@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:42:35.281Z",
+  "generatedAt": "2026-06-16T17:14:54.336Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1299,12 +1299,38 @@
       "status": "public",
       "publicUrl": "https://imagineqira.com",
       "description": "Primary Qira research and product site.",
-      "found": false,
-      "stack": [],
-      "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
-      "scannerWarnings": []
+      "found": true,
+      "git": {
+        "branch": "main",
+        "commit": "d7ec5a7",
+        "changedFiles": 2
+      },
+      "stack": [
+        "React",
+        "Vite",
+        "TypeScript"
+      ],
+      "scripts": [
+        "dev",
+        "build",
+        "preview",
+        "typecheck",
+        "collect",
+        "scan:debug",
+        "validate:data"
+      ],
+      "fileCounts": {
+        "docs": 3,
+        "ts": 9,
+        "json": 6,
+        "html": 1,
+        "tsx": 2,
+        "css": 1
+      },
+      "lastModified": "2026-06-16T17:05:37.262Z",
+      "scannerWarnings": [
+        "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
+      ]
     },
     {
       "name": "LOLM",
@@ -1313,18 +1339,44 @@
       "description": "Latent Order Language Model architecture and validation work.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "main",
+        "commit": "bc0d96e",
+        "changedFiles": 1
       },
-      "stack": [],
-      "scripts": [],
+      "stack": [
+        "Python"
+      ],
+      "scripts": [
+        "qira:learning:pull",
+        "qira:hf:ingest",
+        "qira:web:research",
+        "agent:daily-learned-update",
+        "eval:lolm",
+        "eval:controller",
+        "eval:retrieval",
+        "eval:memory",
+        "qira:receipt:daily",
+        "qira:release:canary",
+        "qira:release:stable",
+        "qira:deploy",
+        "qira:rollback",
+        "test:all"
+      ],
       "fileCounts": {
-        "py": 12,
-        "js": 1
+        "docs": 20,
+        "py": 179,
+        "json": 21,
+        "ts": 6,
+        "html": 8,
+        "js": 8,
+        "tsx": 17,
+        "css": 3,
+        "sql": 2
       },
-      "lastModified": "2026-03-08T23:15:11.381Z",
-      "scannerWarnings": []
+      "lastModified": "2026-06-15T07:11:01.195Z",
+      "scannerWarnings": [
+        "match:scored score:1970 folder=lolm, package~lolm, text~lolm, package~lolm-nfet, text~lolm-nfet, text~lolm-nfet-client, text~latent-order, domain=lolm.autohustle.online"
+      ]
     },
     {
       "name": "NFET / QEV",
@@ -1333,17 +1385,29 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": "rescue/codex-autoloop-20260610-195045",
-        "commit": "1fd165d",
-        "changedFiles": 67
+        "branch": "main",
+        "commit": "a409d15",
+        "changedFiles": 0
       },
-      "stack": [],
+      "stack": [
+        "Python"
+      ],
       "scripts": [],
       "fileCounts": {
-        "py": 7
+        "html": 17,
+        "docs": 8,
+        "py": 38,
+        "json": 13,
+        "js": 19,
+        "css": 3,
+        "tsx": 2,
+        "ts": 3,
+        "rs": 34
       },
-      "lastModified": "2026-06-12T17:00:24.682Z",
-      "scannerWarnings": []
+      "lastModified": "2026-06-11T08:51:06.000Z",
+      "scannerWarnings": [
+        "match:scored score:1645 folder~qev, text~qev, text~nfet, folder=qev-desktop, text~qev-desktop, text~bry-nfet, text~qira-encryption-vault, domain=secure.imagineqira.com"
+      ]
     },
     {
       "name": "My Digital",
@@ -1356,7 +1420,9 @@
       "scripts": [],
       "fileCounts": {},
       "lastModified": null,
-      "scannerWarnings": []
+      "scannerWarnings": [
+        "no-scored-candidate"
+      ]
     },
     {
       "name": "Codey",
@@ -1386,7 +1452,9 @@
         "tsx": 41
       },
       "lastModified": "2026-06-13T12:37:20.891Z",
-      "scannerWarnings": []
+      "scannerWarnings": [
+        "match:explicit score:10000 explicit-path, folder=codey, text~codey, domain=codey.imagineqira.com, python"
+      ]
     },
     {
       "name": "PTI",
@@ -1394,12 +1462,29 @@
       "status": "active",
       "publicUrl": "https://pti.imagineqira.com",
       "description": "Phoenix traffic intelligence surface.",
-      "found": false,
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
       "stack": [],
-      "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
-      "scannerWarnings": []
+      "scripts": [
+        "research",
+        "draft",
+        "today",
+        "linkedin",
+        "all",
+        "status"
+      ],
+      "fileCounts": {
+        "docs": 10,
+        "json": 10
+      },
+      "lastModified": "2026-06-06T16:06:35.036Z",
+      "scannerWarnings": [
+        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
+      ]
     },
     {
       "name": "Question",
@@ -1412,7 +1497,9 @@
       "scripts": [],
       "fileCounts": {},
       "lastModified": null,
-      "scannerWarnings": []
+      "scannerWarnings": [
+        "no-scored-candidate"
+      ]
     },
     {
       "name": "TOKENS",
@@ -1422,8 +1509,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "5376132",
-        "changedFiles": 2
+        "commit": "d7ec5a7",
+        "changedFiles": 4
       },
       "stack": [
         "React",
@@ -1436,30 +1523,33 @@
         "preview",
         "typecheck",
         "collect",
+        "scan:debug",
         "validate:data"
       ],
       "fileCounts": {
         "docs": 3,
-        "ts": 8,
+        "ts": 9,
         "json": 6,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T16:40:47.045Z",
-      "scannerWarnings": []
+      "lastModified": "2026-06-16T17:07:12.673Z",
+      "scannerWarnings": [
+        "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
+      ]
     }
   ],
   "scanner": {
-    "rootsChecked": 5,
+    "rootsChecked": 7,
     "allowlistedProjects": 8,
-    "foundProjects": 4,
+    "foundProjects": 6,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "368cc08d69ef0a17702c8ea9d13f26b50c7e7febcb248b29ab36892c621672d2",
+    "snapshotSha256": "b87fbd2afdcbded9e85e931fd216c97eb2c0369391b43ef7cafac4cb6648a780",
     "rawLogsPublished": false,
     "gitCommit": null
   }
