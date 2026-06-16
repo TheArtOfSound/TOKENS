@@ -1,28 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { compactNumber, currency, dateTime, fullNumber, percent } from './lib/format';
-import { PublicUsageSnapshot, sampleSnapshot } from './lib/usage';
+import { PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
 
-type Tone = 'default' | 'hot' | 'safe' | 'warn';
-type Project = {
-  name: string;
-  category: 'Research Engines' | 'Public Products' | 'Growth Systems' | 'Proof Infrastructure';
-  status: 'active' | 'shipping' | 'research' | 'instrumented';
-  description: string;
-  signal: string;
-};
-
-const projects: Project[] = [
-  { name: 'Codey', category: 'Public Products', status: 'shipping', description: 'Multi-agent builder and product workspace under the Qira umbrella.', signal: 'product completion / auth / live UX' },
-  { name: 'LOLM', category: 'Research Engines', status: 'research', description: 'Latent Order Language Model work: uncertainty, regimes, and nontrivial model behavior.', signal: 'model architecture / validation' },
-  { name: 'NFET / QEV', category: 'Research Engines', status: 'research', description: 'Encryption, emergence, verification, and proof-layer experiments.', signal: 'math / proof / secure vaults' },
-  { name: 'My Digital', category: 'Public Products', status: 'shipping', description: 'QEV-backed digital-goods marketplace and creator trust layer.', signal: 'payments / licensing / unlocks' },
-  { name: 'WeSearch', category: 'Growth Systems', status: 'active', description: 'News aggregation, distribution, bots, and public web traffic systems.', signal: 'traffic / crawl / distribution' },
-  { name: 'AutoHustle', category: 'Growth Systems', status: 'active', description: 'Automation products, Solana tools, lead systems, and monetized bots.', signal: 'automation / revenue experiments' },
-  { name: 'TOKENS', category: 'Proof Infrastructure', status: 'instrumented', description: 'This public observatory: AI-agent workload, cache ratio, cost, and update history.', signal: 'public telemetry / snapshot hash' },
-  { name: 'Qira Sites', category: 'Proof Infrastructure', status: 'active', description: 'The portfolio surface for Qira research, products, trust docs, and demos.', signal: 'brand / deploy / verification' },
-];
+type Tone = 'default' | 'dark' | 'quiet';
 
 function MetricCard(props: { label: string; value: string; detail?: string; tone?: Tone }) {
   return (
@@ -34,87 +16,41 @@ function MetricCard(props: { label: string; value: string; detail?: string; tone
   );
 }
 
-function StatusPill({ children, tone = 'default' }: { children: string; tone?: Tone }) {
-  return <span className={`pill pill--${tone}`}>{children}</span>;
+function QiraLogo() {
+  return <div className="brand-mark" aria-hidden="true"><span /></div>;
 }
 
-function CacheRatio({ snapshot }: { snapshot: PublicUsageSnapshot }) {
+function NetworkField() {
+  return (
+    <svg className="network-field" viewBox="0 0 1200 760" preserveAspectRatio="none" aria-hidden="true">
+      <g opacity="0.42">
+        <path d="M70 120 L180 190 L330 140 L470 210 L620 150 L760 230 L910 170 L1120 250" />
+        <path d="M120 520 L260 430 L410 470 L560 380 L760 460 L910 360 L1110 420" />
+        <path d="M250 80 L300 250 L210 410 L350 620" />
+        <path d="M850 80 L820 240 L930 410 L880 650" />
+        {[70,180,330,470,620,760,910,1120,120,260,410,560,1110,250,300,210,350,850,820,930,880].map((x, i) => (
+          <circle key={`${x}-${i}`} cx={x} cy={[120,190,140,210,150,230,170,250,520,430,470,380,420,80,250,410,620,80,240,410,650][i]} r="3" />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+function CachePanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   const cached = snapshot.totals.cachedTokens;
   const fresh = snapshot.totals.freshTokens;
   const total = snapshot.totals.totalTokens;
   const cachedWidth = total ? Math.max(0, Math.min(100, (cached / total) * 100)) : 0;
-  const freshWidth = total ? Math.max(0, Math.min(100, (fresh / total) * 100)) : 0;
 
   return (
-    <section className="panel cache-panel span-7">
-      <div className="section-heading split-heading">
-        <div>
-          <p>Cache physics</p>
-          <h2>Massive token totals, separated from fresh generation.</h2>
-        </div>
-        <StatusPill tone="hot">cache visible</StatusPill>
-      </div>
-      <div className="ratio-rail" aria-label="Cached and fresh token ratio">
-        <div className="ratio-cache" style={{ width: `${cachedWidth}%` }} />
-        <div className="ratio-fresh" style={{ width: `${freshWidth}%` }} />
-      </div>
-      <div className="ratio-grid">
-        <div>
-          <span>Cached context</span>
-          <strong>{percent(cached, total)}</strong>
-          <small>{fullNumber(cached)} tokens</small>
-        </div>
-        <div>
-          <span>Fresh input/output</span>
-          <strong>{percent(fresh, total)}</strong>
-          <small>{fullNumber(fresh)} tokens</small>
-        </div>
-      </div>
-      <p className="muted">The point is not a fake flex number. The useful signal is how much sustained coding-agent work is happening, how cache-heavy it is, and how much context is being carried through long repo sessions.</p>
-    </section>
-  );
-}
-
-function DailyChart({ snapshot }: { snapshot: PublicUsageSnapshot }) {
-  const days = snapshot.daily.slice(-24);
-  const max = Math.max(...days.map((day) => day.totalTokens), 1);
-
-  if (!days.length) {
-    return (
-      <section className="panel chart-panel span-12">
-        <div className="section-heading">
-          <p>Daily trace</p>
-          <h2>No daily records yet.</h2>
-        </div>
-        <p className="muted">Run the collector on the local Mac to replace sample data with real usage history.</p>
-      </section>
-    );
-  }
-
-  return (
-    <section className="panel chart-panel span-12">
-      <div className="section-heading split-heading">
-        <div>
-          <p>Daily trace</p>
-          <h2>Recent workload by day</h2>
-        </div>
-        <div className="legend"><span /> cached <b /> fresh</div>
-      </div>
-      <div className="bars">
-        {days.map((day) => {
-          const totalHeight = Math.max(5, (day.totalTokens / max) * 100);
-          const cachedHeight = Math.max(2, (day.cachedTokens / day.totalTokens) * 100);
-          const freshHeight = Math.max(2, (day.freshTokens / day.totalTokens) * 100);
-          return (
-            <div className="bar-wrap" key={`${day.date}-${day.provider}`} title={`${day.date}: ${fullNumber(day.totalTokens)} tokens`}>
-              <div className="bar" style={{ height: `${totalHeight}%` }}>
-                <span className="bar-cache" style={{ height: `${cachedHeight}%` }} />
-                <span className="bar-fresh" style={{ height: `${freshHeight}%` }} />
-              </div>
-              <small>{day.date.slice(5)}</small>
-            </div>
-          );
-        })}
+    <section className="panel wide-panel">
+      <div className="section-kicker"><span /> CACHE RATIO</div>
+      <h2>Separating reused context from fresh generation.</h2>
+      <p className="panel-copy">Huge coding-agent totals are easy to misread. This view makes cache usage explicit so the dashboard reads as evidence, not hype.</p>
+      <div className="ratio-track"><div style={{ width: `${cachedWidth}%` }} /></div>
+      <div className="split-two">
+        <div><span>Cached context</span><strong>{percent(cached, total)}</strong><small>{fullNumber(cached)} tokens</small></div>
+        <div><span>Fresh input/output</span><strong>{percent(fresh, total)}</strong><small>{fullNumber(fresh)} tokens</small></div>
       </div>
     </section>
   );
@@ -122,62 +58,60 @@ function DailyChart({ snapshot }: { snapshot: PublicUsageSnapshot }) {
 
 function ProviderPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   const providers = useMemo(() => Object.values(snapshot.providers), [snapshot.providers]);
-
   return (
-    <section className="panel span-5">
-      <div className="section-heading">
-        <p>Agent engines</p>
-        <h2>Provider split</h2>
+    <section className="panel">
+      <div className="section-kicker"><span /> AGENT SOURCES</div>
+      <h2>Claude Code / Codex.</h2>
+      <div className="rows">
+        {providers.length ? providers.map((provider) => (
+          <div className="data-row" key={provider.provider}>
+            <div><strong>{provider.displayName}</strong><small>{provider.models.length ? provider.models.join(' · ') : 'model unknown'}</small></div>
+            <div><strong>{compactNumber(provider.totalTokens)}</strong><small>{currency(provider.estimatedCostUsd)}</small></div>
+          </div>
+        )) : <p className="panel-copy">Provider data appears after the collector parses local ccusage output.</p>}
       </div>
-      {providers.length ? (
-        <div className="provider-list">
-          {providers.map((provider) => (
-            <div className="provider-row" key={provider.provider}>
-              <div>
-                <strong>{provider.displayName}</strong>
-                <small>{provider.models.length ? provider.models.join(' · ') : 'model names unavailable'}</small>
-              </div>
-              <div>
-                <strong>{compactNumber(provider.totalTokens)}</strong>
-                <small>{currency(provider.estimatedCostUsd)}</small>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="muted">Provider data will appear after the collector parses the local ccusage output.</p>
-      )}
     </section>
   );
 }
 
-function ProjectAtlas() {
-  const categories = [...new Set(projects.map((project) => project.category))];
+function DailyChart({ snapshot }: { snapshot: PublicUsageSnapshot }) {
+  const days = snapshot.daily.slice(-28);
+  const max = Math.max(...days.map((day) => day.totalTokens), 1);
   return (
-    <section className="panel project-panel span-12">
-      <div className="section-heading split-heading">
-        <div>
-          <p>Portfolio map</p>
-          <h2>Projects behind the agent workload</h2>
+    <section className="panel full-panel">
+      <div className="section-kicker"><span /> DAILY LEDGER</div>
+      <h2>Recent agent workload.</h2>
+      {days.length ? (
+        <div className="bars">
+          {days.map((day) => (
+            <div className="bar-wrap" key={`${day.date}-${day.provider}`} title={`${day.date}: ${fullNumber(day.totalTokens)} tokens`}>
+              <div className="bar" style={{ height: `${Math.max(4, (day.totalTokens / max) * 100)}%` }}><span style={{ height: `${day.totalTokens ? (day.freshTokens / day.totalTokens) * 100 : 0}%` }} /></div>
+              <small>{day.date.slice(5)}</small>
+            </div>
+          ))}
         </div>
-        <StatusPill tone="warn">paths withheld</StatusPill>
+      ) : <p className="panel-copy">No daily records yet. Run the collector on the local Mac.</p>}
+    </section>
+  );
+}
+
+function ProjectScanner({ projects }: { projects: QiraProjectScan[] }) {
+  const found = projects.filter((project) => project.found).length;
+  const categories = [...new Set(projects.map((project) => project.category))];
+
+  return (
+    <section className="project-section" id="projects">
+      <div className="tier-label"><span /> TIER 1 — QIRA SYSTEMS ONLY</div>
+      <div className="section-title-row">
+        <h2>Scanned Qira project surface.</h2>
+        <p>{found} of {projects.length} allowlisted Qira projects found locally. No AutoHustle, no unrelated products, no raw paths.</p>
       </div>
-      <p className="muted project-note">This is public project categorization, not raw per-folder telemetry. Private repo paths and session text stay off the site. Per-project token attribution can be added later through an explicit safe allowlist.</p>
       <div className="project-groups">
         {categories.map((category) => (
           <div className="project-group" key={category}>
             <h3>{category}</h3>
             <div className="project-cards">
-              {projects.filter((project) => project.category === category).map((project) => (
-                <article className="project-card" key={project.name}>
-                  <div className="project-card-top">
-                    <strong>{project.name}</strong>
-                    <span>{project.status}</span>
-                  </div>
-                  <p>{project.description}</p>
-                  <small>{project.signal}</small>
-                </article>
-              ))}
+              {projects.filter((project) => project.category === category).map((project) => <ProjectCard key={project.name} project={project} />)}
             </div>
           </div>
         ))}
@@ -186,36 +120,54 @@ function ProjectAtlas() {
   );
 }
 
+function ProjectCard({ project }: { project: QiraProjectScan }) {
+  const counts = Object.entries(project.fileCounts ?? {}).filter(([, count]) => count > 0).slice(0, 4);
+  return (
+    <article className={`project-card ${project.found ? 'is-found' : 'is-missing'}`}>
+      <div className="project-head">
+        <div><strong>{project.name}</strong><span>{project.status}</span></div>
+        <b>{project.found ? 'FOUND' : 'WAITING'}</b>
+      </div>
+      <p>{project.description}</p>
+      <div className="project-meta">
+        {project.publicUrl ? <a href={project.publicUrl} target="_blank" rel="noreferrer">public surface</a> : null}
+        {project.git?.branch ? <span>{project.git.branch}</span> : null}
+        {project.git?.commit ? <span>{project.git.commit}</span> : null}
+        {typeof project.git?.changedFiles === 'number' ? <span>{project.git.changedFiles} changed</span> : null}
+      </div>
+      {project.stack.length ? <div className="tag-row">{project.stack.slice(0, 6).map((item) => <span key={item}>{item}</span>)}</div> : null}
+      {counts.length ? <div className="count-row">{counts.map(([kind, count]) => <span key={kind}>{kind}: {count}</span>)}</div> : null}
+      {project.scripts.length ? <small>scripts: {project.scripts.slice(0, 8).join(' · ')}</small> : <small>scanner has not found local build scripts yet</small>}
+    </article>
+  );
+}
+
 function VerificationPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   return (
-    <section className="panel verification span-6">
-      <div className="section-heading">
-        <p>Proof layer</p>
-        <h2>Sanitized snapshot</h2>
-      </div>
-      <dl>
+    <section className="panel">
+      <div className="section-kicker"><span /> PROOF LAYER</div>
+      <h2>Sanitized snapshot.</h2>
+      <dl className="proof-list">
         <div><dt>Generated</dt><dd>{dateTime(snapshot.generatedAt)}</dd></div>
         <div><dt>Source</dt><dd>{snapshot.source}</dd></div>
         <div><dt>Schema</dt><dd>{snapshot.verification.schemaVersion}</dd></div>
         <div><dt>Snapshot hash</dt><dd>{snapshot.verification.snapshotSha256 ?? 'pending local collector'}</dd></div>
-        <div><dt>Raw logs published</dt><dd>{String(snapshot.verification.rawLogsPublished)}</dd></div>
+        <div><dt>Raw logs</dt><dd>{snapshot.verification.rawLogsPublished ? 'published' : 'withheld'}</dd></div>
       </dl>
     </section>
   );
 }
 
-function WorkStack() {
-  const steps = ['local Mac logs', 'ccusage JSON', 'sanitizer', 'public snapshot', 'GitHub Pages'];
+function ScannerPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   return (
-    <section className="panel stack-panel span-6">
-      <div className="section-heading">
-        <p>Pipeline</p>
-        <h2>Local telemetry, public proof</h2>
+    <section className="panel">
+      <div className="section-kicker"><span /> LOCAL SCANNER</div>
+      <h2>More than token totals.</h2>
+      <p className="panel-copy">The collector now inspects an allowlist of Qira repositories for stack, scripts, git state, file counts, and modification signal while refusing to publish local paths.</p>
+      <div className="split-two compact">
+        <div><span>Roots checked</span><strong>{snapshot.scanner?.rootsChecked ?? 0}</strong></div>
+        <div><span>Projects found</span><strong>{snapshot.scanner?.foundProjects ?? 0}</strong></div>
       </div>
-      <div className="stack-steps">
-        {steps.map((step, index) => <div key={step}><span>{String(index + 1).padStart(2, '0')}</span><strong>{step}</strong></div>)}
-      </div>
-      <p className="muted">The public site never reaches into the machine. The Mac publishes sanitized JSON snapshots forward.</p>
     </section>
   );
 }
@@ -237,62 +189,50 @@ export default function App() {
           setLoadState('loaded');
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoadState('fallback');
-      });
+      .catch(() => { if (!cancelled) setLoadState('fallback'); });
     return () => { cancelled = true; };
   }, []);
 
   const largestDay = snapshot.daily.reduce((max, day) => (day.totalTokens > max.totalTokens ? day : max), snapshot.daily[0]);
-  const activeProviders = Object.keys(snapshot.providers).length || 2;
+  const qiraProjects = snapshot.qiraProjects ?? sampleSnapshot.qiraProjects ?? [];
 
   return (
     <main>
-      <section className="hero hero-grid">
-        <div className="hero-copy">
-          <div className="eyebrow">Qira work ledger · local agent telemetry</div>
-          <h1>Proof of work for an AI-native builder.</h1>
-          <p>Not a generic usage chart. This is a public command surface for Bryan's Claude Code and Codex workload: token mass, cache physics, cost pressure, update cadence, and the projects those sessions are pushing forward.</p>
-          <div className="hero-actions">
-            <a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">View repo</a>
-            <a href="./data/latest.json" target="_blank" rel="noreferrer">Inspect JSON</a>
-          </div>
-          {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> on the local Mac to publish the real sanitized snapshot.</div> : null}
-        </div>
-        <aside className="terminal-card">
-          <div className="terminal-top"><span /> <span /> <span /></div>
-          <code>$ ccusage claude daily --json</code>
-          <code>$ ccusage codex daily --json</code>
-          <code>$ sanitize --no-prompts --no-paths</code>
-          <div className="terminal-number">{compactNumber(snapshot.totals.totalTokens)}</div>
-          <small>total public token accounting</small>
-        </aside>
+      <NetworkField />
+      <header className="topbar">
+        <a className="brand" href="#top"><QiraLogo /> <span>QIRA</span></a>
+        <nav><a href="#projects">Research</a><a href="#projects">Products</a><a href="#scanner">Approach</a><a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a><a className="nav-button" href="./data/latest.json" target="_blank" rel="noreferrer">Inspect JSON</a></nav>
+      </header>
+
+      <section className="hero" id="top">
+        <div className="hero-pill"><span /> Qira LLC · local AI-agent work ledger</div>
+        <h1>Instrumented systems for Qira research.</h1>
+        <p>A public, sanitized telemetry surface for Claude Code and Codex usage across Qira-only work: cached context, fresh output, model/provider split, local repo health, and snapshot verification.</p>
+        <div className="hero-actions"><a href="#projects">Explore Qira projects →</a><a href="https://imagineqira.com" target="_blank" rel="noreferrer">Imagine Qira</a></div>
+        <ul className="hero-facts"><li>Raw prompts withheld</li><li>Local paths withheld</li><li>Qira-only allowlist</li><li>Updated from Bryan's Mac</li></ul>
+        {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
       </section>
 
       <section className="metrics-grid">
-        <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="hot" />
-        <MetricCard label="Cached tokens" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} />
-        <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output, excluding cache" />
+        <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="dark" />
+        <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} />
+        <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" />
         <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" />
         <MetricCard label="Largest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} />
-        <MetricCard label="Active surfaces" value={String(projects.length)} detail={`${activeProviders} agent providers`} tone="safe" />
+        <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" />
       </section>
 
-      <section className="dashboard-grid">
-        <CacheRatio snapshot={snapshot} />
+      <div className="panel-grid" id="scanner">
+        <CachePanel snapshot={snapshot} />
         <ProviderPanel snapshot={snapshot} />
-        <ProjectAtlas />
-        <DailyChart snapshot={snapshot} />
-        <WorkStack />
+        <ScannerPanel snapshot={snapshot} />
         <VerificationPanel snapshot={snapshot} />
-      </section>
+        <DailyChart snapshot={snapshot} />
+      </div>
 
-      {snapshot.warnings.length ? (
-        <section className="panel warnings">
-          <div className="section-heading"><p>Collector warnings</p><h2>Safe public warnings</h2></div>
-          <ul>{snapshot.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
-        </section>
-      ) : null}
+      <ProjectScanner projects={qiraProjects} />
+
+      {snapshot.warnings.length ? <section className="panel warnings"><div className="section-kicker"><span /> SAFE WARNINGS</div><ul>{snapshot.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul></section> : null}
     </main>
   );
 }
