@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-06-16T00:00:00.000Z",
+  "timezone": "America/Phoenix",
+  "source": "sample",
+  "collectorVersion": "0.1.0",
+  "isSampleData": true,
+  "totals": {
+    "inputTokens": 2150000,
+    "outputTokens": 74250000,
+    "cacheCreationTokens": 16000000,
+    "cacheReadTokens": 27860731000,
+    "cachedTokens": 27876731000,
+    "freshTokens": 76400000,
+    "totalTokens": 27953131000,
+    "estimatedCostUsd": 25345.26
+  },
+  "providers": {
+    "claude": {
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": ["opus-4-8", "haiku-4-5"],
+      "inputTokens": 1250000,
+      "outputTokens": 52000000,
+      "cacheCreationTokens": 9700000,
+      "cacheReadTokens": 15736220000,
+      "cachedTokens": 15745920000,
+      "freshTokens": 53250000,
+      "totalTokens": 15799170000,
+      "estimatedCostUsd": 15799.17
+    },
+    "codex": {
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": ["codex"],
+      "inputTokens": 900000,
+      "outputTokens": 22250000,
+      "cacheCreationTokens": 6300000,
+      "cacheReadTokens": 9516640000,
+      "cachedTokens": 9522940000,
+      "freshTokens": 23150000,
+      "totalTokens": 9546090000,
+      "estimatedCostUsd": 9546.09
+    }
+  },
+  "daily": [
+    {
+      "date": "2026-06-10",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": ["opus-4-8"],
+      "inputTokens": 35153,
+      "outputTokens": 1134598,
+      "cacheCreationTokens": 860568,
+      "cacheReadTokens": 239807500,
+      "cachedTokens": 240668068,
+      "freshTokens": 1169751,
+      "totalTokens": 241837819,
+      "estimatedCostUsd": 152.94
+    },
+    {
+      "date": "2026-06-11",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": ["haiku-4-5", "opus-4-8"],
+      "inputTokens": 231006,
+      "outputTokens": 6466636,
+      "cacheCreationTokens": 2370700,
+      "cacheReadTokens": 767131800,
+      "cachedTokens": 769502500,
+      "freshTokens": 6697642,
+      "totalTokens": 776200142,
+      "estimatedCostUsd": 492.11
+    },
+    {
+      "date": "2026-06-12",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": ["haiku-4-5", "opus-4-8"],
+      "inputTokens": 156130,
+      "outputTokens": 5690394,
+      "cacheCreationTokens": 1651700,
+      "cacheReadTokens": 341563200,
+      "cachedTokens": 343214900,
+      "freshTokens": 5846524,
+      "totalTokens": 349061424,
+      "estimatedCostUsd": 254.36
+    },
+    {
+      "date": "2026-06-13",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": ["haiku-4-5", "opus-4-8"],
+      "inputTokens": 111564,
+      "outputTokens": 4294826,
+      "cacheCreationTokens": 1651900,
+      "cacheReadTokens": 468583100,
+      "cachedTokens": 470235000,
+      "freshTokens": 4406390,
+      "totalTokens": 474641390,
+      "estimatedCostUsd": 316.47
+    }
+  ],
+  "warnings": [
+    "Sample data is bundled so the interface works before the local collector is run.",
+    "Run npm run collect on Bryan's Mac to replace this with sanitized ccusage output."
+  ],
+  "verification": {
+    "schemaVersion": "1.0.0",
+    "snapshotSha256": null,
+    "rawLogsPublished": false,
+    "gitCommit": null
+  }
+}
