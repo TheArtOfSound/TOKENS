@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T15:57:14.194Z",
+  "generatedAt": "2026-06-16T15:57:48.805Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.1.0",
@@ -1299,7 +1299,7 @@
   ],
   "verification": {
     "schemaVersion": "1.0.0",
-    "snapshotSha256": "e19aa498533e09d15f5bb7d186b91586b92accf0793c08d94586b80637d52290",
+    "snapshotSha256": "00557ce22804f28c0b69f08f3ccd40365a3b26b951a4cc47d01bc708901f8152",
     "rawLogsPublished": false,
     "gitCommit": null
   }
