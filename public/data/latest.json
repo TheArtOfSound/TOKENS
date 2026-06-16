@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-16T16:11:40.661Z",
+  "generatedAt": "2026-06-16T16:17:44.635Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
-  "collectorVersion": "0.2.1",
+  "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
     "inputTokens": 215220377,
@@ -1406,8 +1406,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "7f47997",
-        "changedFiles": 3
+        "commit": "994bca7",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -1424,13 +1424,13 @@
       ],
       "fileCounts": {
         "docs": 3,
-        "ts": 7,
+        "ts": 8,
         "html": 1,
         "json": 5,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T16:11:31.791Z",
+      "lastModified": "2026-06-16T16:17:41.438Z",
       "scannerWarnings": []
     }
   ],
@@ -1440,12 +1440,10 @@
     "foundProjects": 3,
     "privacyMode": "allowlist_no_paths"
   },
-  "warnings": [
-    "ccusage daily --json returned JSON but no recognized token records"
-  ],
+  "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "06663fd691e2d53a9cb3b063b0a904a9511915a6082edf9a39421659d8290116",
+    "snapshotSha256": "6b16925be813b7e148a32970a0c674a6677fc41ec9f1dc2a6040d1a3e526af96",
     "rawLogsPublished": false,
     "gitCommit": null
   }
