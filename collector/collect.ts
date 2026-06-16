@@ -10,7 +10,7 @@ type Daily = Metrics & { date: string; provider: Provider; displayName: string; 
 type ScannerMeta = { rootsChecked: number; allowlistedProjects: number; foundProjects: number; privacyMode: 'allowlist_no_paths' };
 type Snapshot = { generatedAt: string; timezone: string; source: 'local_mac_sanitized_ccusage'; collectorVersion: string; isSampleData: false; totals: Metrics; providers: Record<string, Daily>; daily: Daily[]; qiraProjects: QiraProjectScan[]; scanner: ScannerMeta; warnings: string[]; verification: { schemaVersion: string; snapshotSha256: string | null; rawLogsPublished: false; gitCommit: string | null } };
 
-const VERSION = '0.2.0';
+const VERSION = '0.2.1';
 const OUT = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT, 'latest.json');
 const HISTORY = path.join(OUT, 'history.json');
@@ -18,9 +18,6 @@ const COMMANDS: Array<{ provider: Provider; args: string[] }> = [
   { provider: 'all', args: ['daily', '--json'] },
   { provider: 'claude', args: ['claude', 'daily', '--json'] },
   { provider: 'codex', args: ['codex', 'daily', '--json'] },
-  { provider: 'claude', args: ['claude', 'weekly', '--json'] },
-  { provider: 'codex', args: ['codex', 'monthly', '--json'] },
-  { provider: 'codex', args: ['codex', 'session', '--json'] },
 ];
 
 const empty = (): Metrics => ({ inputTokens: 0, outputTokens: 0, cacheCreationTokens: 0, cacheReadTokens: 0, cachedTokens: 0, freshTokens: 0, totalTokens: 0, estimatedCostUsd: null });

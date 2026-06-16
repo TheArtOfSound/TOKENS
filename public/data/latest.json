@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-16T15:57:48.805Z",
+  "generatedAt": "2026-06-16T16:11:40.661Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
-  "collectorVersion": "0.1.0",
+  "collectorVersion": "0.2.1",
   "isSampleData": false,
   "totals": {
     "inputTokens": 215220377,
@@ -1292,14 +1292,160 @@
       "estimatedCostUsd": null
     }
   ],
+  "qiraProjects": [
+    {
+      "name": "Qira Main",
+      "category": "Company Surface",
+      "status": "public",
+      "publicUrl": "https://imagineqira.com",
+      "description": "Primary Qira research and product site.",
+      "found": false,
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
+      "scannerWarnings": []
+    },
+    {
+      "name": "LOLM",
+      "category": "Research",
+      "status": "research",
+      "description": "Latent Order Language Model architecture and validation work.",
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {
+        "py": 12,
+        "js": 1
+      },
+      "lastModified": "2026-03-08T23:15:11.381Z",
+      "scannerWarnings": []
+    },
+    {
+      "name": "NFET / QEV",
+      "category": "Research",
+      "status": "research",
+      "description": "Verification, encryption, and proof-layer experiments.",
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {
+        "json": 1,
+        "py": 1
+      },
+      "lastModified": "2026-04-14T23:16:42.087Z",
+      "scannerWarnings": []
+    },
+    {
+      "name": "My Digital",
+      "category": "Product",
+      "status": "shipping",
+      "publicUrl": "https://mydigital.imagineqira.com",
+      "description": "QEV-backed digital goods and licensing surface.",
+      "found": false,
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
+      "scannerWarnings": []
+    },
+    {
+      "name": "Codey",
+      "category": "Product",
+      "status": "shipping",
+      "publicUrl": "https://codey.imagineqira.com",
+      "description": "Qira builder and agent-product workspace.",
+      "found": false,
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
+      "scannerWarnings": []
+    },
+    {
+      "name": "PTI",
+      "category": "Intelligence",
+      "status": "active",
+      "publicUrl": "https://pti.imagineqira.com",
+      "description": "Phoenix traffic intelligence surface.",
+      "found": false,
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
+      "scannerWarnings": []
+    },
+    {
+      "name": "Question",
+      "category": "Public Experiment",
+      "status": "active",
+      "publicUrl": "https://question.imagineqira.com",
+      "description": "Qira question and cognition experiment.",
+      "found": false,
+      "stack": [],
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
+      "scannerWarnings": []
+    },
+    {
+      "name": "TOKENS",
+      "category": "Proof Infrastructure",
+      "status": "instrumented",
+      "description": "Public AI-agent usage observatory.",
+      "found": true,
+      "git": {
+        "branch": "main",
+        "commit": "7f47997",
+        "changedFiles": 3
+      },
+      "stack": [
+        "React",
+        "Vite",
+        "TypeScript"
+      ],
+      "scripts": [
+        "dev",
+        "build",
+        "preview",
+        "typecheck",
+        "collect",
+        "validate:data"
+      ],
+      "fileCounts": {
+        "docs": 3,
+        "ts": 7,
+        "html": 1,
+        "json": 5,
+        "tsx": 2,
+        "css": 1
+      },
+      "lastModified": "2026-06-16T16:11:31.791Z",
+      "scannerWarnings": []
+    }
+  ],
+  "scanner": {
+    "rootsChecked": 4,
+    "allowlistedProjects": 8,
+    "foundProjects": 3,
+    "privacyMode": "allowlist_no_paths"
+  },
   "warnings": [
-    "ccusage daily --json returned JSON but no daily token records were recognized",
-    "ccusage monthly --json returned JSON but no daily token records were recognized",
-    "ccusage session --json returned JSON but no daily token records were recognized"
+    "ccusage daily --json returned JSON but no recognized token records"
   ],
   "verification": {
-    "schemaVersion": "1.0.0",
-    "snapshotSha256": "00557ce22804f28c0b69f08f3ccd40365a3b26b951a4cc47d01bc708901f8152",
+    "schemaVersion": "1.1.0",
+    "snapshotSha256": "06663fd691e2d53a9cb3b063b0a904a9511915a6082edf9a39421659d8290116",
     "rawLogsPublished": false,
     "gitCommit": null
   }
