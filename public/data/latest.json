@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:22:01.127Z",
+  "generatedAt": "2026-06-16T16:28:31.232Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1333,17 +1333,16 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "json": 1,
-        "py": 1
+        "py": 7
       },
-      "lastModified": "2026-04-14T23:16:42.087Z",
+      "lastModified": "2026-06-12T17:00:24.682Z",
       "scannerWarnings": []
     },
     {
@@ -1365,11 +1364,27 @@
       "status": "shipping",
       "publicUrl": "https://codey.imagineqira.com",
       "description": "Qira builder and agent-product workspace.",
-      "found": false,
-      "stack": [],
+      "found": true,
+      "git": {
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
+      },
+      "stack": [
+        "Python"
+      ],
       "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "fileCounts": {
+        "docs": 2,
+        "json": 12,
+        "ts": 9,
+        "py": 271,
+        "js": 23,
+        "html": 47,
+        "css": 3,
+        "tsx": 41
+      },
+      "lastModified": "2026-06-13T12:37:20.891Z",
       "scannerWarnings": []
     },
     {
@@ -1406,8 +1421,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "a5b5961",
-        "changedFiles": 2
+        "commit": "b09e2fa",
+        "changedFiles": 4
       },
       "stack": [
         "React",
@@ -1430,20 +1445,20 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T16:21:39.760Z",
+      "lastModified": "2026-06-16T16:28:27.451Z",
       "scannerWarnings": []
     }
   ],
   "scanner": {
-    "rootsChecked": 4,
+    "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 3,
+    "foundProjects": 4,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "6d2ab64bee0845b2cb133c4b3a35eacca0cfcce8e6f0bb5e05f6c2e7dc72c85e",
+    "snapshotSha256": "7a02102761bd05a1cdf73b5d6bacbf1346aa93ee5edff360bfd1383e9f905332",
     "rawLogsPublished": false,
     "gitCommit": null
   }
