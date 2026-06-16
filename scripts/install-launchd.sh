@@ -5,6 +5,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PLIST="$HOME/Library/LaunchAgents/com.qira.tokens.collector.plist"
 LOG_DIR="$REPO_DIR/collector/local-logs"
 LAUNCHD_PATH="$HOME/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+QIRA_SCAN_ROOTS_VALUE="$HOME/Projects,$HOME/nous,$HOME/Desktop,$HOME/Developer,$HOME/Code"
 mkdir -p "$HOME/Library/LaunchAgents" "$LOG_DIR"
 
 if [[ "$REPO_DIR" == "$HOME/Desktop"* || "$REPO_DIR" == "$HOME/Documents"* || "$REPO_DIR" == "$HOME/Downloads"* ]]; then
@@ -24,6 +25,8 @@ cat > "$PLIST" <<PLIST
   <dict>
     <key>PATH</key>
     <string>$LAUNCHD_PATH</string>
+    <key>QIRA_SCAN_ROOTS</key>
+    <string>$QIRA_SCAN_ROOTS_VALUE</string>
   </dict>
   <key>ProgramArguments</key>
   <array>
@@ -51,3 +54,4 @@ launchctl kickstart -k "gui/$(id -u)/com.qira.tokens.collector" >/dev/null 2>&1 
 
 echo "Installed launchd publisher: $PLIST"
 echo "Runs every 30 minutes while this Mac is awake."
+echo "Qira scan roots: $QIRA_SCAN_ROOTS_VALUE"
