@@ -5,7 +5,7 @@ const localPort = Number(process.env.TOKENS_DEV_PORT ?? 5199);
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.GITHUB_PAGES === 'true' ? '/TOKENS/' : '/',
+  base: '/',
   server: {
     port: localPort,
     strictPort: true,
