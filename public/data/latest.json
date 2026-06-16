@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:33:35.161Z",
+  "generatedAt": "2026-06-16T16:42:35.281Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1422,7 +1422,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "405ec04",
+        "commit": "5376132",
         "changedFiles": 2
       },
       "stack": [
@@ -1446,7 +1446,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T16:32:45.883Z",
+      "lastModified": "2026-06-16T16:40:47.045Z",
       "scannerWarnings": []
     }
   ],
@@ -1459,7 +1459,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "bb13d88c4ef3edf20048818c9b3e2e5b364b280345791aab2aa820345c8d5c41",
+    "snapshotSha256": "368cc08d69ef0a17702c8ea9d13f26b50c7e7febcb248b29ab36892c621672d2",
     "rawLogsPublished": false,
     "gitCommit": null
   }
