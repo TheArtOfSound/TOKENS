@@ -12,8 +12,19 @@ if ! command -v npm >/dev/null 2>&1; then
 fi
 
 if ! command -v ccusage >/dev/null 2>&1; then
-  echo "ccusage was not found. Install it before running the collector." >&2
-  echo "Try: npm install -g ccusage" >&2
+  echo "ccusage was not found on PATH. Creating local npx fallback wrapper." >&2
+  mkdir -p "$REPO_DIR/.tmp-bin"
+  cat > "$REPO_DIR/.tmp-bin/ccusage" <<'WRAPPER'
+#!/usr/bin/env bash
+exec npx -y ccusage@latest "$@"
+WRAPPER
+  chmod +x "$REPO_DIR/.tmp-bin/ccusage"
+  export PATH="$REPO_DIR/.tmp-bin:$PATH"
+fi
+
+if ! command -v ccusage >/dev/null 2>&1; then
+  echo "ccusage still could not be resolved after fallback setup." >&2
+  echo "Try manually: npm install -g ccusage" >&2
   echo "The dashboard will keep using the last published snapshot." >&2
   exit 1
 fi
