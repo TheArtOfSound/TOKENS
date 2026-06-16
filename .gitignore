@@ -6,4 +6,5 @@ dist/
 .DS_Store
 *.log
 collector/local-logs/
+collector/local-qira-projects.json
 public/data/raw/
