@@ -29,10 +29,19 @@ Bryan's Mac
 
 ## Quick start
 
+Local dev uses port `5199` by default so it does not collide with the usual Vite `5173` port.
+
 ```bash
 npm install
 npm run dev
-open "http://localhost:5173"
+open "http://localhost:5199"
+```
+
+Override the port if needed:
+
+```bash
+TOKENS_DEV_PORT=5299 npm run dev
+open "http://localhost:5299"
 ```
 
 ## Run the collector once
@@ -43,7 +52,7 @@ Install `ccusage` first if it is not already available on your Mac.
 npm run collect
 npm run validate:data
 npm run build
-open "http://localhost:5173"
+open "http://localhost:5199"
 ```
 
 The collector tries these commands and uses whatever succeeds:
