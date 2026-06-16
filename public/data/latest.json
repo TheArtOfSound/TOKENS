@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:17:44.635Z",
+  "generatedAt": "2026-06-16T16:21:01.378Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1333,17 +1333,16 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "json": 1,
-        "py": 1
+        "py": 7
       },
-      "lastModified": "2026-04-14T23:16:42.087Z",
+      "lastModified": "2026-06-12T17:00:24.682Z",
       "scannerWarnings": []
     },
     {
@@ -1365,11 +1364,27 @@
       "status": "shipping",
       "publicUrl": "https://codey.imagineqira.com",
       "description": "Qira builder and agent-product workspace.",
-      "found": false,
-      "stack": [],
+      "found": true,
+      "git": {
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
+      },
+      "stack": [
+        "Python"
+      ],
       "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "fileCounts": {
+        "docs": 2,
+        "json": 12,
+        "ts": 9,
+        "py": 271,
+        "js": 23,
+        "html": 47,
+        "css": 3,
+        "tsx": 41
+      },
+      "lastModified": "2026-06-13T12:37:20.891Z",
       "scannerWarnings": []
     },
     {
@@ -1406,7 +1421,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "994bca7",
+        "commit": "abe7899",
         "changedFiles": 2
       },
       "stack": [
@@ -1430,20 +1445,20 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T16:17:41.438Z",
+      "lastModified": "2026-06-16T16:17:44.645Z",
       "scannerWarnings": []
     }
   ],
   "scanner": {
-    "rootsChecked": 4,
+    "rootsChecked": 3,
     "allowlistedProjects": 8,
-    "foundProjects": 3,
+    "foundProjects": 4,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "6b16925be813b7e148a32970a0c674a6677fc41ec9f1dc2a6040d1a3e526af96",
+    "snapshotSha256": "47db5d20cbd2883bc58980c76a2f72c9a7d7227da185eaa8c093b45ec678543c",
     "rawLogsPublished": false,
     "gitCommit": null
   }
