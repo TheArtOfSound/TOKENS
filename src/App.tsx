@@ -97,47 +97,72 @@ function DailyChart({ snapshot }: { snapshot: PublicUsageSnapshot }) {
 
 function ProjectScanner({ projects }: { projects: QiraProjectScan[] }) {
   const found = projects.filter((project) => project.found).length;
-  const categories = [...new Set(projects.map((project) => project.category))];
+  const changed = projects.reduce((sum, project) => sum + (project.git?.changedFiles ?? 0), 0);
+  const fileCount = projects.reduce((sum, project) => sum + Object.values(project.fileCounts ?? {}).reduce((a, b) => a + b, 0), 0);
 
   return (
     <section className="project-section" id="projects">
       <div className="tier-label"><span /> TIER 1 — QIRA SYSTEMS ONLY</div>
-      <div className="section-title-row">
-        <h2>Scanned Qira project surface.</h2>
-        <p>{found} of {projects.length} allowlisted Qira projects found locally. No AutoHustle, no unrelated products, no raw paths.</p>
+      <div className="section-title-row project-title-row">
+        <div>
+          <h2>Qira project matrix.</h2>
+          <p>One clean grid for the allowlisted Qira repos. The scanner reports state, stack, scripts, file surface, and git signal without publishing local paths.</p>
+        </div>
+        <div className="scanner-summary" aria-label="Qira scanner summary">
+          <div><strong>{found}/{projects.length}</strong><span>found</span></div>
+          <div><strong>{changed}</strong><span>changed files</span></div>
+          <div><strong>{fileCount}</strong><span>indexed files</span></div>
+        </div>
       </div>
-      <div className="project-groups">
-        {categories.map((category) => (
-          <div className="project-group" key={category}>
-            <h3>{category}</h3>
-            <div className="project-cards">
-              {projects.filter((project) => project.category === category).map((project) => <ProjectCard key={project.name} project={project} />)}
-            </div>
-          </div>
-        ))}
+      <div className="project-matrix">
+        {projects.map((project, index) => <ProjectCard key={project.name} project={project} index={index + 1} />)}
       </div>
     </section>
   );
 }
 
-function ProjectCard({ project }: { project: QiraProjectScan }) {
-  const counts = Object.entries(project.fileCounts ?? {}).filter(([, count]) => count > 0).slice(0, 4);
+function shortText(value: string | null | undefined, max = 22) {
+  if (!value) return null;
+  return value.length > max ? `${value.slice(0, max - 1)}…` : value;
+}
+
+function totalFiles(project: QiraProjectScan) {
+  return Object.values(project.fileCounts ?? {}).reduce((sum, count) => sum + count, 0);
+}
+
+function ProjectCard({ project, index }: { project: QiraProjectScan; index: number }) {
+  const counts = Object.entries(project.fileCounts ?? {}).filter(([, count]) => count > 0).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const branch = shortText(project.git?.branch, 24);
+  const commit = shortText(project.git?.commit, 12);
+  const changed = typeof project.git?.changedFiles === 'number' ? project.git.changedFiles : null;
+  const files = totalFiles(project);
+  const modified = project.lastModified ? new Date(project.lastModified).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
+
   return (
     <article className={`project-card ${project.found ? 'is-found' : 'is-missing'}`}>
+      <div className="project-index">{String(index).padStart(2, '0')}</div>
       <div className="project-head">
-        <div><strong>{project.name}</strong><span>{project.status}</span></div>
+        <div>
+          <strong>{project.name}</strong>
+          <span>{project.category} · {project.status}</span>
+        </div>
         <b>{project.found ? 'FOUND' : 'WAITING'}</b>
       </div>
       <p>{project.description}</p>
-      <div className="project-meta">
+      <div className="project-diagnostics">
+        {branch ? <div><span>branch</span><strong>{branch}</strong></div> : null}
+        {commit ? <div><span>commit</span><strong>{commit}</strong></div> : null}
+        {changed !== null ? <div><span>changes</span><strong>{changed}</strong></div> : null}
+        {files ? <div><span>files</span><strong>{files}</strong></div> : null}
+        {modified ? <div><span>modified</span><strong>{modified}</strong></div> : null}
+      </div>
+      <div className="project-links">
         {project.publicUrl ? <a href={project.publicUrl} target="_blank" rel="noreferrer">public surface</a> : null}
-        {project.git?.branch ? <span>{project.git.branch}</span> : null}
-        {project.git?.commit ? <span>{project.git.commit}</span> : null}
-        {typeof project.git?.changedFiles === 'number' ? <span>{project.git.changedFiles} changed</span> : null}
+        {!project.found ? <span>map local path</span> : null}
       </div>
       {project.stack.length ? <div className="tag-row">{project.stack.slice(0, 6).map((item) => <span key={item}>{item}</span>)}</div> : null}
       {counts.length ? <div className="count-row">{counts.map(([kind, count]) => <span key={kind}>{kind}: {count}</span>)}</div> : null}
-      {project.scripts.length ? <small>scripts: {project.scripts.slice(0, 8).join(' · ')}</small> : <small>scanner has not found local build scripts yet</small>}
+      {project.scripts.length ? <small>scripts: {project.scripts.slice(0, 8).join(' · ')}</small> : <small>{project.found ? 'No package scripts detected.' : 'Waiting for local scanner mapping.'}</small>}
     </article>
   );
 }
@@ -163,7 +188,7 @@ function ScannerPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
     <section className="panel">
       <div className="section-kicker"><span /> LOCAL SCANNER</div>
       <h2>More than token totals.</h2>
-      <p className="panel-copy">The collector now inspects an allowlist of Qira repositories for stack, scripts, git state, file counts, and modification signal while refusing to publish local paths.</p>
+      <p className="panel-copy">The collector inspects an allowlist of Qira repositories for stack, scripts, git state, file counts, and modification signal while refusing to publish local paths.</p>
       <div className="split-two compact">
         <div><span>Roots checked</span><strong>{snapshot.scanner?.rootsChecked ?? 0}</strong></div>
         <div><span>Projects found</span><strong>{snapshot.scanner?.foundProjects ?? 0}</strong></div>
