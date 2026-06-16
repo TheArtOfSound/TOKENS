@@ -27,9 +27,9 @@ export type QiraProjectScan = {
 };
 
 const PROJECTS: ProjectDef[] = [
-  { name: 'Qira Main', category: 'Company Surface', status: 'public', publicUrl: 'https://imagineqira.com', description: 'Primary Qira research and product site.', aliases: ['imagineqira', 'imagine-qira', 'qira-site', 'qira-main'] },
+  { name: 'Qira Main', category: 'Company Surface', status: 'public', publicUrl: 'https://imagineqira.com', description: 'Primary Qira research and product site.', aliases: ['imagineqira', 'imagine-qira', 'qira-site', 'qira-main', 'qira'] },
   { name: 'LOLM', category: 'Research', status: 'research', description: 'Latent Order Language Model architecture and validation work.', aliases: ['lolm', 'lolm-nfet', 'lolm-nfet-client'] },
-  { name: 'NFET / QEV', category: 'Research', status: 'research', description: 'Verification, encryption, and proof-layer experiments.', aliases: ['qev', 'nfet', 'qev-desktop', 'qev-secure', 'secure-qev'] },
+  { name: 'NFET / QEV', category: 'Research', status: 'research', description: 'Verification, encryption, and proof-layer experiments.', aliases: ['qev', 'nfet', 'qev-desktop', 'qev-secure', 'secure-qev', 'bry-nfet'] },
   { name: 'My Digital', category: 'Product', status: 'shipping', publicUrl: 'https://mydigital.imagineqira.com', description: 'QEV-backed digital goods and licensing surface.', aliases: ['my-digital', 'mydigital', 'mydigital-imagineqira'] },
   { name: 'Codey', category: 'Product', status: 'shipping', publicUrl: 'https://codey.imagineqira.com', description: 'Qira builder and agent-product workspace.', aliases: ['codey', 'codey-imagineqira'] },
   { name: 'PTI', category: 'Intelligence', status: 'active', publicUrl: 'https://pti.imagineqira.com', description: 'Phoenix traffic intelligence surface.', aliases: ['pti', 'pti-phoenix', 'pti-imagineqira'] },
@@ -37,23 +37,38 @@ const PROJECTS: ProjectDef[] = [
   { name: 'TOKENS', category: 'Proof Infrastructure', status: 'instrumented', description: 'Public AI-agent usage observatory.', aliases: ['tokens', 'qira-agent-usage-observatory'] },
 ];
 
-const SKIP = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.turbo', 'coverage', '.cache']);
-const EXT_TO_KIND: Record<string, string> = { '.ts': 'ts', '.tsx': 'tsx', '.js': 'js', '.jsx': 'jsx', '.py': 'py', '.md': 'docs', '.json': 'json', '.css': 'css', '.html': 'html', '.sol': 'sol', '.rs': 'rs' };
+const SKIP = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.turbo', 'coverage', '.cache', 'vendor']);
+const EXT_TO_KIND: Record<string, string> = { '.ts': 'ts', '.tsx': 'tsx', '.js': 'js', '.jsx': 'jsx', '.py': 'py', '.md': 'docs', '.json': 'json', '.css': 'css', '.html': 'html', '.sol': 'sol', '.rs': 'rs', '.go': 'go', '.sql': 'sql' };
 
 function homePath(...parts: string[]) {
   return path.join(process.env.HOME || process.cwd(), ...parts);
 }
 
+function expandHome(value: string) {
+  return value.startsWith('~/') ? path.join(process.env.HOME || '', value.slice(2)) : value;
+}
+
 function scanRoots() {
-  const fromEnv = process.env.QIRA_SCAN_ROOTS?.split(',').map((item) => item.trim()).filter(Boolean);
-  return fromEnv?.length ? fromEnv : [homePath('Projects'), homePath('Developer'), homePath('Code'), homePath('Desktop')];
+  const fromEnv = process.env.QIRA_SCAN_ROOTS?.split(',').map((item) => expandHome(item.trim())).filter(Boolean);
+  return fromEnv?.length ? fromEnv : [homePath('Projects'), homePath('nous'), homePath('Developer'), homePath('Code'), homePath('Desktop')];
+}
+
+function localConfig(): Record<string, string> {
+  const configPath = process.env.QIRA_PROJECT_CONFIG || path.join(process.cwd(), 'collector', 'local-qira-projects.json');
+  if (!existsSync(configPath)) return {};
+  try {
+    const parsed = JSON.parse(readFileSync(configPath, 'utf8')) as Record<string, string>;
+    return Object.fromEntries(Object.entries(parsed).map(([key, value]) => [key, expandHome(value)]));
+  } catch {
+    return {};
+  }
 }
 
 function safeStat(target: string) {
   try { return statSync(target); } catch { return null; }
 }
 
-function listDirs(root: string, depth = 0, maxDepth = 2, out: string[] = []) {
+function listDirs(root: string, depth = 0, maxDepth = 3, out: string[] = []) {
   const st = safeStat(root);
   if (!st?.isDirectory() || depth > maxDepth) return out;
   let entries: string[] = [];
@@ -69,9 +84,21 @@ function listDirs(root: string, depth = 0, maxDepth = 2, out: string[] = []) {
   return out;
 }
 
+function normalize(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 function matches(def: ProjectDef, dir: string) {
-  const base = path.basename(dir).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return def.aliases.some((alias) => base === alias || base.includes(alias));
+  const base = normalize(path.basename(dir));
+  return def.aliases.map(normalize).some((alias) => base === alias || base.includes(alias));
+}
+
+function explicitPathFor(def: ProjectDef, config: Record<string, string>) {
+  const keys = [def.name, ...def.aliases].map(normalize);
+  for (const [rawKey, rawPath] of Object.entries(config)) {
+    if (keys.includes(normalize(rawKey)) && safeStat(rawPath)?.isDirectory()) return rawPath;
+  }
+  return null;
 }
 
 function runGit(dir: string, args: string[]) {
@@ -103,7 +130,7 @@ function detectStack(dir: string, deps: string[]) {
   addIf('Supabase', deps.includes('@supabase/supabase-js'));
   addIf('Three.js', deps.includes('three'));
   addIf('Python', existsSync(path.join(dir, 'requirements.txt')) || existsSync(path.join(dir, 'pyproject.toml')));
-  addIf('Solana', deps.some((dep) => dep.includes('solana')));
+  addIf('SQLite', existsSync(path.join(dir, 'sqlite.db')) || existsSync(path.join(dir, 'database.sqlite')));
   return [...stack].slice(0, 10);
 }
 
@@ -112,7 +139,7 @@ function countFiles(dir: string) {
   let latest = 0;
   let seen = 0;
   function walk(current: string, depth: number) {
-    if (depth > 5 || seen > 9000) return;
+    if (depth > 6 || seen > 12000) return;
     let entries: string[] = [];
     try { entries = readdirSync(current); } catch { return; }
     for (const entry of entries) {
@@ -134,7 +161,6 @@ function countFiles(dir: string) {
 }
 
 function analyze(def: ProjectDef, dir: string): QiraProjectScan {
-  const warnings: string[] = [];
   const { scripts, deps } = packageInfo(dir);
   const { counts, lastModified } = countFiles(dir);
   const branch = runGit(dir, ['rev-parse', '--abbrev-ref', 'HEAD']);
@@ -152,15 +178,16 @@ function analyze(def: ProjectDef, dir: string): QiraProjectScan {
     scripts,
     fileCounts: counts,
     lastModified,
-    scannerWarnings: warnings,
+    scannerWarnings: [],
   };
 }
 
 export function scanQiraProjects() {
   const roots = scanRoots();
+  const config = localConfig();
   const dirs = roots.flatMap((root) => listDirs(root));
   const scans = PROJECTS.map((def) => {
-    const dir = dirs.find((candidate) => matches(def, candidate));
+    const dir = explicitPathFor(def, config) ?? dirs.find((candidate) => matches(def, candidate));
     if (!dir) return { name: def.name, category: def.category, status: def.status, publicUrl: def.publicUrl, description: def.description, found: false, stack: [], scripts: [], fileCounts: {}, lastModified: null, scannerWarnings: [] } satisfies QiraProjectScan;
     return analyze(def, dir);
   });
