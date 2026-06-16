@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "collect": "tsx collector/collectV2.ts",
+    "scan:debug": "tsx collector/scanDebug.ts",
     "validate:data": "tsx collector/validateLatest.ts"
   },
   "dependencies": {
