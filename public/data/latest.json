@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T17:14:54.336Z",
+  "generatedAt": "2026-06-16T18:11:21.624Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1302,7 +1302,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "d7ec5a7",
+        "commit": "cdf319d",
         "changedFiles": 2
       },
       "stack": [
@@ -1327,7 +1327,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T17:05:37.262Z",
+      "lastModified": "2026-06-16T18:09:57.358Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1339,43 +1339,19 @@
       "description": "Latent Order Language Model architecture and validation work.",
       "found": true,
       "git": {
-        "branch": "main",
-        "commit": "bc0d96e",
-        "changedFiles": 1
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
       },
-      "stack": [
-        "Python"
-      ],
-      "scripts": [
-        "qira:learning:pull",
-        "qira:hf:ingest",
-        "qira:web:research",
-        "agent:daily-learned-update",
-        "eval:lolm",
-        "eval:controller",
-        "eval:retrieval",
-        "eval:memory",
-        "qira:receipt:daily",
-        "qira:release:canary",
-        "qira:release:stable",
-        "qira:deploy",
-        "qira:rollback",
-        "test:all"
-      ],
+      "stack": [],
+      "scripts": [],
       "fileCounts": {
-        "docs": 20,
-        "py": 179,
-        "json": 21,
-        "ts": 6,
-        "html": 8,
-        "js": 8,
-        "tsx": 17,
-        "css": 3,
-        "sql": 2
+        "py": 12,
+        "js": 1
       },
-      "lastModified": "2026-06-15T07:11:01.195Z",
+      "lastModified": "2026-03-08T23:15:11.381Z",
       "scannerWarnings": [
-        "match:scored score:1970 folder=lolm, package~lolm, text~lolm, package~lolm-nfet, text~lolm-nfet, text~lolm-nfet-client, text~latent-order, domain=lolm.autohustle.online"
+        "match:scored score:280 folder~lolm, text~lolm, text~latent-order"
       ]
     },
     {
@@ -1385,28 +1361,18 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": "main",
-        "commit": "a409d15",
-        "changedFiles": 0
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
       },
-      "stack": [
-        "Python"
-      ],
+      "stack": [],
       "scripts": [],
       "fileCounts": {
-        "html": 17,
-        "docs": 8,
-        "py": 38,
-        "json": 13,
-        "js": 19,
-        "css": 3,
-        "tsx": 2,
-        "ts": 3,
-        "rs": 34
+        "docs": 1
       },
-      "lastModified": "2026-06-11T08:51:06.000Z",
+      "lastModified": "2026-04-19T07:28:22.557Z",
       "scannerWarnings": [
-        "match:scored score:1645 folder~qev, text~qev, text~nfet, folder=qev-desktop, text~qev-desktop, text~bry-nfet, text~qira-encryption-vault, domain=secure.imagineqira.com"
+        "match:scored score:1175 folder~qev, text~qev, text~qev-desktop, text~qira-encryption-vault, domain=secure.imagineqira.com, domain=qev-desktop"
       ]
     },
     {
@@ -1509,8 +1475,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "d7ec5a7",
-        "changedFiles": 4
+        "commit": "cdf319d",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -1534,14 +1500,14 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-16T17:07:12.673Z",
+      "lastModified": "2026-06-16T18:09:57.358Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
     }
   ],
   "scanner": {
-    "rootsChecked": 7,
+    "rootsChecked": 5,
     "allowlistedProjects": 8,
     "foundProjects": 6,
     "privacyMode": "allowlist_no_paths"
@@ -1549,7 +1515,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "b87fbd2afdcbded9e85e931fd216c97eb2c0369391b43ef7cafac4cb6648a780",
+    "snapshotSha256": "72fb13ea4726bd1ac5556c45ff90f426c3bec91b78d0e2c44a341530e3966eab",
     "rawLogsPublished": false,
     "gitCommit": null
   }
