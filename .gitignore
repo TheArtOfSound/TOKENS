@@ -8,3 +8,8 @@ dist/
 collector/local-logs/
 collector/local-qira-projects.json
 public/data/raw/
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
