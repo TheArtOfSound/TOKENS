@@ -34,6 +34,31 @@ npm run collect
 npm run validate:data
 npm run build
 
+# --- Publish the fresh snapshot to the live observatory backend (if configured) ---
+# Load TOKENS_INGEST_URL / TOKENS_INGEST_TOKEN from a local .env if present.
+if [ -f "$REPO_DIR/.env" ]; then
+  # shellcheck disable=SC1091
+  set -a; . "$REPO_DIR/.env"; set +a
+fi
+
+if [ -n "${TOKENS_INGEST_URL:-}" ] && [ -n "${TOKENS_INGEST_TOKEN:-}" ]; then
+  echo "Publishing snapshot to live observatory: $TOKENS_INGEST_URL"
+  HTTP_CODE="$(curl -sS -o /tmp/qira-ingest-response.json -w "%{http_code}" \
+    -X POST "$TOKENS_INGEST_URL" \
+    -H "Content-Type: application/json" \
+    -H "X-Ingest-Token: $TOKENS_INGEST_TOKEN" \
+    --data-binary @"$REPO_DIR/public/data/latest.json" || echo "000")"
+  if [ "$HTTP_CODE" = "200" ]; then
+    echo "Live observatory updated (HTTP 200)."
+  else
+    echo "WARNING: ingest POST returned HTTP $HTTP_CODE" >&2
+    cat /tmp/qira-ingest-response.json >&2 || true
+    echo >&2
+  fi
+else
+  echo "Skipping live observatory push (TOKENS_INGEST_URL / TOKENS_INGEST_TOKEN not set)."
+fi
+
 if git diff --quiet -- public/data; then
   echo "No public data changes to publish."
   exit 0

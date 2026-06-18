@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import AnimatedNumber from "./AnimatedNumber";
-import { compact, full, pct, usd } from "../lib/format";
+import { compact, full, pct, usd, ago } from "../lib/format";
 
 const reveal = (i) => ({
   initial: { opacity: 0, y: 16 },
@@ -32,7 +32,9 @@ function Overline({ children }) {
 
 export function HeroMetric({ snapshot }) {
   const t = snapshot.totals || {};
-  const session = snapshot.live?.sessionTokens || 0;
+  const live = snapshot.live || {};
+  const isReal = live.mode === "real";
+  const session = live.sessionTokens || 0;
   return (
     <Cell
       i={0}
@@ -63,12 +65,23 @@ export function HeroMetric({ snapshot }) {
         </div>
       </div>
 
-      <div className="mt-10 flex items-center gap-3 border-t border-hair pt-5">
+      <div className="mt-10 flex items-center gap-3 border-t border-hair pt-5" data-testid="hero-live-status">
         <span className="block h-[7px] w-[7px] animate-pulse2 rounded-full bg-live" />
-        <span className="font-mono text-[11px] tracking-widest-2 text-live">+{full(session)}</span>
-        <span className="font-mono text-[11px] tracking-widest-2 text-faint">
-          TOKENS SINCE SNAPSHOT · {pct(t.cachedTokens, t.totalTokens)} CACHED
-        </span>
+        {isReal ? (
+          <>
+            <span className="font-mono text-[11px] tracking-widest-2 text-live">REAL DATA</span>
+            <span className="font-mono text-[11px] tracking-widest-2 text-faint">
+              LAST PUSH {ago(live.anchor)} · {pct(t.cachedTokens, t.totalTokens)} CACHED
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="font-mono text-[11px] tracking-widest-2 text-live">+{full(session)}</span>
+            <span className="font-mono text-[11px] tracking-widest-2 text-faint">
+              TOKENS SINCE SNAPSHOT · {pct(t.cachedTokens, t.totalTokens)} CACHED
+            </span>
+          </>
+        )}
       </div>
     </Cell>
   );

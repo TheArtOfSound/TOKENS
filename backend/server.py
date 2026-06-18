@@ -1,12 +1,14 @@
 import os
 import json
+from typing import Dict, List, Optional, Any
 from pathlib import Path
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from pydantic import BaseModel, ConfigDict, Field
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent
@@ -16,15 +18,71 @@ load_dotenv(ROOT / ".env")
 
 MONGO_URL = os.environ["MONGO_URL"]
 DB_NAME = os.environ["DB_NAME"]
+INGEST_SECRET = os.environ.get("INGEST_SECRET")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
 # Live drift: tokens accumulate continuously so the observatory feels alive.
+# Drift is ONLY applied to the seeded demo snapshot. Real snapshots pushed via
+# /api/usage/ingest show their true, un-inflated numbers (evidence, not hype).
 FRESH_RATE = 1550.0      # fresh tokens / second
 CACHED_RATE = 17300.0    # cached (read) tokens / second
 COST_RATE = 0.0023       # estimated USD / second
 TOTAL_RATE = FRESH_RATE + CACHED_RATE
+
+
+# ---------------------------------------------------------------------------
+# Ingest schema (validated payload from the local Mac publisher)
+# ---------------------------------------------------------------------------
+class TokenMetrics(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    inputTokens: int = 0
+    outputTokens: int = 0
+    cacheCreationTokens: int = 0
+    cacheReadTokens: int = 0
+    cachedTokens: int = 0
+    freshTokens: int = 0
+    totalTokens: int = 0
+    estimatedCostUsd: Optional[float] = None
+
+
+class ProviderSummary(TokenMetrics):
+    provider: str
+    displayName: str
+    models: List[str] = Field(default_factory=list)
+
+
+class DailyUsage(TokenMetrics):
+    date: str
+    provider: str
+    displayName: Optional[str] = None
+    models: List[str] = Field(default_factory=list)
+
+
+class SnapshotVerification(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    schemaVersion: str
+    snapshotSha256: Optional[str] = None
+    rawLogsPublished: bool = False
+    gitCommit: Optional[str] = None
+
+
+class IngestSnapshot(BaseModel):
+    """Sanitized snapshot pushed by the local collector. Extra keys allowed."""
+    model_config = ConfigDict(extra="allow")
+    generatedAt: str
+    timezone: str
+    source: str
+    collectorVersion: str
+    isSampleData: bool = False
+    totals: TokenMetrics
+    providers: Dict[str, ProviderSummary] = Field(default_factory=dict)
+    daily: List[DailyUsage] = Field(default_factory=list)
+    qiraProjects: Optional[List[Dict[str, Any]]] = None
+    scanner: Optional[Dict[str, Any]] = None
+    warnings: List[str] = Field(default_factory=list)
+    verification: SnapshotVerification
 
 
 def _now():
@@ -52,6 +110,7 @@ async def seed_if_empty():
     latest = _load_json("latest.json") or {}
     latest["_id"] = "latest"
     latest["liveAnchor"] = _now().isoformat()
+    latest["simulateDrift"] = True  # seeded demo data: animate it live
     await db.snapshots.replace_one({"_id": "latest"}, latest, upsert=True)
 
     history = _load_json("history.json") or []
@@ -66,6 +125,19 @@ def apply_drift(snap):
     anchor = _parse_iso(snap.get("liveAnchor", snap.get("generatedAt", _now().isoformat())))
     now = _now()
     elapsed = max(0.0, (now - anchor).total_seconds())
+
+    # Real ingested snapshots are shown verbatim (no simulated growth).
+    if not snap.get("simulateDrift", False):
+        snap["live"] = {
+            "anchor": anchor.isoformat(),
+            "elapsedSeconds": round(elapsed, 1),
+            "totalRatePerSecond": 0,
+            "freshRatePerSecond": 0,
+            "cachedRatePerSecond": 0,
+            "sessionTokens": 0,
+            "mode": "real",
+        }
+        return snap
 
     fresh_add = int(elapsed * FRESH_RATE)
     cached_add = int(elapsed * CACHED_RATE)
@@ -108,6 +180,7 @@ def apply_drift(snap):
         "freshRatePerSecond": FRESH_RATE,
         "cachedRatePerSecond": CACHED_RATE,
         "sessionTokens": total_add,
+        "mode": "simulated",
     }
     return snap
 
@@ -199,14 +272,30 @@ async def projects():
 
 
 @app.post("/api/usage/ingest")
-async def ingest(request: Request):
-    """Local Mac publisher pushes a fresh sanitized snapshot here to go live."""
-    payload = await request.json()
+async def ingest(
+    snapshot: IngestSnapshot,
+    x_ingest_token: Optional[str] = Header(default=None),
+):
+    """Local Mac publisher pushes a fresh sanitized snapshot here to go live.
+
+    Requires the `X-Ingest-Token` header to match the server's INGEST_SECRET.
+    Ingested snapshots are stored verbatim (no simulated drift).
+    """
+    if not INGEST_SECRET:
+        raise HTTPException(
+            status_code=503,
+            detail="Ingest endpoint not configured: INGEST_SECRET is missing on the server.",
+        )
+    if not x_ingest_token or x_ingest_token != INGEST_SECRET:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-Ingest-Token.")
+
+    payload = snapshot.model_dump()
     payload["_id"] = "latest"
     payload["liveAnchor"] = _now().isoformat()
+    payload["simulateDrift"] = False  # real data is shown as-is
     await db.snapshots.replace_one({"_id": "latest"}, payload, upsert=True)
 
-    clean = {k: v for k, v in payload.items() if k not in ("_id",)}
+    clean = {k: v for k, v in payload.items() if k != "_id"}
     count = await db.history.count_documents({})
     await db.history.insert_one({"index": count, "snapshot": clean})
-    return {"status": "ingested", "generatedAt": payload.get("generatedAt")}
+    return {"status": "ingested", "generatedAt": payload.get("generatedAt"), "mode": "real"}
