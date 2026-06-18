@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, ConfigDict, Field
 from dotenv import load_dotenv
@@ -299,3 +300,93 @@ async def ingest(
     count = await db.history.count_documents({})
     await db.history.insert_one({"index": count, "snapshot": clean})
     return {"status": "ingested", "generatedAt": payload.get("generatedAt"), "mode": "real"}
+
+
+
+# ---------------------------------------------------------------------------
+# Live embeddable SVG badge  ->  /api/badge.svg
+# ---------------------------------------------------------------------------
+def _compact(v):
+    if v is None:
+        return "n/a"
+    v = float(v)
+    a = abs(v)
+    if a >= 1e12:
+        return f"{v / 1e12:.2f}T"
+    if a >= 1e9:
+        return f"{v / 1e9:.2f}B"
+    if a >= 1e6:
+        return f"{v / 1e6:.1f}M"
+    if a >= 1e3:
+        return f"{v / 1e3:.1f}K"
+    return str(int(v))
+
+
+def _xml_escape(s):
+    return (
+        str(s)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def _badge_metric(snap, metric):
+    t = snap.get("totals", {})
+    providers = snap.get("providers", {})
+    if metric == "cost":
+        cost = t.get("estimatedCostUsd")
+        return "est. spend", ("n/a" if cost is None else f"${cost:,.0f}")
+    if metric == "cached":
+        total = t.get("totalTokens", 0) or 1
+        return "cached", f"{(t.get('cachedTokens', 0) / total) * 100:.1f}%"
+    if metric == "fresh":
+        return "fresh tokens", _compact(t.get("freshTokens"))
+    if metric in ("claude", "codex"):
+        p = providers.get(metric, {})
+        return metric, f"{_compact(p.get('totalTokens'))} tok"
+    return "tokens", f"{_compact(t.get('totalTokens'))} tok"
+
+
+@app.get("/api/badge.svg")
+async def badge_svg(metric: str = "total", label: Optional[str] = None, live: int = 1):
+    snap = await get_live_snapshot()
+    default_label, value = _badge_metric(snap, metric)
+    left = _xml_escape((label or f"qira · {default_label}"))
+    right = _xml_escape(value)
+
+    char = 6.7
+    lw = int(len(left) * char) + (34 if live else 20)
+    rw = int(len(right) * char) + 22
+    w = lw + rw
+    h = 28
+    dot = (
+        '<circle cx="14" cy="14" r="4" fill="#FF3B30">'
+        '<animate attributeName="opacity" values="1;0.25;1" dur="1.4s" repeatCount="indefinite"/>'
+        "</circle>"
+        if live
+        else ""
+    )
+    text_x = 24 if live else 11
+
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" role="img" aria-label="{left}: {right}">
+  <rect width="{w}" height="{h}" rx="6" fill="#0A0A0A"/>
+  <rect x="{lw}" width="{rw}" height="{h}" rx="6" fill="#121212"/>
+  <rect x="{lw - 6}" width="12" height="{h}" fill="#121212"/>
+  <rect width="{w}" height="{h}" rx="6" fill="none" stroke="#1C1C1C" stroke-width="1"/>
+  {dot}
+  <g font-family="'JetBrains Mono','SFMono-Regular',Menlo,Consolas,monospace" font-size="11.5" font-weight="700">
+    <text x="{text_x}" y="18.5" fill="#8A8F98" letter-spacing="0.5">{left}</text>
+    <text x="{lw + 11}" y="18.5" fill="#FFFFFF" letter-spacing="0.5">{right}</text>
+  </g>
+</svg>"""
+
+    return Response(
+        content=svg,
+        media_type="image/svg+xml",
+        headers={
+            "Cache-Control": "max-age=60, s-maxage=60",
+            "Access-Control-Allow-Origin": "*",
+        },
+    )

@@ -29,6 +29,8 @@ Interpretation (proceed-with-best-judgment): make the existing static Qira token
 ## Implemented (2026-06-18)
 - Full FastAPI + MongoDB backend with seeding + live drift + ingest. Tested 6/6.
 - Premium live React dashboard (bento grid, animated counters, recharts, project matrix). Tested 100%.
+- Secured `POST /api/usage/ingest` (X-Ingest-Token header + Pydantic schema); real snapshots shown verbatim (`simulateDrift=false`). `scripts/update-local.sh` wired to push to the live backend.
+- `GET /api/badge.svg` — live embeddable SVG badge (metric=total|cost|cached|fresh|claude|codex, label override, live dot). Documented in README.
 
 ## Backlog / Next
 - **P1**: Real publisher wiring — point the existing `scripts/update-local.sh` collector at `POST /api/usage/ingest` (instead of committing JSON) for true live pushes from Bryan's Mac.

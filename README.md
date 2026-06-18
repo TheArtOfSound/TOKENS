@@ -16,6 +16,58 @@ This repo is designed to work as a static GitHub Pages site backed by sanitized 
 - Snapshot hash and collector metadata
 - Last update time
 
+## Live observatory backend
+
+In addition to the static GitHub Pages site, there is a live backend
+(FastAPI + MongoDB) that serves real-time telemetry and powers the
+embeddable badge.
+
+API endpoints (all prefixed with `/api`):
+
+- `GET /api/usage/latest` — current snapshot (totals, providers, daily, projects, verification, `live`)
+- `GET /api/usage/history` — historical token series
+- `GET /api/projects` — Qira project matrix + scanner summary
+- `GET /api/badge.svg` — live embeddable SVG badge (see below)
+- `POST /api/usage/ingest` — secured publisher endpoint (see below)
+
+### Live SVG badge
+
+Embed a live, auto-updating proof-of-work badge in any README:
+
+```md
+![Qira tokens](https://YOUR-OBSERVATORY/api/badge.svg)
+```
+
+Query params:
+
+- `metric` — `total` (default), `cost`, `cached`, `fresh`, `claude`, `codex`
+- `label` — override the left label text, e.g. `?label=Claude%20Code`
+- `live` — `1` (default, animated red pulse dot) or `0` (static)
+
+Examples:
+
+```md
+![tokens](https://YOUR-OBSERVATORY/api/badge.svg)
+![spend](https://YOUR-OBSERVATORY/api/badge.svg?metric=cost)
+![cached](https://YOUR-OBSERVATORY/api/badge.svg?metric=cached)
+```
+
+### Publishing live data from your Mac
+
+`scripts/update-local.sh` pushes the freshly collected `public/data/latest.json`
+to the live backend when these are set (e.g. in a local, untracked `.env`):
+
+```bash
+TOKENS_INGEST_URL=https://YOUR-OBSERVATORY/api/usage/ingest
+TOKENS_INGEST_TOKEN=<must match INGEST_SECRET on the server>
+```
+
+The ingest endpoint requires the `X-Ingest-Token` header to match the server's
+`INGEST_SECRET`, validates the payload schema, and stores real snapshots
+verbatim (no simulated drift). If the two vars are unset, the script simply
+skips the push and still commits to GitHub Pages as before.
+
+
 ## Architecture
 
 ```text
