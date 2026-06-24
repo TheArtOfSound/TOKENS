@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T07:05:28.031Z",
+  "generatedAt": "2026-06-24T07:39:35.101Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1386,7 +1386,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "9892429",
+        "commit": "b0142f0",
         "changedFiles": 2
       },
       "stack": [
@@ -1411,7 +1411,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-24T07:01:26.543Z",
+      "lastModified": "2026-06-24T07:35:35.713Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1559,7 +1559,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "9892429",
+        "commit": "b0142f0",
         "changedFiles": 2
       },
       "stack": [
@@ -1584,7 +1584,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-06-24T07:01:26.543Z",
+      "lastModified": "2026-06-24T07:35:35.713Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1599,7 +1599,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "78d74ab2613547dd80bbf16e9016fb85d7138435c9012f29a41b972b068d8662",
+    "snapshotSha256": "08c7e3797a1796821cea3ad0f809d061597244ae96d870413affdc10941fb13a",
     "rawLogsPublished": false,
     "gitCommit": null
   }
