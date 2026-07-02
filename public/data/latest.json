@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-02T07:43:26.407Z",
+  "generatedAt": "2026-07-02T10:04:19.512Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 229927260,
-    "outputTokens": 82300267,
-    "cacheCreationTokens": 499785116,
-    "cacheReadTokens": 27720468311,
-    "cachedTokens": 28220253427,
-    "freshTokens": 312227527,
-    "totalTokens": 28532480954,
-    "estimatedCostUsd": 16898.681325200003
+    "inputTokens": 229942276,
+    "outputTokens": 82343480,
+    "cacheCreationTokens": 500630558,
+    "cacheReadTokens": 27736368388,
+    "cachedTokens": 28236998946,
+    "freshTokens": 312285756,
+    "totalTokens": 28549284702,
+    "estimatedCostUsd": 16918.391920200003
   },
   "providers": {
     "codex": {
@@ -34,14 +34,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 8860623,
-      "outputTokens": 58925717,
-      "cacheCreationTokens": 499785116,
-      "cacheReadTokens": 19489467351,
-      "cachedTokens": 19989252467,
-      "freshTokens": 67786340,
-      "totalTokens": 20057038807,
-      "estimatedCostUsd": 16898.681325200003
+      "inputTokens": 8875639,
+      "outputTokens": 58968930,
+      "cacheCreationTokens": 500630558,
+      "cacheReadTokens": 19505367428,
+      "cachedTokens": 20005997986,
+      "freshTokens": 67844569,
+      "totalTokens": 20073842555,
+      "estimatedCostUsd": 16918.391920200003
     }
   },
   "daily": [
@@ -1528,6 +1528,20 @@
       "freshTokens": 535821,
       "totalTokens": 225088179,
       "estimatedCostUsd": 332.19722395000025
+    },
+    {
+      "date": "2026-07-02",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [],
+      "inputTokens": 15016,
+      "outputTokens": 43213,
+      "cacheCreationTokens": 845442,
+      "cacheReadTokens": 15900077,
+      "cachedTokens": 16745519,
+      "freshTokens": 58229,
+      "totalTokens": 16803748,
+      "estimatedCostUsd": 19.710595000000005
     }
   ],
   "qiraProjects": [
@@ -1540,7 +1554,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1df6c43",
+        "commit": "d036604",
         "changedFiles": 2
       },
       "stack": [
@@ -1565,7 +1579,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-02T06:54:01.169Z",
+      "lastModified": "2026-07-02T10:00:37.528Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1696,13 +1710,21 @@
       "status": "active",
       "publicUrl": "https://question.imagineqira.com",
       "description": "Qira question and cognition experiment.",
-      "found": false,
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
       "stack": [],
       "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "fileCounts": {
+        "tsx": 1,
+        "ts": 1
+      },
+      "lastModified": "2026-06-11T16:31:39.000Z",
       "scannerWarnings": [
-        "no-scored-candidate"
+        "match:scored score:225 folder~question, text~question"
       ]
     },
     {
@@ -1713,7 +1735,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1df6c43",
+        "commit": "d036604",
         "changedFiles": 2
       },
       "stack": [
@@ -1738,7 +1760,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-02T06:54:01.169Z",
+      "lastModified": "2026-07-02T10:00:37.528Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1747,13 +1769,13 @@
   "scanner": {
     "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 6,
+    "foundProjects": 7,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "09a698c91c83ce613776687e7370bbc4892cd37b9d511a391c243ab47487565b",
+    "snapshotSha256": "d593a9203204bd67ae95dd589b3952cf627267f97775e8b4321aa07e52fc7acd",
     "rawLogsPublished": false,
     "gitCommit": null
   }
