@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-06T06:35:26.863Z",
+  "generatedAt": "2026-07-06T07:11:59.106Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 231506040,
-    "outputTokens": 86180956,
-    "cacheCreationTokens": 541363219,
-    "cacheReadTokens": 28766012876,
-    "cachedTokens": 29307376095,
-    "freshTokens": 317686996,
-    "totalTokens": 29625063091,
-    "estimatedCostUsd": 18173.040861700003
+    "inputTokens": 231511881,
+    "outputTokens": 86272140,
+    "cacheCreationTokens": 542089526,
+    "cacheReadTokens": 28811349849,
+    "cachedTokens": 29353439375,
+    "freshTokens": 317784021,
+    "totalTokens": 29671223396,
+    "estimatedCostUsd": 18205.281223200003
   },
   "providers": {
     "codex": {
@@ -34,14 +34,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 10439403,
-      "outputTokens": 62806406,
-      "cacheCreationTokens": 541363219,
-      "cacheReadTokens": 20535011916,
-      "cachedTokens": 21076375135,
-      "freshTokens": 73245809,
-      "totalTokens": 21149620944,
-      "estimatedCostUsd": 18173.040861700003
+      "inputTokens": 10445244,
+      "outputTokens": 62897590,
+      "cacheCreationTokens": 542089526,
+      "cacheReadTokens": 20580348889,
+      "cachedTokens": 21122438415,
+      "freshTokens": 73342834,
+      "totalTokens": 21195781249,
+      "estimatedCostUsd": 18205.281223200003
     }
   },
   "daily": [
@@ -1576,14 +1576,28 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 643063,
-      "outputTokens": 1630600,
-      "cacheCreationTokens": 14029120,
-      "cacheReadTokens": 318583604,
-      "cachedTokens": 332612724,
-      "freshTokens": 2273663,
-      "totalTokens": 334886387,
-      "estimatedCostUsd": 331.8047644999998
+      "inputTokens": 648719,
+      "outputTokens": 1716325,
+      "cacheCreationTokens": 14749561,
+      "cacheReadTokens": 359817966,
+      "cachedTokens": 374567527,
+      "freshTokens": 2365044,
+      "totalTokens": 376932571,
+      "estimatedCostUsd": 361.79776049999987
+    },
+    {
+      "date": "2026-07-06",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [],
+      "inputTokens": 185,
+      "outputTokens": 5459,
+      "cacheCreationTokens": 5866,
+      "cacheReadTokens": 4102611,
+      "cachedTokens": 4108477,
+      "freshTokens": 5644,
+      "totalTokens": 4114121,
+      "estimatedCostUsd": 2.2473655
     }
   ],
   "qiraProjects": [
@@ -1596,7 +1610,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "85a0989",
+        "commit": "6c3c90c",
         "changedFiles": 2
       },
       "stack": [
@@ -1621,7 +1635,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-06T06:31:47.953Z",
+      "lastModified": "2026-07-06T07:05:30.752Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1777,7 +1791,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "85a0989",
+        "commit": "6c3c90c",
         "changedFiles": 2
       },
       "stack": [
@@ -1802,7 +1816,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-06T06:31:47.953Z",
+      "lastModified": "2026-07-06T07:05:30.752Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1817,7 +1831,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "8948d5584b8aa29832f20390b1d01f249b28da166d4271957accf9128b0e264e",
+    "snapshotSha256": "b41dd2d7004db5acc57a4db47bc3917dc25dd51ad3dd9ea9d170bdf0a3fed3dd",
     "rawLogsPublished": false,
     "gitCommit": null
   }
