@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-10T00:07:34.103Z",
+  "generatedAt": "2026-07-10T00:42:36.730Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 235350831,
-    "outputTokens": 88295756,
-    "cacheCreationTokens": 561109309,
-    "cacheReadTokens": 29297913502,
-    "cachedTokens": 29859022811,
-    "freshTokens": 323646587,
-    "totalTokens": 30182669398,
-    "estimatedCostUsd": 18870.19748795
+    "inputTokens": 235356483,
+    "outputTokens": 88455438,
+    "cacheCreationTokens": 563584793,
+    "cacheReadTokens": 29414325897,
+    "cachedTokens": 29977910690,
+    "freshTokens": 323811921,
+    "totalTokens": 30301722611,
+    "estimatedCostUsd": 19010.096842450002
   },
   "providers": {
     "codex": {
@@ -34,14 +34,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 10935577,
-      "outputTokens": 64521754,
-      "cacheCreationTokens": 561109309,
-      "cacheReadTokens": 20978906910,
-      "cachedTokens": 21540016219,
-      "freshTokens": 75457331,
-      "totalTokens": 21615473550,
-      "estimatedCostUsd": 18870.19748795
+      "inputTokens": 10941229,
+      "outputTokens": 64681436,
+      "cacheCreationTokens": 563584793,
+      "cacheReadTokens": 21095319305,
+      "cachedTokens": 21658904098,
+      "freshTokens": 75622665,
+      "totalTokens": 21734526763,
+      "estimatedCostUsd": 19010.096842450002
     }
   },
   "daily": [
@@ -1646,14 +1646,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 176393,
-      "outputTokens": 646923,
-      "cacheCreationTokens": 8593586,
-      "cacheReadTokens": 165248645,
-      "cachedTokens": 173842231,
-      "freshTokens": 823316,
-      "totalTokens": 174665547,
-      "estimatedCostUsd": 312.0194727500001
+      "inputTokens": 182045,
+      "outputTokens": 806605,
+      "cacheCreationTokens": 11069070,
+      "cacheReadTokens": 281661040,
+      "cachedTokens": 292730110,
+      "freshTokens": 988650,
+      "totalTokens": 293718760,
+      "estimatedCostUsd": 451.9188272499997
     }
   ],
   "qiraProjects": [
@@ -1666,7 +1666,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "05ca0e6",
+        "commit": "a884cdc",
         "changedFiles": 2
       },
       "stack": [
@@ -1691,7 +1691,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-09T23:58:51.550Z",
+      "lastModified": "2026-07-10T00:37:46.692Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1822,21 +1822,13 @@
       "status": "active",
       "publicUrl": "https://question.imagineqira.com",
       "description": "Qira question and cognition experiment.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
       "scripts": [],
-      "fileCounts": {
-        "tsx": 1,
-        "ts": 1
-      },
-      "lastModified": "2026-06-11T16:31:39.000Z",
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:225 folder~question, text~question"
+        "no-scored-candidate"
       ]
     },
     {
@@ -1847,7 +1839,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "05ca0e6",
+        "commit": "a884cdc",
         "changedFiles": 2
       },
       "stack": [
@@ -1872,7 +1864,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-09T23:58:51.550Z",
+      "lastModified": "2026-07-10T00:37:46.692Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1881,13 +1873,13 @@
   "scanner": {
     "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 7,
+    "foundProjects": 6,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "8631566c3947bab017ccf691c78a02eb84870d1b8bf82d7e34bbfa7e68984914",
+    "snapshotSha256": "aa21e3cd7a98fcd36c463581f58cf1aecad02d5639b1a91d49230fed4ff5c91e",
     "rawLogsPublished": false,
     "gitCommit": null
   }
