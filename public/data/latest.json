@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-12T05:19:08.634Z",
+  "generatedAt": "2026-07-12T05:51:32.061Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 241162305,
-    "outputTokens": 89125347,
-    "cacheCreationTokens": 589082664,
-    "cacheReadTokens": 30151562057,
-    "cachedTokens": 30740644721,
-    "freshTokens": 330287652,
-    "totalTokens": 31070932373,
-    "estimatedCostUsd": 19898.076609200005
+    "inputTokens": 241167362,
+    "outputTokens": 89299790,
+    "cacheCreationTokens": 590659335,
+    "cacheReadTokens": 30223687718,
+    "cachedTokens": 30814347053,
+    "freshTokens": 330467152,
+    "totalTokens": 31144814205,
+    "estimatedCostUsd": 19954.292509700004
   },
   "providers": {
     "codex": {
@@ -34,14 +34,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 13041487,
-      "outputTokens": 64909396,
-      "cacheCreationTokens": 589082664,
-      "cacheReadTokens": 21741484361,
-      "cachedTokens": 22330567025,
-      "freshTokens": 77950883,
-      "totalTokens": 22408517908,
-      "estimatedCostUsd": 19898.076609200005
+      "inputTokens": 13046544,
+      "outputTokens": 65083839,
+      "cacheCreationTokens": 590659335,
+      "cacheReadTokens": 21813610022,
+      "cachedTokens": 22404269357,
+      "freshTokens": 78130383,
+      "totalTokens": 22482399740,
+      "estimatedCostUsd": 19954.292509700004
     }
   },
   "daily": [
@@ -1688,14 +1688,14 @@
       "provider": "claude",
       "displayName": "Claude Code",
       "models": [],
-      "inputTokens": 685704,
-      "outputTokens": 1620846,
-      "cacheCreationTokens": 19324583,
-      "cacheReadTokens": 480674522,
-      "cachedTokens": 499999105,
-      "freshTokens": 2306550,
-      "totalTokens": 502305655,
-      "estimatedCostUsd": 471.33087599999993
+      "inputTokens": 690761,
+      "outputTokens": 1795289,
+      "cacheCreationTokens": 20901254,
+      "cacheReadTokens": 552800183,
+      "cachedTokens": 573701437,
+      "freshTokens": 2486050,
+      "totalTokens": 576187487,
+      "estimatedCostUsd": 527.5467764999996
     },
     {
       "date": "2026-07-11",
@@ -1722,7 +1722,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "db44ce9",
+        "commit": "f4d68a5",
         "changedFiles": 2
       },
       "stack": [
@@ -1747,7 +1747,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-12T05:17:01.024Z",
+      "lastModified": "2026-07-12T05:49:48.604Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1895,7 +1895,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "db44ce9",
+        "commit": "f4d68a5",
         "changedFiles": 2
       },
       "stack": [
@@ -1920,7 +1920,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-12T05:17:01.024Z",
+      "lastModified": "2026-07-12T05:49:48.604Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1935,7 +1935,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "24191b2be9fd2149a3db764f1da884831e527b2403e830529d0610304e074d80",
+    "snapshotSha256": "222a8957a6eda61db895170a6743948894423e5365cd322a14808f848acc8df6",
     "rawLogsPublished": false,
     "gitCommit": null
   }
