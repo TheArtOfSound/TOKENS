@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-13T01:25:52.135Z",
+  "generatedAt": "2026-07-13T01:58:52.649Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 241518314,
-    "outputTokens": 89387062,
+    "inputTokens": 241912072,
+    "outputTokens": 89427971,
     "cacheCreationTokens": 592476419,
-    "cacheReadTokens": 30291643607,
-    "cachedTokens": 30884120026,
-    "freshTokens": 330905376,
-    "totalTokens": 31215025402,
+    "cacheReadTokens": 30297248215,
+    "cachedTokens": 30889724634,
+    "freshTokens": 331340043,
+    "totalTokens": 31221064677,
     "estimatedCostUsd": 20003.372495200005
   },
   "providers": {
@@ -20,13 +20,13 @@
       "provider": "codex",
       "displayName": "Codex",
       "models": [],
-      "inputTokens": 228441346,
-      "outputTokens": 24247878,
+      "inputTokens": 228835104,
+      "outputTokens": 24288787,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 8419286784,
-      "cachedTokens": 8419286784,
-      "freshTokens": 252689224,
-      "totalTokens": 8671976008,
+      "cacheReadTokens": 8424891392,
+      "cachedTokens": 8424891392,
+      "freshTokens": 253123891,
+      "totalTokens": 8678015283,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -1730,13 +1730,13 @@
       "provider": "codex",
       "displayName": "Codex",
       "models": [],
-      "inputTokens": 320528,
-      "outputTokens": 31927,
+      "inputTokens": 714286,
+      "outputTokens": 72836,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 9209088,
-      "cachedTokens": 9209088,
-      "freshTokens": 352455,
-      "totalTokens": 9561543,
+      "cacheReadTokens": 14813696,
+      "cachedTokens": 14813696,
+      "freshTokens": 787122,
+      "totalTokens": 15600818,
       "estimatedCostUsd": null
     }
   ],
@@ -1750,7 +1750,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "5a73bfc",
+        "commit": "406294f",
         "changedFiles": 2
       },
       "stack": [
@@ -1775,7 +1775,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-13T01:17:41.808Z",
+      "lastModified": "2026-07-13T01:55:59.605Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1876,13 +1876,28 @@
       "status": "active",
       "publicUrl": "https://pti.imagineqira.com",
       "description": "Phoenix traffic intelligence surface.",
-      "found": false,
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
       "stack": [],
-      "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "scripts": [
+        "research",
+        "draft",
+        "today",
+        "linkedin",
+        "all",
+        "status"
+      ],
+      "fileCounts": {
+        "docs": 10,
+        "json": 10
+      },
+      "lastModified": "2026-06-06T16:06:35.036Z",
       "scannerWarnings": [
-        "no-scored-candidate"
+        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
       ]
     },
     {
@@ -1908,7 +1923,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "5a73bfc",
+        "commit": "406294f",
         "changedFiles": 2
       },
       "stack": [
@@ -1933,7 +1948,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-13T01:17:41.808Z",
+      "lastModified": "2026-07-13T01:55:59.605Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1942,13 +1957,13 @@
   "scanner": {
     "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 5,
+    "foundProjects": 6,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "680ae363486e4cf2363784a68e35b02777e0c7bc180a5b765f23b0910fe69af1",
+    "snapshotSha256": "21807f3bf9f9d770bceff93dd95a67dd74250f9c674867eb963f2c3aa7adf84b",
     "rawLogsPublished": false,
     "gitCommit": null
   }
