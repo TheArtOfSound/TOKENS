@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T00:47:38.163Z",
+  "generatedAt": "2026-07-13T01:25:52.135Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
@@ -1750,7 +1750,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "c41c5dc",
+        "commit": "5a73bfc",
         "changedFiles": 2
       },
       "stack": [
@@ -1775,7 +1775,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-13T00:46:45.462Z",
+      "lastModified": "2026-07-13T01:17:41.808Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -1876,28 +1876,13 @@
       "status": "active",
       "publicUrl": "https://pti.imagineqira.com",
       "description": "Phoenix traffic intelligence surface.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
-      "scripts": [
-        "research",
-        "draft",
-        "today",
-        "linkedin",
-        "all",
-        "status"
-      ],
-      "fileCounts": {
-        "docs": 10,
-        "json": 10
-      },
-      "lastModified": "2026-06-06T16:06:35.036Z",
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
+        "no-scored-candidate"
       ]
     },
     {
@@ -1923,7 +1908,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "c41c5dc",
+        "commit": "5a73bfc",
         "changedFiles": 2
       },
       "stack": [
@@ -1948,7 +1933,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-13T00:46:45.462Z",
+      "lastModified": "2026-07-13T01:17:41.808Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -1957,13 +1942,13 @@
   "scanner": {
     "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 6,
+    "foundProjects": 5,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "7e7cbc8e7c6ee23e910ba0c7c244156141d341b48707ee9692a27683433d9579",
+    "snapshotSha256": "680ae363486e4cf2363784a68e35b02777e0c7bc180a5b765f23b0910fe69af1",
     "rawLogsPublished": false,
     "gitCommit": null
   }
