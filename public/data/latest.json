@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-18T11:51:12.039Z",
+  "generatedAt": "2026-07-18T12:22:23.013Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.3.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 260462185,
-    "outputTokens": 92439651,
+    "inputTokens": 260495935,
+    "outputTokens": 92441993,
     "cacheCreationTokens": 615063903,
-    "cacheReadTokens": 31679945739,
-    "cachedTokens": 32295009642,
-    "freshTokens": 352901836,
-    "totalTokens": 32647911478,
+    "cacheReadTokens": 31680091915,
+    "cachedTokens": 32295155818,
+    "freshTokens": 352937928,
+    "totalTokens": 32648093746,
     "estimatedCostUsd": 20965.52151085
   },
   "providers": {
@@ -20,13 +20,13 @@
       "provider": "codex",
       "displayName": "Codex",
       "models": [],
-      "inputTokens": 247612232,
-      "outputTokens": 25675079,
+      "inputTokens": 247645982,
+      "outputTokens": 25677421,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 8877227008,
-      "cachedTokens": 8877227008,
-      "freshTokens": 273287311,
-      "totalTokens": 9150514319,
+      "cacheReadTokens": 8877373184,
+      "cachedTokens": 8877373184,
+      "freshTokens": 273323403,
+      "totalTokens": 9150696587,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -1870,13 +1870,13 @@
       "provider": "codex",
       "displayName": "Codex",
       "models": [],
-      "inputTokens": 207265,
-      "outputTokens": 15826,
+      "inputTokens": 241015,
+      "outputTokens": 18168,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 1587968,
-      "cachedTokens": 1587968,
-      "freshTokens": 223091,
-      "totalTokens": 1811059,
+      "cacheReadTokens": 1734144,
+      "cachedTokens": 1734144,
+      "freshTokens": 259183,
+      "totalTokens": 1993327,
       "estimatedCostUsd": null
     }
   ],
@@ -1890,7 +1890,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "77fa1f6",
+        "commit": "0856581",
         "changedFiles": 2
       },
       "stack": [
@@ -1915,7 +1915,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-18T11:50:05.651Z",
+      "lastModified": "2026-07-18T12:21:15.740Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ]
@@ -2063,7 +2063,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "77fa1f6",
+        "commit": "0856581",
         "changedFiles": 2
       },
       "stack": [
@@ -2088,7 +2088,7 @@
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-18T11:50:05.651Z",
+      "lastModified": "2026-07-18T12:21:15.740Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -2103,7 +2103,7 @@
   "warnings": [],
   "verification": {
     "schemaVersion": "1.1.0",
-    "snapshotSha256": "651dd2fe95dff335facb7a6ed6762a91f6a6d072586ae490602c56f69d708421",
+    "snapshotSha256": "07a85629eab2688646e4638d9bd12448e36c9c63d1c117ebf0ebafb893018c8f",
     "rawLogsPublished": false,
     "gitCommit": null
   }
