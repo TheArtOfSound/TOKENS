@@ -10,19 +10,23 @@
     "typecheck": "tsc --noEmit",
     "collect": "tsx collector/collectV2.ts",
     "scan:debug": "tsx collector/scanDebug.ts",
-    "validate:data": "tsx collector/validateLatest.ts"
+    "validate:data": "tsx collector/validateLatest.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
-    "tsx": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest"
+    "@types/node": "25.9.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "ajv": "8.20.0",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3",
+    "vite": "8.0.16",
+    "vitest": "3.2.7"
   }
 }

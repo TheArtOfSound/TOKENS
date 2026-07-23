@@ -24,10 +24,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install
-        run: npm install
-      - name: Validate public data
+          cache: npm
+      - name: Install (immutable)
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests (normalization, privacy, schema, strangler)
+        run: npm test
+      - name: Validate published data (schema + hash + secret scan)
         run: npm run validate:data
+      - name: Dependency audit (advisory)
+        run: npm audit --audit-level=high || true
       - name: Build
         run: npm run build
         env:

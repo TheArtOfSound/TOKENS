@@ -8,3 +8,5 @@ dist/
 collector/local-logs/
 collector/local-qira-projects.json
 public/data/raw/
+tsconfig.tsbuildinfo
+.tmp-bin/
