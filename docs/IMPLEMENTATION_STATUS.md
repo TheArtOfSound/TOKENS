@@ -26,15 +26,18 @@ This is the master status view. Detailed docs live under `docs/execution`, `docs
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
 | Test suite | ✅ done | 35 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
+| Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
+| Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
 | CI gates | ✅ done | npm ci + typecheck + test + validate + audit + build |
 | Publisher hardening | ✅ done | idempotent, no-clobber, no force-push |
+| Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
 | Docs / threat model / privacy | ✅ done | full `docs/**` set |
 | Live publishing restore | ⬜ needs Bryan | resolve R1, re-enable launchd |
 | Incremental/scoped scan | ⬜ roadmap | current scan is full + slow (R5) |
 | Ed25519 device signing | ⬜ roadmap | designed in THREAT_MODEL/roadmap |
 | SQLite event ledger | ⬜ roadmap | Phase 2 |
 | Cloud sync / auth ingest | ⬜ roadmap | Phase 2+ |
-| Professional profile / marketplace | ⬜ future | Phase 3+ |
+| Opportunity marketplace / employer search | ⬜ future | Phase 4+ (profile identity layer now shipped) |
 
 ## Known limitations (honest)
 1. **Live site is stale** (2026-06-18) until the origin/local divergence is reconciled by Bryan (R1). All new work is on a feature branch.

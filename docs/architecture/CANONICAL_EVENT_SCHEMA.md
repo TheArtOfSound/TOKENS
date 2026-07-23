@@ -70,6 +70,30 @@ The public contract keeps `estimatedCostUsd` as float USD (frozen), but the cano
 ## Null-with-reason
 Unavailable values are `null` (e.g. `estimatedCostUsd`), never a fabricated `0`. Token counts default to `0` only when genuinely zero; a coercion of `NaN`/`Infinity`/negative also yields `0` (safety), and such inputs are treated as absent data upstream.
 
+## `profile` block (professional identity — additive, optional)
+
+Leads with **identity**, backed by **measured activity**, with **honest verification** labels.
+
+```jsonc
+"profile": {
+  "identity": {           // SELF-SUBMITTED (from profile/profile.json), sanitized, labeled unverified in UI
+    "displayName", "headline", "pronouns", "location", "bio", "availability",
+    "workCategories": [], "openTo": [], "links": [ { "label", "url(https only)" } ]
+  },
+  "activity": {           // COLLECTOR-DERIVED from daily data (deterministic)
+    "referenceDate", "activeDays", "firstActiveDate", "lastActiveDate", "spanDays",
+    "activeDaysLast30", "activeDaysLast90", "currentStreakDays", "longestStreakDays",
+    "toolsUsed": [], "modelsUsed": [], "projectsActive"
+  },
+  "verification": [       // HONEST status per category
+    { "label", "status": "verified|reported|self_submitted|unverified|pending", "basis" }
+  ],
+  "note": "identity is self-submitted; activity is measured; volume is not skill"
+}
+```
+
+Rules: identity is never presented as verified; activity is derived only from measured usage (no "expert" inference); categories we cannot verify yet (`Identity verified`, `Work verified`) are `pending`, never faked. Identity strings are sanitized by the same allowlist/secret-scan pipeline as everything else — a bio cannot leak a path or key (proven in `profile.test.ts`). Source: [`collector/lib/profile.ts`](../../collector/lib/profile.ts); config: `profile/profile.json`.
+
 ## `history.json` (compact series)
 ```jsonc
 { "schemaVersion": "2.0.0", "kind": "compact_daily_series", "generatedAt": "…",

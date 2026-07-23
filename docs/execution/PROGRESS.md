@@ -23,6 +23,14 @@
 ### Verified
 - Chrome at 1440×900 and 375×812: methodology panel + evidence tags render, no console errors, no horizontal overflow, no leaked strings in served assets.
 
+### Added — professional profile layer (evidence-backed identity)
+- **`collector/lib/profile.ts`** (pure, tested): derives active AI-work days, current/longest streak, active-last-30/90, tools, models, projects from measured daily data; honest verification categories (never fakes identity/work verification).
+- **`profile/profile.json`** — self-submitted identity config (sanitized, labeled unverified).
+- Profile block routed through the allowlist + secret-scan pipeline (a bio cannot leak a path/key — proven by tests).
+- **Frontend `ProfileView`**: identity-first card, verification chips, measured stat tiles, tools/models, work categories, availability, and a 26-week GitHub-style activity heatmap.
+- Fixed a pre-existing mobile horizontal-overflow bug (28-bar chart + fixed decorative SVG).
+- +8 tests (43 total); real derived data: 95 active days, 26-day longest streak, active 29/30 last days.
+
 ### Not done (deferred by design — see ROADMAP)
 - Origin/local reconciliation (needs Bryan — R1).
-- Cloud sync backend, authenticated ingest, SQLite ledger, Rust core, incremental checkpoint scan, Ed25519 device signing, opportunity marketplace, employer search, professional profile graph.
+- Cloud sync backend, authenticated ingest, SQLite ledger, Rust core, incremental checkpoint scan, Ed25519 device signing, connected work-artifact verification, opportunity marketplace, employer search.

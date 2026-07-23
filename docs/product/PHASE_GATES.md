@@ -22,8 +22,14 @@ Each phase advances only on **objective evidence** (dossier §07). Do not build 
 ## Phase 2 — Local ledger & efficiency  ⬜
 SQLite event ledger (WAL, migrations, `usage_events`, `daily_aggregates`, checkpoints), incremental/streaming scan, replacing the file-rewrite model entirely. Gate: no-change rescan is fast with zero new inserts; median scan <2s, p95 <5s.
 
-## Phase 3 — Verified public identity  ⬜
+## Phase 3 — Verified public identity  ◑ (first cut shipped)
 Professional profile leading with identity (not a token number), evidence graph, verification categories (collector-verified / provider-reported / identity-verified / outcome-verified). Gate: ≥70% of testers find the local dashboard useful without any public-profile features (proves the free tier stands alone first).
+- ✅ Identity-first profile card (name/headline/location/availability/links) — self-submitted, sanitized, labeled unverified.
+- ✅ Measured activity: active AI-work days, current/longest streak, active-last-30, tools, models, projects — all collector-derived.
+- ✅ Honest verification categories (Collector verified / Provider reported / Sustained usage / Active-multi-project verified; Identity/Work verified = `pending`).
+- ✅ 26-week activity heatmap driven by measured daily data.
+- ⬜ Connected work artifacts (repos/deployments/case studies) with outcome verification.
+- ⬜ Tester-usefulness gate (≥70%) — requires beta cohort.
 
 ## Phase 4 — First real opportunity  ⬜
 A single, real employer/evaluation use case end-to-end (search by verified activity → contact). Gate: one genuine paid opportunity completed. No marketplace, messaging, or social feed before this.
