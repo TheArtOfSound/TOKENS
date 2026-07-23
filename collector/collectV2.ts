@@ -24,10 +24,32 @@ import { assembleDraft, type RawSource } from './lib/snapshot';
 import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './lib/publish';
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
+import { buildProfile, type ProfileIdentity } from './lib/profile';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
 const HISTORY = path.join(OUT_DIR, 'history.json');
+const PROFILE_CONFIG = path.join(process.cwd(), 'profile', 'profile.json');
+
+/** Read the self-submitted profile identity (profile/profile.json). Safe defaults if absent. */
+function readProfileConfig(): ProfileIdentity {
+  const fallback: ProfileIdentity = {
+    displayName: 'Qira',
+    headline: 'Local AI-agent work ledger',
+    workCategories: [],
+    openTo: [],
+    links: [],
+  };
+  try {
+    const parsed = JSON.parse(readFileSync(PROFILE_CONFIG, 'utf8')) as Partial<ProfileIdentity>;
+    if (parsed && typeof parsed.displayName === 'string' && typeof parsed.headline === 'string') {
+      return { ...fallback, ...parsed } as ProfileIdentity;
+    }
+  } catch {
+    /* fall through to defaults */
+  }
+  return fallback;
+}
 
 const PROVIDERS: Array<{ provider: 'claude' | 'codex'; args: string[] }> = [
   { provider: 'claude', args: ['claude', 'daily', '--json'] },
@@ -74,6 +96,14 @@ function main(): void {
     scanner: qira.scanner,
     gitCommit: process.env.GITHUB_SHA ?? null,
   });
+
+  draft.profile = buildProfile(
+    readProfileConfig(),
+    daily,
+    draft.providers,
+    draft.generatedAt.slice(0, 10),
+    qira.scanner.foundProjects,
+  );
 
   const existing = readExistingLatest();
 

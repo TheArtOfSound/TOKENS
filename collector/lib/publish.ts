@@ -25,6 +25,7 @@ import {
 } from './canonical';
 import { isSafeString } from './secretScan';
 import type { NormalizedDaily, ProviderSummary } from './normalize';
+import type { ProfileBlock, VerificationStatus } from './profile';
 
 // ---------- Published (frozen contract + additive) shapes ----------
 
@@ -75,6 +76,40 @@ export interface PublishedVerification {
   proves: string;
 }
 
+export interface PublishedProfileLink {
+  label: string;
+  url: string;
+}
+export interface PublishedProfile {
+  identity: {
+    displayName: string;
+    headline: string;
+    pronouns: string | null;
+    location: string | null;
+    bio: string | null;
+    availability: string | null;
+    workCategories: string[];
+    openTo: string[];
+    links: PublishedProfileLink[];
+  };
+  activity: {
+    referenceDate: string;
+    activeDays: number;
+    firstActiveDate: string | null;
+    lastActiveDate: string | null;
+    spanDays: number;
+    activeDaysLast30: number;
+    activeDaysLast90: number;
+    currentStreakDays: number;
+    longestStreakDays: number;
+    toolsUsed: string[];
+    modelsUsed: string[];
+    projectsActive: number;
+  };
+  verification: { label: string; status: VerificationStatus; basis: string }[];
+  note: string;
+}
+
 export interface PublishedSnapshot {
   generatedAt: string;
   timezone: string;
@@ -89,6 +124,7 @@ export interface PublishedSnapshot {
   warnings: string[];
   measurement: MeasurementBlock;
   privacy: PrivacyBlock;
+  profile?: PublishedProfile;
   verification: PublishedVerification;
 }
 
@@ -106,6 +142,7 @@ export interface DraftSnapshot {
   warnings: string[];
   gitCommit: string | null;
   eligibleForAggregateSync: boolean;
+  profile?: ProfileBlock;
 }
 
 export interface PublishResult {
@@ -203,6 +240,63 @@ function publishProject(raw: unknown, dropped: string[]): PublishedProject | nul
   return project;
 }
 
+const HTTPS_URL_RE = /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i;
+const VERIFICATION_STATUSES: VerificationStatus[] = ['verified', 'reported', 'self_submitted', 'unverified', 'pending'];
+
+/** Publish the profile block: identity strings sanitized, activity coerced, links https-only. */
+function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProfile {
+  const id = profile.identity;
+  const links: PublishedProfileLink[] = (Array.isArray(id.links) ? id.links : [])
+    .map((link) => {
+      const url = safeStringOrNull(link?.url, dropped, 200);
+      const label = safeStringOrNull(link?.label, dropped, 40);
+      return url && label && HTTPS_URL_RE.test(url) ? { label, url } : null;
+    })
+    .filter((link): link is PublishedProfileLink => link !== null)
+    .slice(0, 6);
+
+  const a = profile.activity;
+  const validDate = (value: string | null): string | null =>
+    typeof value === 'string' && DATE_RE.test(value) ? value : null;
+
+  return {
+    identity: {
+      displayName: (safeStringOrNull(id.displayName, dropped, 60) ?? 'Anonymous').slice(0, 60),
+      headline: safeStringOrNull(id.headline, dropped, 120) ?? '',
+      pronouns: safeStringOrNull(id.pronouns, dropped, 24),
+      location: safeStringOrNull(id.location, dropped, 60),
+      bio: safeStringOrNull(id.bio, dropped, 600),
+      availability: safeStringOrNull(id.availability, dropped, 160),
+      workCategories: safeStrings(id.workCategories, dropped, 10, 40),
+      openTo: safeStrings(id.openTo, dropped, 10, 40),
+      links,
+    },
+    activity: {
+      referenceDate: validDate(a.referenceDate) ?? new Date(0).toISOString().slice(0, 10),
+      activeDays: safeCount(a.activeDays),
+      firstActiveDate: validDate(a.firstActiveDate),
+      lastActiveDate: validDate(a.lastActiveDate),
+      spanDays: safeCount(a.spanDays),
+      activeDaysLast30: safeCount(a.activeDaysLast30),
+      activeDaysLast90: safeCount(a.activeDaysLast90),
+      currentStreakDays: safeCount(a.currentStreakDays),
+      longestStreakDays: safeCount(a.longestStreakDays),
+      toolsUsed: safeStrings(a.toolsUsed, dropped, 8, 40),
+      modelsUsed: safeStrings(a.modelsUsed, dropped, 24, 80),
+      projectsActive: safeCount(a.projectsActive),
+    },
+    verification: (Array.isArray(profile.verification) ? profile.verification : [])
+      .map((entry) => ({
+        label: safeStringOrNull(entry?.label, dropped, 60) ?? '',
+        status: VERIFICATION_STATUSES.includes(entry?.status) ? entry.status : 'unverified',
+        basis: safeStringOrNull(entry?.basis, dropped, 300) ?? '',
+      }))
+      .filter((entry) => entry.label)
+      .slice(0, 12),
+    note: safeStringOrNull(profile.note, dropped, 400) ?? '',
+  };
+}
+
 const TIMEZONE_RE = /^[A-Za-z]+(?:\/[A-Za-z0-9_+-]+){0,2}$/;
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -245,6 +339,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
   const warnings = safeStrings(draft.warnings, dropped, 12, 200);
 
   const measurement = buildMeasurementBlock(totals.totalTokens, totals.estimatedCostUsd);
+  const profile = draft.profile ? publishProfile(draft.profile, dropped) : undefined;
 
   const privacy: PrivacyBlock = {
     rawContentPersisted: false,
@@ -258,6 +353,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'scanner',
       'warnings',
       'measurement',
+      ...(profile ? ['profile'] : []),
       'verification',
     ],
   };
@@ -281,6 +377,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     warnings,
     measurement,
     privacy,
+    ...(profile ? { profile } : {}),
     verification: {
       schemaVersion: CANONICAL_SCHEMA_VERSION,
       canonicalSchemaVersion: CANONICAL_SCHEMA_VERSION,

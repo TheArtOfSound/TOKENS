@@ -97,6 +97,73 @@
         "fieldsPublished": { "type": "array", "items": { "type": "string" } }
       }
     },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "activity", "verification", "note"],
+      "properties": {
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["displayName", "headline", "pronouns", "location", "bio", "availability", "workCategories", "openTo", "links"],
+          "properties": {
+            "displayName": { "type": "string", "maxLength": 60 },
+            "headline": { "type": "string", "maxLength": 120 },
+            "pronouns": { "type": ["string", "null"], "maxLength": 24 },
+            "location": { "type": ["string", "null"], "maxLength": 60 },
+            "bio": { "type": ["string", "null"], "maxLength": 600 },
+            "availability": { "type": ["string", "null"], "maxLength": 160 },
+            "workCategories": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
+            "openTo": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "url"],
+                "properties": {
+                  "label": { "type": "string", "maxLength": 40 },
+                  "url": { "type": "string", "pattern": "^https://" }
+                }
+              }
+            }
+          }
+        },
+        "activity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["referenceDate", "activeDays", "firstActiveDate", "lastActiveDate", "spanDays", "activeDaysLast30", "activeDaysLast90", "currentStreakDays", "longestStreakDays", "toolsUsed", "modelsUsed", "projectsActive"],
+          "properties": {
+            "referenceDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+            "activeDays": { "type": "integer", "minimum": 0 },
+            "firstActiveDate": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+            "lastActiveDate": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+            "spanDays": { "type": "integer", "minimum": 0 },
+            "activeDaysLast30": { "type": "integer", "minimum": 0 },
+            "activeDaysLast90": { "type": "integer", "minimum": 0 },
+            "currentStreakDays": { "type": "integer", "minimum": 0 },
+            "longestStreakDays": { "type": "integer", "minimum": 0 },
+            "toolsUsed": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
+            "modelsUsed": { "type": "array", "items": { "type": "string", "maxLength": 80 } },
+            "projectsActive": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "verification": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "status", "basis"],
+            "properties": {
+              "label": { "type": "string", "maxLength": 60 },
+              "status": { "enum": ["verified", "reported", "self_submitted", "unverified", "pending"] },
+              "basis": { "type": "string", "maxLength": 300 }
+            }
+          }
+        },
+        "note": { "type": "string", "maxLength": 400 }
+      }
+    },
     "verification": {
       "type": "object",
       "additionalProperties": false,
