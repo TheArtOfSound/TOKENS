@@ -1,18 +1,64 @@
 import { useEffect, useMemo, useState } from 'react';
 import { compactNumber, currency, dateTime, fullNumber, percent } from './lib/format';
-import { PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
+import { MEASUREMENT_LABEL, PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
 
 type Tone = 'default' | 'dark' | 'quiet';
 
-function MetricCard(props: { label: string; value: string; detail?: string; tone?: Tone }) {
+function MetricCard(props: { label: string; value: string; detail?: string; tone?: Tone; evidence?: string }) {
   return (
     <article className={`metric metric--${props.tone ?? 'default'}`}>
       <span>{props.label}</span>
       <strong>{props.value}</strong>
       {props.detail ? <small>{props.detail}</small> : null}
+      {props.evidence ? <em className="evidence-tag">{props.evidence}</em> : null}
     </article>
+  );
+}
+
+function MethodologyPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
+  const classes = snapshot.measurement?.classes ?? {};
+  const families: Array<[string, string]> = [
+    ['inputTokens', 'Input tokens'],
+    ['outputTokens', 'Output tokens'],
+    ['cacheReadTokens', 'Cache-read tokens'],
+    ['totalTokens', 'Total tokens'],
+    ['estimatedCostUsd', 'Estimated cost'],
+  ];
+  const rows = families.filter(([key]) => classes[key]);
+  return (
+    <section className="panel wide-panel" id="methodology">
+      <div className="section-kicker"><span /> MEASUREMENT &amp; METHODOLOGY</div>
+      <h2>What each number is — and is not.</h2>
+      <p className="panel-copy">
+        {snapshot.measurement?.note ??
+          'Token counts are provider-reported usage accounting or deterministic sums of them; cost is a price-table estimate, not an invoice. Activity volume is not a measure of skill, productivity, or employability.'}
+      </p>
+      {rows.length ? (
+        <div className="methodology-grid">
+          {rows.map(([key, label]) => {
+            const provenance = classes[key];
+            return (
+              <div className="methodology-row" key={key}>
+                <div className="methodology-head">
+                  <strong>{label}</strong>
+                  <span className={`evidence-chip evidence-${provenance.measurementClass}`}>
+                    {MEASUREMENT_LABEL[provenance.measurementClass]}
+                  </span>
+                </div>
+                <small>{provenance.method}</small>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+      <ul className="methodology-not">
+        <li>Not a claim that token volume equals intelligence or expertise.</li>
+        <li>Not a universal AI score.</li>
+        <li>Estimated cost is never added into token totals.</li>
+      </ul>
+    </section>
   );
 }
 
@@ -178,6 +224,7 @@ function VerificationPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
         <div><dt>Schema</dt><dd>{snapshot.verification.schemaVersion}</dd></div>
         <div><dt>Snapshot hash</dt><dd>{snapshot.verification.snapshotSha256 ?? 'pending local collector'}</dd></div>
         <div><dt>Raw logs</dt><dd>{snapshot.verification.rawLogsPublished ? 'published' : 'withheld'}</dd></div>
+        <div><dt>Hash proves</dt><dd>{snapshot.verification.proves ?? 'The public snapshot is intact; it does not prove the private source logs were immutable.'}</dd></div>
       </dl>
     </section>
   );
@@ -226,7 +273,7 @@ export default function App() {
       <NetworkField />
       <header className="topbar">
         <a className="brand" href="#top"><QiraLogo /> <span>QIRA</span></a>
-        <nav><a href="#projects">Research</a><a href="#projects">Products</a><a href="#scanner">Approach</a><a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a><a className="nav-button" href="./data/latest.json" target="_blank" rel="noreferrer">Inspect JSON</a></nav>
+        <nav><a href="#projects">Research</a><a href="#methodology">Methodology</a><a href="#scanner">Approach</a><a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a><a className="nav-button" href="./data/latest.json" target="_blank" rel="noreferrer">Inspect JSON</a></nav>
       </header>
 
       <section className="hero" id="top">
@@ -239,18 +286,19 @@ export default function App() {
       </section>
 
       <section className="metrics-grid">
-        <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="dark" />
-        <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} />
-        <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" />
-        <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" />
-        <MetricCard label="Largest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} />
-        <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" />
+        <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="dark" evidence="derived" />
+        <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} evidence="provider-reported" />
+        <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" evidence="provider-reported" />
+        <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" evidence="estimated" />
+        <MetricCard label="Largest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} evidence="derived" />
+        <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" evidence="metadata" />
       </section>
 
       <div className="panel-grid" id="scanner">
         <CachePanel snapshot={snapshot} />
         <ProviderPanel snapshot={snapshot} />
         <ScannerPanel snapshot={snapshot} />
+        <MethodologyPanel snapshot={snapshot} />
         <VerificationPanel snapshot={snapshot} />
         <DailyChart snapshot={snapshot} />
       </div>

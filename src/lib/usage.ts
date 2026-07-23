@@ -43,11 +43,49 @@ export interface QiraProjectScan {
   scannerWarnings: string[];
 }
 
+export type MeasurementClass =
+  | 'provider_reported'
+  | 'application_reported'
+  | 'collector_derived'
+  | 'tokenizer_estimated'
+  | 'user_submitted';
+
+export interface MetricProvenance {
+  measurementClass: MeasurementClass;
+  confidence: 'high' | 'medium' | 'low';
+  method: string;
+}
+
+export interface MeasurementBlock {
+  classes: Record<string, MetricProvenance>;
+  exactTotalTokens: number;
+  estimatedOnly: { costUsd: number | null; costMicroUsd: number | null };
+  note: string;
+}
+
+export interface PrivacyBlock {
+  rawContentPersisted: boolean;
+  allowlistPublication: boolean;
+  eligibleForAggregateSync: boolean;
+  fieldsPublished: string[];
+}
+
+/** Short, human-facing label for a measurement class. */
+export const MEASUREMENT_LABEL: Record<MeasurementClass, string> = {
+  provider_reported: 'provider-reported',
+  application_reported: 'app-reported',
+  collector_derived: 'derived',
+  tokenizer_estimated: 'estimated',
+  user_submitted: 'self-submitted',
+};
+
 export interface SnapshotVerification {
   schemaVersion: string;
+  canonicalSchemaVersion?: string;
   snapshotSha256: string | null;
   rawLogsPublished: false;
   gitCommit: string | null;
+  proves?: string;
 }
 
 export interface PublicUsageSnapshot {
@@ -67,6 +105,8 @@ export interface PublicUsageSnapshot {
     privacyMode: 'allowlist_no_paths';
   };
   warnings: string[];
+  measurement?: MeasurementBlock;
+  privacy?: PrivacyBlock;
   verification: SnapshotVerification;
 }
 
