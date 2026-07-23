@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-23T14:33:11.513Z",
+  "generatedAt": "2026-07-23T15:01:08.895Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 266118311,
-    "outputTokens": 93035254,
-    "cacheCreationTokens": 614806591,
-    "cacheReadTokens": 31536375985,
-    "cachedTokens": 32151182576,
-    "freshTokens": 359153565,
-    "totalTokens": 32510336141,
-    "estimatedCostUsd": 20734.61091095
+    "inputTokens": 266118795,
+    "outputTokens": 93336806,
+    "cacheCreationTokens": 615538401,
+    "cacheReadTokens": 31648574455,
+    "cachedTokens": 32264112856,
+    "freshTokens": 359455601,
+    "totalTokens": 32623568457,
+    "estimatedCostUsd": 20805.569465949997
   },
   "providers": {
     "codex": {
@@ -39,14 +39,14 @@
         "claude-sonnet-4-6",
         "claude-fable-5"
       ],
-      "inputTokens": 12559850,
-      "outputTokens": 66856125,
-      "cacheCreationTokens": 614806591,
-      "cacheReadTokens": 22519070129,
-      "cachedTokens": 23133876720,
-      "freshTokens": 79415975,
-      "totalTokens": 23213292695,
-      "estimatedCostUsd": 20734.61091095
+      "inputTokens": 12560334,
+      "outputTokens": 67157677,
+      "cacheCreationTokens": 615538401,
+      "cacheReadTokens": 22631268599,
+      "cachedTokens": 23246807000,
+      "freshTokens": 79718011,
+      "totalTokens": 23326525011,
+      "estimatedCostUsd": 20805.569465949997
     }
   },
   "daily": [
@@ -2115,14 +2115,14 @@
         "claude-opus-4-8",
         "claude-fable-5"
       ],
-      "inputTokens": 622,
-      "outputTokens": 448623,
-      "cacheCreationTokens": 2291327,
-      "cacheReadTokens": 70621832,
-      "cachedTokens": 72913159,
-      "freshTokens": 449245,
-      "totalTokens": 73362404,
-      "estimatedCostUsd": 90.13759700000007
+      "inputTokens": 1106,
+      "outputTokens": 750175,
+      "cacheCreationTokens": 3023137,
+      "cacheReadTokens": 182820302,
+      "cachedTokens": 185843439,
+      "freshTokens": 751281,
+      "totalTokens": 186594720,
+      "estimatedCostUsd": 161.0961519999998
     }
   ],
   "qiraProjects": [
@@ -2134,8 +2134,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "c7154ba",
-        "changedFiles": 14
+        "commit": "05776c3",
+        "changedFiles": 9
       },
       "stack": [
         "React",
@@ -2154,14 +2154,14 @@
         "test:watch"
       ],
       "fileCounts": {
-        "docs": 8,
-        "ts": 22,
-        "json": 11,
+        "docs": 18,
+        "ts": 24,
+        "json": 12,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-23T14:32:27.016Z",
+      "lastModified": "2026-07-23T15:00:43.500Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -2280,8 +2280,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "c7154ba",
-        "changedFiles": 14
+        "commit": "05776c3",
+        "changedFiles": 9
       },
       "stack": [
         "React",
@@ -2300,14 +2300,14 @@
         "test:watch"
       ],
       "fileCounts": {
-        "docs": 8,
-        "ts": 22,
-        "json": 11,
+        "docs": 18,
+        "ts": 24,
+        "json": 12,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-23T14:32:27.016Z",
+      "lastModified": "2026-07-23T15:00:43.500Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -2368,10 +2368,10 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 32510336141,
+    "exactTotalTokens": 32623568457,
     "estimatedOnly": {
-      "costUsd": 20734.61091095,
-      "costMicroUsd": 20734610911
+      "costUsd": 20805.569465949997,
+      "costMicroUsd": 20805569466
     },
     "note": "Token counts are provider-reported usage accounting or deterministic sums of them. Cost is an estimate from a price table, not an invoice, and is never added into token totals. Activity volume is not a measure of skill, productivity, or employability."
   },
@@ -2387,13 +2387,106 @@
       "scanner",
       "warnings",
       "measurement",
+      "profile",
       "verification"
     ]
+  },
+  "profile": {
+    "identity": {
+      "displayName": "Bryan Leonard",
+      "headline": "Founder, Qira LLC — AI systems, agent tooling, and applied research",
+      "pronouns": null,
+      "location": "Phoenix, Arizona, US",
+      "bio": "Building Qira: local-first AI measurement, verified AI-work identity, and applied agent research. Daily hands-on user of Claude Code and Codex across research and product surfaces.",
+      "availability": "Open to paid AI evaluations, research participation, beta programs, and consulting.",
+      "workCategories": [
+        "AI evaluation",
+        "Agent tooling",
+        "Applied research",
+        "Consulting",
+        "Product engineering"
+      ],
+      "openTo": [
+        "Paid evaluations",
+        "Research studies",
+        "Beta testing",
+        "Contract work",
+        "Consulting",
+        "Expert interviews"
+      ],
+      "links": [
+        {
+          "label": "Qira",
+          "url": "https://imagineqira.com"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/TheArtOfSound"
+        }
+      ]
+    },
+    "activity": {
+      "referenceDate": "2026-07-23",
+      "activeDays": 95,
+      "firstActiveDate": "2026-02-26",
+      "lastActiveDate": "2026-07-23",
+      "spanDays": 148,
+      "activeDaysLast30": 29,
+      "activeDaysLast90": 70,
+      "currentStreakDays": 3,
+      "longestStreakDays": 26,
+      "toolsUsed": [
+        "Codex",
+        "Claude Code"
+      ],
+      "modelsUsed": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-sonnet-4-6"
+      ],
+      "projectsActive": 3
+    },
+    "verification": [
+      {
+        "label": "Collector verified",
+        "status": "verified",
+        "basis": "Aggregate built by the open-source local collector; the snapshot hash verifies the public file was not altered after generation."
+      },
+      {
+        "label": "Provider reported",
+        "status": "reported",
+        "basis": "Token counts come from provider usage accounting parsed out of local Claude Code / Codex logs."
+      },
+      {
+        "label": "Sustained usage",
+        "status": "verified",
+        "basis": "95 active AI-work days over a 148-day span (threshold: 20 days across 56 days)."
+      },
+      {
+        "label": "Active across multiple projects",
+        "status": "verified",
+        "basis": "3 allowlisted project(s) detected locally."
+      },
+      {
+        "label": "Identity verified",
+        "status": "pending",
+        "basis": "No identity verification has been performed. Name and headline are self-submitted."
+      },
+      {
+        "label": "Work verified",
+        "status": "pending",
+        "basis": "No work-output or outcome verification is connected yet."
+      }
+    ],
+    "note": "Identity fields are self-submitted and unverified. Activity is derived from measured, provider-reported usage. Activity volume is evidence of practice, not a measure of skill, seniority, or employability."
   },
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "265799464c12558d4920073be7b2b33d984d6689a3ce61a0be6790af492b40f1",
+    "snapshotSha256": "3dacea3a37809cc4502a1b9f02b3c55e06003abc59f72f3e31568cf938e3c035",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
