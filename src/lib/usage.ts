@@ -70,6 +70,38 @@ export interface PrivacyBlock {
   fieldsPublished: string[];
 }
 
+export type VerificationStatus = 'verified' | 'reported' | 'self_submitted' | 'unverified' | 'pending';
+
+export interface ProfileBlock {
+  identity: {
+    displayName: string;
+    headline: string;
+    pronouns: string | null;
+    location: string | null;
+    bio: string | null;
+    availability: string | null;
+    workCategories: string[];
+    openTo: string[];
+    links: { label: string; url: string }[];
+  };
+  activity: {
+    referenceDate: string;
+    activeDays: number;
+    firstActiveDate: string | null;
+    lastActiveDate: string | null;
+    spanDays: number;
+    activeDaysLast30: number;
+    activeDaysLast90: number;
+    currentStreakDays: number;
+    longestStreakDays: number;
+    toolsUsed: string[];
+    modelsUsed: string[];
+    projectsActive: number;
+  };
+  verification: { label: string; status: VerificationStatus; basis: string }[];
+  note: string;
+}
+
 /** Short, human-facing label for a measurement class. */
 export const MEASUREMENT_LABEL: Record<MeasurementClass, string> = {
   provider_reported: 'provider-reported',
@@ -107,6 +139,7 @@ export interface PublicUsageSnapshot {
   warnings: string[];
   measurement?: MeasurementBlock;
   privacy?: PrivacyBlock;
+  profile?: ProfileBlock;
   verification: SnapshotVerification;
 }
 
