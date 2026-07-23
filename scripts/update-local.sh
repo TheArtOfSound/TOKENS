@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Local publisher for TOKENS. Collects sanitized usage, validates it, builds the
+# site, and publishes changed public data — WITHOUT ever accumulating a backlog
+# of unpushable commits or force-pushing over a diverged remote.
+
 export PATH="$HOME/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -29,11 +33,15 @@ if ! command -v ccusage >/dev/null 2>&1; then
   exit 1
 fi
 
-npm install
+# Install only if needed (immutable). node_modules present => skip the ~30s reinstall.
+[ -d node_modules ] || npm ci
+
 npm run collect
 npm run validate:data
 npm run build
 
+# The collector is idempotent: if usage data did not change it rewrites nothing,
+# so there is nothing to commit and we exit quietly (no more 30-minute no-op commits).
 if git diff --quiet -- public/data; then
   echo "No public data changes to publish."
   exit 0
@@ -41,6 +49,23 @@ fi
 
 git add public/data/latest.json public/data/history.json
 git commit -m "data: update agent usage $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-git push
 
+# Only push when it is a safe fast-forward. If the remote has diverged (as it did
+# historically between two competing automations), DO NOT force and DO NOT loop:
+# report clearly and leave the commit local for a human to reconcile.
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+if ! git fetch origin "$BRANCH" >/dev/null 2>&1; then
+  echo "WARN: git fetch failed; leaving commit local. Will retry next run." >&2
+  exit 0
+fi
+
+BEHIND="$(git rev-list --count "HEAD..origin/$BRANCH" 2>/dev/null || echo 0)"
+if [ "$BEHIND" != "0" ]; then
+  echo "WARN: local '$BRANCH' is $BEHIND commit(s) behind origin (histories have diverged)." >&2
+  echo "      Not pushing to avoid a rejected push loop or an unsafe force-push." >&2
+  echo "      A human must reconcile local vs origin. See docs/execution/RISKS.md (R1)." >&2
+  exit 0
+fi
+
+git push
 echo "Published sanitized usage data."
