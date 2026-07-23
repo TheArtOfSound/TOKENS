@@ -6,6 +6,7 @@ import {
   buildProfile,
   deriveActivity,
   deriveVerification,
+  deriveWorkEvidence,
   diffDaysUtc,
   type ProfileIdentity,
 } from '../profile';
@@ -85,7 +86,8 @@ describe('deriveVerification (honest categories)', () => {
     expect(byLabel['Sustained usage']).toBe('verified');
     expect(byLabel['Active across multiple projects']).toBe('verified');
     expect(byLabel['Identity verified']).toBe('pending');
-    expect(byLabel['Work verified']).toBe('pending');
+    expect(byLabel['Work evidence']).toBe('pending'); // no artifacts connected
+    expect(byLabel['Outcome verified']).toBe('pending');
   });
 
   it('marks sustained usage unverified for a short history and single project', () => {
@@ -94,6 +96,57 @@ describe('deriveVerification (honest categories)', () => {
     const byLabel = Object.fromEntries(deriveVerification(activity).map((x) => [x.label, x.status]));
     expect(byLabel['Sustained usage']).toBe('unverified');
     expect(byLabel['Active across multiple projects']).toBe('unverified');
+  });
+});
+
+describe('deriveWorkEvidence (evidence, not claims)', () => {
+  const scanned = [
+    { name: 'TOKENS', found: true },
+    { name: 'Codey', found: true },
+    { name: 'LOLM', found: false },
+  ];
+
+  it('badges collector_observed only when the linked project was actually found locally', () => {
+    const work = deriveWorkEvidence(
+      {
+        artifacts: [
+          { type: 'repository', title: 'TOKENS repo', url: 'https://github.com/TheArtOfSound/TOKENS', linkedProject: 'TOKENS' },
+          { type: 'research', title: 'LOLM', linkedProject: 'LOLM' }, // allowlisted but NOT found locally
+          { type: 'deployment', title: 'Other', url: 'https://example.com' }, // link only
+          { type: 'case_study', title: 'Bare claim' }, // nothing backing it
+        ],
+      },
+      scanned,
+    );
+    expect(work.artifacts.map((a) => a.verification)).toEqual([
+      'collector_observed',
+      'self_reported',
+      'link_provided',
+      'self_reported',
+    ]);
+    expect(work.collectorObserved).toBe(1);
+    expect(work.totalArtifacts).toBe(4);
+  });
+
+  it('matches linked project names case-insensitively', () => {
+    const work = deriveWorkEvidence({ artifacts: [{ type: 'repository', title: 'x', linkedProject: 'tokens' }] }, scanned);
+    expect(work.artifacts[0].verification).toBe('collector_observed');
+  });
+
+  it('always marks outcomes self_reported, never verified', () => {
+    const work = deriveWorkEvidence({ outcomes: [{ title: 'Shipped X', metric: '3x faster' }] }, scanned);
+    expect(work.outcomes[0].verification).toBe('self_reported');
+    expect(work.totalOutcomes).toBe(1);
+    expect(work.collectorObserved).toBe(0);
+  });
+
+  it('lifts "Work evidence" to reported once a collector-observed artifact exists, but never lifts outcomes', () => {
+    const rows = [day('2026-06-01')];
+    const activity = deriveActivity(rows, summarizeProviders(rows), '2026-06-01', 2);
+    const work = deriveWorkEvidence({ artifacts: [{ type: 'repository', title: 'T', linkedProject: 'TOKENS' }] }, scanned);
+    const byLabel = Object.fromEntries(deriveVerification(activity, work).map((x) => [x.label, x.status]));
+    expect(byLabel['Work evidence']).toBe('reported');
+    expect(byLabel['Outcome verified']).toBe('pending');
   });
 });
 
@@ -117,7 +170,10 @@ describe('profile publication (privacy + schema)', () => {
       warnings: [],
       gitCommit: null,
       eligibleForAggregateSync: true,
-      profile: buildProfile(identity, rows, providers, '2026-06-02', 2),
+      profile: buildProfile(identity, rows, providers, '2026-06-02', [
+        { name: 'TOKENS', found: true },
+        { name: 'Codey', found: true },
+      ]),
     };
   }
 
@@ -163,5 +219,31 @@ describe('profile publication (privacy + schema)', () => {
     expect(id.links).toEqual([{ label: 'ok', url: 'https://imagineqira.com' }]); // non-https dropped
     // The core guarantee holds even for the profile block:
     expect(scanForProhibited(published)).toEqual([]);
+  });
+
+  it('refuses a forged collector_observed badge and recomputes the observed count', () => {
+    const draft = draftWithProfile({ displayName: 'Bryan', headline: 'Founder' });
+    draft.profile!.work = {
+      artifacts: [
+        {
+          type: 'repository',
+          title: 'Forged',
+          description: '',
+          url: null,
+          period: null,
+          linkedProject: null, // nothing backing the claim
+          verification: 'collector_observed',
+          basis: 'forged',
+        },
+      ],
+      outcomes: [{ title: 'Fake win', description: '', metric: null, period: null, verification: 'self_reported', basis: '' }],
+      collectorObserved: 99, // lie about the count
+      totalArtifacts: 1,
+      totalOutcomes: 1,
+    };
+    const { published } = publishSnapshot(draft);
+    expect(published.profile!.work.artifacts[0].verification).toBe('self_reported');
+    expect(published.profile!.work.collectorObserved).toBe(0); // recomputed, not trusted
+    expect(validate(published)).toBe(true);
   });
 });

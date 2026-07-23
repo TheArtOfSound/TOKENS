@@ -22,42 +22,108 @@
     "verification"
   ],
   "properties": {
-    "generatedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}" },
-    "timezone": { "type": "string", "maxLength": 64 },
-    "source": { "enum": ["sample", "local_mac_sanitized_ccusage"] },
-    "collectorVersion": { "type": "string", "maxLength": 20 },
-    "isSampleData": { "type": "boolean" },
-    "totals": { "$ref": "#/$defs/metrics" },
+    "generatedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+    },
+    "timezone": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "source": {
+      "enum": [
+        "sample",
+        "local_mac_sanitized_ccusage"
+      ]
+    },
+    "collectorVersion": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "isSampleData": {
+      "type": "boolean"
+    },
+    "totals": {
+      "$ref": "#/$defs/metrics"
+    },
     "providers": {
       "type": "object",
-      "propertyNames": { "enum": ["claude", "codex"] },
-      "additionalProperties": { "$ref": "#/$defs/provider" }
+      "propertyNames": {
+        "enum": [
+          "claude",
+          "codex"
+        ]
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/provider"
+      }
     },
-    "daily": { "type": "array", "items": { "$ref": "#/$defs/daily" } },
-    "qiraProjects": { "type": "array", "items": { "$ref": "#/$defs/project" } },
+    "daily": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/daily"
+      }
+    },
+    "qiraProjects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/project"
+      }
+    },
     "scanner": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rootsChecked", "allowlistedProjects", "foundProjects", "privacyMode"],
+      "required": [
+        "rootsChecked",
+        "allowlistedProjects",
+        "foundProjects",
+        "privacyMode"
+      ],
       "properties": {
-        "rootsChecked": { "type": "integer", "minimum": 0 },
-        "allowlistedProjects": { "type": "integer", "minimum": 0 },
-        "foundProjects": { "type": "integer", "minimum": 0 },
-        "privacyMode": { "const": "allowlist_no_paths" }
+        "rootsChecked": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowlistedProjects": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "foundProjects": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "privacyMode": {
+          "const": "allowlist_no_paths"
+        }
       }
     },
-    "warnings": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      }
+    },
     "measurement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["classes", "exactTotalTokens", "estimatedOnly", "note"],
+      "required": [
+        "classes",
+        "exactTotalTokens",
+        "estimatedOnly",
+        "note"
+      ],
       "properties": {
         "classes": {
           "type": "object",
           "additionalProperties": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["measurementClass", "confidence", "method"],
+            "required": [
+              "measurementClass",
+              "confidence",
+              "method"
+            ],
             "properties": {
               "measurementClass": {
                 "enum": [
@@ -68,62 +134,173 @@
                   "user_submitted"
                 ]
               },
-              "confidence": { "enum": ["high", "medium", "low"] },
-              "method": { "type": "string", "maxLength": 300 }
+              "confidence": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              },
+              "method": {
+                "type": "string",
+                "maxLength": 300
+              }
             }
           }
         },
-        "exactTotalTokens": { "type": "integer", "minimum": 0 },
+        "exactTotalTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
         "estimatedOnly": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["costUsd", "costMicroUsd"],
+          "required": [
+            "costUsd",
+            "costMicroUsd"
+          ],
           "properties": {
-            "costUsd": { "type": ["number", "null"] },
-            "costMicroUsd": { "type": ["integer", "null"] }
+            "costUsd": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "costMicroUsd": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
           }
         },
-        "note": { "type": "string", "maxLength": 400 }
+        "note": {
+          "type": "string",
+          "maxLength": 400
+        }
       }
     },
     "privacy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rawContentPersisted", "allowlistPublication", "eligibleForAggregateSync", "fieldsPublished"],
+      "required": [
+        "rawContentPersisted",
+        "allowlistPublication",
+        "eligibleForAggregateSync",
+        "fieldsPublished"
+      ],
       "properties": {
-        "rawContentPersisted": { "const": false },
-        "allowlistPublication": { "const": true },
-        "eligibleForAggregateSync": { "type": "boolean" },
-        "fieldsPublished": { "type": "array", "items": { "type": "string" } }
+        "rawContentPersisted": {
+          "const": false
+        },
+        "allowlistPublication": {
+          "const": true
+        },
+        "eligibleForAggregateSync": {
+          "type": "boolean"
+        },
+        "fieldsPublished": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["identity", "activity", "verification", "note"],
+      "required": [
+        "identity",
+        "activity",
+        "work",
+        "verification",
+        "note"
+      ],
       "properties": {
         "identity": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["displayName", "headline", "pronouns", "location", "bio", "availability", "workCategories", "openTo", "links"],
+          "required": [
+            "displayName",
+            "headline",
+            "pronouns",
+            "location",
+            "bio",
+            "availability",
+            "workCategories",
+            "openTo",
+            "links"
+          ],
           "properties": {
-            "displayName": { "type": "string", "maxLength": 60 },
-            "headline": { "type": "string", "maxLength": 120 },
-            "pronouns": { "type": ["string", "null"], "maxLength": 24 },
-            "location": { "type": ["string", "null"], "maxLength": 60 },
-            "bio": { "type": ["string", "null"], "maxLength": 600 },
-            "availability": { "type": ["string", "null"], "maxLength": 160 },
-            "workCategories": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
-            "openTo": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
+            "displayName": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "headline": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "pronouns": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 24
+            },
+            "location": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "bio": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 600
+            },
+            "availability": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 160
+            },
+            "workCategories": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
+            "openTo": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
             "links": {
               "type": "array",
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["label", "url"],
+                "required": [
+                  "label",
+                  "url"
+                ],
                 "properties": {
-                  "label": { "type": "string", "maxLength": 40 },
-                  "url": { "type": "string", "pattern": "^https://" }
+                  "label": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "url": {
+                    "type": "string",
+                    "pattern": "^https://"
+                  }
                 }
               }
             }
@@ -132,20 +309,221 @@
         "activity": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["referenceDate", "activeDays", "firstActiveDate", "lastActiveDate", "spanDays", "activeDaysLast30", "activeDaysLast90", "currentStreakDays", "longestStreakDays", "toolsUsed", "modelsUsed", "projectsActive"],
+          "required": [
+            "referenceDate",
+            "activeDays",
+            "firstActiveDate",
+            "lastActiveDate",
+            "spanDays",
+            "activeDaysLast30",
+            "activeDaysLast90",
+            "currentStreakDays",
+            "longestStreakDays",
+            "toolsUsed",
+            "modelsUsed",
+            "projectsActive"
+          ],
           "properties": {
-            "referenceDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-            "activeDays": { "type": "integer", "minimum": 0 },
-            "firstActiveDate": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-            "lastActiveDate": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-            "spanDays": { "type": "integer", "minimum": 0 },
-            "activeDaysLast30": { "type": "integer", "minimum": 0 },
-            "activeDaysLast90": { "type": "integer", "minimum": 0 },
-            "currentStreakDays": { "type": "integer", "minimum": 0 },
-            "longestStreakDays": { "type": "integer", "minimum": 0 },
-            "toolsUsed": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
-            "modelsUsed": { "type": "array", "items": { "type": "string", "maxLength": 80 } },
-            "projectsActive": { "type": "integer", "minimum": 0 }
+            "referenceDate": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "activeDays": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "firstActiveDate": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "lastActiveDate": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "spanDays": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "activeDaysLast30": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "activeDaysLast90": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "currentStreakDays": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "longestStreakDays": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "toolsUsed": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
+            "modelsUsed": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 80
+              }
+            },
+            "projectsActive": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "work": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "artifacts",
+            "outcomes",
+            "collectorObserved",
+            "totalArtifacts",
+            "totalOutcomes"
+          ],
+          "properties": {
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "title",
+                  "description",
+                  "url",
+                  "period",
+                  "linkedProject",
+                  "verification",
+                  "basis"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "repository",
+                      "deployment",
+                      "publication",
+                      "case_study",
+                      "evaluation",
+                      "research"
+                    ]
+                  },
+                  "title": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 300
+                  },
+                  "url": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^https://"
+                  },
+                  "period": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 40
+                  },
+                  "linkedProject": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 60
+                  },
+                  "verification": {
+                    "enum": [
+                      "collector_observed",
+                      "link_provided",
+                      "self_reported"
+                    ]
+                  },
+                  "basis": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                }
+              }
+            },
+            "outcomes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "title",
+                  "description",
+                  "metric",
+                  "period",
+                  "verification",
+                  "basis"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 300
+                  },
+                  "metric": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 80
+                  },
+                  "period": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 40
+                  },
+                  "verification": {
+                    "const": "self_reported"
+                  },
+                  "basis": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                }
+              }
+            },
+            "collectorObserved": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "totalArtifacts": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "totalOutcomes": {
+              "type": "integer",
+              "minimum": 0
+            }
           }
         },
         "verification": {
@@ -153,28 +531,75 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["label", "status", "basis"],
+            "required": [
+              "label",
+              "status",
+              "basis"
+            ],
             "properties": {
-              "label": { "type": "string", "maxLength": 60 },
-              "status": { "enum": ["verified", "reported", "self_submitted", "unverified", "pending"] },
-              "basis": { "type": "string", "maxLength": 300 }
+              "label": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "status": {
+                "enum": [
+                  "verified",
+                  "reported",
+                  "self_submitted",
+                  "unverified",
+                  "pending"
+                ]
+              },
+              "basis": {
+                "type": "string",
+                "maxLength": 300
+              }
             }
           }
         },
-        "note": { "type": "string", "maxLength": 400 }
+        "note": {
+          "type": "string",
+          "maxLength": 400
+        }
       }
     },
     "verification": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["schemaVersion", "canonicalSchemaVersion", "snapshotSha256", "rawLogsPublished", "gitCommit", "proves"],
+      "required": [
+        "schemaVersion",
+        "canonicalSchemaVersion",
+        "snapshotSha256",
+        "rawLogsPublished",
+        "gitCommit",
+        "proves"
+      ],
       "properties": {
-        "schemaVersion": { "type": "string" },
-        "canonicalSchemaVersion": { "type": "string" },
-        "snapshotSha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
-        "rawLogsPublished": { "const": false },
-        "gitCommit": { "type": ["string", "null"] },
-        "proves": { "type": "string" }
+        "schemaVersion": {
+          "type": "string"
+        },
+        "canonicalSchemaVersion": {
+          "type": "string"
+        },
+        "snapshotSha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "rawLogsPublished": {
+          "const": false
+        },
+        "gitCommit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "proves": {
+          "type": "string"
+        }
       }
     }
   },
@@ -193,14 +618,41 @@
         "estimatedCostUsd"
       ],
       "properties": {
-        "inputTokens": { "type": "integer", "minimum": 0 },
-        "outputTokens": { "type": "integer", "minimum": 0 },
-        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
-        "cacheReadTokens": { "type": "integer", "minimum": 0 },
-        "cachedTokens": { "type": "integer", "minimum": 0 },
-        "freshTokens": { "type": "integer", "minimum": 0 },
-        "totalTokens": { "type": "integer", "minimum": 0 },
-        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+        "inputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheCreationTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheReadTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cachedTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "freshTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimatedCostUsd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
       }
     },
     "provider": {
@@ -220,17 +672,59 @@
         "estimatedCostUsd"
       ],
       "properties": {
-        "provider": { "enum": ["claude", "codex", "unknown"] },
-        "displayName": { "type": "string", "maxLength": 40 },
-        "models": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{2,80}$" } },
-        "inputTokens": { "type": "integer", "minimum": 0 },
-        "outputTokens": { "type": "integer", "minimum": 0 },
-        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
-        "cacheReadTokens": { "type": "integer", "minimum": 0 },
-        "cachedTokens": { "type": "integer", "minimum": 0 },
-        "freshTokens": { "type": "integer", "minimum": 0 },
-        "totalTokens": { "type": "integer", "minimum": 0 },
-        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+        "provider": {
+          "enum": [
+            "claude",
+            "codex",
+            "unknown"
+          ]
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._:-]{2,80}$"
+          }
+        },
+        "inputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheCreationTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheReadTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cachedTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "freshTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimatedCostUsd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
       }
     },
     "daily": {
@@ -251,45 +745,165 @@
         "estimatedCostUsd"
       ],
       "properties": {
-        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-        "provider": { "enum": ["claude", "codex", "unknown"] },
-        "displayName": { "type": "string", "maxLength": 40 },
-        "models": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{2,80}$" } },
-        "inputTokens": { "type": "integer", "minimum": 0 },
-        "outputTokens": { "type": "integer", "minimum": 0 },
-        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
-        "cacheReadTokens": { "type": "integer", "minimum": 0 },
-        "cachedTokens": { "type": "integer", "minimum": 0 },
-        "freshTokens": { "type": "integer", "minimum": 0 },
-        "totalTokens": { "type": "integer", "minimum": 0 },
-        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "provider": {
+          "enum": [
+            "claude",
+            "codex",
+            "unknown"
+          ]
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._:-]{2,80}$"
+          }
+        },
+        "inputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outputTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheCreationTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cacheReadTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cachedTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "freshTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimatedCostUsd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
       }
     },
     "project": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "category", "status", "description", "found", "stack", "scripts", "fileCounts", "lastModified", "scannerWarnings"],
+      "required": [
+        "name",
+        "category",
+        "status",
+        "description",
+        "found",
+        "stack",
+        "scripts",
+        "fileCounts",
+        "lastModified",
+        "scannerWarnings"
+      ],
       "properties": {
-        "name": { "type": "string", "maxLength": 60 },
-        "category": { "type": "string", "maxLength": 40 },
-        "status": { "type": "string", "maxLength": 40 },
-        "publicUrl": { "type": "string", "pattern": "^https://" },
-        "description": { "type": "string", "maxLength": 400 },
-        "found": { "type": "boolean" },
+        "name": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "publicUrl": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "found": {
+          "type": "boolean"
+        },
         "git": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "branch": { "type": ["string", "null"], "maxLength": 80 },
-            "commit": { "type": ["string", "null"], "maxLength": 60 },
-            "changedFiles": { "type": ["integer", "null"], "minimum": 0 }
+            "branch": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 80
+            },
+            "commit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "changedFiles": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           }
         },
-        "stack": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
-        "scripts": { "type": "array", "items": { "type": "string", "maxLength": 60 } },
-        "fileCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
-        "lastModified": { "type": ["string", "null"] },
-        "scannerWarnings": { "type": "array", "items": { "type": "string", "maxLength": 200 } }
+        "stack": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "scripts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 60
+          }
+        },
+        "fileCounts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "lastModified": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scannerWarnings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
       }
     }
   }

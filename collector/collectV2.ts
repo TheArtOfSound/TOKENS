@@ -24,12 +24,13 @@ import { assembleDraft, type RawSource } from './lib/snapshot';
 import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './lib/publish';
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
-import { buildProfile, type ProfileIdentity } from './lib/profile';
+import { buildProfile, type ProfileIdentity, type WorkConfig } from './lib/profile';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
 const HISTORY = path.join(OUT_DIR, 'history.json');
 const PROFILE_CONFIG = path.join(process.cwd(), 'profile', 'profile.json');
+const WORK_CONFIG = path.join(process.cwd(), 'profile', 'work.json');
 
 /** Read the self-submitted profile identity (profile/profile.json). Safe defaults if absent. */
 function readProfileConfig(): ProfileIdentity {
@@ -49,6 +50,19 @@ function readProfileConfig(): ProfileIdentity {
     /* fall through to defaults */
   }
   return fallback;
+}
+
+/** Read self-submitted work artifacts and outcomes (profile/work.json). */
+function readWorkConfig(): WorkConfig {
+  try {
+    const parsed = JSON.parse(readFileSync(WORK_CONFIG, 'utf8')) as WorkConfig;
+    return {
+      artifacts: Array.isArray(parsed?.artifacts) ? parsed.artifacts : [],
+      outcomes: Array.isArray(parsed?.outcomes) ? parsed.outcomes : [],
+    };
+  } catch {
+    return { artifacts: [], outcomes: [] };
+  }
 }
 
 const PROVIDERS: Array<{ provider: 'claude' | 'codex'; args: string[] }> = [
@@ -102,7 +116,8 @@ function main(): void {
     daily,
     draft.providers,
     draft.generatedAt.slice(0, 10),
-    qira.scanner.foundProjects,
+    qira.projects,
+    readWorkConfig(),
   );
 
   const existing = readExistingLatest();

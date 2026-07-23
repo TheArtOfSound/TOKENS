@@ -58,11 +58,68 @@ export interface VerificationCategory {
   basis: string;
 }
 
+// ---- connected work artifacts + outcomes ----
+export type WorkType = 'repository' | 'deployment' | 'publication' | 'case_study' | 'evaluation' | 'research';
+
+export interface WorkArtifactConfig {
+  type: WorkType;
+  title: string;
+  description?: string;
+  url?: string;
+  linkedProject?: string;
+  period?: string;
+}
+export interface OutcomeConfig {
+  title: string;
+  description?: string;
+  metric?: string;
+  period?: string;
+}
+export interface WorkConfig {
+  artifacts?: WorkArtifactConfig[];
+  outcomes?: OutcomeConfig[];
+}
+
+/** How strongly a work artifact is backed by evidence. */
+export type WorkVerification = 'collector_observed' | 'link_provided' | 'self_reported';
+
+export interface WorkArtifact {
+  type: WorkType;
+  title: string;
+  description: string;
+  url: string | null;
+  period: string | null;
+  linkedProject: string | null;
+  verification: WorkVerification;
+  basis: string;
+}
+export interface Outcome {
+  title: string;
+  description: string;
+  metric: string | null;
+  period: string | null;
+  verification: 'self_reported';
+  basis: string;
+}
+export interface WorkEvidence {
+  artifacts: WorkArtifact[];
+  outcomes: Outcome[];
+  collectorObserved: number;
+  totalArtifacts: number;
+  totalOutcomes: number;
+}
+
 export interface ProfileBlock {
   identity: ProfileIdentity;
   activity: ProfileActivity;
+  work: WorkEvidence;
   verification: VerificationCategory[];
   note: string;
+}
+
+export interface ScannedProject {
+  name: string;
+  found: boolean;
 }
 
 export const PROFILE_NOTE =
@@ -159,8 +216,60 @@ export function deriveActivity(
   };
 }
 
-export function deriveVerification(activity: ProfileActivity): VerificationCategory[] {
+const HTTPS = /^https:\/\//i;
+
+/**
+ * Cross-reference self-submitted work artifacts with the local project scan.
+ * An artifact whose `linkedProject` was actually found by the collector earns a
+ * `collector_observed` badge (real, local, tamper-evident evidence). Otherwise it
+ * is a self-submitted link or claim, labeled as such. Outcomes are ALWAYS
+ * self-reported — they require third-party confirmation and are never faked.
+ */
+export function deriveWorkEvidence(config: WorkConfig, qiraProjects: ScannedProject[]): WorkEvidence {
+  const foundNames = new Set(qiraProjects.filter((p) => p.found).map((p) => p.name.toLowerCase()));
+
+  const artifacts: WorkArtifact[] = (config.artifacts ?? []).map((a) => {
+    const linked = typeof a.linkedProject === 'string' && foundNames.has(a.linkedProject.toLowerCase());
+    const hasUrl = typeof a.url === 'string' && HTTPS.test(a.url);
+    const verification: WorkVerification = linked ? 'collector_observed' : hasUrl ? 'link_provided' : 'self_reported';
+    const basis = linked
+      ? 'The local collector independently observed git/file activity for this project.'
+      : hasUrl
+        ? 'Public link provided; not independently verified.'
+        : 'Self-reported; not independently verified.';
+    return {
+      type: a.type,
+      title: a.title,
+      description: a.description ?? '',
+      url: a.url ?? null,
+      period: a.period ?? null,
+      linkedProject: a.linkedProject ?? null,
+      verification,
+      basis,
+    };
+  });
+
+  const outcomes: Outcome[] = (config.outcomes ?? []).map((o) => ({
+    title: o.title,
+    description: o.description ?? '',
+    metric: o.metric ?? null,
+    period: o.period ?? null,
+    verification: 'self_reported' as const,
+    basis: 'Self-reported outcome; requires third-party confirmation to be verified.',
+  }));
+
+  return {
+    artifacts,
+    outcomes,
+    collectorObserved: artifacts.filter((a) => a.verification === 'collector_observed').length,
+    totalArtifacts: artifacts.length,
+    totalOutcomes: outcomes.length,
+  };
+}
+
+export function deriveVerification(activity: ProfileActivity, work?: WorkEvidence): VerificationCategory[] {
   const sustained = activity.activeDays >= SUSTAINED_MIN_DAYS && activity.spanDays >= SUSTAINED_MIN_SPAN;
+  const observed = work?.collectorObserved ?? 0;
   return [
     {
       label: 'Collector verified',
@@ -183,14 +292,22 @@ export function deriveVerification(activity: ProfileActivity): VerificationCateg
       basis: `${activity.projectsActive} allowlisted project(s) detected locally.`,
     },
     {
+      label: 'Work evidence',
+      status: observed > 0 ? 'reported' : 'pending',
+      basis:
+        observed > 0
+          ? `${observed} connected work artifact(s) independently observed by the local collector.`
+          : 'No collector-observed work artifacts connected yet.',
+    },
+    {
       label: 'Identity verified',
       status: 'pending',
       basis: 'No identity verification has been performed. Name and headline are self-submitted.',
     },
     {
-      label: 'Work verified',
+      label: 'Outcome verified',
       status: 'pending',
-      basis: 'No work-output or outcome verification is connected yet.',
+      basis: 'No third-party-confirmed outcomes are connected. Outcomes are self-reported until verified.',
     },
   ];
 }
@@ -200,13 +317,17 @@ export function buildProfile(
   daily: NormalizedDaily[],
   providers: Record<string, ProviderSummary>,
   referenceDate: string,
-  projectsActive: number,
+  qiraProjects: ScannedProject[],
+  workConfig: WorkConfig = {},
 ): ProfileBlock {
+  const projectsActive = qiraProjects.filter((p) => p.found).length;
   const activity = deriveActivity(daily, providers, referenceDate, projectsActive);
+  const work = deriveWorkEvidence(workConfig, qiraProjects);
   return {
     identity,
     activity,
-    verification: deriveVerification(activity),
+    work,
+    verification: deriveVerification(activity, work),
     note: PROFILE_NOTE,
   };
 }

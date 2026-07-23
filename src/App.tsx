@@ -307,6 +307,107 @@ function ActivityHeatmap({ daily, referenceDate }: { daily: PublicUsageSnapshot[
   );
 }
 
+type WorkBlock = NonNullable<PublicUsageSnapshot['profile']>['work'];
+type WorkArtifactItem = WorkBlock['artifacts'][number];
+
+const WORK_TYPE_LABEL: Record<WorkArtifactItem['type'], string> = {
+  repository: 'Repository',
+  deployment: 'Deployment',
+  publication: 'Publication',
+  case_study: 'Case study',
+  evaluation: 'Evaluation',
+  research: 'Research',
+};
+
+const WORK_BADGE: Record<WorkArtifactItem['verification'], { icon: string; label: string }> = {
+  collector_observed: { icon: '✓', label: 'Collector observed' },
+  link_provided: { icon: '↗', label: 'Link provided' },
+  self_reported: { icon: '○', label: 'Self-reported' },
+};
+
+const WORK_RANK: Record<WorkArtifactItem['verification'], number> = {
+  collector_observed: 0,
+  link_provided: 1,
+  self_reported: 2,
+};
+
+/**
+ * Connected work + outcomes. Strongest evidence first. Every card states exactly
+ * how it is backed, so a self-submitted link never reads like verified work.
+ */
+function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
+  if (!work || (!work.artifacts?.length && !work.outcomes?.length)) return null;
+  const artifacts = [...(work.artifacts ?? [])].sort((a, b) => WORK_RANK[a.verification] - WORK_RANK[b.verification]);
+
+  return (
+    <div className="profile-work" id="work">
+      <div className="section-kicker"><span /> CONNECTED WORK &amp; EVIDENCE</div>
+      <div className="work-head">
+        <h3>Work evidence</h3>
+        <p>
+          {work.collectorObserved} of {work.totalArtifacts} connected {work.totalArtifacts === 1 ? 'artifact was' : 'artifacts were'}{' '}
+          independently observed by the local collector. The rest are self-submitted links or claims and are labeled as such.
+        </p>
+      </div>
+
+      <div className="work-grid">
+        {artifacts.map((item) => {
+          const badge = WORK_BADGE[item.verification];
+          return (
+            <article className={`work-card work-${item.verification}`} key={`${item.type}-${item.title}`}>
+              <div className="work-top">
+                <span className="work-type">{WORK_TYPE_LABEL[item.type]}</span>
+                <span className={`work-badge wb-${item.verification}`} title={item.basis}>
+                  <b>{badge.icon}</b> {badge.label}
+                </span>
+              </div>
+              <strong className="work-title">{item.title}</strong>
+              {item.description ? <p className="work-desc">{item.description}</p> : null}
+              <div className="work-foot">
+                {item.period ? <span>{item.period}</span> : null}
+                {item.linkedProject ? <span>linked: {item.linkedProject}</span> : null}
+                {item.url ? <a href={item.url} target="_blank" rel="noreferrer">Open ↗</a> : null}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="work-outcomes">
+        <h3>Outcomes</h3>
+        {work.outcomes?.length ? (
+          <>
+            <p className="work-outcome-note">
+              Self-reported. Outcome verification requires third-party confirmation and is not implemented yet.
+            </p>
+            <div className="work-grid">
+              {work.outcomes.map((item) => (
+                <article className="work-card work-self_reported" key={item.title}>
+                  <div className="work-top">
+                    <span className="work-type">Outcome</span>
+                    <span className="work-badge wb-self_reported" title={item.basis}><b>○</b> Self-reported</span>
+                  </div>
+                  <strong className="work-title">{item.title}</strong>
+                  {item.description ? <p className="work-desc">{item.description}</p> : null}
+                  <div className="work-foot">
+                    {item.metric ? <span>{item.metric}</span> : null}
+                    {item.period ? <span>{item.period}</span> : null}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="work-empty">
+            No confirmed outcomes yet. Outcomes appear here only when a client or employer confirms them — usage volume alone
+            is never treated as an outcome.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnapshot['profile']>; daily: PublicUsageSnapshot['daily'] }) {
   const { identity, activity, verification } = profile;
   return (
@@ -366,6 +467,8 @@ function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnaps
         <ActivityHeatmap daily={daily} referenceDate={activity.referenceDate} />
         <p className="profile-note">{profile.note}</p>
       </div>
+
+      <WorkEvidenceSection work={profile.work} />
     </section>
   );
 }

@@ -98,8 +98,38 @@ export interface ProfileBlock {
     modelsUsed: string[];
     projectsActive: number;
   };
+  work: {
+    artifacts: WorkArtifact[];
+    outcomes: WorkOutcome[];
+    collectorObserved: number;
+    totalArtifacts: number;
+    totalOutcomes: number;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
+}
+
+export type WorkType = 'repository' | 'deployment' | 'publication' | 'case_study' | 'evaluation' | 'research';
+export type WorkVerification = 'collector_observed' | 'link_provided' | 'self_reported';
+
+export interface WorkArtifact {
+  type: WorkType;
+  title: string;
+  description: string;
+  url: string | null;
+  period: string | null;
+  linkedProject: string | null;
+  verification: WorkVerification;
+  basis: string;
+}
+
+export interface WorkOutcome {
+  title: string;
+  description: string;
+  metric: string | null;
+  period: string | null;
+  verification: 'self_reported';
+  basis: string;
 }
 
 /** Short, human-facing label for a measurement class. */

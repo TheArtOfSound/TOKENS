@@ -106,6 +106,22 @@ export interface PublishedProfile {
     modelsUsed: string[];
     projectsActive: number;
   };
+  work: {
+    artifacts: {
+      type: string;
+      title: string;
+      description: string;
+      url: string | null;
+      period: string | null;
+      linkedProject: string | null;
+      verification: string;
+      basis: string;
+    }[];
+    outcomes: { title: string; description: string; metric: string | null; period: string | null; verification: string; basis: string }[];
+    collectorObserved: number;
+    totalArtifacts: number;
+    totalOutcomes: number;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
 }
@@ -242,6 +258,8 @@ function publishProject(raw: unknown, dropped: string[]): PublishedProject | nul
 
 const HTTPS_URL_RE = /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i;
 const VERIFICATION_STATUSES: VerificationStatus[] = ['verified', 'reported', 'self_submitted', 'unverified', 'pending'];
+const WORK_TYPES = ['repository', 'deployment', 'publication', 'case_study', 'evaluation', 'research'];
+const WORK_VERIFICATIONS = ['collector_observed', 'link_provided', 'self_reported'];
 
 /** Publish the profile block: identity strings sanitized, activity coerced, links https-only. */
 function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProfile {
@@ -285,6 +303,7 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       modelsUsed: safeStrings(a.modelsUsed, dropped, 24, 80),
       projectsActive: safeCount(a.projectsActive),
     },
+    work: publishWork(profile.work, dropped),
     verification: (Array.isArray(profile.verification) ? profile.verification : [])
       .map((entry) => ({
         label: safeStringOrNull(entry?.label, dropped, 60) ?? '',
@@ -294,6 +313,64 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       .filter((entry) => entry.label)
       .slice(0, 12),
     note: safeStringOrNull(profile.note, dropped, 400) ?? '',
+  };
+}
+
+/**
+ * Publish connected work artifacts and outcomes.
+ * Every free-form string passes the secret scanner; URLs must be https.
+ * An artifact only keeps `collector_observed` if the collector really linked it
+ * to a scanned project — otherwise it is downgraded, so a hand-edited config
+ * cannot mint a verification badge.
+ */
+function publishWork(work: ProfileBlock['work'], dropped: string[]): PublishedProfile['work'] {
+  const source = work ?? { artifacts: [], outcomes: [], collectorObserved: 0, totalArtifacts: 0, totalOutcomes: 0 };
+
+  const artifacts = (Array.isArray(source.artifacts) ? source.artifacts : [])
+    .map((item) => {
+      const title = safeStringOrNull(item?.title, dropped, 100);
+      if (!title) return null;
+      const url = safeStringOrNull(item?.url, dropped, 200);
+      const linkedProject = safeStringOrNull(item?.linkedProject, dropped, 60);
+      const verification = WORK_VERIFICATIONS.includes(item?.verification) ? item.verification : 'self_reported';
+      return {
+        type: WORK_TYPES.includes(item?.type) ? item.type : 'repository',
+        title,
+        description: safeStringOrNull(item?.description, dropped, 300) ?? '',
+        url: url && HTTPS_URL_RE.test(url) ? url : null,
+        period: safeStringOrNull(item?.period, dropped, 40),
+        linkedProject,
+        // A collector_observed badge requires a real linked project.
+        verification: verification === 'collector_observed' && !linkedProject ? 'self_reported' : verification,
+        basis: safeStringOrNull(item?.basis, dropped, 300) ?? '',
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .slice(0, 40);
+
+  const outcomes = (Array.isArray(source.outcomes) ? source.outcomes : [])
+    .map((item) => {
+      const title = safeStringOrNull(item?.title, dropped, 100);
+      if (!title) return null;
+      return {
+        title,
+        description: safeStringOrNull(item?.description, dropped, 300) ?? '',
+        metric: safeStringOrNull(item?.metric, dropped, 80),
+        period: safeStringOrNull(item?.period, dropped, 40),
+        // Outcomes are never verified by the collector.
+        verification: 'self_reported',
+        basis: safeStringOrNull(item?.basis, dropped, 300) ?? '',
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .slice(0, 40);
+
+  return {
+    artifacts,
+    outcomes,
+    collectorObserved: artifacts.filter((item) => item.verification === 'collector_observed').length,
+    totalArtifacts: artifacts.length,
+    totalOutcomes: outcomes.length,
   };
 }
 

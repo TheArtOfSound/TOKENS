@@ -78,6 +78,56 @@ Definitions:
 }
 ```
 
+## Profile (optional)
+
+`profile` carries the professional identity layer. It mixes three *clearly separated* classes of
+data and the UI must never blur them:
+
+- `profile.identity` — **self-submitted**, read from `profile/profile.json`. Every string passes
+  the secret scanner before publish; links must be `https://`. Never presented as verified.
+- `profile.activity` — **derived** deterministically from the measured `daily` rows
+  (active AI-work days, streaks, tools, models). No skill or seniority is inferred from volume.
+- `profile.work` — connected work artifacts and outcomes, read from `profile/work.json`.
+
+```json
+{
+  "work": {
+    "artifacts": [
+      {
+        "type": "repository",
+        "title": "TheArtOfSound/TOKENS",
+        "description": "Open-source local-first collector.",
+        "url": "https://github.com/TheArtOfSound/TOKENS",
+        "period": "2026",
+        "linkedProject": "TOKENS",
+        "verification": "collector_observed",
+        "basis": "The local collector independently observed git/file activity for this project."
+      }
+    ],
+    "outcomes": [],
+    "collectorObserved": 1,
+    "totalArtifacts": 1,
+    "totalOutcomes": 0
+  }
+}
+```
+
+Artifact `verification` values, strongest first:
+
+- `collector_observed` — the artifact's `linkedProject` was **actually found on this machine** by the
+  scanner. This is real local evidence that the work exists.
+- `link_provided` — a public `https://` URL was supplied but nothing was independently checked.
+- `self_reported` — a bare claim with no backing.
+
+Two anti-forgery rules are enforced in `publish.ts` and covered by tests:
+
+1. A `collector_observed` badge with no `linkedProject` is **downgraded** to `self_reported`.
+2. `collectorObserved` is **recomputed** from the published artifacts, so a hand-edited
+   `profile/work.json` cannot inflate the count.
+
+`outcomes` are **always** `self_reported`. Third-party outcome confirmation is not implemented, so
+no code path can mark an outcome verified.
+
 ## Verification
 
 ```json

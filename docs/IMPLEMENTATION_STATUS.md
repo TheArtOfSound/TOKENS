@@ -8,7 +8,7 @@ This is the master status view. Detailed docs live under `docs/execution`, `docs
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 35/35 |
+| Unit tests (`vitest run`) | ✅ 48/48 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -28,6 +28,7 @@ This is the master status view. Detailed docs live under `docs/execution`, `docs
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
+| Connected work artifacts + outcomes | ✅ done, tested | 3-tier evidence badges; anti-forgery enforced in publish; 5 tests |
 | CI gates | ✅ done | npm ci + typecheck + test + validate + audit + build |
 | Publisher hardening | ✅ done | idempotent, no-clobber, no force-push |
 | Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
@@ -48,6 +49,7 @@ This is the master status view. Detailed docs live under `docs/execution`, `docs
 6. **Cross-platform paths tested by fixtures only**, not on real Windows/Linux machines.
 7. **Legacy `collector/collect.ts` (v0.2.1)** remains, unused; safe to delete once confirmed unreferenced.
 8. **`qiraProjects` publishes git branch names** of allowlisted repos (scanned + truncated); avoid encoding sensitive info in branch names.
+9. **Work artifacts are only as strong as their badge.** `collector_observed` proves the *project exists and is active on this machine* — it does **not** prove authorship, quality, or that the linked URL is genuinely that project. `link_provided` and `self_reported` assert nothing. Outcomes are never verifiable today.
 
 ## Definition of Done for Phase 1 (dossier §38) — remaining
 - Restore live publishing (R1).
