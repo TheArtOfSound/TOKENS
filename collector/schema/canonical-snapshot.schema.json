@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ledger.imagineqira.com/schema/canonical-snapshot-2.0.0.json",
+  "title": "TOKENS Published Usage Snapshot",
+  "description": "Public, sanitized snapshot published as public/data/latest.json. Constructed by the allowlist publication transform. Schema version 2.0.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generatedAt",
+    "timezone",
+    "source",
+    "collectorVersion",
+    "isSampleData",
+    "totals",
+    "providers",
+    "daily",
+    "qiraProjects",
+    "scanner",
+    "warnings",
+    "measurement",
+    "privacy",
+    "verification"
+  ],
+  "properties": {
+    "generatedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}" },
+    "timezone": { "type": "string", "maxLength": 64 },
+    "source": { "enum": ["sample", "local_mac_sanitized_ccusage"] },
+    "collectorVersion": { "type": "string", "maxLength": 20 },
+    "isSampleData": { "type": "boolean" },
+    "totals": { "$ref": "#/$defs/metrics" },
+    "providers": {
+      "type": "object",
+      "propertyNames": { "enum": ["claude", "codex"] },
+      "additionalProperties": { "$ref": "#/$defs/provider" }
+    },
+    "daily": { "type": "array", "items": { "$ref": "#/$defs/daily" } },
+    "qiraProjects": { "type": "array", "items": { "$ref": "#/$defs/project" } },
+    "scanner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rootsChecked", "allowlistedProjects", "foundProjects", "privacyMode"],
+      "properties": {
+        "rootsChecked": { "type": "integer", "minimum": 0 },
+        "allowlistedProjects": { "type": "integer", "minimum": 0 },
+        "foundProjects": { "type": "integer", "minimum": 0 },
+        "privacyMode": { "const": "allowlist_no_paths" }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classes", "exactTotalTokens", "estimatedOnly", "note"],
+      "properties": {
+        "classes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["measurementClass", "confidence", "method"],
+            "properties": {
+              "measurementClass": {
+                "enum": [
+                  "provider_reported",
+                  "application_reported",
+                  "collector_derived",
+                  "tokenizer_estimated",
+                  "user_submitted"
+                ]
+              },
+              "confidence": { "enum": ["high", "medium", "low"] },
+              "method": { "type": "string", "maxLength": 300 }
+            }
+          }
+        },
+        "exactTotalTokens": { "type": "integer", "minimum": 0 },
+        "estimatedOnly": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["costUsd", "costMicroUsd"],
+          "properties": {
+            "costUsd": { "type": ["number", "null"] },
+            "costMicroUsd": { "type": ["integer", "null"] }
+          }
+        },
+        "note": { "type": "string", "maxLength": 400 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rawContentPersisted", "allowlistPublication", "eligibleForAggregateSync", "fieldsPublished"],
+      "properties": {
+        "rawContentPersisted": { "const": false },
+        "allowlistPublication": { "const": true },
+        "eligibleForAggregateSync": { "type": "boolean" },
+        "fieldsPublished": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "canonicalSchemaVersion", "snapshotSha256", "rawLogsPublished", "gitCommit", "proves"],
+      "properties": {
+        "schemaVersion": { "type": "string" },
+        "canonicalSchemaVersion": { "type": "string" },
+        "snapshotSha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "rawLogsPublished": { "const": false },
+        "gitCommit": { "type": ["string", "null"] },
+        "proves": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputTokens",
+        "outputTokens",
+        "cacheCreationTokens",
+        "cacheReadTokens",
+        "cachedTokens",
+        "freshTokens",
+        "totalTokens",
+        "estimatedCostUsd"
+      ],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
+        "cacheReadTokens": { "type": "integer", "minimum": 0 },
+        "cachedTokens": { "type": "integer", "minimum": 0 },
+        "freshTokens": { "type": "integer", "minimum": 0 },
+        "totalTokens": { "type": "integer", "minimum": 0 },
+        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "displayName",
+        "models",
+        "inputTokens",
+        "outputTokens",
+        "cacheCreationTokens",
+        "cacheReadTokens",
+        "cachedTokens",
+        "freshTokens",
+        "totalTokens",
+        "estimatedCostUsd"
+      ],
+      "properties": {
+        "provider": { "enum": ["claude", "codex", "unknown"] },
+        "displayName": { "type": "string", "maxLength": 40 },
+        "models": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{2,80}$" } },
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
+        "cacheReadTokens": { "type": "integer", "minimum": 0 },
+        "cachedTokens": { "type": "integer", "minimum": 0 },
+        "freshTokens": { "type": "integer", "minimum": 0 },
+        "totalTokens": { "type": "integer", "minimum": 0 },
+        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "daily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "provider",
+        "displayName",
+        "models",
+        "inputTokens",
+        "outputTokens",
+        "cacheCreationTokens",
+        "cacheReadTokens",
+        "cachedTokens",
+        "freshTokens",
+        "totalTokens",
+        "estimatedCostUsd"
+      ],
+      "properties": {
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "provider": { "enum": ["claude", "codex", "unknown"] },
+        "displayName": { "type": "string", "maxLength": 40 },
+        "models": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{2,80}$" } },
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "cacheCreationTokens": { "type": "integer", "minimum": 0 },
+        "cacheReadTokens": { "type": "integer", "minimum": 0 },
+        "cachedTokens": { "type": "integer", "minimum": 0 },
+        "freshTokens": { "type": "integer", "minimum": 0 },
+        "totalTokens": { "type": "integer", "minimum": 0 },
+        "estimatedCostUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "category", "status", "description", "found", "stack", "scripts", "fileCounts", "lastModified", "scannerWarnings"],
+      "properties": {
+        "name": { "type": "string", "maxLength": 60 },
+        "category": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "maxLength": 40 },
+        "publicUrl": { "type": "string", "pattern": "^https://" },
+        "description": { "type": "string", "maxLength": 400 },
+        "found": { "type": "boolean" },
+        "git": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "branch": { "type": ["string", "null"], "maxLength": 80 },
+            "commit": { "type": ["string", "null"], "maxLength": 60 },
+            "changedFiles": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "stack": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
+        "scripts": { "type": "array", "items": { "type": "string", "maxLength": 60 } },
+        "fileCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "lastModified": { "type": ["string", "null"] },
+        "scannerWarnings": { "type": "array", "items": { "type": "string", "maxLength": 200 } }
+      }
+    }
+  }
+}
