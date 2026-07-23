@@ -91,9 +91,35 @@ bash scripts/uninstall-launchd.sh
 
 Raw logs are never published. See [`docs/PRIVACY.md`](docs/PRIVACY.md).
 
-## Public data schema
+Note: the collector's project scan reads the home directory and can be slow. Scope it:
 
-See [`docs/DATA_SCHEMA.md`](docs/DATA_SCHEMA.md).
+```bash
+QIRA_SCAN_ROOTS="$HOME/Projects,$HOME/nous" npm run collect
+```
+
+## Tests, typecheck, and data validation
+
+```bash
+npm test              # 35 unit tests: normalization, dedup, privacy/redaction, allowlist publication, schema, strangler equivalence
+npm run typecheck     # tsc --noEmit
+npm run validate:data # JSON-Schema (allowlist) + snapshot hash + nested secret scan over public/data
+npm run build         # tsc -b && vite build
+```
+
+## Measurement integrity
+
+Every published number carries a **measurement class** (`provider_reported`, `collector_derived`, `tokenizer_estimated`, …) and a method. Token counts are provider-reported usage or deterministic sums; cost is a price-table **estimate** and is never summed into token totals. Activity volume is never presented as skill, productivity, or employability. See [`docs/architecture/CANONICAL_EVENT_SCHEMA.md`](docs/architecture/CANONICAL_EVENT_SCHEMA.md).
+
+## Privacy
+
+The published object is **constructed from an allowlist** (not redacted), then passed through a nested secret/PII/path scanner; the collector refuses to write if anything prohibited survives. See [`docs/security/PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md) and [`docs/DATA_SCHEMA.md`](docs/DATA_SCHEMA.md).
+
+## Documentation
+
+- Architecture: [`docs/architecture/SYSTEM_OVERVIEW.md`](docs/architecture/SYSTEM_OVERVIEW.md), [`CANONICAL_EVENT_SCHEMA.md`](docs/architecture/CANONICAL_EVENT_SCHEMA.md)
+- Security: [`docs/security/THREAT_MODEL.md`](docs/security/THREAT_MODEL.md), [`PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md), [`SECURITY.md`](SECURITY.md)
+- Product: [`docs/product/PRODUCT_REQUIREMENTS.md`](docs/product/PRODUCT_REQUIREMENTS.md), [`PHASE_GATES.md`](docs/product/PHASE_GATES.md)
+- Status & execution: [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md), [`docs/ROADMAP.md`](docs/ROADMAP.md), [`docs/execution/`](docs/execution/)
 
 ## Important limitation
 

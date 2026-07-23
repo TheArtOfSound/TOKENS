@@ -41,6 +41,8 @@ Coding agents often re-use large context windows. That can create very large tok
 
 The public site does not read the Mac directly. The local Mac runs the collector, writes sanitized JSON into `public/data`, and pushes the changed public data to GitHub.
 
-## Validation
+## Validation (v2)
 
-`npm run validate:data` scans the public snapshot for common path and secret patterns before the data is committed or deployed.
+The public snapshot is **constructed from an allowlist** of approved fields (`collector/lib/publish.ts`), not produced by redacting a raw object — so a field we did not deliberately choose cannot appear. As defense in depth, `npm run validate:data` then validates the result against the canonical JSON Schema and runs a nested secret/PII/path scanner over both `latest.json` and `history.json`; the collector itself refuses to write if anything prohibited survives.
+
+See [`../docs/security/PRIVACY_BOUNDARY.md`](security/PRIVACY_BOUNDARY.md) for the full boundary and enforcement details.

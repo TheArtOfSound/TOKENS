@@ -2,6 +2,8 @@
 
 The dashboard reads `public/data/latest.json`.
 
+> **Schema 2.0.0.** The authoritative machine-readable schema is [`../collector/schema/canonical-snapshot.schema.json`](../collector/schema/canonical-snapshot.schema.json), enforced by `npm run validate:data`. Version 2.0.0 adds the additive `measurement` (provenance) and `privacy` blocks and extends `verification`. See [`architecture/CANONICAL_EVENT_SCHEMA.md`](architecture/CANONICAL_EVENT_SCHEMA.md) for the full model, measurement classes, and the compact `history.json` series. The fields below remain part of the frozen, backward-compatible contract.
+
 ## Top-level fields
 
 ```json
