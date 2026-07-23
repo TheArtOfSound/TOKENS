@@ -1,0 +1,22 @@
+{
+  "daily": [
+    {
+      "date": "2026-04-11",
+      "inputTokens": 5000,
+      "outputTokens": 8000,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 300000,
+      "totalCost": 0.9,
+      "totalTokens": 313000,
+      "modelsUsed": ["gpt-5-codex"]
+    }
+  ],
+  "totals": {
+    "inputTokens": 5000,
+    "outputTokens": 8000,
+    "cacheCreationTokens": 0,
+    "cacheReadTokens": 300000,
+    "totalCost": 0.9,
+    "totalTokens": 313000
+  }
+}

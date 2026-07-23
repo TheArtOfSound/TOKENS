@@ -1,0 +1,42 @@
+{
+  "_comment": "Adversarial/malformed input: reported-total mismatch, duplicate date, zero-token row, undated row, and a path-shaped model name. Used to prove normalization does not inflate or leak.",
+  "daily": [
+    {
+      "date": "2026-05-01",
+      "inputTokens": 100,
+      "outputTokens": 200,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 0,
+      "totalTokens": 999999,
+      "modelsUsed": ["claude-opus-4-8", "/Users/bry/evil-model"]
+    },
+    {
+      "date": "2026-05-01",
+      "inputTokens": 50,
+      "outputTokens": 50,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 0,
+      "totalTokens": 100
+    },
+    {
+      "date": "2026-05-02",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 0,
+      "totalTokens": 0
+    },
+    {
+      "notADate": "hello",
+      "inputTokens": 5,
+      "outputTokens": 5
+    },
+    {
+      "date": "2026-05-03",
+      "inputTokens": 10,
+      "outputTokens": 20,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 0
+    }
+  ]
+}
