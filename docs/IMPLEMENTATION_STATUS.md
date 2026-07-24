@@ -38,7 +38,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
 | Chrome (1440 / 375) | ✅ renders, no console errors, no leaks |
-| Live site publishing | ⛔ blocked (R1 divergence) |
+| Live site publishing | ✅ **LIVE** — https://ledger.imagineqira.com (deployed 2026-07-24) |
 
 ## Component status
 | Area | Status | Notes |
@@ -65,7 +65,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | **Canonical JSON (RFC 8785 subset)** | ✅ done, tested | replaces `JSON.stringify` key-order dependence so a non-JS verifier can reproduce the signing bytes; spec published in `docs/architecture/CANONICALIZATION.md` |
 | Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
 | Docs / threat model / privacy | ✅ done | full `docs/**` set |
-| Live publishing restore | ⬜ needs Bryan | resolve R1, re-enable launchd |
+| Live publishing restore | ✅ done | R1 resolved by merge (no force-push); both lineages preserved on branches; launchd re-enabled |
 
 ### Dossier **Phase 1** scope that is NOT built (previously mislabeled "roadmap")
 | Area | Status | Notes |
@@ -75,7 +75,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | ~~Ed25519 device signing~~ | ✅ **now built** | See the built table above. Revocation lists remain unimplemented. |
 | Canonical **event** model | ⛔ **Phase 1 — not built** | Finest granularity is a daily per-provider aggregate. No `eventId`, `ingestedAt`, per-record evidence class, or session pseudonym. Blocks ~40 downstream requirements. |
 | Adapter framework | ⛔ **not built** | 0 of 11. Providers are hardcoded, not pluggable versioned adapters. |
-| Accessibility (WCAG 2.2 AA) | ⛔ **not built** | 0 focus-visible rules, 0 `prefers-reduced-motion` rules; heatmap exposes no per-day data to assistive tech. A Definition-of-Done item, never checked. |
+| ~~Accessibility~~ | ✅ **now built** (partial) | focus-visible, reduced-motion, skip link, `main` landmark, heatmap grid marked decorative with a 95-row accessible table. Full WCAG 2.2 AA audit still not performed. |
 
 ### Later phases (dossier gates these — correctly deferred)
 | Area | Status | Notes |
@@ -85,7 +85,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Opportunity marketplace / employer search | ⬜ Phase 4+ | dossier explicitly warns against building this first |
 
 ## Known limitations (honest)
-1. **Live site is stale** (2026-06-18) until the origin/local divergence is reconciled by Bryan (R1). All new work is on a feature branch.
+1. **Origin lineage superseded.** R1 was resolved by adopting the local TypeScript lineage and merging origin's history (no force-push). Origin's `frontend/` JS app and `backend/` FastAPI service are now in-tree but unused by the deployed static site. Both lineages remain on `backup/origin-main-2026-07-23` and `recovery/main-2026-07-23`.
 2. **Cold scan is still ~72s** the first time, or after a project is added/renamed (the depth-5 discovery walk). Warm runs are ~0.7s. Scope roots with `QIRA_SCAN_ROOTS`; force re-discovery with `TOKENS_SCAN_FORCE=1`.
 3. **Base64 secret detection is one level deep**; deeply nested encodings could evade the defense-in-depth scanner (the allowlist makes placement hard regardless).
 4. **Hostname/username detection outside path context is not attempted** (false-positive tradeoff) — see PRIVACY_BOUNDARY.
