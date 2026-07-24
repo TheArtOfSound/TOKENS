@@ -1,0 +1,273 @@
+/**
+ * Shared professional-profile view.
+ *
+ * Extracted from App so the same profile renders for the site operator on the
+ * home route and for any member at #/u/<handle>. One implementation means a
+ * member's profile can never quietly render with weaker labeling than the
+ * operator's.
+ */
+
+import { useMemo } from 'react';
+import { compactNumber, fullNumber } from '../lib/format';
+import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
+
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('') || 'Q';
+}
+
+function VerificationChip({ item }: { item: NonNullable<PublicUsageSnapshot['profile']>['verification'][number] }) {
+  const icon = item.status === 'verified' ? '✓' : item.status === 'reported' ? '◆' : item.status === 'pending' ? '…' : '○';
+  return (
+    <span className={`vchip vchip-${item.status}`} title={item.basis}>
+      <b>{icon}</b> {item.label}
+    </span>
+  );
+}
+
+export function ActivityHeatmap({ daily, referenceDate }: { daily: PublicUsageSnapshot['daily']; referenceDate: string }) {
+  const weeks = 26;
+  const dayMs = 86_400_000;
+  const totals = new Map<string, number>();
+  for (const row of daily) totals.set(row.date, (totals.get(row.date) ?? 0) + row.totalTokens);
+  const max = Math.max(1, ...Array.from(totals.values()));
+  const end = Date.parse(`${referenceDate}T00:00:00Z`);
+  const endDow = Number.isNaN(end) ? 6 : new Date(end).getUTCDay();
+  const gridEnd = (Number.isNaN(end) ? Date.parse('2026-01-01T00:00:00Z') : end) + (6 - endDow) * dayMs;
+  const gridStart = gridEnd - (weeks * 7 - 1) * dayMs;
+
+  const columns: Array<Array<{ date: string; level: number; tokens: number }>> = [];
+  for (let w = 0; w < weeks; w += 1) {
+    const column: Array<{ date: string; level: number; tokens: number }> = [];
+    for (let d = 0; d < 7; d += 1) {
+      const ms = gridStart + (w * 7 + d) * dayMs;
+      const date = new Date(ms).toISOString().slice(0, 10);
+      const tokens = totals.get(date) ?? 0;
+      const ratio = tokens / max;
+      const level = ms > (Number.isNaN(end) ? gridEnd : end) ? -1 : tokens === 0 ? 0 : ratio > 0.6 ? 4 : ratio > 0.3 ? 3 : ratio > 0.1 ? 2 : 1;
+      column.push({ date, level, tokens });
+    }
+    columns.push(column);
+  }
+
+  const activeCells = columns.flat().filter((cell) => cell.level >= 0 && cell.tokens > 0);
+
+  return (
+    <div className="heatmap">
+      {/*
+        The coloured grid is decorative: colour alone cannot convey the values, so
+        it is hidden from assistive tech and the same data is exposed as a real
+        table below. Previously this was role="img" with one aria-label, which
+        hid every per-day value from screen readers with no alternative.
+      */}
+      <div className="heatmap-grid" aria-hidden="true">
+        {columns.map((column, i) => (
+          <div className="heatmap-col" key={i}>
+            {column.map((cell) => (
+              <div
+                key={cell.date}
+                className={`heatmap-cell ${cell.level < 0 ? 'hm-empty' : `hm-${cell.level}`}`}
+                title={cell.level < 0 ? '' : `${cell.date}: ${fullNumber(cell.tokens)} tokens`}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="heatmap-legend" aria-hidden="true"><span>Less</span><i className="hm-0" /><i className="hm-1" /><i className="hm-2" /><i className="hm-3" /><i className="hm-4" /><span>More</span></div>
+
+      {/* The accessible equivalent: every active day with its real token count. */}
+      <details className="heatmap-data">
+        <summary>
+          Activity data as a table ({activeCells.length} active {activeCells.length === 1 ? 'day' : 'days'} in the last 26 weeks)
+        </summary>
+        <div className="heatmap-table-wrap">
+          <table>
+            <caption>Daily AI-work activity, last 26 weeks. Only days with measured activity are listed.</caption>
+            <thead>
+              <tr><th scope="col">Date</th><th scope="col">Tokens</th></tr>
+            </thead>
+            <tbody>
+              {activeCells.map((cell) => (
+                <tr key={cell.date}>
+                  <th scope="row">{cell.date}</th>
+                  <td>{fullNumber(cell.tokens)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  );
+}
+
+type WorkBlock = NonNullable<PublicUsageSnapshot['profile']>['work'];
+type WorkArtifactItem = WorkBlock['artifacts'][number];
+
+const WORK_TYPE_LABEL: Record<WorkArtifactItem['type'], string> = {
+  repository: 'Repository',
+  deployment: 'Deployment',
+  publication: 'Publication',
+  case_study: 'Case study',
+  evaluation: 'Evaluation',
+  research: 'Research',
+};
+
+const WORK_BADGE: Record<WorkArtifactItem['verification'], { icon: string; label: string }> = {
+  collector_observed: { icon: '✓', label: 'Collector observed' },
+  link_provided: { icon: '↗', label: 'Link provided' },
+  self_reported: { icon: '○', label: 'Self-reported' },
+};
+
+const WORK_RANK: Record<WorkArtifactItem['verification'], number> = {
+  collector_observed: 0,
+  link_provided: 1,
+  self_reported: 2,
+};
+
+/**
+ * Connected work + outcomes. Strongest evidence first. Every card states exactly
+ * how it is backed, so a self-submitted link never reads like verified work.
+ */
+function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
+  if (!work || (!work.artifacts?.length && !work.outcomes?.length)) return null;
+  const artifacts = [...(work.artifacts ?? [])].sort((a, b) => WORK_RANK[a.verification] - WORK_RANK[b.verification]);
+
+  return (
+    <div className="profile-work" id="work">
+      <div className="section-kicker"><span /> CONNECTED WORK &amp; EVIDENCE</div>
+      <div className="work-head">
+        <h3>Work evidence</h3>
+        <p>
+          {work.collectorObserved} of {work.totalArtifacts} connected {work.totalArtifacts === 1 ? 'artifact was' : 'artifacts were'}{' '}
+          independently observed by the local collector. The rest are self-submitted links or claims and are labeled as such.
+        </p>
+      </div>
+
+      <div className="work-grid">
+        {artifacts.map((item) => {
+          const badge = WORK_BADGE[item.verification];
+          return (
+            <article className={`work-card work-${item.verification}`} key={`${item.type}-${item.title}`}>
+              <div className="work-top">
+                <span className="work-type">{WORK_TYPE_LABEL[item.type]}</span>
+                <span className={`work-badge wb-${item.verification}`} title={item.basis}>
+                  <b>{badge.icon}</b> {badge.label}
+                </span>
+              </div>
+              <strong className="work-title">{item.title}</strong>
+              {item.description ? <p className="work-desc">{item.description}</p> : null}
+              <div className="work-foot">
+                {item.period ? <span>{item.period}</span> : null}
+                {item.linkedProject ? <span>linked: {item.linkedProject}</span> : null}
+                {item.url ? <a href={item.url} target="_blank" rel="noreferrer">Open ↗</a> : null}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="work-outcomes">
+        <h3>Outcomes</h3>
+        {work.outcomes?.length ? (
+          <>
+            <p className="work-outcome-note">
+              Self-reported. Outcome verification requires third-party confirmation and is not implemented yet.
+            </p>
+            <div className="work-grid">
+              {work.outcomes.map((item) => (
+                <article className="work-card work-self_reported" key={item.title}>
+                  <div className="work-top">
+                    <span className="work-type">Outcome</span>
+                    <span className="work-badge wb-self_reported" title={item.basis}><b>○</b> Self-reported</span>
+                  </div>
+                  <strong className="work-title">{item.title}</strong>
+                  {item.description ? <p className="work-desc">{item.description}</p> : null}
+                  <div className="work-foot">
+                    {item.metric ? <span>{item.metric}</span> : null}
+                    {item.period ? <span>{item.period}</span> : null}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="work-empty">
+            No confirmed outcomes yet. Outcomes appear here only when a client or employer confirms them — usage volume alone
+            is never treated as an outcome.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnapshot['profile']>; daily: PublicUsageSnapshot['daily'] }) {
+  const { identity, activity, verification } = profile;
+  return (
+    <section className="profile" id="profile">
+      <div className="profile-card">
+        <div className="profile-id">
+          <div className="profile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
+          <div>
+            <h2 className="profile-name">
+              {identity.displayName}
+              {identity.pronouns ? <span className="profile-pronouns"> · {identity.pronouns}</span> : null}
+            </h2>
+            <p className="profile-role">{identity.headline}</p>
+            <div className="profile-meta">
+              {identity.location ? <span>{identity.location}</span> : null}
+              {identity.availability ? <span className="profile-avail">{identity.availability}</span> : null}
+            </div>
+            {identity.links.length ? (
+              <div className="profile-links">
+                {identity.links.map((link) => (
+                  <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </div>
+        <div className="profile-verify">
+          {verification.map((item) => <VerificationChip key={item.label} item={item} />)}
+        </div>
+      </div>
+
+      {identity.bio ? <p className="profile-bio">{identity.bio}</p> : null}
+
+      <div className="profile-stats">
+        <div><strong>{fullNumber(activity.activeDays)}</strong><span>Active AI-work days</span></div>
+        <div><strong>{activity.currentStreakDays}</strong><span>Current streak (days)</span></div>
+        <div><strong>{activity.longestStreakDays}</strong><span>Longest streak (days)</span></div>
+        <div><strong>{activity.activeDaysLast30}</strong><span>Active in last 30 days</span></div>
+        <div><strong>{activity.toolsUsed.length}</strong><span>AI tools used</span></div>
+        <div><strong>{activity.projectsActive}</strong><span>Projects active</span></div>
+      </div>
+
+      <div className="profile-cols">
+        <div className="profile-block">
+          <h3>Tools &amp; models</h3>
+          <div className="tag-row">{activity.toolsUsed.map((tool) => <span key={tool} className="tag-strong">{tool}</span>)}</div>
+          {activity.modelsUsed.length ? <div className="tag-row">{activity.modelsUsed.slice(0, 10).map((model) => <span key={model}>{model}</span>)}</div> : null}
+        </div>
+        <div className="profile-block">
+          {identity.workCategories.length ? <><h3>Work categories</h3><div className="tag-row">{identity.workCategories.map((category) => <span key={category}>{category}</span>)}</div></> : null}
+          {identity.openTo.length ? <><h3>Open to</h3><div className="tag-row">{identity.openTo.map((item) => <span key={item} className="tag-open">{item}</span>)}</div></> : null}
+        </div>
+      </div>
+
+      <div className="profile-heatmap">
+        <div className="section-kicker"><span /> VERIFIED ACTIVITY · LAST 26 WEEKS</div>
+        <ActivityHeatmap daily={daily} referenceDate={activity.referenceDate} />
+        <p className="profile-note">{profile.note}</p>
+      </div>
+
+      <WorkEvidenceSection work={profile.work} />
+    </section>
+  );
+}
+

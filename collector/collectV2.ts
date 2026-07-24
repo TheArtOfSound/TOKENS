@@ -35,6 +35,36 @@ const LATEST = path.join(OUT_DIR, 'latest.json');
 const HISTORY = path.join(OUT_DIR, 'history.json');
 const PROFILE_CONFIG = path.join(process.cwd(), 'profile', 'profile.json');
 const WORK_CONFIG = path.join(process.cwd(), 'profile', 'work.json');
+const REGISTRY = path.join(process.cwd(), 'public', 'data', 'profiles', 'index.json');
+
+/**
+ * Refresh this member's own registry entry from profile.json.
+ *
+ * Only the operator's entry is touched — other members' entries point at
+ * snapshots hosted elsewhere and must never be rewritten by someone else's
+ * collector run.
+ */
+function syncRegistryEntry(identity: ProfileIdentity, generatedAt: string): void {
+  try {
+    const registry = JSON.parse(readFileSync(REGISTRY, 'utf8')) as {
+      members?: Array<Record<string, unknown>>;
+      updatedAt?: string;
+    };
+    if (!Array.isArray(registry.members)) return;
+    const mine = registry.members.find((m) => m.operator === true);
+    if (!mine) return;
+    mine.displayName = identity.displayName;
+    mine.headline = identity.headline;
+    mine.location = identity.location ?? null;
+    mine.availability = identity.availability ?? null;
+    mine.workCategories = identity.workCategories ?? [];
+    if (Array.isArray(identity.links)) mine.links = identity.links;
+    registry.updatedAt = generatedAt;
+    writeFileSync(REGISTRY, `${JSON.stringify(registry, null, 2)}\n`);
+  } catch {
+    /* the registry is optional; never fail a collection over it */
+  }
+}
 
 /** Read the self-submitted profile identity (profile/profile.json). Safe defaults if absent. */
 function readProfileConfig(): ProfileIdentity {
@@ -180,6 +210,7 @@ function main(): void {
   );
 
   draft.consent = consent;
+  syncRegistryEntry(readProfileConfig(), draft.generatedAt);
   draft.sourceOfTruth = ledgerData.rows.length ? 'event_ledger' : 'ccusage_aggregate';
   draft.providerConfidence = ledgerData.providerConfidence;
 

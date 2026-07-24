@@ -204,3 +204,95 @@ summary:focus:not(:focus-visible) {
 .skip-link:focus {
   left: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Multi-user surfaces: directory, member cards, onboarding, verification.
+   Uses the site's existing light tokens (--ink/--muted/--line/--soft/--blue).
+   --------------------------------------------------------------------------- */
+
+.directory,.join,.verify-page{position:relative;z-index:1;padding-top:48px}
+.directory-head{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;justify-content:space-between;margin-bottom:30px}
+.directory-head h2{margin:0 0 10px;font-size:clamp(1.9rem,3.5vw,3.1rem);line-height:1.02;letter-spacing:-.065em}
+.directory-head p{max-width:62ch;margin:0;color:var(--muted);line-height:1.55}
+
+.cta{display:inline-block;padding:15px 22px;border-radius:10px;background:#06070c;color:#fff;text-decoration:none;font-weight:900;white-space:nowrap}
+.cta:hover{background:#1b1f2b}
+
+.directory-controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:24px}
+.directory-controls input[type=search]{flex:1 1 22rem;min-width:0;padding:14px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit}
+.directory-controls input[type=search]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:.92rem;font-weight:700;color:var(--muted)}
+
+.member-grid{list-style:none;margin:0;padding:0;display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,21rem),1fr))}
+.member-card{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.88);box-shadow:0 18px 50px rgba(20,30,50,.055);padding:22px;display:flex;flex-direction:column;gap:14px}
+.member-link{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:inherit}
+.member-link:hover .member-identity strong{text-decoration:underline}
+.member-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:12px}
+.member-avatar{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:900;font-size:.95rem;background:radial-gradient(circle at 54% 47%,#9bd2ff 0 18%,#6f5cff 31%,#1a2444 55%,#080910 100%);color:#fff}
+.member-identity{display:flex;flex-direction:column;gap:4px;min-width:0}
+.member-identity strong{font-size:1.15rem;letter-spacing:-.04em;color:var(--ink)}
+.member-headline{font-size:.88rem;color:var(--muted);line-height:1.45}
+.member-location{font-size:.78rem;color:var(--faint);font-weight:700}
+
+.member-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0;padding:14px 0 0;border-top:1px solid var(--line)}
+/* Fixed label row so a wrapping label cannot push its value out of alignment. */
+.member-stats>div{display:grid;grid-template-rows:2.4em auto;align-content:start;gap:3px;min-width:0}
+.member-stats dt{color:var(--faint);font-size:.62rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.member-stats dd{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.15rem;letter-spacing:-.05em;color:var(--ink)}
+.member-tools{margin:0;font-size:.82rem;color:var(--muted);font-weight:700}
+.member-availability{margin:0;padding-top:12px;border-top:1px dashed var(--line);font-size:.84rem;color:var(--muted);line-height:1.5}
+.directory-footnote{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);font-size:.87rem;color:var(--muted);max-width:72ch;line-height:1.6}
+
+/* Signature badges: never colour alone -- each state also carries distinct text. */
+.sig{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1px solid currentColor;width:fit-content}
+.sig-dot{width:7px;height:7px;border-radius:999px;background:currentColor}
+.sig-valid{color:#166534;background:#edf7f1}
+.sig-invalid{color:#9f1239;background:#fff4f5}
+.sig-unsigned{color:#854d0e;background:#fefce8}
+.sig-unreachable,.sig-checking{color:#667085;background:#f1f3f6}
+
+.member-banner{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0 0}
+.member-banner a{text-decoration:none;color:var(--muted);font-weight:800}
+.member-banner a:hover{color:var(--ink);text-decoration:underline}
+.alert{border-color:#f0c8ce;background:#fff4f5}
+.alert h2{color:#9f1239}
+
+/* Onboarding + verification */
+.join,.verify-page{max-width:860px;margin:0 auto}
+.join-head h2,.verify-page h2{font-size:clamp(1.9rem,3.5vw,3.1rem);line-height:1.02;letter-spacing:-.065em;margin:0 0 14px}
+.lede{font-size:1.15rem;color:var(--muted);max-width:64ch;line-height:1.62;margin:0}
+.steps{list-style:none;margin:44px 0 0;padding:0;display:grid;gap:34px}
+.steps>li{border-left:2px solid var(--line);padding-left:22px}
+.steps h3{margin:0 0 8px;font-size:1.15rem;letter-spacing:-.03em}
+.steps p{margin:0 0 12px;color:var(--muted);max-width:64ch;line-height:1.6}
+.steps .muted{font-size:.86rem}
+
+.command{display:flex;align-items:center;gap:12px;background:#06070c;border-radius:12px;padding:13px 16px;margin-bottom:10px;overflow-x:auto}
+.command code{background:none;padding:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;white-space:pre;color:#e8ecf5}
+.command button{margin-left:auto;flex:0 0 auto;font-size:.7rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;cursor:pointer}
+.command button:hover{background:rgba(255,255,255,.12)}
+.command button:focus-visible{outline:2px solid #9bd2ff;outline-offset:2px}
+
+.join-honest{margin-top:44px;padding:26px;border:1px solid var(--line);border-radius:22px;background:var(--soft)}
+.join-honest h3{margin:0 0 14px;font-size:1.05rem;letter-spacing:-.03em}
+.join-honest ul{margin:0;padding-left:20px;display:grid;gap:10px}
+.join-honest li{color:var(--muted);line-height:1.6}
+.join-honest strong{color:var(--ink)}
+
+.verify-form{margin:40px 0 18px}
+.verify-form label{display:block;font-weight:900;margin-bottom:10px;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase}
+.verify-row{display:flex;gap:12px;flex-wrap:wrap}
+.verify-row input{flex:1 1 20rem;min-width:0;padding:14px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit}
+.verify-row input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.verify-row button{padding:14px 24px;border-radius:10px;border:1px solid #06070c;background:#06070c;color:#fff;font-weight:900;cursor:pointer}
+.verify-row button[disabled]{opacity:.6;cursor:progress}
+.verify-result{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.verify-result p{margin:0;color:var(--muted);line-height:1.55}
+
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media(max-width:720px){
+  .directory-head{flex-direction:column;align-items:stretch}
+  .member-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .member-banner{padding-top:16px}
+}
