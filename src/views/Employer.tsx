@@ -96,6 +96,15 @@ export function Employer() {
 
       {results.length === 0 ? <p className="muted">No candidates match these filters yet.</p> : null}
 
+      {profiles.length > 0 && profiles.length < 5 ? (
+        <div className="employer-early">
+          <strong>This talent pool is new.</strong> {profiles.length === 1 ? 'There is' : 'There are'}{' '}
+          {profiles.length} verified {profiles.length === 1 ? 'profile' : 'profiles'} so far. Everyone here is backed by a signed,
+          browser-verifiable record rather than a self-written résumé — and the pool grows as people publish.
+          <a href={href({ name: 'join' })}>Invite someone to add theirs →</a>
+        </div>
+      ) : null}
+
       <ul className="candidate-list">
         {results.map((p) => (
           <Candidate key={p.member.handle} p={p} expanded={!!expanded[p.member.handle]} onToggle={() =>
@@ -104,8 +113,10 @@ export function Employer() {
       </ul>
 
       <p className="directory-footnote">
-        A verified signature proves a snapshot is authentic and unaltered — not who the person is. Identity,
-        provider-attested usage, and third-party outcomes are separate evidence tiers, shown per profile.
+        A verified signature proves a snapshot is authentic and unaltered. A linked account proves the member
+        controls that account — <strong>not</strong> their legal identity. Provider-attested usage and
+        third-party-confirmed outcomes are separate, stronger tiers, shown per profile.{' '}
+        <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
       </p>
     </section>
   );
@@ -130,6 +141,12 @@ function Candidate({ p, expanded, onToggle }: { p: MemberProfile; expanded: bool
         ) : null}
 
         <dl className="candidate-facts">
+          {p.identityProofs.length ? (
+            <div>
+              <dt>Linked accounts</dt>
+              <dd>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(' · ')}</dd>
+            </div>
+          ) : null}
           {p.collectorObserved > 0 ? <div><dt>Collector-observed work</dt><dd>{p.collectorObserved} artifact(s)</dd></div> : null}
           {p.toolsUsed.length ? <div><dt>Tools</dt><dd>{p.toolsUsed.join(' · ')}</dd></div> : null}
           <div><dt>Experience</dt><dd>{p.activeDays} active days · {p.activeDaysLast30} in last 30</dd></div>

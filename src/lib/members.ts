@@ -34,6 +34,8 @@ export interface MemberProfile {
   workArrangement: string | null;
   timezone: string | null;
   contact: { label: string; href: string } | null;
+  /** Self-declared external accounts; verified live on the profile page. */
+  identityProofs: { type: string; handle: string }[];
   error?: string;
 }
 
@@ -64,6 +66,7 @@ export function emptyMemberProfile(member: RegistryMember): MemberProfile {
     workArrangement: null,
     timezone: null,
     contact: null,
+    identityProofs: [],
   };
 }
 
@@ -104,6 +107,9 @@ export async function loadMemberProfile(member: RegistryMember): Promise<MemberP
       workArrangement: (opportunity.workArrangement as string) ?? null,
       timezone: (opportunity.timezone as string) ?? null,
       contact: (identity.contact as { label: string; href: string } | null) ?? null,
+      identityProofs: Array.isArray(identity.identityProofs)
+        ? (identity.identityProofs as { type: string; handle: string }[]).filter((p) => p && p.handle)
+        : [],
     };
   } catch (error) {
     return { ...base, signature: 'unreachable', error: error instanceof Error ? error.message : 'fetch failed' };
