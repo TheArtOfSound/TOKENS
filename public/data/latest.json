@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-23T19:47:21.825Z",
+  "generatedAt": "2026-07-24T00:46:50.145Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 266119321,
-    "outputTokens": 93626655,
-    "cacheCreationTokens": 617420099,
-    "cacheReadTokens": 31733208187,
-    "cachedTokens": 32350628286,
-    "freshTokens": 359745976,
-    "totalTokens": 32710374262,
-    "estimatedCostUsd": 20873.4890757
+    "inputTokens": 266130488,
+    "outputTokens": 94774765,
+    "cacheCreationTokens": 622034047,
+    "cacheReadTokens": 31882508285,
+    "cachedTokens": 32504542332,
+    "freshTokens": 360905253,
+    "totalTokens": 32865447585,
+    "estimatedCostUsd": 21008.882345949998
   },
   "providers": {
     "codex": {
@@ -39,14 +39,14 @@
         "claude-sonnet-4-6",
         "claude-fable-5"
       ],
-      "inputTokens": 12560860,
-      "outputTokens": 67447526,
-      "cacheCreationTokens": 617420099,
-      "cacheReadTokens": 22715902331,
-      "cachedTokens": 23333322430,
-      "freshTokens": 80008386,
-      "totalTokens": 23413330816,
-      "estimatedCostUsd": 20873.4890757
+      "inputTokens": 12572027,
+      "outputTokens": 68595636,
+      "cacheCreationTokens": 622034047,
+      "cacheReadTokens": 22865202429,
+      "cachedTokens": 23487236476,
+      "freshTokens": 81167663,
+      "totalTokens": 23568404139,
+      "estimatedCostUsd": 21008.882345949998
     }
   },
   "daily": [
@@ -2115,14 +2115,14 @@
         "claude-opus-4-8",
         "claude-fable-5"
       ],
-      "inputTokens": 1632,
-      "outputTokens": 1040024,
-      "cacheCreationTokens": 4904835,
-      "cacheReadTokens": 267454034,
-      "cachedTokens": 272358869,
-      "freshTokens": 1041656,
-      "totalTokens": 273400525,
-      "estimatedCostUsd": 229.0157617499999
+      "inputTokens": 12799,
+      "outputTokens": 2188134,
+      "cacheCreationTokens": 9518783,
+      "cacheReadTokens": 416754132,
+      "cachedTokens": 426272915,
+      "freshTokens": 2200933,
+      "totalTokens": 428473848,
+      "estimatedCostUsd": 364.40903199999957
     }
   ],
   "qiraProjects": [
@@ -2134,8 +2134,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "1c67cb6",
-        "changedFiles": 11
+        "commit": "c005b89",
+        "changedFiles": 16
       },
       "stack": [
         "React",
@@ -2155,13 +2155,13 @@
       ],
       "fileCounts": {
         "docs": 18,
-        "ts": 24,
+        "ts": 25,
         "json": 13,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-23T19:45:34.763Z",
+      "lastModified": "2026-07-24T00:45:23.091Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -2172,21 +2172,13 @@
       "category": "Research",
       "status": "research",
       "description": "Latent Order Language Model architecture and validation work.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
       "scripts": [],
-      "fileCounts": {
-        "py": 12,
-        "js": 1
-      },
-      "lastModified": "2026-03-08T23:15:11.381Z",
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:280 folder~lolm, text~lolm, text~latent-order"
+        "no-scored-candidate"
       ]
     },
     {
@@ -2196,18 +2188,18 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "docs": 1
+        "py": 7
       },
-      "lastModified": "2026-04-19T07:28:22.557Z",
+      "lastModified": "2026-06-12T16:59:58.356Z",
       "scannerWarnings": [
-        "match:scored score:1175 folder~qev, text~qev, text~qev-desktop, text~qira-encryption-vault, domain=secure.imagineqira.com, domain=qev-desktop"
+        "match:scored score:395 folder=nfet, text~nfet"
       ]
     },
     {
@@ -2262,28 +2254,13 @@
       "category": "Intelligence",
       "status": "active",
       "description": "Phoenix traffic intelligence surface.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
-      "scripts": [
-        "research",
-        "draft",
-        "today",
-        "linkedin",
-        "all",
-        "status"
-      ],
-      "fileCounts": {
-        "docs": 10,
-        "json": 10
-      },
-      "lastModified": "2026-06-06T16:06:35.036Z",
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
+        "no-scored-candidate"
       ],
       "publicUrl": "https://pti.imagineqira.com"
     },
@@ -2310,8 +2287,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "1c67cb6",
-        "changedFiles": 11
+        "commit": "c005b89",
+        "changedFiles": 16
       },
       "stack": [
         "React",
@@ -2331,22 +2308,22 @@
       ],
       "fileCounts": {
         "docs": 18,
-        "ts": 24,
+        "ts": 25,
         "json": 13,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-23T19:45:34.763Z",
+      "lastModified": "2026-07-24T00:45:23.091Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
     }
   ],
   "scanner": {
-    "rootsChecked": 5,
+    "rootsChecked": 2,
     "allowlistedProjects": 8,
-    "foundProjects": 6,
+    "foundProjects": 4,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [],
@@ -2398,10 +2375,10 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 32710374262,
+    "exactTotalTokens": 32865447585,
     "estimatedOnly": {
-      "costUsd": 20873.4890757,
-      "costMicroUsd": 20873489076
+      "costUsd": 21008.882345949998,
+      "costMicroUsd": 21008882346
     },
     "note": "Token counts are provider-reported usage accounting or deterministic sums of them. Cost is an estimate from a price table, not an invoice, and is never added into token totals. Activity volume is not a measure of skill, productivity, or employability."
   },
@@ -2456,12 +2433,12 @@
       ]
     },
     "activity": {
-      "referenceDate": "2026-07-23",
+      "referenceDate": "2026-07-24",
       "activeDays": 95,
       "firstActiveDate": "2026-02-26",
       "lastActiveDate": "2026-07-23",
       "spanDays": 148,
-      "activeDaysLast30": 29,
+      "activeDaysLast30": 28,
       "activeDaysLast90": 70,
       "currentStreakDays": 3,
       "longestStreakDays": 26,
@@ -2477,7 +2454,7 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "projectsActive": 6
+      "projectsActive": 4
     },
     "work": {
       "artifacts": [
@@ -2538,8 +2515,8 @@
           "url": null,
           "period": "2026",
           "linkedProject": "LOLM",
-          "verification": "collector_observed",
-          "basis": "The local collector independently observed git/file activity for this project."
+          "verification": "self_reported",
+          "basis": "Self-reported; not independently verified."
         },
         {
           "type": "research",
@@ -2553,7 +2530,7 @@
         }
       ],
       "outcomes": [],
-      "collectorObserved": 6,
+      "collectorObserved": 5,
       "totalArtifacts": 7,
       "totalOutcomes": 0
     },
@@ -2561,7 +2538,7 @@
       {
         "label": "Collector verified",
         "status": "verified",
-        "basis": "Aggregate built by the open-source local collector; the snapshot hash verifies the public file was not altered after generation."
+        "basis": "Aggregate built by the local collector on this machine; the snapshot hash verifies the public file was not altered after generation."
       },
       {
         "label": "Provider reported",
@@ -2576,12 +2553,12 @@
       {
         "label": "Active across multiple projects",
         "status": "verified",
-        "basis": "6 allowlisted project(s) detected locally."
+        "basis": "4 allowlisted project(s) detected locally."
       },
       {
         "label": "Work evidence",
         "status": "reported",
-        "basis": "6 connected work artifact(s) independently observed by the local collector."
+        "basis": "5 connected work artifact(s) independently observed by the local collector."
       },
       {
         "label": "Identity verified",
@@ -2599,7 +2576,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "9a929263c19ba62885e328a4bcd033a41f8a69c55d98360c616c7f83b8af8e14",
+    "snapshotSha256": "b9f0cf54c10474ce5538035a56f2d014eb47660d22cc3bf3f065f23859084907",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
