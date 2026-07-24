@@ -26,7 +26,7 @@ import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { buildProfile, type ProfileIdentity, type WorkConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
-import { loadOrCreateDeviceKey, signSnapshot, verifySnapshot } from './lib/signing';
+import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot } from './lib/signing';
 import { randomUUID } from 'node:crypto';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
@@ -211,6 +211,14 @@ function main(): void {
     process.exitCode = 1;
     return;
   }
+
+  // Revocations are published as a SEPARATE file, deliberately. Embedding them
+  // in the snapshot would be circular: whoever holds a compromised key could
+  // sign a snapshot carrying an empty revocation list.
+  writeFileSync(
+    path.join(OUT_DIR, 'revoked-keys.json'),
+    `${JSON.stringify({ updatedAt: signed.generatedAt, revoked: loadRevocations() }, null, 2)}\n`,
+  );
 
   writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);
   const history = buildCompactHistory(daily, published.generatedAt);

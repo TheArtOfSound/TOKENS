@@ -8,7 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateKeyPairSync } from 'node:crypto';
 import { canonicalize } from '../canonicalJson';
-import { decodeKeychainValue, payloadDigest, publicKeyFrom, signSnapshot, verifySnapshot } from '../signing';
+import { decodeKeychainValue, isRevoked, payloadDigest, publicKeyFrom, signSnapshot, verifySnapshot, verifySnapshotWithRevocations } from '../signing';
 
 function testKey(): string {
   const { privateKey } = generateKeyPairSync('ed25519');
@@ -159,5 +159,49 @@ describe('keychain value decoding', () => {
     expect(decodeKeychainValue('   ')).toBeNull();
     expect(decodeKeychainValue('not a key at all')).toBeNull();
     expect(decodeKeychainValue('deadbeef')).toBeNull();
+  });
+});
+
+describe('key revocation', () => {
+  // Rotation alone leaves already-published snapshots verifying under a stolen
+  // key forever. A revocation list is what makes a compromise repudiable.
+  const key = testKey();
+  const signed = () => {
+    const doc: Record<string, unknown> = snapshot();
+    doc.signature = signSnapshot(doc, key, 'nonce-1');
+    return doc;
+  };
+
+  it('a well-formed signature from a revoked key is INVALID', () => {
+    const doc = signed();
+    const keyId = (doc.signature as { keyId: string }).keyId;
+    const result = verifySnapshotWithRevocations(doc, [
+      { keyId, revokedAt: '2026-07-24T00:00:00.000Z', reason: 'laptop stolen' },
+    ]);
+    expect(result.valid).toBe(false);
+    expect(result.reason).toMatch(/REVOKED/);
+    expect(result.reason).toMatch(/laptop stolen/);
+  });
+
+  it('remains valid when a DIFFERENT key is revoked', () => {
+    expect(verifySnapshotWithRevocations(signed(), [
+      { keyId: '0000000000000000', revokedAt: '2026-07-24T00:00:00.000Z', reason: 'unrelated' },
+    ]).valid).toBe(true);
+  });
+
+  it('an empty revocation list changes nothing', () => {
+    expect(verifySnapshotWithRevocations(signed(), []).valid).toBe(true);
+  });
+
+  it('isRevoked matches only the exact key id', () => {
+    const list = [{ keyId: 'abcdef0123456789', revokedAt: '2026-07-24T00:00:00.000Z', reason: 'test' }];
+    expect(isRevoked('abcdef0123456789', list)).toBeTruthy();
+    expect(isRevoked('abcdef012345678a', list)).toBeNull();
+  });
+
+  it('tampering still loses to revocation checks (both must pass)', () => {
+    const doc = signed();
+    (doc.totals as Record<string, unknown>).totalTokens = 1;
+    expect(verifySnapshotWithRevocations(doc, []).valid).toBe(false);
   });
 });

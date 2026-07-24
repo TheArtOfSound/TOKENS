@@ -33,7 +33,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 142/142 |
+| Unit tests (`vitest run`) | ✅ 147/147 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -49,7 +49,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Secret/PII/path scanner | ✅ done, tested | nested + base64 + control chars |
 | Compact history | ✅ done | 28 MB → 27 KB |
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
-| Test suite | ✅ done | 142 tests, adversarial fixtures |
+| Test suite | ✅ done | 147 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
@@ -61,7 +61,8 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | **Scanner filesystem containment** | ✅ done, tested | symlink-escape, TOCTOU, and FIFO/socket/device reads closed; real-symlink + real-FIFO tests |
 | **Consent + permission disclosure** | ✅ done, tested | per-source opt-in (disabled source is never read), per-field publication toggles, `profile/consent.json`; 9 tests |
 | **Upload preview / export / delete** | ✅ done | `npm run consent`, `consent:preview` (exact published bytes), `consent:export`, `consent:delete` |
-| **Ed25519 device signing** | ✅ done, tested | keypair in macOS Keychain, signed manifest (nonce/scope/issuedAt/digest), `npm run verify`; 21 tests incl. tamper detection |
+| **Ed25519 device signing** | ✅ done, tested | keypair in macOS Keychain, signed manifest, `npm run verify`; tamper detection |
+| **Key rotation + revocation** | ✅ done, tested | `npm run key -- rotate\|revoke`; revocation list published separately at `data/revoked-keys.json` so a compromised key cannot publish an empty list |
 | **Canonical JSON (RFC 8785 subset)** | ✅ done, tested | replaces `JSON.stringify` key-order dependence so a non-JS verifier can reproduce the signing bytes; spec published in `docs/architecture/CANONICALIZATION.md` |
 | **Canonical event model** | ✅ done, tested | event-level records read from provider JSONL; allowlist extraction; HMAC pseudonyms; 28 tests |
 | **SQLite event ledger** | ✅ done, tested | `node:sqlite` + WAL, append-only migrations with tested `down`, 21 tests |
@@ -76,7 +77,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | --- | --- | --- |
 | ~~Incremental/checkpointed scan~~ | ✅ **now built** | See the measured numbers in the built table above. |
 | ~~Consent / upload-preview / export / delete~~ | ✅ **now built** | See the built table above. |
-| ~~Ed25519 device signing~~ | ✅ **now built** | See the built table above. Revocation lists remain unimplemented. |
+| ~~Ed25519 device signing~~ | ✅ **now built** | Including rotation and revocation. |
 | ~~Canonical event model~~ | ✅ **now built** | See the built table above. |
 | ~~Adapter framework~~ | ✅ **now built** | Versioned adapters with per-provider extractors; adding a provider touches no shared code. |
 | ~~Accessibility~~ | ✅ **now built** (partial) | focus-visible, reduced-motion, skip link, `main` landmark, heatmap grid marked decorative with a 95-row accessible table. Full WCAG 2.2 AA audit still not performed. |
@@ -98,7 +99,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 7. **Legacy `collector/collect.ts` (v0.2.1)** remains, unused; safe to delete once confirmed unreferenced.
 8. **`qiraProjects` publishes git branch names** of allowlisted repos (scanned + truncated); avoid encoding sensitive info in branch names.
 9. **Work artifacts are only as strong as their badge.** `collector_observed` proves the *project exists and is active on this machine* — it does **not** prove authorship, quality, or that the linked URL is genuinely that project. `link_provided` and `self_reported` assert nothing. Outcomes are never verifiable today.
-10. **No key revocation.** A compromised device key cannot yet be repudiated — there is no published revocation list. Rotation works: delete the Keychain item and re-run.
+10. **Revocation is publisher-controlled.** The list at `data/revoked-keys.json` is served from the same origin as the snapshot, so an attacker with both the key and the deploy pipeline could suppress it. A third-party revocation registry would be needed to close that.
 11. **The signature is a device attestation, not proof of log authenticity.** Anyone controlling this Mac could feed the collector fabricated provider logs and it would sign them faithfully.
 12. **Codex event-level totals run +6.7% above `ccusage` and the cause is not yet identified.** Claude agrees to −0.1%. Until this is run down, the published figures still source Codex from `ccusage`, not from the event ledger. See `docs/architecture/EVENT_LEDGER.md` §5.
 13. **Two records sharing a provider message id collapse to one event**, even if a token count was revised — first write wins. This is the fix for a +124% duplicate-inflation bug; the tradeoff is deliberate.

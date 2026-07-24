@@ -272,3 +272,106 @@ export function verifySnapshot(snapshot: Record<string, unknown>): VerifyResult 
     return { valid: false, reason: `verification error: ${(error as Error).message}` };
   }
 }
+
+// ---------------------------------------------------------------------------
+// Key rotation and revocation
+// ---------------------------------------------------------------------------
+
+/**
+ * Rotation alone is not enough: rotating leaves previously published snapshots
+ * still verifying under the old key, so a stolen key stays useful to an attacker
+ * forever. A revocation list lets a verifier reject them.
+ *
+ * The list is published alongside the snapshot so any third party can apply it,
+ * and it holds only key ids, timestamps, and reasons — no key material.
+ */
+export interface RevokedKey {
+  keyId: string;
+  revokedAt: string;
+  reason: string;
+}
+
+const REVOCATION_FILE = path.join(process.cwd(), 'profile', 'revoked-keys.json');
+
+export function loadRevocations(): RevokedKey[] {
+  try {
+    const parsed = JSON.parse(readFileSync(REVOCATION_FILE, 'utf8')) as { revoked?: RevokedKey[] };
+    return Array.isArray(parsed?.revoked)
+      ? parsed.revoked.filter(
+          (entry) => entry && typeof entry.keyId === 'string' && /^[a-f0-9]{16}$/.test(entry.keyId),
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveRevocations(revoked: RevokedKey[]): void {
+  mkdirSync(path.dirname(REVOCATION_FILE), { recursive: true });
+  writeFileSync(
+    REVOCATION_FILE,
+    `${JSON.stringify(
+      {
+        _comment:
+          'Revoked TOKENS device keys. A snapshot signed by any keyId listed here must be treated as INVALID even though its signature is cryptographically well-formed. Published with the snapshot so third parties can apply it.',
+        revoked,
+      },
+      null,
+      2,
+    )}\n`,
+  );
+}
+
+export function isRevoked(keyId: string, revoked: RevokedKey[] = loadRevocations()): RevokedKey | null {
+  return revoked.find((entry) => entry.keyId === keyId) ?? null;
+}
+
+/** Revoke a key id. Idempotent. */
+export function revokeKey(keyId: string, reason: string): RevokedKey[] {
+  const revoked = loadRevocations();
+  if (!revoked.some((entry) => entry.keyId === keyId)) {
+    revoked.push({ keyId, revokedAt: new Date().toISOString(), reason: reason.slice(0, 200) });
+    saveRevocations(revoked);
+  }
+  return revoked;
+}
+
+/**
+ * Generate a fresh device key, revoking the outgoing one.
+ * Revoking on rotation is the default because the usual reason to rotate is that
+ * the old key may be compromised.
+ */
+export function rotateKey(reason = 'routine rotation'): { oldKeyId: string | null; newKeyId: string } {
+  let oldKeyId: string | null = null;
+  try {
+    const existing = loadOrCreateDeviceKey();
+    if (!existing.created) oldKeyId = publicKeyFrom(existing.privateKeyPem).keyId;
+  } catch {
+    /* no usable existing key */
+  }
+
+  const { privateKey } = generateKeyPairSync('ed25519');
+  const pem = privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
+  if (!(keychainAvailable() && keychainWrite(pem))) fileWrite(pem);
+
+  if (oldKeyId) revokeKey(oldKeyId, reason);
+  return { oldKeyId, newKeyId: publicKeyFrom(pem).keyId };
+}
+
+/** Verify, additionally rejecting a signature from a revoked key. */
+export function verifySnapshotWithRevocations(
+  snapshot: Record<string, unknown>,
+  revoked: RevokedKey[] = loadRevocations(),
+): VerifyResult {
+  const base = verifySnapshot(snapshot);
+  if (!base.valid) return base;
+  const manifest = snapshot.signature as SignedManifest;
+  const hit = isRevoked(manifest.keyId, revoked);
+  if (hit) {
+    return {
+      valid: false,
+      reason: `signature is well-formed but key ${hit.keyId} was REVOKED on ${hit.revokedAt} (${hit.reason})`,
+    };
+  }
+  return base;
+}

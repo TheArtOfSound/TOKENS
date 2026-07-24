@@ -19,7 +19,8 @@
     "consent:export": "tsx collector/consent.ts export",
     "consent:delete": "tsx collector/consent.ts delete",
     "verify": "tsx collector/verify.ts",
-    "ingest": "tsx collector/ingest.ts"
+    "ingest": "tsx collector/ingest.ts",
+    "key": "tsx collector/key.ts"
   },
   "dependencies": {
     "react": "19.2.7",

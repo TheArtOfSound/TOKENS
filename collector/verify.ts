@@ -9,7 +9,7 @@
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { verifySnapshot } from './lib/signing';
+import { loadRevocations, verifySnapshotWithRevocations } from './lib/signing';
 
 const target = process.argv[2] || path.join(process.cwd(), 'public', 'data', 'latest.json');
 
@@ -22,7 +22,8 @@ try {
 }
 
 const manifest = snapshot.signature as Record<string, unknown> | undefined;
-const result = verifySnapshot(snapshot);
+const revoked = loadRevocations();
+const result = verifySnapshotWithRevocations(snapshot, revoked);
 
 console.log(`\nSnapshot: ${target}`);
 if (manifest) {
@@ -31,6 +32,7 @@ if (manifest) {
   console.log(`  issued at:     ${manifest.issuedAt}`);
   console.log(`  canonical:     ${manifest.canonicalizationSpec}`);
 }
+console.log(`  revocations:   ${revoked.length} key(s) on the local list`);
 console.log(`\n  ${result.valid ? 'VALID' : 'INVALID'} — ${result.reason}\n`);
 
 if (manifest) {
