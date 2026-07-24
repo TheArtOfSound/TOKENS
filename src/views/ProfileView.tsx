@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { compactNumber, fullNumber } from '../lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
 import { verifyIdentityProof, type IdentityResult } from '../lib/identity';
+import { href } from '../lib/router';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
 
 export function initials(name: string): string {
@@ -345,6 +346,7 @@ function IdentityProofs({
                 : `Verifying @${r.handle}…`}
         </a>
       ))}
+      <a className="idp-explain" href={href({ name: 'claims' })}>what this proves →</a>
     </div>
   );
 }
@@ -393,8 +395,8 @@ export function ProfileView({
           </div>
         </div>
 
-        <div className="profile-actions">
-          {contact ? (
+        {contact ? (
+          <div className="profile-actions">
             <a
               className="profile-cta"
               href={contact.href}
@@ -402,10 +404,21 @@ export function ProfileView({
             >
               {contact.label}
             </a>
-          ) : null}
-          <div className="profile-verify">
-            {verification.map((item) => <VerificationChip key={item.label} item={item} />)}
           </div>
+        ) : null}
+
+        {/* Evidence tiers span the full width below the header. Met tiers lead;
+            unmet tiers collapse into one link so a recruiter isn't met by a wall
+            of "pending". */}
+        <div className="profile-verify">
+          {verification.filter((v) => v.status !== 'pending').map((item) => (
+            <VerificationChip key={item.label} item={item} />
+          ))}
+          {verification.some((v) => v.status === 'pending') ? (
+            <a className="vchip vchip-more" href={href({ name: 'claims' })}>
+              +{verification.filter((v) => v.status === 'pending').length} evidence tiers not yet met →
+            </a>
+          ) : null}
         </div>
       </div>
 

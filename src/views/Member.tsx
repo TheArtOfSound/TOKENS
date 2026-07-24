@@ -77,9 +77,13 @@ export function Member({ handle }: { handle: string }) {
 
   if (state.status === 'loading') {
     return (
-      <section className="panel wide-panel">
-        <p className="muted">Loading profile and verifying signature…</p>
-      </section>
+      <div className="profile-skeleton" aria-busy="true" aria-label="Loading profile and verifying signature">
+        <div className="skeleton" style={{ height: 140, borderRadius: 22 }} />
+        <div className="skeleton sk-row" style={{ width: '40%' }} />
+        <div className="skeleton sk-row" style={{ width: '70%' }} />
+        <div className="skeleton" style={{ height: 120, borderRadius: 18 }} />
+        <p className="muted">Loading profile and verifying its signature in your browser…</p>
+      </div>
     );
   }
 

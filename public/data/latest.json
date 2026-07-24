@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T19:40:33.339Z",
+  "generatedAt": "2026-07-24T19:59:19.010Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3013,8 +3013,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "137fe36",
-        "changedFiles": 27
+        "commit": "6bf7612",
+        "changedFiles": 8
       },
       "stack": [
         "React",
@@ -3047,7 +3047,7 @@
         "css": 2,
         "tsx": 11
       },
-      "lastModified": "2026-07-24T19:38:58.220Z",
+      "lastModified": "2026-07-24T19:58:43.733Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3173,8 +3173,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "137fe36",
-        "changedFiles": 27
+        "commit": "6bf7612",
+        "changedFiles": 8
       },
       "stack": [
         "React",
@@ -3207,7 +3207,7 @@
         "css": 2,
         "tsx": 11
       },
-      "lastModified": "2026-07-24T19:38:58.220Z",
+      "lastModified": "2026-07-24T19:58:43.733Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -3489,6 +3489,11 @@
         "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (96 active days; 4 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
+        "label": "Identity-linked",
+        "status": "reported",
+        "basis": "The member published a key-signed proof under an external account; your browser verifies it live (see the identity badge above). This proves control of that account, not legal identity."
+      },
+      {
         "label": "Provider-attested",
         "status": "pending",
         "basis": "No provider has independently confirmed this usage (no OAuth usage API, billing export, or enterprise attestation is connected yet). This is a stronger tier when available."
@@ -3561,7 +3566,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "07731e52e845c26a54c83b477c35475138981e16a5fd238205b4790c57009d12",
+    "snapshotSha256": "b6269376baf37a5deffee5c8a72e70a03afeae7d1bca9766a21c0e1719781a7b",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3571,12 +3576,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T19:40:33.409Z",
-    "nonce": "2b309876-af1f-4dcd-84b8-cc2da58e9888",
+    "issuedAt": "2026-07-24T19:59:19.081Z",
+    "nonce": "3320f962-254b-49eb-bc52-f260df4120f5",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "d4317ad7e3449078e15737ab695c843ba10188d9bf0f09fe5f4d68103bb41a85",
-    "signature": "EzUS2rlyWg1X0shjdQ6dPv+YSO9VeeEwktCyYL8j2opTiRCO+Mw/+02UND8rnO/IA0iZUM7HEs9NVsPq81veAA==",
+    "payloadSha256": "216d64102a1c1b3455aaacf0b9fa425faa1b07e3cc7d9dbc3727b1616c97db6a",
+    "signature": "5B7sEms2FBQtPNEtcO+rccHy2wTiQHkhiqg+eqycV8DRbKg7ZGQAh9d9VDb+Qxxklzb6iPGJVlX1gF/HCNDABQ==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",

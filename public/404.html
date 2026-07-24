@@ -4,14 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QIRA — redirecting…</title>
+    <!--
+      GitHub Pages has no server-side rewrite, so a hard load of a clean URL like
+      /people would 404. This redirects it to /?/people (a real 200 at the root);
+      index.html then restores the clean path before the app boots. Result: clean
+      URLs that hard-load with a 200 status. Standard spa-github-pages technique.
+    -->
     <script>
-      // GitHub Pages has no server-side rewrites. This SPA uses hash routing, so
-      // any non-root path (e.g. someone typed /people, or a scraper stripped the
-      // hash) lands here. Convert the path to a hash route and bounce to index.
       (function () {
-        var p = window.location.pathname.replace(/^\/+/, '');
-        var target = '/' + (p ? '#/' + p : '') + window.location.search + window.location.hash;
-        window.location.replace(target);
+        var l = window.location;
+        l.replace(
+          l.protocol + '//' + l.host + '/?/' +
+            l.pathname.slice(1).replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
       })();
     </script>
   </head>

@@ -366,7 +366,11 @@ export function deriveWorkEvidence(config: WorkConfig, qiraProjects: ScannedProj
  * independent evidence to weakest self-assertion. Nothing here says "verified"
  * without saying verified-by-what.
  */
-export function deriveVerification(activity: ProfileActivity, work?: WorkEvidence): VerificationCategory[] {
+export function deriveVerification(
+  activity: ProfileActivity,
+  work?: WorkEvidence,
+  hasIdentityProof = false,
+): VerificationCategory[] {
   const observed = work?.collectorObserved ?? 0;
   return [
     {
@@ -383,6 +387,14 @@ export function deriveVerification(activity: ProfileActivity, work?: WorkEvidenc
         `AI activity was read from the provider's own usage accounting in local logs on this device ` +
         `(${activity.activeDays} active days; ${activity.projectsActive} project(s) seen locally). ` +
         'This is device-local observation, not independent confirmation.',
+    },
+    {
+      label: 'Identity-linked',
+      status: hasIdentityProof ? 'reported' : 'pending',
+      basis: hasIdentityProof
+        ? 'The member published a key-signed proof under an external account; your browser verifies it live ' +
+          '(see the identity badge above). This proves control of that account, not legal identity.'
+        : 'No external account (e.g. GitHub) is linked yet. When linked, it is verified in your browser.',
     },
     {
       label: 'Provider-attested',
@@ -429,7 +441,7 @@ export function buildProfile(
     work,
     opportunity: buildOpportunity(opportunityConfig),
     efficiency: deriveEfficiency(daily, activity.activeDays),
-    verification: deriveVerification(activity, work),
+    verification: deriveVerification(activity, work, (identity.identityProofs?.length ?? 0) > 0),
     note: PROFILE_NOTE,
   };
 }

@@ -161,9 +161,6 @@ export function Directory() {
           </p>
           <ActivityDisclaimer compact />
         </div>
-        <a className="cta" href={href({ name: 'join' })}>
-          Add your profile
-        </a>
       </header>
 
       <div className="directory-controls">
@@ -230,10 +227,22 @@ export function Directory() {
         })}
       </ul>
 
+      {registry && registry.members.length < 5 ? (
+        <div className="directory-empty">
+          <h3>This directory is just getting started.</h3>
+          <p>
+            Every profile is a real, signed, browser-verifiable record of someone's AI work. Be one of the
+            first — it takes about ten minutes.
+          </p>
+          <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
+        </div>
+      ) : null}
+
       <p className="directory-footnote">
-        A verified signature proves the snapshot was produced by that device key and has not been altered.
-        It does <strong>not</strong> prove who the person is — identity verification is not built yet, and every
-        profile says so.
+        A verified signature proves a snapshot was produced by a device key and hasn't been altered. Members
+        can also link an external account (e.g. GitHub) — verified in <em>your</em> browser — which proves
+        control of that account, but <strong>not</strong> legal identity. <a href={href({ name: 'claims' })}>What each
+        signal can and cannot establish →</a>
       </p>
     </section>
   );
