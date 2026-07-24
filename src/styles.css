@@ -98,3 +98,109 @@ body{overflow-x:clip}
   .profile-work{padding:16px;border-radius:18px}
   .work-grid{grid-template-columns:1fr}
 }
+
+/* ---------------------------------------------------------------
+   Accessibility
+   Previously this stylesheet had zero :focus-visible rules and zero
+   prefers-reduced-motion rules, while WCAG 2.2 AA on core flows is a
+   Definition-of-Done item. Keyboard users had no visible focus at all.
+   --------------------------------------------------------------- */
+
+/* Visible focus on every interactive element. :focus-visible so pointer
+   users do not get a ring on click, but keyboard users always do. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+details:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #6ea8fe;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Fallback for engines without :focus-visible — never remove focus outright. */
+a:focus,
+button:focus,
+summary:focus {
+  outline: 3px solid #6ea8fe;
+  outline-offset: 2px;
+}
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+summary:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Respect a user's reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessible table alternative to the decorative heatmap grid. */
+.heatmap-data {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+.heatmap-data summary {
+  cursor: pointer;
+  color: var(--muted, #9aa4b2);
+  padding: 0.25rem 0;
+}
+.heatmap-data summary:hover {
+  color: var(--text, #e6edf3);
+}
+/* Long tables scroll inside their own container, never the page. */
+.heatmap-table-wrap {
+  max-height: 22rem;
+  overflow: auto;
+  margin-top: 0.5rem;
+}
+.heatmap-data table {
+  border-collapse: collapse;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.heatmap-data caption {
+  text-align: left;
+  padding-bottom: 0.5rem;
+  color: var(--muted, #9aa4b2);
+}
+.heatmap-data th,
+.heatmap-data td {
+  text-align: left;
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 400;
+}
+.heatmap-data thead th {
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: var(--panel, #12161c);
+}
+.heatmap-data td {
+  text-align: right;
+}
+
+/* Skip link: lets keyboard users jump past the header to the content. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: #6ea8fe;
+  color: #0b0e13;
+  font-weight: 600;
+  border-radius: 0 0 6px 0;
+}
+.skip-link:focus {
+  left: 0;
+}

@@ -287,9 +287,17 @@ function ActivityHeatmap({ daily, referenceDate }: { daily: PublicUsageSnapshot[
     columns.push(column);
   }
 
+  const activeCells = columns.flat().filter((cell) => cell.level >= 0 && cell.tokens > 0);
+
   return (
-    <div className="heatmap" role="img" aria-label="Daily AI-work activity, last 26 weeks">
-      <div className="heatmap-grid">
+    <div className="heatmap">
+      {/*
+        The coloured grid is decorative: colour alone cannot convey the values, so
+        it is hidden from assistive tech and the same data is exposed as a real
+        table below. Previously this was role="img" with one aria-label, which
+        hid every per-day value from screen readers with no alternative.
+      */}
+      <div className="heatmap-grid" aria-hidden="true">
         {columns.map((column, i) => (
           <div className="heatmap-col" key={i}>
             {column.map((cell) => (
@@ -302,7 +310,30 @@ function ActivityHeatmap({ daily, referenceDate }: { daily: PublicUsageSnapshot[
           </div>
         ))}
       </div>
-      <div className="heatmap-legend"><span>Less</span><i className="hm-0" /><i className="hm-1" /><i className="hm-2" /><i className="hm-3" /><i className="hm-4" /><span>More</span></div>
+      <div className="heatmap-legend" aria-hidden="true"><span>Less</span><i className="hm-0" /><i className="hm-1" /><i className="hm-2" /><i className="hm-3" /><i className="hm-4" /><span>More</span></div>
+
+      {/* The accessible equivalent: every active day with its real token count. */}
+      <details className="heatmap-data">
+        <summary>
+          Activity data as a table ({activeCells.length} active {activeCells.length === 1 ? 'day' : 'days'} in the last 26 weeks)
+        </summary>
+        <div className="heatmap-table-wrap">
+          <table>
+            <caption>Daily AI-work activity, last 26 weeks. Only days with measured activity are listed.</caption>
+            <thead>
+              <tr><th scope="col">Date</th><th scope="col">Tokens</th></tr>
+            </thead>
+            <tbody>
+              {activeCells.map((cell) => (
+                <tr key={cell.date}>
+                  <th scope="row">{cell.date}</th>
+                  <td>{fullNumber(cell.tokens)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </div>
   );
 }
@@ -498,13 +529,16 @@ export default function App() {
   const qiraProjects = snapshot.qiraProjects ?? sampleSnapshot.qiraProjects ?? [];
 
   return (
-    <main>
+    <>
+      {/* Lets keyboard users bypass the nav; the first thing Tab reaches. */}
+      <a className="skip-link" href="#top">Skip to main content</a>
       <NetworkField />
       <header className="topbar">
         <a className="brand" href="#top"><QiraLogo /> <span>QIRA</span></a>
         <nav><a href="#profile">Profile</a><a href="#projects">Research</a><a href="#methodology">Methodology</a><a href="#scanner">Approach</a><a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a><a className="nav-button" href="./data/latest.json" target="_blank" rel="noreferrer">Inspect JSON</a></nav>
       </header>
 
+      <main>
       <section className="hero" id="top">
         <div className="hero-pill"><span /> Qira LLC · local AI-agent work ledger</div>
         <h1>Instrumented systems for Qira research.</h1>
@@ -537,6 +571,7 @@ export default function App() {
       <ProjectScanner projects={qiraProjects} />
 
       {snapshot.warnings.length ? <section className="panel warnings"><div className="section-kicker"><span /> SAFE WARNINGS</div><ul>{snapshot.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul></section> : null}
-    </main>
+      </main>
+    </>
   );
 }
