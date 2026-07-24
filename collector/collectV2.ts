@@ -21,6 +21,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { scanQiraProjects } from './qiraScanner';
 import { assembleDraft, type RawSource } from './lib/snapshot';
+import { readLedgerDaily } from './lib/ledgerSource';
 import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './lib/publish';
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
@@ -147,8 +148,21 @@ function main(): void {
     ? scanQiraProjects()
     : { projects: [], scanner: { rootsChecked: 0, allowlistedProjects: 0, foundProjects: 0, privacyMode: 'allowlist_no_paths' as const }, stats: { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false } };
 
+  // Source of truth is the event ledger. ccusage remains the fallback when the
+  // ledger has not been populated yet (`npm run ingest`).
+  const ledgerData = process.env.TOKENS_SOURCE === 'ccusage'
+    ? { rows: [], warnings: ['Forced ccusage source via TOKENS_SOURCE=ccusage.'], eventCount: 0, providerConfidence: {} }
+    : readLedgerDaily();
+  if (ledgerData.rows.length) {
+    console.log(`Sourcing from event ledger: ${ledgerData.eventCount} events, ${ledgerData.rows.length} day-rows.`);
+  } else {
+    console.log('Event ledger unavailable or empty; falling back to ccusage.');
+  }
+
   const { draft, daily } = assembleDraft({
     sources,
+    preNormalizedRows: ledgerData.rows,
+    extraWarnings: ledgerData.warnings,
     generatedAt: new Date().toISOString(),
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
     qiraProjects: qira.projects,
@@ -166,6 +180,8 @@ function main(): void {
   );
 
   draft.consent = consent;
+  draft.sourceOfTruth = ledgerData.rows.length ? 'event_ledger' : 'ccusage_aggregate';
+  draft.providerConfidence = ledgerData.providerConfidence;
 
   const existing = readExistingLatest();
 

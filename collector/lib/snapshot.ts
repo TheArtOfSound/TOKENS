@@ -39,6 +39,11 @@ export interface AssembleInput {
   gitCommit: string | null;
   eligibleForAggregateSync?: boolean;
   extraWarnings?: string[];
+  /**
+   * Daily rows sourced from the event ledger. When present these REPLACE the
+   * ccusage sources entirely; ccusage is then only a cross-check.
+   */
+  preNormalizedRows?: NormalizedDaily[];
 }
 
 export interface AssembleResult {
@@ -51,7 +56,11 @@ export function assembleDraft(input: AssembleInput): AssembleResult {
   const warnings: string[] = [...(input.extraWarnings ?? [])];
   const rowSets: NormalizedDaily[][] = [];
 
-  for (const source of input.sources) {
+  // Preferred path: rows already normalized from the event ledger. The ledger is
+  // event-level and deduplicated, so no provider JSON parsing is needed.
+  if (input.preNormalizedRows?.length) rowSets.push(input.preNormalizedRows);
+
+  for (const source of input.preNormalizedRows?.length ? [] : input.sources) {
     if (source.json == null) {
       if (source.failureWarning) warnings.push(source.failureWarning);
       continue;

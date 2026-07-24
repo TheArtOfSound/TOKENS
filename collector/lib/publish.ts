@@ -143,6 +143,8 @@ export interface PublishedSnapshot {
   measurement: MeasurementBlock;
   privacy: PrivacyBlock;
   profile?: PublishedProfile;
+  sourceOfTruth: 'event_ledger' | 'ccusage_aggregate';
+  providerConfidence: Record<string, { confidence: string; note: string }>;
   verification: PublishedVerification;
 }
 
@@ -162,6 +164,10 @@ export interface DraftSnapshot {
   eligibleForAggregateSync: boolean;
   profile?: ProfileBlock;
   consent?: ConsentConfig;
+  /** Which pipeline produced the daily rows. */
+  sourceOfTruth?: 'event_ledger' | 'ccusage_aggregate';
+  /** Per-provider measurement confidence and its justification. */
+  providerConfidence?: Record<string, { confidence: 'high' | 'medium'; note: string }>;
 }
 
 export interface PublishResult {
@@ -460,6 +466,8 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'warnings',
       'measurement',
       ...(profile ? ['profile'] : []),
+      'sourceOfTruth',
+      'providerConfidence',
       'verification',
     ],
     // Stated in the published file so a viewer can see the user withheld
@@ -488,6 +496,18 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     measurement,
     privacy,
     ...(profile ? { profile } : {}),
+    sourceOfTruth: draft.sourceOfTruth === 'event_ledger' ? 'event_ledger' : 'ccusage_aggregate',
+    providerConfidence: Object.fromEntries(
+      Object.entries(draft.providerConfidence ?? {})
+        .filter(([key]) => key === 'claude' || key === 'codex')
+        .map(([key, value]) => [
+          key,
+          {
+            confidence: value?.confidence === 'high' ? 'high' : 'medium',
+            note: safeStringOrNull(value?.note, dropped, 400) ?? '',
+          },
+        ]),
+    ),
     verification: {
       schemaVersion: CANONICAL_SCHEMA_VERSION,
       canonicalSchemaVersion: CANONICAL_SCHEMA_VERSION,

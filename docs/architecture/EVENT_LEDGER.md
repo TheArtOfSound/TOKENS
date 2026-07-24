@@ -81,19 +81,50 @@ treated as one event even if a token count was revised. First write wins.
 
 Measured 2026-07-24, 135,655 events across 95 days:
 
-| Provider | Event ledger | ccusage | Delta |
-| --- | --- | --- | --- |
-| Claude | 23,777,475,763 | 23,789,634,716 | **−0.1%** |
-| Codex | 9,916,569,804 | 9,297,043,446 | **+6.7%** |
+| Provider | Event ledger | ccusage | Delta | Days >2% off |
+| --- | --- | --- | --- | --- |
+| Claude | 23,875,395,830 | 23,885,578,855 | **−0.04%** | **0 / 68** |
+| Codex | 9,916,569,804 | 9,297,043,446 | **+6.66%** | 11 / 68 |
 
-Claude agreement is essentially exact; the residual is activity that occurred
-between the two measurements.
+Claude agreement is essentially exact and uniform across every measured day; the
+residual is activity occurring between the two measurements.
 
-**The Codex +6.7% is not explained yet.** The ledger reads every file under
-`~/.codex/sessions`, and `ccusage` may filter or scope differently. Until that is
-run down, Codex event-level totals should be treated as approximate and are
-**not** used for the published figures — the publisher still sources Codex from
-`ccusage`. This is recorded as a known limitation rather than smoothed over.
+### The Codex +6.7%, explained
+
+Two separate causes were found by measuring, and one is fixed.
+
+**Fixed — UTC vs local day bucketing.** Days were bucketed on the UTC date
+substring. For a UTC−7 user everything after 17:00 local landed on the next day,
+which showed up as exactly equal-and-opposite errors on adjacent days
+(2026-04-04 −139,659,940 against 2026-04-05 +139,659,940). Migration 2 adds a
+`local_date` column computed with `Intl` at insert time. Claude went to −0.04%
+with **0 of 68 days** off by more than 2%.
+
+**Understood, not fixable today — Codex re-emission.** Codex re-emits the same
+turn's `last_token_usage` without advancing its cumulative counter. Sampling 226
+real sessions:
+
+- 191 sessions: `sum(last_token_usage)` equals the session's **own** final
+  `total_token_usage` — so summing is correct there, validated against Codex's
+  internal arithmetic rather than against ccusage.
+- 35 sessions: `sum > final` with no counter reset — the re-emission case.
+
+Two alternative rules were implemented and measured, and both are worse:
+
+| Rule | Result |
+| --- | --- |
+| Sum `last_token_usage` (current) | **+6.7%** |
+| Derive events from cumulative delta | −44% |
+| Gate on "cumulative advanced" | −45% |
+
+Both cumulative-based rules fail for the same reason: the cumulative counter
+advances only at turn end, while `last_token_usage` updates per sub-call (a
+single turn can emit **205** `token_count` lines), so anything gated on it drops
+every intra-turn call. Summing is the most accurate rule available today, with a
+known one-directional error bounded at roughly +7%.
+
+Consequently Codex is published at **`confidence: medium`** with the uncertainty
+stated in the snapshot and the UI, rather than presented as exact.
 
 ## 6. Incremental scanning
 
@@ -128,3 +159,18 @@ rebuildable from the logs. `npm run consent:delete` clears it.
 Cold ingest of the full corpus (3,126 Claude files + 628 Codex files, ~2.15 GB,
 924,554 lines): **~20s**, yielding 135,655 events and catching 85,542 duplicates.
 A subsequent no-change run skips every file without opening it.
+
+
+## 9. The ledger is now the source of truth
+
+`npm run collect` publishes from the ledger (`collector/lib/ledgerSource.ts`),
+not from `ccusage`. The snapshot records this in `sourceOfTruth: "event_ledger"`
+and carries per-provider confidence:
+
+- `claude` → `high` — reconciles to within 0.05% of ccusage on every measured day
+- `codex` → `medium` — may overstate by up to ~7% from provider re-emission
+
+`ccusage` remains available as an independent cross-check and as the fallback
+when the ledger is empty (`TOKENS_SOURCE=ccusage` forces it). Cost is published
+as `null` from this path: the ledger stores measured tokens and does not invent
+a price.

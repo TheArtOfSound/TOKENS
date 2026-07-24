@@ -19,7 +19,9 @@
     "warnings",
     "measurement",
     "privacy",
-    "verification"
+    "verification",
+    "sourceOfTruth",
+    "providerConfidence"
   ],
   "properties": {
     "generatedAt": {
@@ -672,6 +674,35 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "sourceOfTruth": {
+      "enum": [
+        "event_ledger",
+        "ccusage_aggregate"
+      ]
+    },
+    "providerConfidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "confidence",
+          "note"
+        ],
+        "properties": {
+          "confidence": {
+            "enum": [
+              "high",
+              "medium"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 400
           }
         }
       }

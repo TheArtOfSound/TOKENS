@@ -19,6 +19,19 @@ import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import type { CanonicalEvent } from './events';
 
+/** Machine timezone, resolved once. */
+const LOCAL_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+
+/** YYYY-MM-DD in the machine's timezone. 'en-CA' formats as ISO by default. */
+export function toLocalDate(iso: string, timeZone: string = LOCAL_TZ): string {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' })
+      .format(new Date(iso));
+  } catch {
+    return iso.slice(0, 10);
+  }
+}
+
 export const LEDGER_DIR = path.join(process.cwd(), '.tokens-cache');
 export const LEDGER_FILE = path.join(LEDGER_DIR, 'ledger.db');
 
@@ -77,6 +90,30 @@ export const MIGRATIONS: Migration[] = [
       DROP INDEX IF EXISTS idx_events_occurred;
       DROP TABLE IF EXISTS events;
       DROP TABLE IF EXISTS source_checkpoints;
+    `,
+  },
+  {
+    id: 2,
+    name: 'add_local_date',
+    /**
+     * Events are bucketed into days by LOCAL date, not UTC.
+     *
+     * Bucketing on the UTC substring put evening work on the following day: for a
+     * UTC-7 user, anything after 17:00 local. Measured against ccusage this showed
+     * up as exactly equal-and-opposite errors on adjacent days (e.g. 2026-04-04
+     * -139,659,940 and 2026-04-05 +139,659,940). Local date is also what a person
+     * means by "what did I do Tuesday".
+     *
+     * Stored as a column rather than computed in SQL because SQLite has no IANA
+     * timezone database; the collector computes it with Intl at insert time.
+     */
+    up: `
+      ALTER TABLE events ADD COLUMN local_date TEXT;
+      CREATE INDEX IF NOT EXISTS idx_events_local_date ON events(local_date, provider);
+    `,
+    down: `
+      DROP INDEX IF EXISTS idx_events_local_date;
+      ALTER TABLE events DROP COLUMN local_date;
     `,
   },
 ];
@@ -166,8 +203,9 @@ export class Ledger {
       INSERT OR IGNORE INTO events (
         event_id, event_schema_version, occurred_at, ingested_at, provider, model,
         input_tokens, output_tokens, cache_creation_tokens, cache_read_tokens, total_tokens,
-        measurement_class, confidence, session_pseudonym, source_fingerprint, adapter, adapter_version
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        measurement_class, confidence, session_pseudonym, source_fingerprint, adapter, adapter_version,
+        local_date
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `);
     let inserted = 0;
     this.db.exec('BEGIN');
@@ -177,6 +215,7 @@ export class Ledger {
           e.eventId, e.eventSchemaVersion, e.occurredAt, e.ingestedAt, e.provider, e.model,
           e.inputTokens, e.outputTokens, e.cacheCreationTokens, e.cacheReadTokens, e.totalTokens,
           e.measurementClass, e.confidence, e.sessionPseudonym, e.sourceFingerprint, e.adapter, e.adapterVersion,
+          toLocalDate(e.occurredAt),
         );
         inserted += Number(result.changes) > 0 ? 1 : 0;
       }
@@ -199,7 +238,7 @@ export class Ledger {
   }> {
     return this.db
       .prepare(`
-        SELECT substr(occurred_at, 1, 10) AS date, provider,
+        SELECT COALESCE(local_date, substr(occurred_at, 1, 10)) AS date, provider,
                SUM(input_tokens) AS inputTokens, SUM(output_tokens) AS outputTokens,
                SUM(cache_creation_tokens) AS cacheCreationTokens, SUM(cache_read_tokens) AS cacheReadTokens,
                SUM(total_tokens) AS totalTokens, COUNT(*) AS eventCount

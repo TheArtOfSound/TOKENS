@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { appendFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { Ledger, MIGRATIONS } from '../ledger';
+import { Ledger, MIGRATIONS, toLocalDate } from '../ledger';
 import { extractEvent, type CanonicalEvent } from '../events';
 import { createJsonlAdapter } from '../../adapters/jsonlAdapter';
 
@@ -83,16 +83,39 @@ describe('event deduplication', () => {
 });
 
 describe('daily rollup', () => {
-  it('groups by day and provider', () => {
-    ledger.insertEvents([
-      event({ eventId: 'a', occurredAt: '2026-07-20T01:00:00Z', totalTokens: 10 }),
-      event({ eventId: 'b', occurredAt: '2026-07-20T23:00:00Z', totalTokens: 20 }),
-      event({ eventId: 'c', occurredAt: '2026-07-21T01:00:00Z', totalTokens: 5 }),
-    ]);
+  /**
+   * Days are bucketed by LOCAL date, not UTC — bucketing on the UTC substring put
+   * evening work on the following day. These assertions therefore derive the
+   * expected bucket with toLocalDate() instead of hardcoding a date, so the test
+   * is correct in any machine timezone.
+   */
+  it('groups by local day and provider', () => {
+    const stamps = ['2026-07-20T01:00:00Z', '2026-07-20T23:00:00Z', '2026-07-21T01:00:00Z'];
+    const amounts = [10, 20, 5];
+    ledger.insertEvents(stamps.map((occurredAt, i) =>
+      event({ eventId: `e${i}`, occurredAt, totalTokens: amounts[i] })));
+
+    const expected = new Map<string, { tokens: number; count: number }>();
+    stamps.forEach((s, i) => {
+      const day = toLocalDate(s);
+      const prev = expected.get(day) ?? { tokens: 0, count: 0 };
+      expected.set(day, { tokens: prev.tokens + amounts[i], count: prev.count + 1 });
+    });
+
     const rows = ledger.dailyTotals();
-    expect(rows).toHaveLength(2);
-    expect(Number(rows[0].totalTokens)).toBe(30);
-    expect(Number(rows[0].eventCount)).toBe(2);
+    expect(rows).toHaveLength(expected.size);
+    for (const row of rows) {
+      expect(Number(row.totalTokens)).toBe(expected.get(row.date)!.tokens);
+      expect(Number(row.eventCount)).toBe(expected.get(row.date)!.count);
+    }
+    // Nothing is lost or duplicated by bucketing.
+    expect(rows.reduce((sum, r) => sum + Number(r.totalTokens), 0)).toBe(35);
+  });
+
+  it('assigns an evening-local event to the local day, not the next UTC day', () => {
+    // 2026-07-21T01:00:00Z is the evening of 2026-07-20 anywhere in the Americas.
+    ledger.insertEvents([event({ eventId: 'evening', occurredAt: '2026-07-21T01:00:00Z', totalTokens: 7 })]);
+    expect(ledger.dailyTotals()[0].date).toBe(toLocalDate('2026-07-21T01:00:00Z'));
   });
 });
 
