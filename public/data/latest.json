@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-24T06:58:14.907Z",
+  "generatedAt": "2026-07-24T07:54:28.728Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 284882921,
-    "outputTokens": 89127424,
-    "cacheCreationTokens": 627436639,
-    "cacheReadTokens": 33007794047,
-    "cachedTokens": 33635230686,
-    "freshTokens": 374010345,
-    "totalTokens": 34009241031,
+    "inputTokens": 284882958,
+    "outputTokens": 89144126,
+    "cacheCreationTokens": 629491007,
+    "cacheReadTokens": 33014441324,
+    "cachedTokens": 33643932331,
+    "freshTokens": 374027084,
+    "totalTokens": 34017959415,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -47,13 +47,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12574168,
-      "outputTokens": 60398917,
-      "cacheCreationTokens": 627436639,
-      "cacheReadTokens": 23392261503,
-      "cachedTokens": 24019698142,
-      "freshTokens": 72973085,
-      "totalTokens": 24092671227,
+      "inputTokens": 12574205,
+      "outputTokens": 60415619,
+      "cacheCreationTokens": 629491007,
+      "cacheReadTokens": 23398908780,
+      "cachedTokens": 24028399787,
+      "freshTokens": 72989824,
+      "totalTokens": 24101389611,
       "estimatedCostUsd": null
     }
   },
@@ -2981,6 +2981,27 @@
       "freshTokens": 2063653,
       "totalTokens": 961906753,
       "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-07-24",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 37,
+      "outputTokens": 16702,
+      "cacheCreationTokens": 2054368,
+      "cacheReadTokens": 6647277,
+      "cachedTokens": 8701645,
+      "freshTokens": 16739,
+      "totalTokens": 8718384,
+      "estimatedCostUsd": null
     }
   ],
   "qiraProjects": [
@@ -2992,7 +3013,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6e5b238",
+        "commit": "d49a2bb",
         "changedFiles": 2
       },
       "stack": [
@@ -3026,7 +3047,7 @@
         "css": 2,
         "tsx": 7
       },
-      "lastModified": "2026-07-24T06:58:10.564Z",
+      "lastModified": "2026-07-24T07:54:25.417Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3175,7 +3196,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6e5b238",
+        "commit": "d49a2bb",
         "changedFiles": 2
       },
       "stack": [
@@ -3209,7 +3230,7 @@
         "css": 2,
         "tsx": 7
       },
-      "lastModified": "2026-07-24T06:58:10.564Z",
+      "lastModified": "2026-07-24T07:54:25.417Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -3272,7 +3293,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 34009241031,
+    "exactTotalTokens": 34017959415,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3335,13 +3356,13 @@
     },
     "activity": {
       "referenceDate": "2026-07-24",
-      "activeDays": 95,
+      "activeDays": 96,
       "firstActiveDate": "2026-02-26",
-      "lastActiveDate": "2026-07-23",
-      "spanDays": 148,
-      "activeDaysLast30": 28,
-      "activeDaysLast90": 70,
-      "currentStreakDays": 3,
+      "lastActiveDate": "2026-07-24",
+      "spanDays": 149,
+      "activeDaysLast30": 29,
+      "activeDaysLast90": 71,
+      "currentStreakDays": 4,
       "longestStreakDays": 26,
       "toolsUsed": [
         "Codex",
@@ -3456,7 +3477,7 @@
       {
         "label": "Sustained usage",
         "status": "verified",
-        "basis": "95 active AI-work days over a 148-day span (threshold: 20 days across 56 days)."
+        "basis": "96 active AI-work days over a 149-day span (threshold: 20 days across 56 days)."
       },
       {
         "label": "Active across multiple projects",
@@ -3495,7 +3516,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "fe58bdace73c8215b3b5b0cab5b73cfedfbbb18d5a18545a3f2e37e50815b6d0",
+    "snapshotSha256": "cd6aef33e064343b894ef7465cd0a9dc4099210149ade380f549bf47a6c9deff",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3505,12 +3526,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T06:58:14.965Z",
-    "nonce": "4aa6b0b9-d0a8-4d05-86ef-8c0b474db726",
+    "issuedAt": "2026-07-24T07:54:28.763Z",
+    "nonce": "c1afb9eb-ddde-43a2-a857-87c09538c536",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "480b5054ca218852dd1e08a2e229321609ec213613912c31c1d65f6a260b219c",
-    "signature": "f4x1a8ADmYh8FUctwOlRsjMwlrXKthtIWcFr/ZAnIIPnWgTASaUVLlCTZZizAGHBeQULODgQE4uWg15C8YqwDA==",
+    "payloadSha256": "1c2d6b3c37b9d1531cf528048e4927b850458691ef358bb7ecb392392b78049c",
+    "signature": "MOvrO/j5ui1uazmlINDetLW/JotwIAXwWCtntmZYtQi84qW2H/CK8ABPnS0TpIYnqTh08tf1i/8NbcFK/J7fCQ==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
