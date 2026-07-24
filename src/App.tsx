@@ -12,7 +12,7 @@ import { Compare } from './views/Compare';
 import { Claims } from './views/Claims';
 import { Privacy } from './views/Privacy';
 import { Terms } from './views/Terms';
-import { href, useRoute } from './lib/router';
+import { href, navigate, useRoute } from './lib/router';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
 
@@ -436,6 +436,8 @@ function SiteFooter() {
 
 export default function App() {
   const route = useRoute();
+  // Grey page + white cards is the job-site convention; set once at the root.
+  useEffect(() => { document.body.classList.add('jobsite'); }, []);
   const [snapshot, setSnapshot] = useState<PublicUsageSnapshot>(sampleSnapshot);
   const [loadState, setLoadState] = useState<'loading' | 'loaded' | 'fallback'>('loading');
 
@@ -465,7 +467,23 @@ export default function App() {
       <a className="skip-link" href="#top">Skip to main content</a>
       <NetworkField />
       <header className="topbar">
-        <a className="brand" href="#top"><QiraLogo /> <span>QIRA</span></a>
+        <a className="brand" href={href({ name: 'home' })}><QiraLogo /> <span>QIRA</span></a>
+        {/* Job sites put search in the header. Submitting jumps to the people
+            directory with the query applied. */}
+        <form
+          className="topsearch"
+          role="search"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const q = new FormData(event.currentTarget).get('q');
+            const query = typeof q === 'string' && q.trim() ? `?q=${encodeURIComponent(q.trim())}` : '';
+            navigate(`${href({ name: 'directory' })}${query}`);
+          }}
+        >
+          <span className="topsearch-icon" aria-hidden="true">⌕</span>
+          <label className="visually-hidden" htmlFor="global-search">Search people by name, skill, or tool</label>
+          <input id="global-search" name="q" type="search" placeholder="Search people, skills, or tools" />
+        </form>
         <nav>
           <a href={href({ name: 'directory' })} aria-current={route.name === 'directory' ? 'page' : undefined}>People</a>
           <a href={href({ name: 'employer' })} aria-current={route.name === 'employer' ? 'page' : undefined}>For employers</a>

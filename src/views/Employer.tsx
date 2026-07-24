@@ -13,7 +13,7 @@ import { useMemo, useState } from 'react';
 import { useMemberProfiles, type MemberProfile } from '../lib/members';
 import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
-import { SignatureBadge } from './Directory';
+import { SignatureBadge } from './SignatureBadge';
 
 function initials(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || 'Q';
@@ -70,7 +70,7 @@ export function Employer() {
         </div>
       </header>
 
-      <div className="employer-filters">
+      <div className="employer-filters jcard jcard-pad">
         <label>Tool
           <select value={tool} onChange={(e) => setTool(e.target.value)}>
             <option value="">Any</option>
@@ -105,7 +105,7 @@ export function Employer() {
         </div>
       ) : null}
 
-      <ul className="candidate-list">
+      <ul className="candidate-list jcard">
         {results.map((p) => (
           <Candidate key={p.member.handle} p={p} expanded={!!expanded[p.member.handle]} onToggle={() =>
             setExpanded((prev) => ({ ...prev, [p.member.handle]: !prev[p.member.handle] }))} />

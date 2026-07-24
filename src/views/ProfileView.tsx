@@ -364,65 +364,90 @@ export function ProfileView({
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
+  // Only a member's own declaration turns this on — never inferred from activity.
+  const isOpenToWork =
+    identity.openTo.length > 0 ||
+    (profile.opportunity?.engagementTypes?.length ?? 0) > 0 ||
+    Boolean(identity.availability);
   return (
     <section className="profile" id="profile">
-      {/* 1. Identity, availability, and the recruiter action lead. */}
-      <div className="profile-card">
-        <div className="profile-id">
-          {identity.avatarUrl ? (
-            <img className="profile-avatar profile-photo" src={identity.avatarUrl} alt={`${identity.displayName} headshot`} loading="lazy" />
-          ) : (
-            <div className="profile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
-          )}
-          <div>
-            <h2 className="profile-name">
-              {identity.displayName}
-              {identity.pronouns ? <span className="profile-pronouns"> · {identity.pronouns}</span> : null}
-            </h2>
-            <p className="profile-role">{identity.headline}</p>
-            <div className="profile-meta">
-              {identity.location ? <span>{identity.location}</span> : null}
-              {identity.availability ? <span className="profile-avail">{identity.availability}</span> : null}
-            </div>
-            {identity.links.length ? (
-              <div className="profile-links">
+      {/* LinkedIn-style masthead: cover, overlapping avatar, identity, actions. */}
+      <div className="jcard jprofile">
+        <div className="jprofile-cover" aria-hidden="true" />
+        <div className="jprofile-body">
+          <div className={`jprofile-avatar-wrap ${isOpenToWork ? 'is-open' : ''}`}>
+            {identity.avatarUrl ? (
+              <div className="jprofile-avatar">
+                <img src={identity.avatarUrl} alt={`${identity.displayName} headshot`} loading="lazy" />
+              </div>
+            ) : (
+              <div className="jprofile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
+            )}
+            {isOpenToWork ? <span className="open-ring">Open to work</span> : null}
+          </div>
+
+          <div className="jprofile-top">
+            <div className="jprofile-id">
+              <h2 className="jprofile-name">
+                {identity.displayName}
+                {identity.pronouns ? <span className="profile-pronouns"> · {identity.pronouns}</span> : null}
+              </h2>
+              <p className="jprofile-headline">{identity.headline}</p>
+              <p className="jprofile-meta">
+                {identity.location ? <span>{identity.location}</span> : null}
+                {activity.toolsUsed.length ? <span>{activity.toolsUsed.join(' · ')}</span> : null}
                 {identity.links.map((link) => (
                   <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>
                 ))}
+              </p>
+              <IdentityProofs proofs={identity.identityProofs} keyId={keyId} />
+
+              <div className="jprofile-actions">
+                {contact ? (
+                  <a
+                    className="btn btn-primary"
+                    href={contact.href}
+                    {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+                  >
+                    {contact.label}
+                  </a>
+                ) : null}
+                <a className="btn btn-secondary" href="#work">View work</a>
+                <a className="btn btn-ghost" href={href({ name: 'claims' })}>What this proves</a>
               </div>
-            ) : null}
-            <IdentityProofs proofs={identity.identityProofs} keyId={keyId} />
+            </div>
           </div>
-        </div>
 
-        {contact ? (
-          <div className="profile-actions">
-            <a
-              className="profile-cta"
-              href={contact.href}
-              {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
-            >
-              {contact.label}
-            </a>
-          </div>
-        ) : null}
-
-        {/* Evidence tiers span the full width below the header. Met tiers lead;
-            unmet tiers collapse into one link so a recruiter isn't met by a wall
-            of "pending". */}
-        <div className="profile-verify">
-          {verification.filter((v) => v.status !== 'pending').map((item) => (
-            <VerificationChip key={item.label} item={item} />
-          ))}
-          {verification.some((v) => v.status === 'pending') ? (
-            <a className="vchip vchip-more" href={href({ name: 'claims' })}>
-              +{verification.filter((v) => v.status === 'pending').length} evidence tiers not yet met →
-            </a>
+          {/* The green "open to work" card, shown only when the member actually
+              declared availability — never inferred. */}
+          {isOpenToWork ? (
+            <div className="open-card">
+              <h3>Open to work</h3>
+              <p>{(identity.openTo.length ? identity.openTo : profile.opportunity?.engagementTypes ?? []).join(' · ')}</p>
+              {identity.availability ? <p className="open-detail">{identity.availability}</p> : null}
+            </div>
           ) : null}
+
+          {/* Evidence tiers. Met tiers lead; unmet collapse into one link. */}
+          <div className="profile-verify">
+            {verification.filter((v) => v.status !== 'pending').map((item) => (
+              <VerificationChip key={item.label} item={item} />
+            ))}
+            {verification.some((v) => v.status === 'pending') ? (
+              <a className="vchip vchip-more" href={href({ name: 'claims' })}>
+                +{verification.filter((v) => v.status === 'pending').length} evidence tiers not yet met →
+              </a>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      {identity.bio ? <p className="profile-bio">{identity.bio}</p> : null}
+      {identity.bio ? (
+        <div className="jcard jcard-pad">
+          <h3 className="jcard-title">About</h3>
+          <p className="profile-bio">{identity.bio}</p>
+        </div>
+      ) : null}
 
       {/* Availability & engagement — a buyer sees terms without inferring cost from tokens. */}
       <OpportunityPanel opportunity={profile.opportunity} openTo={identity.openTo} contact={contact} />

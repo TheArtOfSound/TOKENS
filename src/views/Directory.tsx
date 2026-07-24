@@ -1,249 +1,197 @@
 /**
- * Member directory — the "people" surface.
+ * People directory — a job-site search results page.
  *
- * Every figure shown here is read from that member's own signed snapshot and
- * verified in the visitor's browser. Nothing is self-reported except the
- * identity fields, which are labeled as such. There is no ranking by token
- * volume: the dossier is explicit that raw volume must never be presented as
- * skill, and a leaderboard would do exactly that.
+ * Layout follows the pattern people already know from LinkedIn/Indeed: a sticky
+ * filter rail on the left, result rows on the right, each row leading with
+ * identity and the strongest evidence.
+ *
+ * What does NOT change from the original: results are never ranked by token
+ * volume, every figure comes from that member's own signed snapshot verified in
+ * the visitor's browser, and each row states how strong its evidence actually is.
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import {
-  loadRegistry,
-  type MemberSummary,
-  type Registry,
-  type RegistryMember,
-  type SignatureState,
-} from '../lib/registry';
-import { verifySnapshotInBrowser } from '../lib/verify';
+import { useMemberProfiles, type MemberProfile } from '../lib/members';
 import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
+import { SignatureBadge } from './SignatureBadge';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
 
+export { SignatureBadge };
+
 function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
-export function SignatureBadge({ state, reason }: { state: SignatureState; reason?: string }) {
-  const label: Record<SignatureState, string> = {
-    checking: 'Verifying…',
-    valid: 'Signature verified',
-    invalid: 'Signature failed',
-    unsigned: 'Unsigned',
-    unreachable: 'Unreachable',
-  };
-  return (
-    <span className={`sig sig-${state}`} title={reason ?? label[state]}>
-      <span aria-hidden="true" className="sig-dot" />
-      {label[state]}
-    </span>
-  );
-}
-
-async function summarize(member: RegistryMember): Promise<MemberSummary> {
-  const base: MemberSummary = {
-    member,
-    activeDays: 0,
-    totalTokens: 0,
-    toolsUsed: [],
-    lastActiveDate: null,
-    currentStreakDays: 0,
-    projectsActive: 0,
-    collectorObserved: 0,
-    signatureState: 'checking',
-  };
-  try {
-    const url = member.snapshotUrl.startsWith('/')
-      ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${member.snapshotUrl}`
-      : member.snapshotUrl;
-    const response = await fetch(url, { cache: 'no-cache' });
-    if (!response.ok) {
-      return { ...base, signatureState: 'unreachable', error: `HTTP ${response.status}` };
-    }
-    const snapshot = (await response.json()) as Record<string, unknown>;
-    const outcome = await verifySnapshotInBrowser(snapshot);
-    const profile = snapshot.profile as
-      | { activity?: Record<string, unknown>; work?: Record<string, unknown> }
-      | undefined;
-    const activity = profile?.activity ?? {};
-    const totals = (snapshot.totals ?? {}) as Record<string, unknown>;
-
-    return {
-      ...base,
-      activeDays: Number(activity.activeDays) || 0,
-      totalTokens: Number(totals.totalTokens) || 0,
-      toolsUsed: Array.isArray(activity.toolsUsed) ? (activity.toolsUsed as string[]) : [],
-      lastActiveDate: (activity.lastActiveDate as string) ?? null,
-      currentStreakDays: Number(activity.currentStreakDays) || 0,
-      projectsActive: Number(activity.projectsActive) || 0,
-      collectorObserved: Number((profile?.work as Record<string, unknown>)?.collectorObserved) || 0,
-      signatureState: outcome.state,
-      signatureReason: outcome.reason,
-      generatedAt: (snapshot.generatedAt as string) ?? undefined,
-    };
-  } catch (error) {
-    return { ...base, signatureState: 'unreachable', error: error instanceof Error ? error.message : 'fetch failed' };
-  }
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || 'Q';
 }
 
 export function Directory() {
-  const [registry, setRegistry] = useState<Registry | null>(null);
-  const [summaries, setSummaries] = useState<MemberSummary[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState('');
+  const { profiles, error } = useMemberProfiles();
+  // The header search sends ?q= here.
+  const [query, setQuery] = useState(() => new URLSearchParams(window.location.search).get('q') ?? '');
   const [openToOnly, setOpenToOnly] = useState(false);
+  const [tool, setTool] = useState('');
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    loadRegistry(controller.signal)
-      .then((reg) => {
-        setRegistry(reg);
-        setSummaries(reg.members.map((member) => ({ ...({} as MemberSummary), member, signatureState: 'checking' as const })));
-        // Verify every member independently and in parallel.
-        reg.members.forEach((member, index) => {
-          summarize(member).then((summary) =>
-            setSummaries((prev) => {
-              const next = [...prev];
-              next[index] = summary;
-              return next;
-            }),
-          );
-        });
-      })
-      .catch((e) => {
-        if (e.name !== 'AbortError') setError(String(e));
-      });
-    return () => controller.abort();
+    const onPop = () => setQuery(new URLSearchParams(window.location.search).get('q') ?? '');
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const filtered = useMemo(() => {
+  const tools = useMemo(() => {
+    const set = new Set<string>();
+    profiles.forEach((p) => p.toolsUsed.forEach((t) => set.add(t)));
+    return [...set].sort();
+  }, [profiles]);
+
+  const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return summaries.filter((s) => {
-      if (!s.member) return false;
-      if (openToOnly && !s.member.availability) return false;
+    return profiles.filter((p) => {
+      if (!p.member) return false;
+      if (tool && !p.toolsUsed.includes(tool)) return false;
+      if (verifiedOnly && p.signature !== 'valid') return false;
+      if (openToOnly && p.openTo.length === 0 && p.engagementTypes.length === 0) return false;
       if (!q) return true;
-      const haystack = [
-        s.member.displayName,
-        s.member.headline,
-        s.member.location ?? '',
-        ...(s.member.workCategories ?? []),
-        ...(s.toolsUsed ?? []),
-      ]
-        .join(' ')
-        .toLowerCase();
-      return haystack.includes(q);
+      return [
+        p.member.displayName,
+        p.member.headline,
+        p.member.location ?? '',
+        ...p.workCategories,
+        ...p.toolsUsed,
+        ...p.identityProofs.map((x) => x.handle),
+      ].join(' ').toLowerCase().includes(q);
     });
-  }, [summaries, query, openToOnly]);
+  }, [profiles, query, tool, openToOnly, verifiedOnly]);
 
   if (error) {
     return (
-      <section className="panel wide-panel">
+      <div className="jcard jcard-pad">
         <h2>People</h2>
         <p className="muted">The member directory could not be loaded ({error}).</p>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="directory" id="people">
-      <header className="directory-head">
-        <div>
-          <h2>People measuring their AI work</h2>
-          <p className="muted">
-            Every figure below comes from that person's own signed snapshot and is verified in your browser.
-            Profiles are ordered by recency, never ranked by token volume.
-          </p>
-          <ActivityDisclaimer compact />
-        </div>
-      </header>
+    <section className="directory-page" id="people">
+      <div className="jsearch">
+        {/* Filter rail */}
+        <aside className="jfilters">
+          <div className="jcard jcard-pad">
+            <h4>Refine</h4>
+            <div className="fgroup">
+              <label className="visually-hidden" htmlFor="dir-q">Search people</label>
+              <input
+                id="dir-q"
+                type="search"
+                placeholder="Name, skill, tool…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                style={{ width: '100%', height: 38, padding: '0 10px', border: '1px solid var(--card-border)', borderRadius: 8, font: 'inherit' }}
+              />
+            </div>
+            <div className="fgroup">
+              <h4>Tool</h4>
+              <select value={tool} onChange={(e) => setTool(e.target.value)}>
+                <option value="">Any tool</option>
+                {tools.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="fgroup">
+              <h4>Evidence</h4>
+              <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
+              <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
+            </div>
+            {(query || tool || verifiedOnly || openToOnly) ? (
+              <div className="fgroup">
+                <button className="btn btn-ghost" style={{ height: 34 }} onClick={() => { setQuery(''); setTool(''); setVerifiedOnly(false); setOpenToOnly(false); }}>
+                  Clear all
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </aside>
 
-      <div className="directory-controls">
-        <label className="visually-hidden" htmlFor="people-search">
-          Search people
-        </label>
-        <input
-          id="people-search"
-          type="search"
-          placeholder="Search by name, headline, tool, or category…"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <label className="toggle">
-          <input type="checkbox" checked={openToOnly} onChange={(event) => setOpenToOnly(event.target.checked)} />
-          Open to opportunities
-        </label>
+        {/* Results */}
+        <div>
+          <div className="jresult-head">
+            <div>
+              <h2 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>People measuring their AI work</h2>
+              <p className="jresult-count">
+                {results.length} {results.length === 1 ? 'profile' : 'profiles'}
+                {query ? <> for “{query}”</> : null} · never ranked by token volume
+              </p>
+            </div>
+            <a className="btn btn-primary" href={href({ name: 'join' })}>Add your profile</a>
+          </div>
+
+          <div className="jcard">
+            {results.length === 0 ? (
+              <div className="jcard-pad">
+                <p className="muted" style={{ margin: 0 }}>No profiles match these filters.</p>
+              </div>
+            ) : (
+              results.map((p) => <ResultRow key={p.member.handle} p={p} />)
+            )}
+          </div>
+
+          {profiles.length > 0 && profiles.length < 5 ? (
+            <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
+              <h3 style={{ margin: '0 0 6px' }}>This directory is just getting started.</h3>
+              <p className="muted" style={{ margin: '0 0 14px' }}>
+                Every profile here is a signed, browser-verifiable record of real AI work — not a self-written
+                résumé. Be one of the first; it takes about ten minutes.
+              </p>
+              <a className="btn btn-primary" href={href({ name: 'join' })}>Add your profile →</a>
+            </div>
+          ) : null}
+
+          <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
+            <ActivityDisclaimer compact />
+            <p className="muted" style={{ margin: '10px 0 0', fontSize: '.88rem', lineHeight: 1.6 }}>
+              A verified signature proves a snapshot was produced by a device key and hasn’t been altered.
+              Members can also link an external account — verified in <em>your</em> browser — which proves
+              control of that account, but <strong>not</strong> legal identity.{' '}
+              <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ResultRow({ p }: { p: MemberProfile }) {
+  const m = p.member;
+  const openTo = p.openTo.length ? p.openTo : p.engagementTypes;
+  return (
+    <article className="jresult">
+      <a href={href({ name: 'member', handle: m.handle })} aria-hidden="true" tabIndex={-1}>
+        <span className="jresult-avatar">{initials(m.displayName)}</span>
+      </a>
+      <div className="jresult-body">
+        <a className="jresult-name" href={href({ name: 'member', handle: m.handle })}>{m.displayName}</a>
+        <p className="jresult-headline">{m.headline}</p>
+        {m.location ? <p className="jresult-loc">{m.location}</p> : null}
+
+        <div className="jresult-facts">
+          {p.activeDays ? <span><b>{p.activeDays}</b> active AI-work days</span> : null}
+          {p.collectorObserved ? <span><b>{p.collectorObserved}</b> collector-observed {p.collectorObserved === 1 ? 'artifact' : 'artifacts'}</span> : null}
+          {p.identityProofs.length ? <span>Linked: <b>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(', ')}</b></span> : null}
+          {p.totalTokens ? <span>{compactNumber(p.totalTokens)} tokens measured</span> : null}
+        </div>
+
+        {(p.toolsUsed.length || openTo.length) ? (
+          <div className="jchips">
+            {p.toolsUsed.map((t) => <span className="jchip" key={t}>{t}</span>)}
+            {openTo.slice(0, 3).map((o) => <span className="jchip jchip-open" key={o}>{o}</span>)}
+          </div>
+        ) : null}
       </div>
 
-      {registry && filtered.length === 0 && (
-        <p className="muted">No members match that search.</p>
-      )}
-
-      <ul className="member-grid">
-        {filtered.map((summary) => {
-          const m = summary.member;
-          return (
-            <li key={m.handle} className="member-card">
-              <a className="member-link" href={href({ name: 'member', handle: m.handle })}>
-                <span className="member-avatar" aria-hidden="true">
-                  {initials(m.displayName)}
-                </span>
-                <span className="member-identity">
-                  <strong>{m.displayName}</strong>
-                  <span className="member-headline">{m.headline}</span>
-                  {m.location && <span className="member-location">{m.location}</span>}
-                </span>
-              </a>
-
-              <dl className="member-stats">
-                <div>
-                  <dt>Active days</dt>
-                  <dd>{summary.activeDays || '—'}</dd>
-                </div>
-                <div>
-                  <dt>AI activity</dt>
-                  <dd>{summary.totalTokens ? compactNumber(summary.totalTokens) : '—'}</dd>
-                </div>
-                <div>
-                  <dt>Projects</dt>
-                  <dd>{summary.projectsActive || '—'}</dd>
-                </div>
-              </dl>
-
-              {summary.toolsUsed?.length > 0 && (
-                <p className="member-tools">{summary.toolsUsed.join(' · ')}</p>
-              )}
-
-              {m.availability && <p className="member-availability">{m.availability}</p>}
-
-              <SignatureBadge state={summary.signatureState} reason={summary.signatureReason ?? summary.error} />
-            </li>
-          );
-        })}
-      </ul>
-
-      {registry && registry.members.length < 5 ? (
-        <div className="directory-empty">
-          <h3>This directory is just getting started.</h3>
-          <p>
-            Every profile is a real, signed, browser-verifiable record of someone's AI work. Be one of the
-            first — it takes about ten minutes.
-          </p>
-          <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
-        </div>
-      ) : null}
-
-      <p className="directory-footnote">
-        A verified signature proves a snapshot was produced by a device key and hasn't been altered. Members
-        can also link an external account (e.g. GitHub) — verified in <em>your</em> browser — which proves
-        control of that account, but <strong>not</strong> legal identity. <a href={href({ name: 'claims' })}>What each
-        signal can and cannot establish →</a>
-      </p>
-    </section>
+      <div className="jresult-side">
+        <SignatureBadge state={p.signature} reason={p.signatureReason ?? p.error} />
+        <a className="btn btn-secondary" href={href({ name: 'member', handle: m.handle })}>View profile</a>
+      </div>
+    </article>
   );
 }
