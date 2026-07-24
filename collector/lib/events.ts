@@ -264,6 +264,13 @@ export function aggregateByDay(events: CanonicalEvent[]): Map<string, {
 export function createCodexExtractor(): (raw: unknown, options: ExtractOptions) => CanonicalEvent | null {
   let currentModel: string | null = null;
   let turnCounter = 0;
+  // NOTE on the ~+7% Codex overcount vs ccusage: it is NOT caused by the
+  // apparent double-emission of token_count lines. Empirically tested — skipping
+  // non-advancing or exact-duplicate token_count events regressed the total to
+  // -45% vs ccusage, i.e. ccusage counts those events too. Summing every
+  // token_count's last_token_usage is the most accurate option available and is
+  // published at reduced ("medium") confidence with the residual disclosed. Do
+  // not "dedup" Codex here without re-measuring against ccusage first.
 
   return (raw: unknown, options: ExtractOptions): CanonicalEvent | null => {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;

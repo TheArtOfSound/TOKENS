@@ -116,6 +116,14 @@ Two alternative rules were implemented and measured, and both are worse:
 | Sum `last_token_usage` (current) | **+6.7%** |
 | Derive events from cumulative delta | −44% |
 | Gate on "cumulative advanced" | −45% |
+| Skip only EXACT adjacent duplicates (same `last` AND flat cumulative) | −45% |
+
+The last row was re-tested 2026-07-24: even removing only byte-identical adjacent
+re-emissions regresses to −45%, which means ccusage counts those events too. The
+apparent double-emission is therefore **not** the cause of the +6.7%. `events.ts`
+carries an in-code warning not to "dedup" Codex without re-measuring against
+ccusage first. Summing every `last_token_usage` remains the most accurate option
+available and is published at reduced confidence.
 
 Both cumulative-based rules fail for the same reason: the cumulative counter
 advances only at turn end, while `last_token_usage` updates per sub-call (a
