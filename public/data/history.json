@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
   "kind": "compact_daily_series",
-  "generatedAt": "2026-07-24T01:38:07.385Z",
+  "generatedAt": "2026-07-24T01:53:09.497Z",
   "updatedThrough": "2026-07-23",
   "pointCount": 136,
   "points": [
@@ -1088,10 +1088,10 @@
     {
       "date": "2026-07-23",
       "provider": "claude",
-      "totalTokens": 544599318,
-      "freshTokens": 2452798,
-      "cachedTokens": 542146520,
-      "estimatedCostUsd": 441.0189134999991
+      "totalTokens": 591932861,
+      "freshTokens": 2529872,
+      "cachedTokens": 589402989,
+      "estimatedCostUsd": 470.950551999999
     }
   ],
   "note": "Derived per-day token series (one point per date+provider). Replaces the former append-every-run full-snapshot history to eliminate multi-megabyte bloat. Rebuilt deterministically from daily data on each run."
