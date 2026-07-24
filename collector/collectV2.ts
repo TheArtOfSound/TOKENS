@@ -65,15 +65,45 @@ function readWorkConfig(): WorkConfig {
   }
 }
 
+/**
+ * `--offline` uses ccusage's cached pricing table instead of fetching it.
+ *
+ * Two reasons this is the default:
+ *  - Local-first. A collector that reads local logs should not make network
+ *    calls; the fetch is the only egress in the whole pipeline.
+ *  - Reliability. A measured run stalled for ~4 minutes at 4% CPU waiting on
+ *    that fetch. Offline is ~0.9s versus ~2.2s and cannot hang.
+ *
+ * Cost figures are estimates either way and are labeled `estimated` in the
+ * published data. Set TOKENS_CCUSAGE_ONLINE=1 to fetch live pricing instead.
+ */
+const OFFLINE_ARGS = process.env.TOKENS_CCUSAGE_ONLINE === '1' ? [] : ['--offline'];
+
 const PROVIDERS: Array<{ provider: 'claude' | 'codex'; args: string[] }> = [
-  { provider: 'claude', args: ['claude', 'daily', '--json'] },
-  { provider: 'codex', args: ['codex', 'daily', '--json'] },
+  { provider: 'claude', args: ['claude', 'daily', '--json', ...OFFLINE_ARGS] },
+  { provider: 'codex', args: ['codex', 'daily', '--json', ...OFFLINE_ARGS] },
 ];
 
 function runCcusage(args: string[]): { json: unknown } | { warning: string } {
   const bin = process.env.CCUSAGE_BIN || 'ccusage';
-  const result = spawnSync(bin, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 64 * 1024 * 1024 });
-  if (result.error) return { warning: `${bin} ${args.join(' ')} failed: ${result.error.message}` };
+  // Hard timeout: a wedged provider CLI must never stall the collector. The
+  // no-clobber path keeps the previous good snapshot if this trips.
+  const timeoutMs = Number(process.env.TOKENS_CCUSAGE_TIMEOUT_MS ?? 60_000);
+  const result = spawnSync(bin, args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: timeoutMs,
+    killSignal: 'SIGKILL',
+  });
+  if (result.error) {
+    const timedOut = (result.error as NodeJS.ErrnoException).code === 'ETIMEDOUT';
+    return {
+      warning: timedOut
+        ? `${bin} ${args.join(' ')} timed out after ${timeoutMs}ms`
+        : `${bin} ${args.join(' ')} failed: ${result.error.message}`,
+    };
+  }
   if (result.status !== 0) return { warning: `${bin} ${args.join(' ')} exited ${result.status}` };
   try {
     return { json: JSON.parse(result.stdout) as unknown };

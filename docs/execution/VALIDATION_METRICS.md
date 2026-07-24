@@ -20,11 +20,11 @@ Measured, not speculated. Session: `feat/verified-ai-work-foundation`, 2026-07-2
 | Frontend from real normalized data | renders live data | ✅ | verified in Chrome, schema 2.0.0, 32.51B tokens |
 | Professional profile | verified activity | ⬜ future | roadmap (profile graph) |
 | Deletion behavior | delete local derived data | ⬜ partial | `public/data/*` are the only derived artifacts; documented |
-| Passing critical tests | green suite | ✅ | 53/53 |
+| Passing critical tests | green suite | ✅ | 62/62 |
 | Documented limitations | known-limitations doc | ✅ | IMPLEMENTATION_STATUS + PRIVACY_BOUNDARY |
 
 ## Measured results (this session)
-- **Tests:** 53 passed / 53 (8 files) in ~0.9s. Files: profile (13), normalize (10), secretScan (8), publish (8), honesty (5), schema (4), strangler (3), history (2).
+- **Tests:** 53 passed / 53 (8 files) in ~0.9s. Files: profile (13), normalize (10), secretScan (8), publish (8), scanCache (7), honesty (5), schema (4), strangler (3), scannerSafety (2), history (2).
 - **Typecheck:** `tsc --noEmit` exit 0.
 - **Build:** `tsc -b && vite build` exit 0. Output: index.html 0.61 kB, css 10.23 kB (gzip 3.02), js 208.51 kB (gzip 65.33).
 - **Dependency audit:** 0 vulnerabilities.

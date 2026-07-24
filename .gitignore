@@ -10,3 +10,4 @@ collector/local-qira-projects.json
 public/data/raw/
 tsconfig.tsbuildinfo
 .tmp-bin/
+.tokens-cache/

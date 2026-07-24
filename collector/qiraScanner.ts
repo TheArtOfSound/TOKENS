@@ -1,5 +1,15 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
+import {
+  SCAN_CACHE_VERSION,
+  computeProjectSignature,
+  computeRootSignature,
+  loadCheckpoint,
+  saveCheckpoint,
+} from './lib/scanCache';
+
+/** Bump to invalidate every cached scan result after changing scan semantics. */
+const SCAN_CACHE_VERSION_TAG = 'scanner-0.4.0';
 import path from 'node:path';
 
 type ProjectDef = {
@@ -187,7 +197,19 @@ function packageInfo(dir: string) {
   }
 }
 
+/**
+ * Per-run memo for readTextEvidence.
+ *
+ * scoreCandidate() runs once per (project definition x candidate directory), but
+ * the text evidence depends ONLY on the directory. Without this memo the same
+ * directory was read up to 8 times per scan — 8x the file I/O for identical
+ * bytes. This alone removes most of the cold-scan cost.
+ */
+const textEvidenceMemo = new Map<string, string>();
+
 function readTextEvidence(dir: string, maxFiles = 80) {
+  const memoized = textEvidenceMemo.get(dir);
+  if (memoized !== undefined) return memoized;
   const chunks: string[] = [];
   let files = 0;
   function walk(current: string, depth: number) {
@@ -208,7 +230,9 @@ function readTextEvidence(dir: string, maxFiles = 80) {
     }
   }
   walk(dir, 0);
-  return chunks.join('\n').toLowerCase();
+  const evidence = chunks.join('\n').toLowerCase();
+  textEvidenceMemo.set(dir, evidence);
+  return evidence;
 }
 
 function scoreCandidate(def: ProjectDef, dir: string): Candidate {
@@ -327,22 +351,141 @@ export function debugQiraCandidates() {
   return { roots, projects: PROJECTS.map((def) => ({ name: def.name, candidates: bestCandidates(def, dirs).slice(0, 8).map((candidate) => ({ path: candidate.dir, score: candidate.score, reasons: candidate.reasons })) })) };
 }
 
-export function scanQiraProjects() {
+const notFound = (def: ProjectDef, reason: string): QiraProjectScan => ({
+  name: def.name,
+  category: def.category,
+  status: def.status,
+  publicUrl: def.publicUrl,
+  description: def.description,
+  found: false,
+  stack: [],
+  scripts: [],
+  fileCounts: {},
+  lastModified: null,
+  scannerWarnings: [reason],
+});
+
+export interface ScanOptions {
+  /** Ignore the checkpoint and re-walk everything. */
+  force?: boolean;
+}
+
+export interface ScanStats {
+  reusedFromCheckpoint: number;
+  rescanned: number;
+  fullDiscovery: boolean;
+}
+
+/**
+ * Scan the allowlisted projects, reusing the previous run's work when nothing
+ * relevant changed.
+ *
+ * Fast path: the root signature is unchanged and each project's git/mtime
+ * signature is unchanged, so every result is reused and no directory walk
+ * happens at all.
+ *
+ * Slow path: the root signature changed (a project appeared or disappeared) or a
+ * project has no cached directory, so we fall back to the full depth-5 discovery
+ * walk. Correctness never depends on the cache — it only skips recomputation.
+ */
+export function scanQiraProjects(options: ScanOptions = {}) {
   const config = localConfig();
-  const { roots, dirs } = allCandidates();
+  const roots = scanRoots();
+  setApprovedRoots(roots);
+  textEvidenceMemo.clear();
+
+  const force = options.force || process.env.TOKENS_SCAN_FORCE === '1';
+  const rootSignature = computeRootSignature(roots);
+  const checkpoint = force ? null : loadCheckpoint<QiraProjectScan>(SCAN_CACHE_VERSION_TAG);
+  const rootsUnchanged = checkpoint?.rootSignature === rootSignature;
+
+  const stats: ScanStats = { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false };
+  const nextProjects: Record<string, { dir: string; signature: string; result: QiraProjectScan }> = {};
+
+  // Discovery is lazy: only pay for the depth-5 walk if some project actually
+  // needs it. In steady state this stays null and the scan is near-instant.
+  let discovered: string[] | null = null;
+  const dirsForDiscovery = () => {
+    if (discovered === null) {
+      stats.fullDiscovery = true;
+      discovered = [...new Set(roots.flatMap((root) => listDirs(root)))];
+    }
+    return discovered;
+  };
+
   const used = new Set<string>();
   const scans = PROJECTS.map((def) => {
     const explicit = explicitPathFor(def, config);
+    const cached = rootsUnchanged ? checkpoint?.projects[def.name] : undefined;
+
+    // Fast path A: previously searched for and not found. With the root name set
+    // unchanged, re-running discovery would reach the same conclusion, so reuse
+    // it. Without this, every unfound project forced a full depth-5 walk.
+    if (!explicit && cached && cached.dir === '') {
+      stats.reusedFromCheckpoint += 1;
+      nextProjects[def.name] = cached;
+      return cached.result;
+    }
+
+    // Fast path B: known directory whose signature has not moved.
+    if (!explicit && cached && safeStat(cached.dir)?.isDirectory()) {
+      const signature = computeProjectSignature(cached.dir);
+      if (signature === cached.signature) {
+        stats.reusedFromCheckpoint += 1;
+        used.add(cached.dir);
+        nextProjects[def.name] = cached;
+        return cached.result;
+      }
+      // Changed, but we still know where it lives — re-analyze just this project
+      // without re-running discovery across every root.
+      stats.rescanned += 1;
+      const candidate = scoreCandidate(def, cached.dir);
+      used.add(candidate.gitRoot || candidate.dir);
+      const result = analyze(def, candidate);
+      nextProjects[def.name] = { dir: cached.dir, signature, result };
+      return result;
+    }
+
     if (explicit) {
       const candidate = scoreCandidate(def, explicit);
       used.add(candidate.gitRoot || candidate.dir);
-      return analyze(def, { ...candidate, score: Math.max(candidate.score, 10000), reasons: ['explicit-path', ...candidate.reasons] }, true);
+      const result = analyze(def, { ...candidate, score: Math.max(candidate.score, 10000), reasons: ['explicit-path', ...candidate.reasons] }, true);
+      nextProjects[def.name] = { dir: explicit, signature: computeProjectSignature(explicit), result };
+      return result;
     }
-    const candidates = bestCandidates(def, dirs).filter((candidate) => !used.has(candidate.gitRoot || candidate.dir));
+
+    // Slow path: full discovery.
+    stats.rescanned += 1;
+    const candidates = bestCandidates(def, dirsForDiscovery()).filter((candidate) => !used.has(candidate.gitRoot || candidate.dir));
     const candidate = candidates[0];
-    if (!candidate) return { name: def.name, category: def.category, status: def.status, publicUrl: def.publicUrl, description: def.description, found: false, stack: [], scripts: [], fileCounts: {}, lastModified: null, scannerWarnings: ['no-scored-candidate'] } satisfies QiraProjectScan;
+    if (!candidate) {
+      // Cache the negative result so the next run does not re-walk every root.
+      const missing = notFound(def, 'no-scored-candidate');
+      nextProjects[def.name] = { dir: '', signature: 'not-found', result: missing };
+      return missing;
+    }
     used.add(candidate.gitRoot || candidate.dir);
-    return analyze(def, candidate);
+    const result = analyze(def, candidate);
+    nextProjects[def.name] = { dir: candidate.dir, signature: computeProjectSignature(candidate.dir), result };
+    return result;
   });
-  return { projects: scans, scanner: { rootsChecked: roots.length, allowlistedProjects: PROJECTS.length, foundProjects: scans.filter((scan) => scan.found).length, privacyMode: 'allowlist_no_paths' as const } };
+
+  saveCheckpoint<QiraProjectScan>({
+    schemaVersion: SCAN_CACHE_VERSION,
+    collectorVersion: SCAN_CACHE_VERSION_TAG,
+    rootSignature,
+    projects: nextProjects,
+    updatedAt: new Date().toISOString(),
+  });
+
+  return {
+    projects: scans,
+    scanner: {
+      rootsChecked: roots.length,
+      allowlistedProjects: PROJECTS.length,
+      foundProjects: scans.filter((scan) => scan.found).length,
+      privacyMode: 'allowlist_no_paths' as const,
+    },
+    stats,
+  };
 }
