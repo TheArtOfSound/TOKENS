@@ -25,7 +25,7 @@ import {
 } from './lib/consent';
 
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
-const CACHE_DIR = path.join(process.cwd(), '.tokens-cache');
+const CACHE_DIR = process.env.TOKENS_CACHE_DIR?.trim() || path.join(process.cwd(), '.tokens-cache');
 const LATEST = path.join(DATA_DIR, 'latest.json');
 const HISTORY = path.join(DATA_DIR, 'history.json');
 

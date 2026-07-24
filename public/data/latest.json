@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T19:02:29.999Z",
+  "generatedAt": "2026-07-24T19:13:22.955Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3013,8 +3013,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "aa62a7b",
-        "changedFiles": 5
+        "commit": "994d710",
+        "changedFiles": 8
       },
       "stack": [
         "React",
@@ -3047,7 +3047,7 @@
         "css": 2,
         "tsx": 10
       },
-      "lastModified": "2026-07-24T19:02:28.429Z",
+      "lastModified": "2026-07-24T19:11:48.995Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3058,21 +3058,13 @@
       "category": "Research",
       "status": "research",
       "description": "Latent Order Language Model architecture and validation work.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
       "scripts": [],
-      "fileCounts": {
-        "py": 12,
-        "js": 1
-      },
-      "lastModified": "2026-03-08T23:15:11.381Z",
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:280 folder~lolm, text~lolm, text~latent-order"
+        "no-scored-candidate"
       ]
     },
     {
@@ -3082,18 +3074,18 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "rescue/codex-autoloop-20260610-195045",
+        "commit": "1fd165d",
+        "changedFiles": 67
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "docs": 1
+        "py": 7
       },
-      "lastModified": "2026-04-19T07:28:22.557Z",
+      "lastModified": "2026-06-12T16:59:58.356Z",
       "scannerWarnings": [
-        "match:scored score:1175 folder~qev, text~qev, text~qev-desktop, text~qira-encryption-vault, domain=secure.imagineqira.com, domain=qev-desktop"
+        "match:scored score:395 folder=nfet, text~nfet"
       ]
     },
     {
@@ -3148,28 +3140,13 @@
       "category": "Intelligence",
       "status": "active",
       "description": "Phoenix traffic intelligence surface.",
-      "found": true,
-      "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
-      },
+      "found": false,
       "stack": [],
-      "scripts": [
-        "research",
-        "draft",
-        "today",
-        "linkedin",
-        "all",
-        "status"
-      ],
-      "fileCounts": {
-        "docs": 10,
-        "json": 10
-      },
-      "lastModified": "2026-06-06T16:06:35.036Z",
+      "scripts": [],
+      "fileCounts": {},
+      "lastModified": null,
       "scannerWarnings": [
-        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
+        "no-scored-candidate"
       ],
       "publicUrl": "https://pti.imagineqira.com"
     },
@@ -3196,8 +3173,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "aa62a7b",
-        "changedFiles": 5
+        "commit": "994d710",
+        "changedFiles": 8
       },
       "stack": [
         "React",
@@ -3230,16 +3207,16 @@
         "css": 2,
         "tsx": 10
       },
-      "lastModified": "2026-07-24T19:02:28.429Z",
+      "lastModified": "2026-07-24T19:11:48.995Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
     }
   ],
   "scanner": {
-    "rootsChecked": 5,
+    "rootsChecked": 2,
     "allowlistedProjects": 8,
-    "foundProjects": 6,
+    "foundProjects": 4,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [
@@ -3389,7 +3366,7 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "projectsActive": 6
+      "projectsActive": 4
     },
     "work": {
       "artifacts": [
@@ -3450,8 +3427,8 @@
           "url": null,
           "period": "2026",
           "linkedProject": "LOLM",
-          "verification": "collector_observed",
-          "basis": "The local collector independently observed git/file activity for this project."
+          "verification": "self_reported",
+          "basis": "Self-reported; not independently verified."
         },
         {
           "type": "research",
@@ -3465,7 +3442,7 @@
         }
       ],
       "outcomes": [],
-      "collectorObserved": 6,
+      "collectorObserved": 5,
       "totalArtifacts": 7,
       "totalOutcomes": 0
     },
@@ -3502,7 +3479,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (96 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (96 active days; 4 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Provider-attested",
@@ -3517,7 +3494,7 @@
       {
         "label": "Third-party-confirmed",
         "status": "pending",
-        "basis": "No client, employer, repository owner, or research organization has confirmed an outcome. 6 artifact(s) are collector-observed, which shows local activity but not authorship, quality, or results."
+        "basis": "No client, employer, repository owner, or research organization has confirmed an outcome. 5 artifact(s) are collector-observed, which shows local activity but not authorship, quality, or results."
       },
       {
         "label": "Self-submitted",
@@ -3577,7 +3554,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "8ec2826b0daa239158779461949cd30b714dcb087d86a5136280d5a85de366b6",
+    "snapshotSha256": "5f2b390ff8783b65bf58d99f05e85e7dba1085efbb0e9fa34646e48adba7cb57",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3587,12 +3564,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T19:02:30.036Z",
-    "nonce": "f678d0d3-5847-41ff-bad3-aab816126d1b",
+    "issuedAt": "2026-07-24T19:13:23.042Z",
+    "nonce": "aa823f3b-bd21-4edf-a40c-dddd1be5f21b",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "5eb022c013ecb4ab0dd9e8b0183522a9d593accd19aa3c7e35891136b6535722",
-    "signature": "6JBKD5vWOA87cMkpPJOS8upIGnJLhTgXFruFsgMRlsTeW8wrXkfWf8HF6ROUAFCWMZ3y+NfIovy9vn+uvASbCA==",
+    "payloadSha256": "64ced4817faf9e042b93d162b2389b14a024f2c2a7da4b4f4a95d9ccd5f6745b",
+    "signature": "pep1b2sdq3XLWVcPFiChgraeQr51VueqOHjb5+iZLRFCjiX2xVKTa5JZVLQSVaWwoMN6TYTSYWLzUq0VuVNkDQ==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",

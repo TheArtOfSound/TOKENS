@@ -31,7 +31,7 @@ import type { Confidence, MeasurementClass, Provider } from './canonical';
 
 export const EVENT_SCHEMA_VERSION = '1.0.0';
 
-const SALT_DIR = path.join(process.cwd(), '.tokens-cache');
+const SALT_DIR = process.env.TOKENS_CACHE_DIR?.trim() || path.join(process.cwd(), '.tokens-cache');
 const SALT_FILE = path.join(SALT_DIR, 'pseudonym-salt');
 
 export interface CanonicalEvent {

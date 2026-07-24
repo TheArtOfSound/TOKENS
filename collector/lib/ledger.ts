@@ -32,7 +32,7 @@ export function toLocalDate(iso: string, timeZone: string = LOCAL_TZ): string {
   }
 }
 
-export const LEDGER_DIR = path.join(process.cwd(), '.tokens-cache');
+export const LEDGER_DIR = process.env.TOKENS_CACHE_DIR?.trim() || path.join(process.cwd(), '.tokens-cache');
 export const LEDGER_FILE = path.join(LEDGER_DIR, 'ledger.db');
 
 export interface Migration {

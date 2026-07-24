@@ -25,7 +25,10 @@ import { canonicalize } from './canonicalJson';
 
 export const SIGNATURE_VERSION = '1.0.0';
 const KEYCHAIN_SERVICE = 'com.qira.tokens.device-key';
-const KEY_DIR = path.join(process.cwd(), '.tokens-cache');
+// TOKENS_CACHE_DIR relocates the derived-data cache (key file, salt, ledger).
+// Defaults to <cwd>/.tokens-cache. Lets the installed app keep its cache in a
+// stable spot regardless of where `collect` is invoked from.
+const KEY_DIR = process.env.TOKENS_CACHE_DIR?.trim() || path.join(process.cwd(), '.tokens-cache');
 const KEY_FILE = path.join(KEY_DIR, 'device-key.pem');
 
 export interface SignedManifest {
@@ -150,7 +153,13 @@ export interface KeyLoadResult {
 
 /** Load the device key, generating one on first use. */
 export function loadOrCreateDeviceKey(): KeyLoadResult {
-  const useKeychain = keychainAvailable();
+  // TOKENS_KEY_STORAGE=file forces the portable, cross-platform file key even on
+  // macOS (useful for CI, headless runs, or users who don't want a Keychain
+  // item). Off macOS the Keychain is unavailable anyway, so this is the default
+  // path on Linux and Windows. TOKENS_KEY_STORAGE=keychain is the normal macOS
+  // default and is accepted for symmetry.
+  const forceFile = process.env.TOKENS_KEY_STORAGE === 'file';
+  const useKeychain = !forceFile && keychainAvailable();
 
   const fromKeychain = useKeychain ? keychainRead() : null;
   if (fromKeychain) return { privateKeyPem: fromKeychain, storage: 'keychain', created: false };
@@ -391,7 +400,7 @@ export function verifySnapshotWithRevocations(
  * The published history contains only key ids, public keys, and dates/reasons —
  * never private material.
  */
-const KEY_HISTORY_FILE = path.join(process.cwd(), '.tokens-cache', 'key-history.json');
+const KEY_HISTORY_FILE = path.join(KEY_DIR, 'key-history.json');
 
 interface KeyHistoryRecord {
   keyId: string;

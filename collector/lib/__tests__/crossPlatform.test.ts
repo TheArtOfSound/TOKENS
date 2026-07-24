@@ -59,3 +59,40 @@ describe('log directory overrides', () => {
     }
   });
 });
+
+describe('file-based key storage (the Linux / Windows path)', () => {
+  it('forces a portable file key with TOKENS_KEY_STORAGE=file and round-trips sign/verify', async () => {
+    const cacheDir = mkdtempSync(path.join(tmpdir(), 'tokens-key-'));
+    try {
+      process.env.TOKENS_CACHE_DIR = cacheDir; // isolate: never touch the real device key
+      process.env.TOKENS_KEY_STORAGE = 'file';
+      vi.resetModules();
+      const signing = await import('../signing');
+
+      // First load generates and writes a file key (no Keychain used).
+      const created = signing.loadOrCreateDeviceKey();
+      expect(created.storage).toBe('file');
+      expect(created.created).toBe(true);
+
+      // The key persisted to a file we can see.
+      const { existsSync } = await import('node:fs');
+      expect(existsSync(path.join(cacheDir, 'device-key.pem'))).toBe(true);
+
+      // Second load reads the same key back (not regenerated).
+      const reloaded = signing.loadOrCreateDeviceKey();
+      expect(reloaded.storage).toBe('file');
+      expect(reloaded.created).toBe(false);
+      expect(reloaded.privateKeyPem).toBe(created.privateKeyPem);
+
+      // A snapshot signed with the file key verifies.
+      const snapshot: Record<string, unknown> = { generatedAt: '2026-07-24T00:00:00Z', totals: { totalTokens: 10 } };
+      snapshot.signature = signing.signSnapshot(snapshot, created.privateKeyPem, 'nonce-1');
+      expect(signing.verifySnapshot(snapshot).valid).toBe(true);
+    } finally {
+      delete process.env.TOKENS_CACHE_DIR;
+      delete process.env.TOKENS_KEY_STORAGE;
+      rmSync(cacheDir, { recursive: true, force: true });
+      vi.resetModules();
+    }
+  });
+});
