@@ -100,7 +100,7 @@ export function useRoute(): Route {
       const url = new URL(rawHref, window.location.origin);
       if (url.origin !== window.location.origin) return;
       // Let real files (data, scripts, icons) load normally.
-      if (/\.(json|svg|png|ico|sh|txt|xml|webmanifest)$/i.test(url.pathname)) return;
+      if (/\.(json|svg|png|ico|sh|ps1|txt|xml|webmanifest)$/i.test(url.pathname)) return;
       event.preventDefault();
       if (url.pathname !== window.location.pathname) navigate(url.pathname);
     };
