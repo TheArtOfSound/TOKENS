@@ -8,7 +8,7 @@ _Written so another engineer (or agent) can continue without guessing. Session: 
 - Recovery branch **`recovery/main-2026-07-23`** points at `c7154ba` (preserves the 1,252 local data commits).
 - The launchd collector job is **disabled** for safety (R6).
 - Regenerated `public/data/latest.json` (schema 2.0.0) + compact `history.json` are on the branch and validated.
-- All checks green: typecheck, 62 tests, `validate:data`, build, `npm audit` (0 vulns).
+- All checks green: typecheck, 71 tests, `validate:data`, build, `npm audit` (0 vulns).
 
 ## To reopen and continue the project
 ```bash

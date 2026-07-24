@@ -34,7 +34,7 @@ accessibility (0), benchmarks (0).
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 62/62 |
+| Unit tests (`vitest run`) | ✅ 71/71 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -50,7 +50,7 @@ accessibility (0), benchmarks (0).
 | Secret/PII/path scanner | ✅ done, tested | nested + base64 + control chars |
 | Compact history | ✅ done | 28 MB → 27 KB |
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
-| Test suite | ✅ done | 62 tests, adversarial fixtures |
+| Test suite | ✅ done | 71 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
@@ -60,6 +60,8 @@ accessibility (0), benchmarks (0).
 | **Incremental checkpointed scan** | ✅ done, tested | **cold 71.6s → warm 0.70s (100×)**; full collector run **78s → 5.3s**. Root-name + git/mtime signatures; negative results cached; `TOKENS_SCAN_FORCE=1` to re-discover. |
 | **Offline-by-default collection** | ✅ done | `ccusage --offline` removes the only network egress in the pipeline; a measured run had stalled ~4 min at 4% CPU on the pricing fetch. 60s hard timeout added. |
 | **Scanner filesystem containment** | ✅ done, tested | symlink-escape, TOCTOU, and FIFO/socket/device reads closed; real-symlink + real-FIFO tests |
+| **Consent + permission disclosure** | ✅ done, tested | per-source opt-in (disabled source is never read), per-field publication toggles, `profile/consent.json`; 9 tests |
+| **Upload preview / export / delete** | ✅ done | `npm run consent`, `consent:preview` (exact published bytes), `consent:export`, `consent:delete` |
 | Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
 | Docs / threat model / privacy | ✅ done | full `docs/**` set |
 | Live publishing restore | ⬜ needs Bryan | resolve R1, re-enable launchd |
@@ -68,7 +70,7 @@ accessibility (0), benchmarks (0).
 | Area | Status | Notes |
 | --- | --- | --- |
 | ~~Incremental/checkpointed scan~~ | ✅ **now built** | See the measured numbers in the built table above. |
-| Consent / upload-preview / export / delete | ⛔ **Phase 1 — not built** | 0 of 30 requirements built. "Explicit, revocable consent" is a page-1 dossier principle. `collectV2.ts` reads both providers and walks `~/Documents`, `~/Desktop` unconditionally with no opt-in and no revoke path. |
+| ~~Consent / upload-preview / export / delete~~ | ✅ **now built** | See the built table above. |
 | Ed25519 device signing | ⛔ **Phase 1 — not built** | Only SHA-256 content hashing exists. No keypair, no Keychain storage, no signed manifest, no rotation/revocation, no independent verifier. 1 of 21 crypto requirements built. |
 | Canonical **event** model | ⛔ **Phase 1 — not built** | Finest granularity is a daily per-provider aggregate. No `eventId`, `ingestedAt`, per-record evidence class, or session pseudonym. Blocks ~40 downstream requirements. |
 | Adapter framework | ⛔ **not built** | 0 of 11. Providers are hardcoded, not pluggable versioned adapters. |
@@ -96,5 +98,4 @@ accessibility (0), benchmarks (0).
 - Restore live publishing (R1).
 - Add device-signed aggregate + honest badge.
 - ~~Add incremental scan to hit the perf budget.~~ ✅ done — warm run 0.70s (budget <2s median).
-- Build the consent layer: per-source opt-in, permission disclosure, upload preview with per-field
-  toggles, and working export/delete.
+- ~~Build the consent layer.~~ ✅ done — per-source opt-in, disclosure, preview, export, delete.

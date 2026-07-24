@@ -25,6 +25,7 @@ import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './l
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { buildProfile, type ProfileIdentity, type WorkConfig } from './lib/profile';
+import { isSourceEnabled, loadConsent } from './lib/consent';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
@@ -124,13 +125,25 @@ function readExistingLatest(): PublishedSnapshot | null {
 function main(): void {
   mkdirSync(OUT_DIR, { recursive: true });
 
+  const { config: consent, created: consentCreated } = loadConsent();
+  if (consentCreated) {
+    console.log('Created profile/consent.json (all sources enabled, matching existing behavior).');
+    console.log('Run `npm run consent` to see exactly what each source reads, and to turn any of it off.');
+  }
+
+  // A source the user disabled is never invoked -- not read then filtered.
   const sources: RawSource[] = PROVIDERS.map(({ provider, args }) => {
+    if (!isSourceEnabled(consent, provider)) {
+      return { provider, json: null, failureWarning: `${provider} source disabled by consent; not read` };
+    }
     const result = runCcusage(args);
     if ('warning' in result) return { provider, json: null, failureWarning: result.warning };
     return { provider, json: result.json };
   });
 
-  const qira = scanQiraProjects();
+  const qira = isSourceEnabled(consent, 'projectScan')
+    ? scanQiraProjects()
+    : { projects: [], scanner: { rootsChecked: 0, allowlistedProjects: 0, foundProjects: 0, privacyMode: 'allowlist_no_paths' as const }, stats: { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false } };
 
   const { draft, daily } = assembleDraft({
     sources,
@@ -149,6 +162,8 @@ function main(): void {
     qira.projects,
     readWorkConfig(),
   );
+
+  draft.consent = consent;
 
   const existing = readExistingLatest();
 

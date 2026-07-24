@@ -20,7 +20,7 @@ Measured, not speculated. Session: `feat/verified-ai-work-foundation`, 2026-07-2
 | Frontend from real normalized data | renders live data | ✅ | verified in Chrome, schema 2.0.0, 32.51B tokens |
 | Professional profile | verified activity | ⬜ future | roadmap (profile graph) |
 | Deletion behavior | delete local derived data | ⬜ partial | `public/data/*` are the only derived artifacts; documented |
-| Passing critical tests | green suite | ✅ | 62/62 |
+| Passing critical tests | green suite | ✅ | 71/71 |
 | Documented limitations | known-limitations doc | ✅ | IMPLEMENTATION_STATUS + PRIVACY_BOUNDARY |
 
 ## Measured results (this session)

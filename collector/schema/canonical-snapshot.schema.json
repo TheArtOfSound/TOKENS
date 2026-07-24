@@ -187,7 +187,9 @@
         "rawContentPersisted",
         "allowlistPublication",
         "eligibleForAggregateSync",
-        "fieldsPublished"
+        "fieldsPublished",
+        "fieldsWithheld",
+        "sourcesDisabled"
       ],
       "properties": {
         "rawContentPersisted": {
@@ -200,6 +202,18 @@
           "type": "boolean"
         },
         "fieldsPublished": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fieldsWithheld": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcesDisabled": {
           "type": "array",
           "items": {
             "type": "string"

@@ -10,7 +10,7 @@ Local `main` is 1,252 ahead / 11 behind `origin/main`; merge-base `216d9c9`. Ori
 
 ## R2 — Privacy / content-leak is existential (H, MITIGATED)
 A blocklist validator could leak any unanticipated field.
-**Mitigation:** allowlist publication transform (construct, not redact) + nested secret scanner + fail-closed collector write + schema `additionalProperties:false` + `validate:data` gate + 62 tests incl. adversarial fixtures. Verified: 0 prohibited patterns in the regenerated data and in all served `dist/` assets.
+**Mitigation:** allowlist publication transform (construct, not redact) + nested secret scanner + fail-closed collector write + schema `additionalProperties:false` + `validate:data` gate + 71 tests incl. adversarial fixtures. Verified: 0 prohibited patterns in the regenerated data and in all served `dist/` assets.
 **Residual:** base64 decode is one level deep; hostname/username detection outside path context is intentionally not attempted (documented in PRIVACY_BOUNDARY).
 
 ## R3 — Data-accuracy / inflation (H, MITIGATED)

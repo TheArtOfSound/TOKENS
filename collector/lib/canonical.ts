@@ -163,4 +163,12 @@ export interface PrivacyBlock {
   eligibleForAggregateSync: boolean;
   /** The exact set of top-level field families published (for the "what leaves the device" preview). */
   fieldsPublished: string[];
+  /**
+   * Fields the user switched OFF via consent. Naming the withheld field is
+   * deliberate: a viewer can see something was withheld without learning its
+   * value, which is more honest than silently omitting it.
+   */
+  fieldsWithheld: string[];
+  /** Sources the user declined entirely; those logs were never read. */
+  sourcesDisabled: string[];
 }

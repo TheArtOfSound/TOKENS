@@ -13,7 +13,7 @@
 - **Allowlist publication transform** (`publish.ts`) — constructs the published object from approved fields; unknown fields cannot pass through.
 - **Nested secret/PII/path scanner** (`secretScan.ts`) with base64 + control-char handling; fail-closed collector write.
 - **Upgraded validator** (`validateLatest.ts`): JSON-Schema (Ajv 2020) + hash verification + secret scan over `latest.json` and `history.json`.
-- **62 tests** (vitest) incl. adversarial privacy fixtures and strangler equivalence.
+- **71 tests** (vitest) incl. adversarial privacy fixtures and strangler equivalence.
 - **Idempotent + no-clobber collector**; **history.json 28 MB → 27 KB**.
 - **Frontend honesty UI**: evidence tags per metric, Measurement & Methodology panel, honest "hash proves" copy.
 - **Pinned deps + hardened CI** (`npm ci`, typecheck, tests, validate, audit, build); **0 vulnerabilities**.

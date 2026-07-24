@@ -26,6 +26,7 @@ import {
 import { isSafeString } from './secretScan';
 import type { NormalizedDaily, ProviderSummary } from './normalize';
 import type { ProfileBlock, VerificationStatus } from './profile';
+import { disabledFields, disabledSources, type ConsentConfig, type FieldKey } from './consent';
 
 // ---------- Published (frozen contract + additive) shapes ----------
 
@@ -159,6 +160,7 @@ export interface DraftSnapshot {
   gitCommit: string | null;
   eligibleForAggregateSync: boolean;
   profile?: ProfileBlock;
+  consent?: ConsentConfig;
 }
 
 export interface PublishResult {
@@ -415,8 +417,34 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
 
   const warnings = safeStrings(draft.warnings, dropped, 12, 200);
 
-  const measurement = buildMeasurementBlock(totals.totalTokens, totals.estimatedCostUsd);
   const profile = draft.profile ? publishProfile(draft.profile, dropped) : undefined;
+
+  // Apply the user's per-field publication toggles. A field switched off is
+  // removed from the payload entirely -- not blanked, not zeroed -- so it cannot
+  // be recovered from the published file.
+  //
+  // ORDER MATTERS: this runs BEFORE buildMeasurementBlock. When it ran after,
+  // a withheld cost was still recoverable from measurement.estimatedOnly.costUsd
+  // (caught by consent.test.ts).
+  const consent = draft.consent;
+  const allow = (key: FieldKey): boolean => !consent || consent.fields[key] !== false;
+
+  if (!allow('estimatedCost')) {
+    totals.estimatedCostUsd = null;
+    for (const summary of Object.values(providers)) summary.estimatedCostUsd = null;
+    for (const row of daily) row.estimatedCostUsd = null;
+  }
+  if (!allow('models')) {
+    for (const summary of Object.values(providers)) summary.models = [];
+    for (const row of daily) row.models = [];
+  }
+  if (profile && !allow('profileWork')) {
+    profile.work = { artifacts: [], outcomes: [], collectorObserved: 0, totalArtifacts: 0, totalOutcomes: 0 };
+  }
+
+  // Built only after consent has been applied, so a withheld cost never reaches
+  // the estimatedOnly block.
+  const measurement = buildMeasurementBlock(totals.totalTokens, totals.estimatedCostUsd);
 
   const privacy: PrivacyBlock = {
     rawContentPersisted: false,
@@ -424,15 +452,19 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     eligibleForAggregateSync: draft.eligibleForAggregateSync,
     fieldsPublished: [
       'totals',
-      'providers',
-      'daily',
-      'qiraProjects',
+      ...(allow('providers') ? ['providers'] : []),
+      ...(allow('daily') ? ['daily'] : []),
+      ...(allow('qiraProjects') ? ['qiraProjects'] : []),
       'scanner',
       'warnings',
       'measurement',
       ...(profile ? ['profile'] : []),
       'verification',
     ],
+    // Stated in the published file so a viewer can see the user withheld
+    // something, without revealing what the withheld values were.
+    fieldsWithheld: consent ? disabledFields(consent) : [],
+    sourcesDisabled: consent ? disabledSources(consent) : [],
   };
 
   const published: PublishedSnapshot = {
@@ -442,9 +474,9 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     collectorVersion: COLLECTOR_VERSION,
     isSampleData: draft.isSampleData === true,
     totals,
-    providers,
-    daily,
-    qiraProjects,
+    providers: allow('providers') ? providers : {},
+    daily: allow('daily') ? daily : [],
+    qiraProjects: allow('qiraProjects') ? qiraProjects : [],
     scanner: {
       rootsChecked: safeCount(draft.scanner.rootsChecked),
       allowlistedProjects: safeCount(draft.scanner.allowlistedProjects),
