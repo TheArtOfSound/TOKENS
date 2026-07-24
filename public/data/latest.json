@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-24T03:57:05.528Z",
+  "generatedAt": "2026-07-24T04:27:16.195Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 284882881,
-    "outputTokens": 89102793,
-    "cacheCreationTokens": 627406351,
-    "cacheReadTokens": 32992499675,
-    "cachedTokens": 33619906026,
-    "freshTokens": 373985674,
-    "totalTokens": 33993891700,
+    "inputTokens": 284882921,
+    "outputTokens": 89127424,
+    "cacheCreationTokens": 627436639,
+    "cacheReadTokens": 33007794047,
+    "cachedTokens": 33635230686,
+    "freshTokens": 374010345,
+    "totalTokens": 34009241031,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -47,13 +47,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12574128,
-      "outputTokens": 60374286,
-      "cacheCreationTokens": 627406351,
-      "cacheReadTokens": 23376967131,
-      "cachedTokens": 24004373482,
-      "freshTokens": 72948414,
-      "totalTokens": 24077321896,
+      "inputTokens": 12574168,
+      "outputTokens": 60398917,
+      "cacheCreationTokens": 627436639,
+      "cacheReadTokens": 23392261503,
+      "cachedTokens": 24019698142,
+      "freshTokens": 72973085,
+      "totalTokens": 24092671227,
       "estimatedCostUsd": null
     }
   },
@@ -2973,13 +2973,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 14984,
-      "outputTokens": 2023998,
-      "cacheCreationTokens": 16001196,
-      "cacheReadTokens": 928517244,
-      "cachedTokens": 944518440,
-      "freshTokens": 2038982,
-      "totalTokens": 946557422,
+      "inputTokens": 15024,
+      "outputTokens": 2048629,
+      "cacheCreationTokens": 16031484,
+      "cacheReadTokens": 943811616,
+      "cachedTokens": 959843100,
+      "freshTokens": 2063653,
+      "totalTokens": 961906753,
       "estimatedCostUsd": null
     }
   ],
@@ -2992,8 +2992,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "4619314",
-        "changedFiles": 0
+        "commit": "4321996",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -3026,7 +3026,7 @@
         "css": 2,
         "tsx": 7
       },
-      "lastModified": "2026-07-24T03:57:03.994Z",
+      "lastModified": "2026-07-24T04:27:11.745Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3175,8 +3175,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "4619314",
-        "changedFiles": 0
+        "commit": "4321996",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -3209,7 +3209,7 @@
         "css": 2,
         "tsx": 7
       },
-      "lastModified": "2026-07-24T03:57:03.994Z",
+      "lastModified": "2026-07-24T04:27:11.745Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -3272,7 +3272,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 33993891700,
+    "exactTotalTokens": 34009241031,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3495,7 +3495,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "c6070cb9d869de6053f363045cc4103bdaa38fc73683ab1100f5d5693615cc4b",
+    "snapshotSha256": "062d764844d67b673d1cb71757090cfd5e90318b26a70c8c7e40e966d21052af",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3505,12 +3505,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T03:57:05.564Z",
-    "nonce": "d88fb24b-4660-41b5-9ee1-b2d79031621d",
+    "issuedAt": "2026-07-24T04:27:16.254Z",
+    "nonce": "06333d78-c6db-4ccc-ad29-f9b6c493de27",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "0266850f44a8c9f20f26054886b229cce41d3b339bcbf95c4e7c9c7ff5cb2516",
-    "signature": "7ito2wbM8wyNOYb6uF9QfX4su3FHLi5Y1WcbA3N1HERqrxBayU5XarbKrM4MyCpYS5Gf1fUJ1FeEFxaSQlviDw==",
+    "payloadSha256": "c34c7969d092fed3d49f0820d3b9213fd8f962f6387240f33ac102421956a6c5",
+    "signature": "2ugWCkgnAXAc+OcJWQqc/626VhFPpZkbPHQsX/XCowlZqbWdd4ylR5nlnAG8dFpKdQNWi/BU8iYjYpvjUEeVBg==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
