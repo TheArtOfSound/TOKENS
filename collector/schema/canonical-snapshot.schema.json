@@ -223,6 +223,34 @@
         }
       }
     },
+    "imported": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["note", "totalTokens", "sources"],
+      "properties": {
+        "note": { "type": "string" },
+        "totalTokens": { "type": "number" },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "format", "measurementClass", "confidence", "events", "totalTokens", "firstDate", "lastDate", "models"],
+            "properties": {
+              "label": { "type": "string" },
+              "format": { "type": "string" },
+              "measurementClass": { "type": "string", "enum": ["user_submitted"] },
+              "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
+              "events": { "type": "number" },
+              "totalTokens": { "type": "number" },
+              "firstDate": { "type": ["string", "null"] },
+              "lastDate": { "type": ["string", "null"] },
+              "models": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
     "profile": {
       "type": "object",
       "additionalProperties": false,

@@ -51,7 +51,9 @@ export interface ConsentConfig {
 }
 
 export interface SourceDisclosure {
-  key: SourceKey;
+  // 'imported' is informational (opt-in per `npm run import`), not a toggleable
+  // scan source, so it is not part of the SourceKey enable/disable config.
+  key: SourceKey | 'imported';
   name: string;
   reads: string;
   directories: string[];
@@ -110,6 +112,16 @@ export const SOURCE_DISCLOSURES: SourceDisclosure[] = [
     ],
     evidenceClass: 'provider_reported',
     networkAccess: 'none (--offline uses a cached pricing table)',
+  },
+  {
+    key: 'imported',
+    name: 'Imported data (optional, off unless you import)',
+    reads: 'a file YOU point at with `npm run import`, e.g. a ChatGPT/Gemini/Cursor export or a CSV/JSON',
+    directories: ['only the exact file path you pass to the import command'],
+    extracts: ['date', 'provider', 'model', 'input/output/cache token counts — nothing else'],
+    discards: ['prompt text', 'response text', 'titles', 'emails', 'any column not in the token allowlist'],
+    evidenceClass: 'user_submitted',
+    networkAccess: 'none',
   },
   {
     key: 'projectScan',

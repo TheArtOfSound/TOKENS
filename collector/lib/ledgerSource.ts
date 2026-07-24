@@ -24,7 +24,7 @@
  * REDUCED confidence and the uncertainty is stated in the UI rather than hidden.
  */
 
-import { Ledger } from './ledger';
+import { Ledger, type ImportedSource } from './ledger';
 import { providerDisplayName } from './normalize';
 import type { NormalizedDaily } from './normalize';
 import type { Provider } from './canonical';
@@ -35,6 +35,8 @@ export interface LedgerSourceResult {
   eventCount: number;
   /** Per-provider confidence, surfaced in the published snapshot. */
   providerConfidence: Record<string, { confidence: 'high' | 'medium'; note: string }>;
+  /** Self-imported sources (origin='imported'), kept apart from measured rows. */
+  imported: ImportedSource[];
 }
 
 const CLAUDE_NOTE =
@@ -46,13 +48,15 @@ export function readLedgerDaily(ledgerFile?: string): LedgerSourceResult {
   const ledger = ledgerFile ? new Ledger(ledgerFile) : new Ledger();
   try {
     ledger.migrate();
-    const eventCount = ledger.eventCount();
+    const imported = ledger.importedSources();
+    const eventCount = ledger.eventCount('local_log');
     if (eventCount === 0) {
       return {
         rows: [],
-        warnings: ['Event ledger is empty; run `npm run ingest` to populate it.'],
+        warnings: ['Event ledger has no measured events; run `npm run ingest` to populate it.'],
         eventCount: 0,
         providerConfidence: {},
+        imported,
       };
     }
 
@@ -100,6 +104,7 @@ export function readLedgerDaily(ledgerFile?: string): LedgerSourceResult {
         : [],
       eventCount,
       providerConfidence,
+      imported,
     };
   } finally {
     ledger.close();

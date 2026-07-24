@@ -181,7 +181,7 @@ function main(): void {
   // Source of truth is the event ledger. ccusage remains the fallback when the
   // ledger has not been populated yet (`npm run ingest`).
   const ledgerData = process.env.TOKENS_SOURCE === 'ccusage'
-    ? { rows: [], warnings: ['Forced ccusage source via TOKENS_SOURCE=ccusage.'], eventCount: 0, providerConfidence: {} }
+    ? { rows: [], warnings: ['Forced ccusage source via TOKENS_SOURCE=ccusage.'], eventCount: 0, providerConfidence: {}, imported: [] }
     : readLedgerDaily();
   if (ledgerData.rows.length) {
     console.log(`Sourcing from event ledger: ${ledgerData.eventCount} events, ${ledgerData.rows.length} day-rows.`);
@@ -210,6 +210,7 @@ function main(): void {
   );
 
   draft.consent = consent;
+  draft.imported = ledgerData.imported;
   syncRegistryEntry(readProfileConfig(), draft.generatedAt);
   draft.sourceOfTruth = ledgerData.rows.length ? 'event_ledger' : 'ccusage_aggregate';
   draft.providerConfidence = ledgerData.providerConfidence;

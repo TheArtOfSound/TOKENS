@@ -27,7 +27,7 @@
 import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { Provider } from './canonical';
+import type { Confidence, MeasurementClass, Provider } from './canonical';
 
 export const EVENT_SCHEMA_VERSION = '1.0.0';
 
@@ -49,9 +49,9 @@ export interface CanonicalEvent {
   cacheCreationTokens: number;
   cacheReadTokens: number;
   totalTokens: number;
-  /** Always provider_reported for log-derived events. */
-  measurementClass: 'provider_reported';
-  confidence: 'high';
+  /** provider_reported for log-derived events; user_submitted for imports. */
+  measurementClass: MeasurementClass;
+  confidence: Confidence;
   /** HMAC of the session id. Not reversible, not linkable across devices. */
   sessionPseudonym: string | null;
   /** HMAC of the source file identity, for reconciliation without paths. */

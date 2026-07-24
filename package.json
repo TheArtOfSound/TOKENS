@@ -20,7 +20,8 @@
     "consent:delete": "tsx collector/consent.ts delete",
     "verify": "tsx collector/verify.ts",
     "ingest": "tsx collector/ingest.ts",
-    "key": "tsx collector/key.ts"
+    "key": "tsx collector/key.ts",
+    "import": "tsx collector/import.ts"
   },
   "dependencies": {
     "react": "19.2.7",

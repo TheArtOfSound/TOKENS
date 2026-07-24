@@ -128,6 +128,23 @@ export interface PublishedProfile {
   note: string;
 }
 
+export interface PublishedImportedSource {
+  label: string;
+  format: string;
+  measurementClass: string;
+  confidence: string;
+  events: number;
+  totalTokens: number;
+  firstDate: string | null;
+  lastDate: string | null;
+  models: string[];
+}
+export interface PublishedImported {
+  note: string;
+  totalTokens: number;
+  sources: PublishedImportedSource[];
+}
+
 export interface PublishedSnapshot {
   generatedAt: string;
   timezone: string;
@@ -143,6 +160,7 @@ export interface PublishedSnapshot {
   measurement: MeasurementBlock;
   privacy: PrivacyBlock;
   profile?: PublishedProfile;
+  imported?: PublishedImported;
   sourceOfTruth: 'event_ledger' | 'ccusage_aggregate';
   providerConfidence: Record<string, { confidence: string; note: string }>;
   verification: PublishedVerification;
@@ -168,6 +186,18 @@ export interface DraftSnapshot {
   sourceOfTruth?: 'event_ledger' | 'ccusage_aggregate';
   /** Per-provider measurement confidence and its justification. */
   providerConfidence?: Record<string, { confidence: 'high' | 'medium'; note: string }>;
+  /** Self-imported sources from the ledger (origin='imported'). */
+  imported?: {
+    sourceLabel: string;
+    adapter: string;
+    measurementClass: string;
+    confidence: string;
+    events: number;
+    totalTokens: number;
+    firstDate: string | null;
+    lastDate: string | null;
+    models: string[];
+  }[];
 }
 
 export interface PublishResult {
@@ -453,6 +483,8 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
   // the estimatedOnly block.
   const measurement = buildMeasurementBlock(totals.totalTokens, totals.estimatedCostUsd);
 
+  const importedBlock = publishImported(draft.imported, dropped);
+
   const privacy: PrivacyBlock = {
     rawContentPersisted: false,
     allowlistPublication: true,
@@ -466,6 +498,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'warnings',
       'measurement',
       ...(profile ? ['profile'] : []),
+      ...(importedBlock ? ['imported'] : []),
       'sourceOfTruth',
       'providerConfidence',
       'verification',
@@ -496,6 +529,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     measurement,
     privacy,
     ...(profile ? { profile } : {}),
+    ...(importedBlock ? { imported: importedBlock } : {}),
     sourceOfTruth: draft.sourceOfTruth === 'event_ledger' ? 'event_ledger' : 'ccusage_aggregate',
     providerConfidence: Object.fromEntries(
       Object.entries(draft.providerConfidence ?? {})
@@ -522,6 +556,47 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
 
   published.verification.snapshotSha256 = computeSnapshotHash(published);
   return { published, dropped };
+}
+
+/**
+ * Publish self-imported sources as their own block, sanitized and clearly
+ * labeled. Every label/model passes the secret scanner. This block is
+ * deliberately SEPARATE from `totals`/`providers` (which are measured only) so a
+ * viewer — and the schema — can never confuse self-imported figures with
+ * collector-measured ones. Returns undefined when there is nothing imported.
+ */
+function publishImported(sources: DraftSnapshot['imported'], dropped: string[]): PublishedImported | undefined {
+  if (!Array.isArray(sources) || sources.length === 0) return undefined;
+  const published: PublishedImportedSource[] = sources
+    .map((s) => {
+      const label = safeStringOrNull(s?.sourceLabel, dropped, 60);
+      if (!label) return null;
+      const validDate = (value: string | null | undefined) =>
+        typeof value === 'string' && DATE_RE.test(value) ? value : null;
+      return {
+        label,
+        format: safeStringOrNull(s?.adapter, dropped, 40) ?? 'import',
+        // Imports are always user_submitted; never let a bad value read stronger.
+        measurementClass: s?.measurementClass === 'user_submitted' ? 'user_submitted' : 'user_submitted',
+        confidence: ['low', 'medium', 'high'].includes(s?.confidence) ? String(s.confidence) : 'low',
+        events: safeCount(s?.events),
+        totalTokens: safeCount(s?.totalTokens),
+        firstDate: validDate(s?.firstDate),
+        lastDate: validDate(s?.lastDate),
+        models: safeStrings(s?.models, dropped, 24, 80),
+      };
+    })
+    .filter((s): s is PublishedImportedSource => s !== null)
+    .slice(0, 30);
+
+  if (!published.length) return undefined;
+  return {
+    note:
+      'Self-imported from other AI sources. This data is user-submitted, not measured by the collector, ' +
+      'and not independently verifiable. It is excluded from the measured token totals above.',
+    totalTokens: published.reduce((sum, s) => sum + s.totalTokens, 0),
+    sources: published,
+  };
 }
 
 /**

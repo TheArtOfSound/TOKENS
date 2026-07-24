@@ -21,6 +21,7 @@ import {
   isSourceEnabled,
   loadConsent,
   type FieldKey,
+  type SourceKey,
 } from './lib/consent';
 
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
@@ -36,8 +37,15 @@ function showDisclosure(): void {
 
   console.log(`\n${bold('What the TOKENS collector reads, and what it publishes')}\n`);
   for (const source of SOURCE_DISCLOSURES) {
-    const on = isSourceEnabled(config, source.key);
-    console.log(`${on ? '●' : '○'} ${bold(source.name)}  ${on ? dim('(enabled)') : '(DISABLED — never read)'}`);
+    // 'imported' is opt-in per-command, not a standing scan source.
+    const status =
+      source.key === 'imported'
+        ? dim('(opt-in — only when you run `npm run import`)')
+        : isSourceEnabled(config, source.key as SourceKey)
+          ? dim('(enabled)')
+          : '(DISABLED — never read)';
+    const marker = source.key === 'imported' ? '◇' : isSourceEnabled(config, source.key as SourceKey) ? '●' : '○';
+    console.log(`${marker} ${bold(source.name)}  ${status}`);
     console.log(`    reads:      ${source.reads}`);
     console.log(`    locations:  ${source.directories.join(', ')}`);
     console.log(`    extracts:   ${source.extracts.join(', ')}`);

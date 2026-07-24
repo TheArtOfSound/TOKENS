@@ -116,7 +116,45 @@ export const MIGRATIONS: Migration[] = [
       ALTER TABLE events DROP COLUMN local_date;
     `,
   },
+  {
+    id: 3,
+    name: 'add_origin_and_source',
+    /**
+     * `origin` separates locally-collected events ('local_log') from data a user
+     * imported from another AI source ('imported'). This is the load-bearing
+     * distinction for honesty: measured totals query origin='local_log' only, so
+     * imported data can never inflate the "measured" headline. `source_label` is
+     * the human name of an import (e.g. "ChatGPT export"). Existing rows default
+     * to 'local_log'.
+     */
+    up: `
+      ALTER TABLE events ADD COLUMN origin TEXT NOT NULL DEFAULT 'local_log';
+      ALTER TABLE events ADD COLUMN source_label TEXT;
+      CREATE INDEX IF NOT EXISTS idx_events_origin ON events(origin, source_label);
+    `,
+    down: `
+      DROP INDEX IF EXISTS idx_events_origin;
+      ALTER TABLE events DROP COLUMN source_label;
+      ALTER TABLE events DROP COLUMN origin;
+    `,
+  },
 ];
+
+export type EventOrigin = 'local_log' | 'imported';
+
+export interface ImportedSource {
+  sourceLabel: string;
+  adapter: string;
+  measurementClass: string;
+  confidence: string;
+  events: number;
+  totalTokens: number;
+  inputTokens: number;
+  outputTokens: number;
+  firstDate: string | null;
+  lastDate: string | null;
+  models: string[];
+}
 
 export interface SourceCheckpoint {
   sourceFingerprint: string;
@@ -197,15 +235,20 @@ export class Ledger {
    * This is what makes repeated scans idempotent: re-reading the same log lines
    * inserts nothing and cannot inflate totals.
    */
-  insertEvents(events: CanonicalEvent[]): { inserted: number; duplicates: number } {
+  insertEvents(
+    events: CanonicalEvent[],
+    opts: { origin?: EventOrigin; sourceLabel?: string } = {},
+  ): { inserted: number; duplicates: number } {
     if (!events.length) return { inserted: 0, duplicates: 0 };
+    const origin: EventOrigin = opts.origin ?? 'local_log';
+    const sourceLabel = opts.sourceLabel ?? null;
     const stmt = this.db.prepare(`
       INSERT OR IGNORE INTO events (
         event_id, event_schema_version, occurred_at, ingested_at, provider, model,
         input_tokens, output_tokens, cache_creation_tokens, cache_read_tokens, total_tokens,
         measurement_class, confidence, session_pseudonym, source_fingerprint, adapter, adapter_version,
-        local_date
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        local_date, origin, source_label
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `);
     let inserted = 0;
     this.db.exec('BEGIN');
@@ -215,7 +258,7 @@ export class Ledger {
           e.eventId, e.eventSchemaVersion, e.occurredAt, e.ingestedAt, e.provider, e.model,
           e.inputTokens, e.outputTokens, e.cacheCreationTokens, e.cacheReadTokens, e.totalTokens,
           e.measurementClass, e.confidence, e.sessionPseudonym, e.sourceFingerprint, e.adapter, e.adapterVersion,
-          toLocalDate(e.occurredAt),
+          toLocalDate(e.occurredAt), origin, sourceLabel,
         );
         inserted += Number(result.changes) > 0 ? 1 : 0;
       }
@@ -227,11 +270,11 @@ export class Ledger {
     return { inserted, duplicates: events.length - inserted };
   }
 
-  eventCount(): number {
-    return Number((this.db.prepare('SELECT COUNT(*) AS n FROM events').get() as { n: number }).n);
-  }
-
-  /** Daily per-provider rollup straight from SQL. */
+  /**
+   * Daily per-provider rollup of MEASURED events only (origin='local_log').
+   * Imported data is deliberately excluded so it can never inflate the published
+   * measured totals — it is surfaced separately via importedSources().
+   */
   dailyTotals(): Array<{
     date: string; provider: string; inputTokens: number; outputTokens: number;
     cacheCreationTokens: number; cacheReadTokens: number; totalTokens: number; eventCount: number;
@@ -242,15 +285,59 @@ export class Ledger {
                SUM(input_tokens) AS inputTokens, SUM(output_tokens) AS outputTokens,
                SUM(cache_creation_tokens) AS cacheCreationTokens, SUM(cache_read_tokens) AS cacheReadTokens,
                SUM(total_tokens) AS totalTokens, COUNT(*) AS eventCount
-        FROM events GROUP BY date, provider ORDER BY date ASC
+        FROM events WHERE origin = 'local_log' GROUP BY date, provider ORDER BY date ASC
       `)
       .all() as never;
   }
 
   modelsUsed(): string[] {
-    return (this.db.prepare('SELECT DISTINCT model FROM events WHERE model IS NOT NULL ORDER BY model').all() as {
+    return (this.db.prepare("SELECT DISTINCT model FROM events WHERE model IS NOT NULL AND origin = 'local_log' ORDER BY model").all() as {
       model: string;
     }[]).map((r) => r.model);
+  }
+
+  eventCount(origin?: EventOrigin): number {
+    if (origin) {
+      return Number((this.db.prepare('SELECT COUNT(*) AS n FROM events WHERE origin = ?').get(origin) as { n: number }).n);
+    }
+    return Number((this.db.prepare('SELECT COUNT(*) AS n FROM events').get() as { n: number }).n);
+  }
+
+  /** Per-import-source rollup of imported (self-submitted) data. */
+  importedSources(): ImportedSource[] {
+    const rows = this.db
+      .prepare(`
+        SELECT source_label AS sourceLabel, adapter, measurement_class AS measurementClass, confidence,
+               COUNT(*) AS events, SUM(total_tokens) AS totalTokens,
+               SUM(input_tokens) AS inputTokens, SUM(output_tokens) AS outputTokens,
+               MIN(COALESCE(local_date, substr(occurred_at,1,10))) AS firstDate,
+               MAX(COALESCE(local_date, substr(occurred_at,1,10))) AS lastDate
+        FROM events WHERE origin = 'imported' AND source_label IS NOT NULL
+        GROUP BY source_label, adapter, measurement_class, confidence
+        ORDER BY totalTokens DESC
+      `)
+      .all() as Array<Record<string, unknown>>;
+    return rows.map((row) => ({
+      sourceLabel: String(row.sourceLabel),
+      adapter: String(row.adapter),
+      measurementClass: String(row.measurementClass),
+      confidence: String(row.confidence),
+      events: Number(row.events),
+      totalTokens: Number(row.totalTokens),
+      inputTokens: Number(row.inputTokens),
+      outputTokens: Number(row.outputTokens),
+      firstDate: row.firstDate ? String(row.firstDate) : null,
+      lastDate: row.lastDate ? String(row.lastDate) : null,
+      models: (this.db
+        .prepare("SELECT DISTINCT model FROM events WHERE origin='imported' AND source_label = ? AND model IS NOT NULL ORDER BY model LIMIT 24")
+        .all(String(row.sourceLabel)) as { model: string }[]).map((m) => m.model),
+    }));
+  }
+
+  /** Remove one imported source (backs granular consent deletion). */
+  deleteImportedSource(sourceLabel: string): number {
+    const result = this.db.prepare("DELETE FROM events WHERE origin='imported' AND source_label = ?").run(sourceLabel);
+    return Number(result.changes);
   }
 
   getCheckpoint(fingerprint: string): SourceCheckpoint | null {
