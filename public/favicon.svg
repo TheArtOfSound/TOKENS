@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="QIRA">
+  <defs>
+    <radialGradient id="o" cx="42%" cy="38%" r="62%">
+      <stop offset="0%" stop-color="#bfe3ff"/>
+      <stop offset="28%" stop-color="#6f5cff"/>
+      <stop offset="62%" stop-color="#1a2444"/>
+      <stop offset="100%" stop-color="#080910"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#05070d"/>
+  <circle cx="32" cy="32" r="17" fill="url(#o)"/>
+</svg>

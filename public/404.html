@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QIRA — redirecting…</title>
+    <script>
+      // GitHub Pages has no server-side rewrites. This SPA uses hash routing, so
+      // any non-root path (e.g. someone typed /people, or a scraper stripped the
+      // hash) lands here. Convert the path to a hash route and bounce to index.
+      (function () {
+        var p = window.location.pathname.replace(/^\/+/, '');
+        var target = '/' + (p ? '#/' + p : '') + window.location.search + window.location.hash;
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting… If nothing happens, <a href="/">go to the homepage</a>.</p>
+  </body>
+</html>

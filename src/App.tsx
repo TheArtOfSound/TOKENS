@@ -250,6 +250,102 @@ function ScannerPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   );
 }
 
+function HowItWorks() {
+  return (
+    <section className="band how" id="how">
+      <div className="band-head">
+        <div className="section-kicker"><span /> HOW IT WORKS</div>
+        <h2>Three steps. Nothing leaves your machine you didn&apos;t choose.</h2>
+      </div>
+      <ol className="how-steps">
+        <li>
+          <span className="how-num">1</span>
+          <h3>Measure locally</h3>
+          <p>An open-source collector reads the usage logs Claude Code and Codex already write on your machine, and counts tokens into a private local ledger. Prompts, code, and file paths are never read.</p>
+        </li>
+        <li>
+          <span className="how-num">2</span>
+          <h3>Sign on your device</h3>
+          <p>Your summary is signed with an Ed25519 key generated on your Mac and kept in your keychain. The private key never leaves the device — the signature is what makes the numbers tamper-evident.</p>
+        </li>
+        <li>
+          <span className="how-num">3</span>
+          <h3>Publish &amp; be verified</h3>
+          <p>You host the signed summary yourself. Anyone who opens your profile re-checks the signature in their own browser — they don&apos;t have to trust you, this site, or us.</p>
+        </li>
+      </ol>
+      <div className="band-cta">
+        <a className="cta" href={href({ name: 'join' })}>Measure your own work →</a>
+        <a className="ghost" href={href({ name: 'verify' })}>How verification works</a>
+      </div>
+    </section>
+  );
+}
+
+function WhyDifferent() {
+  const points = [
+    { t: 'Measured, not self-reported', d: 'Token counts come from the providers’ own usage accounting in your local logs — not a number you type in.' },
+    { t: 'Private by construction', d: 'Extraction is an allowlist: only a handful of named fields are ever read. Identifiers are kept as keyed hashes. Nothing is uploaded to us.' },
+    { t: 'Cryptographically verifiable', d: 'Every profile is signed on-device and re-verified in the visitor’s browser. Tampering breaks the signature.' },
+    { t: 'You own your data', d: 'You host your own snapshot. Remove it and you’re gone — there is no account and nothing of yours for us to keep.' },
+  ];
+  return (
+    <section className="band why" id="why">
+      <div className="band-head">
+        <div className="section-kicker"><span /> WHY IT&apos;S DIFFERENT</div>
+        <h2>A record built to survive scrutiny.</h2>
+      </div>
+      <div className="why-grid">
+        {points.map((p) => (
+          <div key={p.t} className="why-card">
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <p className="why-honest">
+        What a signature does <strong>not</strong> prove: who you are, or that your provider logs were genuine.
+        Identity verification isn&apos;t built yet, and every profile says so. We&apos;d rather state that plainly than imply a check we don&apos;t run.
+      </p>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <div className="brand"><QiraLogo /> <span>QIRA</span></div>
+          <p>A verified AI-work network. Measured on your machine, signed on your device, verified in the browser.</p>
+        </div>
+        <nav className="footer-cols" aria-label="Footer">
+          <div>
+            <h4>Product</h4>
+            <a href={href({ name: 'directory' })}>People</a>
+            <a href={href({ name: 'join' })}>Add your profile</a>
+            <a href={href({ name: 'verify' })}>Verification</a>
+          </div>
+          <div>
+            <h4>Open source</h4>
+            <a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a>
+            <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License</a>
+            <a href="./data/latest.json" target="_blank" rel="noreferrer">Inspect a snapshot</a>
+          </div>
+          <div>
+            <h4>Qira</h4>
+            <a href="https://imagineqira.com" target="_blank" rel="noreferrer">imagineqira.com</a>
+          </div>
+        </nav>
+      </div>
+      <div className="footer-legal">
+        <span>© {new Date().getFullYear()} Qira LLC</span>
+        <span>Activity is evidence of practice — not a measure of skill, seniority, or employability.</span>
+      </div>
+    </footer>
+  );
+}
+
 export default function App() {
   const route = useRoute();
   const [snapshot, setSnapshot] = useState<PublicUsageSnapshot>(sampleSnapshot);
@@ -307,9 +403,18 @@ export default function App() {
           <ul className="hero-facts"><li>Measured, not self-reported</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
         </section>
-  
+
+        <HowItWorks />
+        <WhyDifferent />
+
+        <section className="example-intro" id="example">
+          <div className="section-kicker"><span /> A LIVE, SIGNED PROFILE</div>
+          <h2>See it working — on real, measured data.</h2>
+          <p>This is the operator&apos;s own profile, generated by the collector and signed on-device. It isn&apos;t a mockup. Open <a href={href({ name: 'member', handle: 'bryan' })}>the verifiable version</a> to watch your browser re-check the signature, or <a href="./data/latest.json" target="_blank" rel="noreferrer">read the raw snapshot</a>.</p>
+        </section>
+
         {snapshot.profile ? <ProfileView profile={snapshot.profile} daily={snapshot.daily} /> : null}
-  
+
         <section className="metrics-grid">
           <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="dark" evidence="derived" />
           <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} evidence="provider-reported" />
@@ -334,6 +439,7 @@ export default function App() {
         </>
       )}
       </main>
+      <SiteFooter />
     </>
   );
 }
