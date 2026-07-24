@@ -277,7 +277,39 @@ function EfficiencyPanel({ efficiency }: { efficiency: ProfileBlockT['efficiency
   );
 }
 
-export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnapshot['profile']>; daily: PublicUsageSnapshot['daily'] }) {
+function IntegrityPanel({ integrity }: { integrity: PublicUsageSnapshot['integrity'] }) {
+  if (!integrity || !integrity.checks?.length) return null;
+  const passed = integrity.checks.length - integrity.flags;
+  return (
+    <details className="integrity-panel">
+      <summary>
+        <span className={`sig sig-${integrity.flags === 0 ? 'valid' : 'unsigned'}`}>
+          <span aria-hidden="true" className="sig-dot" />
+          {passed}/{integrity.checks.length} integrity checks passed
+        </span>
+      </summary>
+      <ul className="integrity-list">
+        {integrity.checks.map((check) => (
+          <li key={check.name} className={`integrity-${check.status}`}>
+            <strong>{check.status === 'ok' ? '✓' : '⚠'} {check.name}</strong>
+            <span>{check.detail}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="efficiency-note">{integrity.note}</p>
+    </details>
+  );
+}
+
+export function ProfileView({
+  profile,
+  daily,
+  integrity,
+}: {
+  profile: NonNullable<PublicUsageSnapshot['profile']>;
+  daily: PublicUsageSnapshot['daily'];
+  integrity?: PublicUsageSnapshot['integrity'];
+}) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
   return (
@@ -360,6 +392,7 @@ export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsa
           <div><strong>{activity.projectsActive}</strong><span>Projects active</span></div>
         </div>
         <EfficiencyPanel efficiency={profile.efficiency} />
+        <IntegrityPanel integrity={integrity} />
         <ActivityHeatmap daily={daily} referenceDate={activity.referenceDate} />
         <p className="profile-note">{profile.note}</p>
       </div>

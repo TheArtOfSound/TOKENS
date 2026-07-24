@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-07-24T14:09:40.898Z",
+  "activeKeyId": "defe470fe73a66c6",
+  "keys": [
+    {
+      "keyId": "defe470fe73a66c6",
+      "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
+      "firstSeen": "2026-07-24T14:09:40.898Z",
+      "status": "active",
+      "revokedAt": null,
+      "reason": null
+    }
+  ]
+}

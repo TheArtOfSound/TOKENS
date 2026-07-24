@@ -144,7 +144,7 @@ export function Member({ handle }: { handle: string }) {
       )}
 
       {profile ? (
-        <ProfileView profile={profile} daily={state.snapshot.daily} />
+        <ProfileView profile={profile} daily={state.snapshot.daily} integrity={state.snapshot.integrity} />
       ) : (
         <section className="panel wide-panel">
           <h2>{state.member.displayName}</h2>

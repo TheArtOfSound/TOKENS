@@ -189,6 +189,7 @@ export interface PublicUsageSnapshot {
   measurement?: MeasurementBlock;
   privacy?: PrivacyBlock;
   profile?: ProfileBlock;
+  integrity?: { checks: { name: string; status: 'ok' | 'flag'; detail: string }[]; flags: number; note: string };
   verification: SnapshotVerification;
 }
 

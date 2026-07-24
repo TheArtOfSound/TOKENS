@@ -25,9 +25,10 @@ import { readLedgerDaily } from './lib/ledgerSource';
 import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './lib/publish';
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
+import { detectAnomalies } from './lib/anomaly';
 import { buildProfile, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
-import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot } from './lib/signing';
+import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
 import { randomUUID } from 'node:crypto';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
@@ -230,6 +231,14 @@ function main(): void {
 
   const existing = readExistingLatest();
 
+  // Integrity checks over the measured series, compared to the previous snapshot
+  // to catch large retroactive backfills. Flags, never accuses.
+  draft.integrity = detectAnomalies(
+    daily,
+    draft.generatedAt.slice(0, 10),
+    (existing?.daily as unknown as typeof daily) ?? [],
+  );
+
   // No-clobber: never replace good published data with an empty snapshot caused
   // by a transient ccusage failure.
   if (daily.length === 0 && existing && Array.isArray(existing.daily) && existing.daily.length > 0) {
@@ -279,6 +288,16 @@ function main(): void {
   writeFileSync(
     path.join(OUT_DIR, 'revoked-keys.json'),
     `${JSON.stringify({ updatedAt: signed.generatedAt, revoked: loadRevocations() }, null, 2)}\n`,
+  );
+
+  // Key history: a rotated key still verifies its own past snapshots; a revoked
+  // key changes their trust interpretation without erasing them. Published so any
+  // verifier can interpret a snapshot's signing key without contacting us.
+  const sig = signed.signature as { keyId: string; publicKey: string };
+  recordKeySeen(sig.keyId, sig.publicKey, published.generatedAt);
+  writeFileSync(
+    path.join(OUT_DIR, 'key-history.json'),
+    `${JSON.stringify(buildPublicKeyHistory(sig.keyId, sig.publicKey, published.generatedAt), null, 2)}\n`,
   );
 
   writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);

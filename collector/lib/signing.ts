@@ -375,3 +375,88 @@ export function verifySnapshotWithRevocations(
   }
   return base;
 }
+
+// ---------------------------------------------------------------------------
+// Key history
+// ---------------------------------------------------------------------------
+
+/**
+ * A revoked key must not erase history — it changes how that history should be
+ * interpreted. So a snapshot signed by a key that was later rotated (but never
+ * revoked) still verifies; a snapshot signed by a revoked key reads as invalid.
+ * To support that, we keep an append-only local record of when each key was
+ * first seen, and publish a key-history document so any verifier can interpret a
+ * snapshot's signing key without contacting us.
+ *
+ * The published history contains only key ids, public keys, and dates/reasons —
+ * never private material.
+ */
+const KEY_HISTORY_FILE = path.join(process.cwd(), '.tokens-cache', 'key-history.json');
+
+interface KeyHistoryRecord {
+  keyId: string;
+  publicKey: string;
+  firstSeen: string;
+}
+
+function loadLocalKeyHistory(): KeyHistoryRecord[] {
+  try {
+    const parsed = JSON.parse(readFileSync(KEY_HISTORY_FILE, 'utf8')) as { keys?: KeyHistoryRecord[] };
+    return Array.isArray(parsed?.keys) ? parsed.keys : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Record the current key's first-seen date (append-only, idempotent). */
+export function recordKeySeen(keyId: string, publicKey: string, now: string): void {
+  const history = loadLocalKeyHistory();
+  if (history.some((entry) => entry.keyId === keyId)) return;
+  history.push({ keyId, publicKey, firstSeen: now });
+  try {
+    mkdirSync(path.dirname(KEY_HISTORY_FILE), { recursive: true });
+    writeFileSync(KEY_HISTORY_FILE, `${JSON.stringify({ keys: history }, null, 2)}\n`);
+  } catch {
+    /* best effort */
+  }
+}
+
+export type KeyStatus = 'active' | 'rotated' | 'revoked';
+export interface PublicKeyHistoryEntry {
+  keyId: string;
+  publicKey: string;
+  firstSeen: string | null;
+  status: KeyStatus;
+  revokedAt: string | null;
+  reason: string | null;
+}
+
+/**
+ * Build the publishable key history: every key we've signed with, marked active
+ * (the current key), rotated (a previous key, still trusted for its snapshots),
+ * or revoked (compromised — its snapshots must be rejected).
+ */
+export function buildPublicKeyHistory(currentKeyId: string, currentPublicKey: string, now: string): {
+  updatedAt: string;
+  activeKeyId: string;
+  keys: PublicKeyHistoryEntry[];
+} {
+  const local = loadLocalKeyHistory();
+  if (!local.some((entry) => entry.keyId === currentKeyId)) {
+    local.push({ keyId: currentKeyId, publicKey: currentPublicKey, firstSeen: now });
+  }
+  const revoked = new Map(loadRevocations().map((entry) => [entry.keyId, entry]));
+  const keys: PublicKeyHistoryEntry[] = local.map((entry) => {
+    const rev = revoked.get(entry.keyId);
+    const status: KeyStatus = rev ? 'revoked' : entry.keyId === currentKeyId ? 'active' : 'rotated';
+    return {
+      keyId: entry.keyId,
+      publicKey: entry.publicKey,
+      firstSeen: entry.firstSeen ?? null,
+      status,
+      revokedAt: rev?.revokedAt ?? null,
+      reason: rev?.reason ?? null,
+    };
+  });
+  return { updatedAt: now, activeKeyId: currentKeyId, keys };
+}

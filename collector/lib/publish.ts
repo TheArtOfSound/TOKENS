@@ -180,6 +180,7 @@ export interface PublishedSnapshot {
   privacy: PrivacyBlock;
   profile?: PublishedProfile;
   imported?: PublishedImported;
+  integrity?: { checks: { name: string; status: string; detail: string }[]; flags: number; note: string };
   sourceOfTruth: 'event_ledger' | 'ccusage_aggregate';
   providerConfidence: Record<string, { confidence: string; note: string }>;
   verification: PublishedVerification;
@@ -205,6 +206,8 @@ export interface DraftSnapshot {
   sourceOfTruth?: 'event_ledger' | 'ccusage_aggregate';
   /** Per-provider measurement confidence and its justification. */
   providerConfidence?: Record<string, { confidence: 'high' | 'medium'; note: string }>;
+  /** Automated integrity checks over the measured series. */
+  integrity?: { checks: { name: string; status: string; detail: string }[]; flags: number; note: string };
   /** Self-imported sources from the ledger (origin='imported'). */
   imported?: {
     sourceLabel: string;
@@ -555,6 +558,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
   const measurement = buildMeasurementBlock(totals.totalTokens, totals.estimatedCostUsd);
 
   const importedBlock = publishImported(draft.imported, dropped);
+  const integrityBlock = publishIntegrity(draft.integrity, dropped);
 
   const privacy: PrivacyBlock = {
     rawContentPersisted: false,
@@ -569,6 +573,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'warnings',
       'measurement',
       ...(profile ? ['profile'] : []),
+      ...(integrityBlock ? ['integrity'] : []),
       ...(importedBlock ? ['imported'] : []),
       'sourceOfTruth',
       'providerConfidence',
@@ -600,6 +605,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     measurement,
     privacy,
     ...(profile ? { profile } : {}),
+    ...(integrityBlock ? { integrity: integrityBlock } : {}),
     ...(importedBlock ? { imported: importedBlock } : {}),
     sourceOfTruth: draft.sourceOfTruth === 'event_ledger' ? 'event_ledger' : 'ccusage_aggregate',
     providerConfidence: Object.fromEntries(
@@ -636,6 +642,25 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
  * viewer — and the schema — can never confuse self-imported figures with
  * collector-measured ones. Returns undefined when there is nothing imported.
  */
+/** Publish the integrity report, sanitized and status-clamped. */
+function publishIntegrity(report: DraftSnapshot['integrity'], dropped: string[]): PublishedSnapshot['integrity'] | undefined {
+  if (!report || !Array.isArray(report.checks) || report.checks.length === 0) return undefined;
+  const checks = report.checks
+    .map((check) => ({
+      name: safeStringOrNull(check?.name, dropped, 60) ?? '',
+      status: check?.status === 'flag' ? 'flag' : 'ok',
+      detail: safeStringOrNull(check?.detail, dropped, 200) ?? '',
+    }))
+    .filter((check) => check.name)
+    .slice(0, 20);
+  if (!checks.length) return undefined;
+  return {
+    checks,
+    flags: checks.filter((check) => check.status === 'flag').length,
+    note: safeStringOrNull(report.note, dropped, 300) ?? '',
+  };
+}
+
 function publishImported(sources: DraftSnapshot['imported'], dropped: string[]): PublishedImported | undefined {
   if (!Array.isArray(sources) || sources.length === 0) return undefined;
   const published: PublishedImportedSource[] = sources
