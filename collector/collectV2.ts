@@ -26,6 +26,8 @@ import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { buildProfile, type ProfileIdentity, type WorkConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
+import { loadOrCreateDeviceKey, signSnapshot, verifySnapshot } from './lib/signing';
+import { randomUUID } from 'node:crypto';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
@@ -192,7 +194,25 @@ function main(): void {
     return;
   }
 
-  writeFileSync(LATEST, `${JSON.stringify(published, null, 2)}\n`);
+  // Sign the snapshot with the device key. The signature covers every byte of
+  // the published object except the signature block itself, over canonical JSON
+  // so a non-JavaScript verifier can reproduce it.
+  const key = loadOrCreateDeviceKey();
+  if (key.created) {
+    console.log(`Generated a new Ed25519 device key (stored in ${key.storage}). The private key never leaves this machine.`);
+  }
+  const signed: Record<string, unknown> = { ...published };
+  signed.signature = signSnapshot(signed, key.privateKeyPem, randomUUID());
+
+  // Verify what we are about to publish, using only the embedded public key.
+  const check = verifySnapshot(signed);
+  if (!check.valid) {
+    console.error(`Refusing to write: self-verification failed (${check.reason}).`);
+    process.exitCode = 1;
+    return;
+  }
+
+  writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);
   const history = buildCompactHistory(daily, published.generatedAt);
   writeFileSync(HISTORY, `${JSON.stringify(history, null, 2)}\n`);
 
@@ -200,6 +220,7 @@ function main(): void {
   console.log(`Exact total tokens: ${published.measurement.exactTotalTokens}`);
   console.log(`History points: ${history.pointCount} (through ${history.updatedThrough ?? 'n/a'})`);
   console.log(`Qira projects found: ${published.scanner.foundProjects}/${published.scanner.allowlistedProjects}`);
+  console.log(`Signed with device key ${(signed.signature as { keyId: string }).keyId} (${key.storage}); self-verification passed.`);
   if (dropped.length) console.warn(`Dropped ${dropped.length} unsafe free-form value(s) during publication.`);
   if (published.warnings.length) console.warn(`Warnings: ${published.warnings.length}`);
 }

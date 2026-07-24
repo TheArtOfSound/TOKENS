@@ -64,7 +64,7 @@ Reported, derived, and estimated values were indistinguishable; `estimatedCostUs
 `package.json` used `"latest"` for every dependency — non-reproducible builds. **Fixed this session** (D6): pinned to exact installed versions.
 
 ### F7 — Zero automated tests (HIGH, verifiability)
-No test runner, no tests. **Fixed this session** (D7): 71 tests across normalization, dedup, privacy/redaction, allowlist publication, schema validation, history, and strangler equivalence.
+No test runner, no tests. **Fixed this session** (D7): 92 tests across normalization, dedup, privacy/redaction, allowlist publication, schema validation, history, and strangler equivalence.
 
 ### F8 — Collector scanner is slow / broad (MEDIUM, efficiency + privacy)
 `qiraScanner.ts` walks `~/Projects, ~/nous, ~/Developer, ~/Code, ~/Desktop, ~/Sites, ~/Documents` to depth 5 and reads up to 20 KB of up to 80 files per candidate for scoring. A full run exceeded 2 minutes interactively. Only derived metadata is published (never file contents), but the scan is expensive and reads broadly. Scoped via `QIRA_SCAN_ROOTS`. Flagged for incremental/scoped redesign — this is **dossier Phase 1 scope**, not roadmap.

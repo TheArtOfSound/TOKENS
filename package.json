@@ -17,7 +17,8 @@
     "consent": "tsx collector/consent.ts show",
     "consent:preview": "tsx collector/consent.ts preview",
     "consent:export": "tsx collector/consent.ts export",
-    "consent:delete": "tsx collector/consent.ts delete"
+    "consent:delete": "tsx collector/consent.ts delete",
+    "verify": "tsx collector/verify.ts"
   },
   "dependencies": {
     "react": "19.2.7",

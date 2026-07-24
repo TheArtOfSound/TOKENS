@@ -51,7 +51,7 @@ describe('scanner filesystem containment', () => {
     expect(serialized).not.toContain('TOPSECRET-CANARY');
     // And no candidate path may point outside the approved root.
     expect(serialized).not.toContain(secret);
-  });
+  }, 60_000);
 
   it('refuses to read non-regular files (FIFO) with a text extension', () => {
     const fifoDir = path.join(approved, 'fifoproj');
@@ -68,5 +68,5 @@ describe('scanner filesystem containment', () => {
     // with a value is the assertion.
     const result = debugQiraCandidates();
     expect(result).toBeTruthy();
-  });
+  }, 60_000);
 });

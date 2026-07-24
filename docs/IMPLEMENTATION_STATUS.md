@@ -25,16 +25,15 @@ A full audit read all 75 dossier pages and checked each requirement against code
 
 ⚠️ **Correction to an earlier claim in this repo.** Ed25519 signing, incremental scanning, and the
 upload-preview/consent layer are **Phase 1 scope in the dossier**. They were previously listed here as
-"roadmap / Phase 2". That was a *self-granted* deferral, not a dossier deferral. Incremental scanning has
-since been built; the other two have not. Entire pillars remain at or near zero: SQLite event ledger
-(0/17), signing & device keys (1/21), consent/preview/export/delete (0/30), adapter framework (0/11),
-accessibility (0), benchmarks (0).
+"roadmap / Phase 2". That was a *self-granted* deferral, not a dossier deferral. Incremental scanning and
+the consent layer and Ed25519 signing have all since been built. Pillars still at or near zero: SQLite
+event ledger (0/17), canonical event model, adapter framework (0/11), accessibility (0), benchmarks (0).
 
 ## Health snapshot
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 71/71 |
+| Unit tests (`vitest run`) | ✅ 92/92 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -50,7 +49,7 @@ accessibility (0), benchmarks (0).
 | Secret/PII/path scanner | ✅ done, tested | nested + base64 + control chars |
 | Compact history | ✅ done | 28 MB → 27 KB |
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
-| Test suite | ✅ done | 71 tests, adversarial fixtures |
+| Test suite | ✅ done | 92 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
@@ -62,6 +61,8 @@ accessibility (0), benchmarks (0).
 | **Scanner filesystem containment** | ✅ done, tested | symlink-escape, TOCTOU, and FIFO/socket/device reads closed; real-symlink + real-FIFO tests |
 | **Consent + permission disclosure** | ✅ done, tested | per-source opt-in (disabled source is never read), per-field publication toggles, `profile/consent.json`; 9 tests |
 | **Upload preview / export / delete** | ✅ done | `npm run consent`, `consent:preview` (exact published bytes), `consent:export`, `consent:delete` |
+| **Ed25519 device signing** | ✅ done, tested | keypair in macOS Keychain, signed manifest (nonce/scope/issuedAt/digest), `npm run verify`; 21 tests incl. tamper detection |
+| **Canonical JSON (RFC 8785 subset)** | ✅ done, tested | replaces `JSON.stringify` key-order dependence so a non-JS verifier can reproduce the signing bytes; spec published in `docs/architecture/CANONICALIZATION.md` |
 | Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
 | Docs / threat model / privacy | ✅ done | full `docs/**` set |
 | Live publishing restore | ⬜ needs Bryan | resolve R1, re-enable launchd |
@@ -71,7 +72,7 @@ accessibility (0), benchmarks (0).
 | --- | --- | --- |
 | ~~Incremental/checkpointed scan~~ | ✅ **now built** | See the measured numbers in the built table above. |
 | ~~Consent / upload-preview / export / delete~~ | ✅ **now built** | See the built table above. |
-| Ed25519 device signing | ⛔ **Phase 1 — not built** | Only SHA-256 content hashing exists. No keypair, no Keychain storage, no signed manifest, no rotation/revocation, no independent verifier. 1 of 21 crypto requirements built. |
+| ~~Ed25519 device signing~~ | ✅ **now built** | See the built table above. Revocation lists remain unimplemented. |
 | Canonical **event** model | ⛔ **Phase 1 — not built** | Finest granularity is a daily per-provider aggregate. No `eventId`, `ingestedAt`, per-record evidence class, or session pseudonym. Blocks ~40 downstream requirements. |
 | Adapter framework | ⛔ **not built** | 0 of 11. Providers are hardcoded, not pluggable versioned adapters. |
 | Accessibility (WCAG 2.2 AA) | ⛔ **not built** | 0 focus-visible rules, 0 `prefers-reduced-motion` rules; heatmap exposes no per-day data to assistive tech. A Definition-of-Done item, never checked. |
@@ -92,10 +93,11 @@ accessibility (0), benchmarks (0).
 6. **Cross-platform paths tested by fixtures only**, not on real Windows/Linux machines.
 7. **Legacy `collector/collect.ts` (v0.2.1)** remains, unused; safe to delete once confirmed unreferenced.
 8. **`qiraProjects` publishes git branch names** of allowlisted repos (scanned + truncated); avoid encoding sensitive info in branch names.
+10. **No key revocation.** A compromised device key cannot yet be repudiated — there is no published revocation list. Rotation works (delete the Keychain item and re-run).
 9. **Work artifacts are only as strong as their badge.** `collector_observed` proves the *project exists and is active on this machine* — it does **not** prove authorship, quality, or that the linked URL is genuinely that project. `link_provided` and `self_reported` assert nothing. Outcomes are never verifiable today.
 
 ## Definition of Done for Phase 1 (dossier §38) — remaining
 - Restore live publishing (R1).
-- Add device-signed aggregate + honest badge.
+- ~~Add device-signed aggregate + honest badge.~~ ✅ done — Ed25519, self-verified on write, `npm run verify` for third parties.
 - ~~Add incremental scan to hit the perf budget.~~ ✅ done — warm run 0.70s (budget <2s median).
 - ~~Build the consent layer.~~ ✅ done — per-source opt-in, disclosure, preview, export, delete.

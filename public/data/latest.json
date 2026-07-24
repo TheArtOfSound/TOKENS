@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-24T01:31:32.800Z",
+  "generatedAt": "2026-07-24T01:38:07.385Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 266131058,
-    "outputTokens": 94963031,
-    "cacheCreationTokens": 622719165,
-    "cacheReadTokens": 31969280783,
-    "cachedTokens": 32591999948,
-    "freshTokens": 361094089,
-    "totalTokens": 32953094037,
-    "estimatedCostUsd": 21063.829274949996
+    "inputTokens": 266131204,
+    "outputTokens": 95025914,
+    "cacheCreationTokens": 623338339,
+    "cacheReadTokens": 31997077598,
+    "cachedTokens": 32620415937,
+    "freshTokens": 361157118,
+    "totalTokens": 32981573055,
+    "estimatedCostUsd": 21085.49222745
   },
   "providers": {
     "codex": {
@@ -39,14 +39,14 @@
         "claude-sonnet-4-6",
         "claude-fable-5"
       ],
-      "inputTokens": 12572597,
-      "outputTokens": 68783902,
-      "cacheCreationTokens": 622719165,
-      "cacheReadTokens": 22951974927,
-      "cachedTokens": 23574694092,
-      "freshTokens": 81356499,
-      "totalTokens": 23656050591,
-      "estimatedCostUsd": 21063.829274949996
+      "inputTokens": 12572743,
+      "outputTokens": 68846785,
+      "cacheCreationTokens": 623338339,
+      "cacheReadTokens": 22979771742,
+      "cachedTokens": 23603110081,
+      "freshTokens": 81419528,
+      "totalTokens": 23684529609,
+      "estimatedCostUsd": 21085.49222745
     }
   },
   "daily": [
@@ -2115,14 +2115,14 @@
         "claude-opus-4-8",
         "claude-fable-5"
       ],
-      "inputTokens": 13369,
-      "outputTokens": 2376400,
-      "cacheCreationTokens": 10203901,
-      "cacheReadTokens": 503526630,
-      "cachedTokens": 513730531,
-      "freshTokens": 2389769,
-      "totalTokens": 516120300,
-      "estimatedCostUsd": 419.3559609999991
+      "inputTokens": 13515,
+      "outputTokens": 2439283,
+      "cacheCreationTokens": 10823075,
+      "cacheReadTokens": 531323445,
+      "cachedTokens": 542146520,
+      "freshTokens": 2452798,
+      "totalTokens": 544599318,
+      "estimatedCostUsd": 441.0189134999991
     }
   ],
   "qiraProjects": [
@@ -2134,8 +2134,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "4fca701",
-        "changedFiles": 11
+        "commit": "c6d5fa2",
+        "changedFiles": 12
       },
       "stack": [
         "React",
@@ -2155,17 +2155,18 @@
         "consent",
         "consent:preview",
         "consent:export",
-        "consent:delete"
+        "consent:delete",
+        "verify"
       ],
       "fileCounts": {
-        "docs": 18,
-        "ts": 31,
+        "docs": 19,
+        "ts": 35,
         "json": 14,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-24T01:31:05.331Z",
+      "lastModified": "2026-07-24T01:36:19.561Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -2291,8 +2292,8 @@
       "found": true,
       "git": {
         "branch": "feat/verified-ai-work-foundation",
-        "commit": "4fca701",
-        "changedFiles": 11
+        "commit": "c6d5fa2",
+        "changedFiles": 12
       },
       "stack": [
         "React",
@@ -2312,17 +2313,18 @@
         "consent",
         "consent:preview",
         "consent:export",
-        "consent:delete"
+        "consent:delete",
+        "verify"
       ],
       "fileCounts": {
-        "docs": 18,
-        "ts": 31,
+        "docs": 19,
+        "ts": 35,
         "json": 14,
         "html": 1,
         "tsx": 2,
         "css": 1
       },
-      "lastModified": "2026-07-24T01:31:05.331Z",
+      "lastModified": "2026-07-24T01:38:02.652Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -2383,10 +2385,10 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 32953094037,
+    "exactTotalTokens": 32981573055,
     "estimatedOnly": {
-      "costUsd": 21063.829274949996,
-      "costMicroUsd": 21063829275
+      "costUsd": 21085.49222745,
+      "costMicroUsd": 21085492227
     },
     "note": "Token counts are provider-reported usage accounting or deterministic sums of them. Cost is an estimate from a price table, not an invoice, and is never added into token totals. Activity volume is not a measure of skill, productivity, or employability."
   },
@@ -2586,9 +2588,27 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "771b587fcde566fbf94ca44cd04bf03629c9900ba15116322500a62921f1bfe7",
+    "snapshotSha256": "0a6724f7d3fd3f86fb9e020d726e627f9dd7cfac83020589a9ed1969d198d357",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
+  },
+  "signature": {
+    "signatureVersion": "1.0.0",
+    "algorithm": "ed25519",
+    "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
+    "keyId": "defe470fe73a66c6",
+    "issuedAt": "2026-07-24T01:38:07.457Z",
+    "nonce": "068dffcb-03e7-4565-bcec-95249d33cd1f",
+    "scope": "published_snapshot",
+    "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
+    "payloadSha256": "5b7378fcc1f50c5c72c6f534e52bd41897339e8dbe1a820fac7aa98e9a1eb94a",
+    "signature": "IH/UAozgN8v8m/Lyk5Ylx0id8wtzITzm+oaAbTUq6zkQk/bmUA/hhyt3wIAkHfD4gfCBiDshOmOj9NDRDesfCg==",
+    "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
+    "doesNotProve": [
+      "It does not prove the provider source logs were genuine or unmodified.",
+      "It does not prove the human identity behind this device key.",
+      "It is a device attestation, not a third-party audit."
+    ]
   }
 }

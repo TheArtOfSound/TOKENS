@@ -36,7 +36,7 @@ Governing order of authority (from the dossier): protect data/secrets → preser
 **Why:** `"latest"` everywhere made builds non-reproducible (dossier P0.4). Pinned only after the baseline build was verified green.
 
 ## D7 — Add a real test suite (vitest) and wire it into CI as a release gate
-**Decision:** 71 tests across normalization/dedup, adversarial privacy, allowlist publication, JSON-Schema validation, compact history, and strangler equivalence. CI runs typecheck → tests → validate:data → build; any failure blocks deploy.
+**Decision:** 92 tests across normalization/dedup, adversarial privacy, allowlist publication, JSON-Schema validation, compact history, and strangler equivalence. CI runs typecheck → tests → validate:data → build; any failure blocks deploy.
 **Why:** Zero tests meant no change was safe. Successful compilation is not completion.
 
 ## D8 — Idempotent collector + no-clobber + fail-closed publication

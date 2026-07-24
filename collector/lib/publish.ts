@@ -24,6 +24,7 @@ import {
   type TokenMetrics,
 } from './canonical';
 import { isSafeString } from './secretScan';
+import { canonicalize } from './canonicalJson';
 import type { NormalizedDaily, ProviderSummary } from './normalize';
 import type { ProfileBlock, VerificationStatus } from './profile';
 import { disabledFields, disabledSources, type ConsentConfig, type FieldKey } from './consent';
@@ -503,13 +504,22 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
   return { published, dropped };
 }
 
-/** Deterministic content hash over the published object with the hash field nulled. */
+/**
+ * Deterministic content hash over the published object with the hash field
+ * nulled and the signature block excluded.
+ *
+ * Uses canonical JSON, not JSON.stringify: stringify's output depends on
+ * property insertion order, so the digest could not be reproduced by a verifier
+ * in another language. The signature block is excluded because it is layered on
+ * top of an already-hashed snapshot (and carries a fresh nonce each run).
+ */
 export function computeSnapshotHash(snapshot: PublishedSnapshot): string {
+  const { signature: _signature, ...rest } = snapshot as PublishedSnapshot & { signature?: unknown };
   const withoutHash = {
-    ...snapshot,
+    ...rest,
     verification: { ...snapshot.verification, snapshotSha256: HASH_PLACEHOLDER },
   };
-  return createHash('sha256').update(JSON.stringify(withoutHash)).digest('hex');
+  return createHash('sha256').update(canonicalize(withoutHash)).digest('hex');
 }
 
 /** Verify a published snapshot's embedded hash matches its content. */
@@ -525,10 +535,14 @@ export function verifySnapshotHash(snapshot: PublishedSnapshot): boolean {
  * the commit level and stops the every-30-minutes no-op commit storm.
  */
 export function computeContentHash(snapshot: PublishedSnapshot): string {
+  // The signature must be excluded too: it carries a fresh nonce and issuedAt on
+  // every run, so including it would make each run look changed and defeat the
+  // idempotency check entirely.
+  const { signature: _signature, ...rest } = snapshot as PublishedSnapshot & { signature?: unknown };
   const stable = {
-    ...snapshot,
+    ...rest,
     generatedAt: '',
     verification: { ...snapshot.verification, snapshotSha256: HASH_PLACEHOLDER },
   };
-  return createHash('sha256').update(JSON.stringify(stable)).digest('hex');
+  return createHash('sha256').update(canonicalize(stable)).digest('hex');
 }

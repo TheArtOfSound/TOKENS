@@ -615,6 +615,66 @@
           "type": "string"
         }
       }
+    },
+    "signature": {
+      "type": "object",
+      "required": [
+        "signatureVersion",
+        "algorithm",
+        "publicKey",
+        "keyId",
+        "issuedAt",
+        "nonce",
+        "scope",
+        "canonicalizationSpec",
+        "payloadSha256",
+        "signature",
+        "proves",
+        "doesNotProve"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "signatureVersion": {
+          "type": "string"
+        },
+        "algorithm": {
+          "const": "ed25519"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "keyId": {
+          "type": "string"
+        },
+        "issuedAt": {
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "scope": {
+          "const": "published_snapshot"
+        },
+        "canonicalizationSpec": {
+          "type": "string"
+        },
+        "payloadSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "proves": {
+          "type": "string"
+        },
+        "doesNotProve": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "$defs": {
