@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-24T14:30:52.096Z",
+  "generatedAt": "2026-07-24T15:01:03.604Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 284914343,
-    "outputTokens": 90045823,
-    "cacheCreationTokens": 639467284,
-    "cacheReadTokens": 33451078825,
-    "cachedTokens": 34090546109,
-    "freshTokens": 374960166,
-    "totalTokens": 34465506275,
+    "inputTokens": 284914531,
+    "outputTokens": 90145271,
+    "cacheCreationTokens": 641613721,
+    "cacheReadTokens": 33512285854,
+    "cachedTokens": 34153899575,
+    "freshTokens": 375059802,
+    "totalTokens": 34528959377,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -47,13 +47,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12605590,
-      "outputTokens": 61317316,
-      "cacheCreationTokens": 639467284,
-      "cacheReadTokens": 23835546281,
-      "cachedTokens": 24475013565,
-      "freshTokens": 73922906,
-      "totalTokens": 24548936471,
+      "inputTokens": 12605778,
+      "outputTokens": 61416764,
+      "cacheCreationTokens": 641613721,
+      "cacheReadTokens": 23896753310,
+      "cachedTokens": 24538367031,
+      "freshTokens": 74022542,
+      "totalTokens": 24612389573,
       "estimatedCostUsd": null
     }
   },
@@ -2994,13 +2994,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 31422,
-      "outputTokens": 918399,
-      "cacheCreationTokens": 12030645,
-      "cacheReadTokens": 443284778,
-      "cachedTokens": 455315423,
-      "freshTokens": 949821,
-      "totalTokens": 456265244,
+      "inputTokens": 31610,
+      "outputTokens": 1017847,
+      "cacheCreationTokens": 14177082,
+      "cacheReadTokens": 504491807,
+      "cachedTokens": 518668889,
+      "freshTokens": 1049457,
+      "totalTokens": 519718346,
       "estimatedCostUsd": null
     }
   ],
@@ -3013,8 +3013,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "e781220",
-        "changedFiles": 0
+        "commit": "baa3717",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -3038,16 +3038,16 @@
         "verify"
       ],
       "fileCounts": {
-        "docs": 23,
+        "docs": 24,
         "py": 2,
-        "ts": 55,
+        "ts": 56,
         "json": 21,
         "js": 13,
         "html": 3,
         "css": 2,
         "tsx": 10
       },
-      "lastModified": "2026-07-24T14:29:28.760Z",
+      "lastModified": "2026-07-24T15:00:59.058Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3196,8 +3196,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "e781220",
-        "changedFiles": 0
+        "commit": "baa3717",
+        "changedFiles": 2
       },
       "stack": [
         "React",
@@ -3221,16 +3221,16 @@
         "verify"
       ],
       "fileCounts": {
-        "docs": 23,
+        "docs": 24,
         "py": 2,
-        "ts": 55,
+        "ts": 56,
         "json": 21,
         "js": 13,
         "html": 3,
         "css": 2,
         "tsx": 10
       },
-      "lastModified": "2026-07-24T14:29:28.760Z",
+      "lastModified": "2026-07-24T15:00:59.058Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -3293,7 +3293,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 34465506275,
+    "exactTotalTokens": 34528959377,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3490,7 +3490,7 @@
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
       "outputSharePct": 24,
-      "avgTokensPerActiveDay": 359015690,
+      "avgTokensPerActiveDay": 359676660,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet."
     },
     "verification": [
@@ -3577,7 +3577,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "de3a887d8160b3f238f64f7851a06b600a4646b0d8c3ed264e34e4fb9a77f74b",
+    "snapshotSha256": "dcb78c643e83c2ef34327cfd47a48fc74177882870c5d9c351af2bce2ba3eab6",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3587,12 +3587,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T14:30:52.153Z",
-    "nonce": "517a6080-bb51-448c-95b4-2e740a295073",
+    "issuedAt": "2026-07-24T15:01:03.670Z",
+    "nonce": "abaca0a5-5748-49ed-94ce-cd8ff8c1df93",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "634c8e33310ef7ca0aa780e4fc54f9e0a4617ea59a44e1d344daa4f240b77f17",
-    "signature": "DYXLpmAHPQxou2AP/W96L6DsLtGsIQcuUyvfnZHYkiuyMHZ0jd479+HfPKaqgSEp/iDFHK5gMrkwNSJ/YuhwCQ==",
+    "payloadSha256": "d97a7a380e77cb2385e4de693764e9020029727def67f3d85872ef8e05800346",
+    "signature": "czFjd4RgpSnzGoGlCxjT3rdBO06cazFNRtpEnUJovSnVEf+t8b0iz9amoVQJDrgwjGSt51SP4zB4AJwvrE03Cw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
