@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 type ProjectDef = {
@@ -55,6 +55,87 @@ function expandHome(value: string) { return value.startsWith('~/') ? path.join(p
 function normalize(value: string) { return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 function safeStat(target: string) { try { return statSync(target); } catch { return null; } }
 
+/**
+ * Filesystem safety for a scanner that walks the user's home directory.
+ *
+ * Three holes this closes:
+ *  1. SYMLINK ESCAPE — statSync follows links, so a symlink inside an approved
+ *     root could point anywhere (~/.ssh, /etc) and be walked or read.
+ *  2. SPECIAL FILES — a FIFO/socket/device node named `notes.md` would be opened
+ *     by readFileSync and could block the collector forever.
+ *  3. TOCTOU — the path could be swapped between the stat and the read.
+ *
+ * Approved roots are captured once per scan; every resolved path must still sit
+ * inside one of them AFTER symlink resolution.
+ */
+let approvedRoots: string[] = [];
+
+export function setApprovedRoots(roots: string[]): void {
+  approvedRoots = roots
+    .map((root) => {
+      try {
+        return realpathSync(root);
+      } catch {
+        return null;
+      }
+    })
+    .filter((root): root is string => root !== null);
+}
+
+function withinApprovedRoot(resolved: string): boolean {
+  if (!approvedRoots.length) return true; // no roots configured => scanner not in use
+  return approvedRoots.some((root) => resolved === root || resolved.startsWith(`${root}${path.sep}`));
+}
+
+/** Resolve symlinks and confirm the target is still inside an approved root. */
+function safeResolve(target: string): string | null {
+  try {
+    const resolved = realpathSync(target);
+    return withinApprovedRoot(resolved) ? resolved : null;
+  } catch {
+    return null;
+  }
+}
+
+/** True only for a real directory that does not escape the approved roots. */
+function isSafeDir(target: string): boolean {
+  try {
+    if (lstatSync(target).isSymbolicLink()) {
+      const resolved = safeResolve(target);
+      if (!resolved) return false;
+      return statSync(resolved).isDirectory();
+    }
+    return statSync(target).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Read a file only if it is a REGULAR file inside an approved root.
+ * Rejects symlink escapes, FIFOs, sockets, and device nodes, and re-checks the
+ * descriptor's identity after opening to close the TOCTOU window.
+ */
+function safeReadTextFile(target: string, maxBytes: number): string | null {
+  try {
+    const link = lstatSync(target);
+    let real = target;
+    if (link.isSymbolicLink()) {
+      const resolved = safeResolve(target);
+      if (!resolved) return null;
+      real = resolved;
+    } else if (!link.isFile()) {
+      return null; // FIFO, socket, device node, etc.
+    }
+    const st = statSync(real);
+    if (!st.isFile() || st.size > maxBytes) return null;
+    if (!withinApprovedRoot(realpathSync(real))) return null;
+    return readFileSync(real, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
 function scanRoots() {
   const fromEnv = process.env.QIRA_SCAN_ROOTS?.split(',').map((item) => expandHome(item.trim())).filter(Boolean);
   if (fromEnv?.length) return fromEnv;
@@ -81,15 +162,13 @@ function runGit(dir: string, args: string[]) {
 function gitRoot(dir: string) { return runGit(dir, ['rev-parse', '--show-toplevel']); }
 
 function listDirs(root: string, depth = 0, maxDepth = 5, out: string[] = []) {
-  const st = safeStat(root);
-  if (!st?.isDirectory() || depth > maxDepth || out.length > 20000) return out;
+  if (!isSafeDir(root) || depth > maxDepth || out.length > 20000) return out;
   let entries: string[] = [];
   try { entries = readdirSync(root); } catch { return out; }
   for (const entry of entries) {
     if (entry.startsWith('.') || SKIP.has(entry)) continue;
     const full = path.join(root, entry);
-    const childStat = safeStat(full);
-    if (!childStat?.isDirectory()) continue;
+    if (!isSafeDir(full)) continue; // rejects symlink escapes and non-directories
     out.push(full);
     if (depth < maxDepth) listDirs(full, depth + 1, maxDepth, out);
   }
@@ -118,12 +197,14 @@ function readTextEvidence(dir: string, maxFiles = 80) {
     for (const entry of entries) {
       if (entry.startsWith('.') || SKIP.has(entry) || files >= maxFiles) continue;
       const full = path.join(current, entry);
-      const st = safeStat(full);
-      if (!st) continue;
-      if (st.isDirectory()) { walk(full, depth + 1); continue; }
+      if (isSafeDir(full)) { walk(full, depth + 1); continue; }
       const ext = path.extname(entry).toLowerCase();
-      if (!TEXT_EXT.has(ext) || st.size > 250_000) continue;
-      try { chunks.push(readFileSync(full, 'utf8').slice(0, 20_000)); files += 1; } catch {}
+      if (!TEXT_EXT.has(ext)) continue;
+      // Regular files only, inside an approved root, size-capped, TOCTOU-rechecked.
+      const text = safeReadTextFile(full, 250_000);
+      if (text === null) continue;
+      chunks.push(text.slice(0, 20_000));
+      files += 1;
     }
   }
   walk(dir, 0);
@@ -189,8 +270,9 @@ function countFiles(dir: string) {
     for (const entry of entries) {
       if (entry.startsWith('.') || SKIP.has(entry)) continue;
       const full = path.join(current, entry);
-      const st = safeStat(full);
-      if (!st) continue;
+      let st;
+      try { st = lstatSync(full); } catch { continue; }
+      if (st.isSymbolicLink()) continue; // never follow links while counting
       latest = Math.max(latest, st.mtimeMs);
       if (st.isDirectory()) walk(full, depth + 1);
       if (st.isFile()) {
@@ -229,6 +311,9 @@ function analyze(def: ProjectDef, candidate: Candidate, explicit = false): QiraP
 
 function allCandidates() {
   const roots = scanRoots();
+  // Capture the approved roots BEFORE walking: every path we later resolve must
+  // still live inside one of them, so a symlink cannot lead the scanner out.
+  setApprovedRoots(roots);
   const dirs = [...new Set(roots.flatMap((root) => listDirs(root)))];
   return { roots, dirs };
 }
