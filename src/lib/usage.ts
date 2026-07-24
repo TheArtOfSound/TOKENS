@@ -107,6 +107,23 @@ export interface ProfileBlock {
     totalArtifacts: number;
     totalOutcomes: number;
   };
+  opportunity?: {
+    engagementTypes: string[];
+    compensation: string | null;
+    typicalProjectSize: string | null;
+    workArrangement: string | null;
+    timezone: string | null;
+    responseTime: string | null;
+    computeCostRange: string | null;
+    note: string;
+  };
+  efficiency?: {
+    cachedSharePct: number | null;
+    freshSharePct: number | null;
+    outputSharePct: number | null;
+    avgTokensPerActiveDay: number | null;
+    note: string;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
 }

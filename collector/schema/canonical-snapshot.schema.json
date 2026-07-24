@@ -226,26 +226,79 @@
     "imported": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["note", "totalTokens", "sources"],
+      "required": [
+        "note",
+        "totalTokens",
+        "sources"
+      ],
       "properties": {
-        "note": { "type": "string" },
-        "totalTokens": { "type": "number" },
+        "note": {
+          "type": "string"
+        },
+        "totalTokens": {
+          "type": "number"
+        },
         "sources": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["label", "format", "measurementClass", "confidence", "events", "totalTokens", "firstDate", "lastDate", "models"],
+            "required": [
+              "label",
+              "format",
+              "measurementClass",
+              "confidence",
+              "events",
+              "totalTokens",
+              "firstDate",
+              "lastDate",
+              "models"
+            ],
             "properties": {
-              "label": { "type": "string" },
-              "format": { "type": "string" },
-              "measurementClass": { "type": "string", "enum": ["user_submitted"] },
-              "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
-              "events": { "type": "number" },
-              "totalTokens": { "type": "number" },
-              "firstDate": { "type": ["string", "null"] },
-              "lastDate": { "type": ["string", "null"] },
-              "models": { "type": "array", "items": { "type": "string" } }
+              "label": {
+                "type": "string"
+              },
+              "format": {
+                "type": "string"
+              },
+              "measurementClass": {
+                "type": "string",
+                "enum": [
+                  "user_submitted"
+                ]
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "events": {
+                "type": "number"
+              },
+              "totalTokens": {
+                "type": "number"
+              },
+              "firstDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "models": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
             }
           }
         }
@@ -258,6 +311,8 @@
         "identity",
         "activity",
         "work",
+        "opportunity",
+        "efficiency",
         "verification",
         "note"
       ],
@@ -351,16 +406,31 @@
               }
             },
             "avatarUrl": {
-              "type": ["string", "null"],
+              "type": [
+                "string",
+                "null"
+              ],
               "pattern": "^https://"
             },
             "contact": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "additionalProperties": false,
-              "required": ["label", "href"],
+              "required": [
+                "label",
+                "href"
+              ],
               "properties": {
-                "label": { "type": "string", "maxLength": 40 },
-                "href": { "type": "string", "pattern": "^(https://|mailto:)" }
+                "label": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "href": {
+                  "type": "string",
+                  "pattern": "^(https://|mailto:)"
+                }
               }
             }
           }
@@ -619,6 +689,116 @@
         "note": {
           "type": "string",
           "maxLength": 400
+        },
+        "opportunity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "engagementTypes",
+            "compensation",
+            "typicalProjectSize",
+            "workArrangement",
+            "timezone",
+            "responseTime",
+            "computeCostRange",
+            "note"
+          ],
+          "properties": {
+            "engagementTypes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
+            "compensation": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 80
+            },
+            "typicalProjectSize": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "workArrangement": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "timezone": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "responseTime": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 60
+            },
+            "computeCostRange": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 80
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 300
+            }
+          }
+        },
+        "efficiency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cachedSharePct",
+            "freshSharePct",
+            "outputSharePct",
+            "avgTokensPerActiveDay",
+            "note"
+          ],
+          "properties": {
+            "cachedSharePct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "freshSharePct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "outputSharePct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "avgTokensPerActiveDay": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 300
+            }
+          }
         }
       }
     },

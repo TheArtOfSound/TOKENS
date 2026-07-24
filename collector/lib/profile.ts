@@ -119,10 +119,84 @@ export interface WorkEvidence {
   totalOutcomes: number;
 }
 
+// ---- opportunity / economics (self-submitted, so a buyer never infers cost from tokens) ----
+export interface OpportunityConfig {
+  engagementTypes?: string[];
+  compensation?: string | null;
+  typicalProjectSize?: string | null;
+  workArrangement?: string | null;
+  timezone?: string | null;
+  responseTime?: string | null;
+  computeCostRange?: string | null;
+}
+export interface OpportunityBlock {
+  engagementTypes: string[];
+  compensation: string | null;
+  typicalProjectSize: string | null;
+  workArrangement: string | null;
+  timezone: string | null;
+  responseTime: string | null;
+  computeCostRange: string | null;
+  note: string;
+}
+
+export const OPPORTUNITY_NOTE =
+  'Availability, engagement, and compensation are set by the member. They are self-declared preferences, not verified terms.';
+
+export function buildOpportunity(config: OpportunityConfig = {}): OpportunityBlock {
+  return {
+    engagementTypes: (config.engagementTypes ?? []).slice(0, 12),
+    compensation: config.compensation ?? null,
+    typicalProjectSize: config.typicalProjectSize ?? null,
+    workArrangement: config.workArrangement ?? null,
+    timezone: config.timezone ?? null,
+    responseTime: config.responseTime ?? null,
+    computeCostRange: config.computeCostRange ?? null,
+    note: OPPORTUNITY_NOTE,
+  };
+}
+
+// ---- efficiency signals (reward doing the same with less, not raw volume) ----
+export interface EfficiencyBlock {
+  cachedSharePct: number | null;
+  freshSharePct: number | null;
+  outputSharePct: number | null;
+  avgTokensPerActiveDay: number | null;
+  note: string;
+}
+
+export function deriveEfficiency(daily: NormalizedDaily[], activeDays: number): EfficiencyBlock {
+  let input = 0;
+  let output = 0;
+  let cached = 0;
+  let fresh = 0;
+  let total = 0;
+  for (const row of daily) {
+    input += row.inputTokens;
+    output += row.outputTokens;
+    cached += row.cachedTokens;
+    fresh += row.freshTokens;
+    total += row.totalTokens;
+  }
+  const pct = (part: number, whole: number): number | null => (whole > 0 ? Math.round((part / whole) * 1000) / 10 : null);
+  return {
+    // Cache reuse is an efficiency signal: reusing context instead of resending it.
+    cachedSharePct: pct(cached, total),
+    freshSharePct: pct(fresh, total),
+    outputSharePct: pct(output, input + output),
+    avgTokensPerActiveDay: activeDays > 0 ? Math.round(total / activeDays) : null,
+    note:
+      'Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. ' +
+      'These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet.',
+  };
+}
+
 export interface ProfileBlock {
   identity: ProfileIdentity;
   activity: ProfileActivity;
   work: WorkEvidence;
+  opportunity: OpportunityBlock;
+  efficiency: EfficiencyBlock;
   verification: VerificationCategory[];
   note: string;
 }
@@ -338,6 +412,7 @@ export function buildProfile(
   referenceDate: string,
   qiraProjects: ScannedProject[],
   workConfig: WorkConfig = {},
+  opportunityConfig: OpportunityConfig = {},
 ): ProfileBlock {
   const projectsActive = qiraProjects.filter((p) => p.found).length;
   const activity = deriveActivity(daily, providers, referenceDate, projectsActive);
@@ -346,6 +421,8 @@ export function buildProfile(
     identity,
     activity,
     work,
+    opportunity: buildOpportunity(opportunityConfig),
+    efficiency: deriveEfficiency(daily, activity.activeDays),
     verification: deriveVerification(activity, work),
     note: PROFILE_NOTE,
   };

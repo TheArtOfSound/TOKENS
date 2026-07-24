@@ -7,6 +7,8 @@ import { Directory } from './views/Directory';
 import { Join } from './views/Join';
 import { Member } from './views/Member';
 import { Verify } from './views/Verify';
+import { Employer } from './views/Employer';
+import { Compare } from './views/Compare';
 import { href, useRoute } from './lib/router';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
@@ -312,6 +314,38 @@ function WhyDifferent() {
   );
 }
 
+function ValueForBoth() {
+  return (
+    <section className="value-both" id="value">
+      <div className="section-kicker"><span /> WHAT EACH SIDE GETS</div>
+      <div className="value-grid">
+        <div className="value-col">
+          <h3>If you do AI-assisted work</h3>
+          <ul>
+            <li><strong>Free to use.</strong> Run the collector, publish a profile, keep hosting your own data.</li>
+            <li><strong>Portable evidence</strong> of what you built and how you work — not just claims on a résumé.</li>
+            <li><strong>You control everything:</strong> what's read, what's published per field, and one command to export or delete.</li>
+            <li><strong>Opportunities come to you</strong> — evaluations, research, beta programs, contract work — via your contact action.</li>
+            <li><strong>You are never paid by token volume.</strong> That would reward waste. Efficiency and outcomes are what matter.</li>
+          </ul>
+          <a className="cta cta-sm" href={href({ name: 'join' })}>Build your record →</a>
+        </div>
+        <div className="value-col">
+          <h3>If you hire or recruit</h3>
+          <ul>
+            <li><strong>See evidence, not adjectives:</strong> tools and models used, duration and consistency, connected repos and deployments.</li>
+            <li><strong>Signed and browser-verifiable</strong> — you don't have to trust us or the candidate.</li>
+            <li><strong>An explicit evidence ladder</strong> tells you exactly how strong each claim is.</li>
+            <li><strong>Availability and terms up front:</strong> engagement type, compensation, work arrangement, time zone.</li>
+            <li><strong>Activity volume is behind a click,</strong> so a big number is never mistaken for capability.</li>
+          </ul>
+          <a className="cta cta-sm" href={href({ name: 'employer' })}>Find people →</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -381,15 +415,17 @@ export default function App() {
         <a className="brand" href="#top"><QiraLogo /> <span>QIRA</span></a>
         <nav>
           <a href={href({ name: 'directory' })} aria-current={route.name === 'directory' ? 'page' : undefined}>People</a>
-          <a href={href({ name: 'home' })} aria-current={route.name === 'home' ? 'page' : undefined}>Ledger</a>
+          <a href={href({ name: 'employer' })} aria-current={route.name === 'employer' ? 'page' : undefined}>For employers</a>
           <a href={href({ name: 'verify' })} aria-current={route.name === 'verify' ? 'page' : undefined}>Verification</a>
-          <a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noreferrer">Repository</a>
+          <a href={href({ name: 'compare' })} aria-current={route.name === 'compare' ? 'page' : undefined}>Compare</a>
           <a className="nav-button" href={href({ name: 'join' })}>Add your profile</a>
         </nav>
       </header>
 
       <main>
       {route.name === 'directory' && <Directory />}
+      {route.name === 'employer' && <Employer />}
+      {route.name === 'compare' && <Compare />}
       {route.name === 'join' && <Join />}
       {route.name === 'verify' && <Verify />}
       {route.name === 'member' && <Member handle={route.handle} />}
@@ -407,6 +443,7 @@ export default function App() {
 
         <HowItWorks />
         <WhyDifferent />
+        <ValueForBoth />
 
         <section className="example-intro" id="example">
           <div className="section-kicker"><span /> A LIVE, SIGNED PROFILE</div>

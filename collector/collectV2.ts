@@ -25,7 +25,7 @@ import { readLedgerDaily } from './lib/ledgerSource';
 import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './lib/publish';
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
-import { buildProfile, type ProfileIdentity, type WorkConfig } from './lib/profile';
+import { buildProfile, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot } from './lib/signing';
 import { randomUUID } from 'node:crypto';
@@ -96,6 +96,18 @@ function readWorkConfig(): WorkConfig {
     };
   } catch {
     return { artifacts: [], outcomes: [] };
+  }
+}
+
+const OPPORTUNITY_CONFIG = path.join(process.cwd(), 'profile', 'opportunity.json');
+
+/** Read self-declared availability, engagement, and compensation preferences. */
+function readOpportunityConfig(): OpportunityConfig {
+  try {
+    const parsed = JSON.parse(readFileSync(OPPORTUNITY_CONFIG, 'utf8')) as OpportunityConfig;
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
   }
 }
 
@@ -207,6 +219,7 @@ function main(): void {
     draft.generatedAt.slice(0, 10),
     qira.projects,
     readWorkConfig(),
+    readOpportunityConfig(),
   );
 
   draft.consent = consent;

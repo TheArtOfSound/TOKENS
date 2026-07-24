@@ -211,6 +211,72 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
   );
 }
 
+type ProfileBlockT = NonNullable<PublicUsageSnapshot['profile']>;
+
+function OpportunityPanel({
+  opportunity,
+  openTo,
+  contact,
+}: {
+  opportunity: ProfileBlockT['opportunity'];
+  openTo: string[];
+  contact: { label: string; href: string } | null;
+}) {
+  if (!opportunity) return null;
+  const rows: Array<[string, string | null]> = [
+    ['Open to', openTo.length ? openTo.join(' · ') : (opportunity.engagementTypes.join(' · ') || null)],
+    ['Compensation', opportunity.compensation],
+    ['Typical engagement', opportunity.typicalProjectSize],
+    ['Work arrangement', opportunity.workArrangement],
+    ['Time zone', opportunity.timezone],
+    ['Response time', opportunity.responseTime],
+    ['Compute profile', opportunity.computeCostRange],
+  ];
+  const shown = rows.filter(([, value]) => value);
+  if (!shown.length && !contact) return null;
+  return (
+    <div className="opportunity-panel" id="availability">
+      <div className="section-kicker"><span /> AVAILABILITY &amp; ENGAGEMENT</div>
+      <div className="opportunity-grid">
+        {shown.map(([label, value]) => (
+          <div className="opportunity-row" key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </div>
+      <div className="opportunity-foot">
+        {contact ? (
+          <a className="cta cta-sm" href={contact.href} {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}>
+            {contact.label}
+          </a>
+        ) : null}
+        <span className="opportunity-note">{opportunity.note}</span>
+      </div>
+    </div>
+  );
+}
+
+function EfficiencyPanel({ efficiency }: { efficiency: ProfileBlockT['efficiency'] }) {
+  if (!efficiency) return null;
+  const cells: Array<[string, string]> = [];
+  if (efficiency.cachedSharePct != null) cells.push(['Cache reuse', `${efficiency.cachedSharePct}%`]);
+  if (efficiency.outputSharePct != null) cells.push(['Output share', `${efficiency.outputSharePct}%`]);
+  if (efficiency.avgTokensPerActiveDay != null) cells.push(['Avg / active day', compactNumber(efficiency.avgTokensPerActiveDay)]);
+  if (!cells.length) return null;
+  return (
+    <div className="efficiency-panel">
+      <h3>Efficiency signals</h3>
+      <div className="efficiency-cells">
+        {cells.map(([label, value]) => (
+          <div key={label}><strong>{value}</strong><span>{label}</span></div>
+        ))}
+      </div>
+      <p className="efficiency-note">{efficiency.note}</p>
+    </div>
+  );
+}
+
 export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnapshot['profile']>; daily: PublicUsageSnapshot['daily'] }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -262,6 +328,9 @@ export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsa
 
       {identity.bio ? <p className="profile-bio">{identity.bio}</p> : null}
 
+      {/* Availability & engagement — a buyer sees terms without inferring cost from tokens. */}
+      <OpportunityPanel opportunity={profile.opportunity} openTo={identity.openTo} contact={contact} />
+
       {/* 2 + 3. Featured work and outcomes — what they built comes before telemetry. */}
       <WorkEvidenceSection work={profile.work} />
 
@@ -290,6 +359,7 @@ export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsa
           <div><strong>{activity.toolsUsed.length}</strong><span>AI tools used</span></div>
           <div><strong>{activity.projectsActive}</strong><span>Projects active</span></div>
         </div>
+        <EfficiencyPanel efficiency={profile.efficiency} />
         <ActivityHeatmap daily={daily} referenceDate={activity.referenceDate} />
         <p className="profile-note">{profile.note}</p>
       </div>

@@ -126,6 +126,23 @@ export interface PublishedProfile {
     totalArtifacts: number;
     totalOutcomes: number;
   };
+  opportunity: {
+    engagementTypes: string[];
+    compensation: string | null;
+    typicalProjectSize: string | null;
+    workArrangement: string | null;
+    timezone: string | null;
+    responseTime: string | null;
+    computeCostRange: string | null;
+    note: string;
+  };
+  efficiency: {
+    cachedSharePct: number | null;
+    freshSharePct: number | null;
+    outputSharePct: number | null;
+    avgTokensPerActiveDay: number | null;
+    note: string;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
 }
@@ -216,6 +233,11 @@ const isRec = (v: unknown): v is Record<string, unknown> =>
 /** Coerce to a finite, non-negative number (fabricated data becomes 0, never NaN). */
 function safeCount(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+/** A percentage 0–100, or null when there is no basis to compute one. */
+function safePct(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 100 ? value : null;
 }
 
 /** Cost is null-with-reason rather than a fabricated 0 when unavailable. */
@@ -375,6 +397,23 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       projectsActive: safeCount(a.projectsActive),
     },
     work: publishWork(profile.work, dropped),
+    opportunity: {
+      engagementTypes: safeStrings(profile.opportunity?.engagementTypes, dropped, 12, 40),
+      compensation: safeStringOrNull(profile.opportunity?.compensation, dropped, 80),
+      typicalProjectSize: safeStringOrNull(profile.opportunity?.typicalProjectSize, dropped, 60),
+      workArrangement: safeStringOrNull(profile.opportunity?.workArrangement, dropped, 60),
+      timezone: safeStringOrNull(profile.opportunity?.timezone, dropped, 60),
+      responseTime: safeStringOrNull(profile.opportunity?.responseTime, dropped, 60),
+      computeCostRange: safeStringOrNull(profile.opportunity?.computeCostRange, dropped, 80),
+      note: safeStringOrNull(profile.opportunity?.note, dropped, 300) ?? '',
+    },
+    efficiency: {
+      cachedSharePct: safePct(profile.efficiency?.cachedSharePct),
+      freshSharePct: safePct(profile.efficiency?.freshSharePct),
+      outputSharePct: safePct(profile.efficiency?.outputSharePct),
+      avgTokensPerActiveDay: profile.efficiency?.avgTokensPerActiveDay == null ? null : safeCount(profile.efficiency.avgTokensPerActiveDay),
+      note: safeStringOrNull(profile.efficiency?.note, dropped, 300) ?? '',
+    },
     verification: (Array.isArray(profile.verification) ? profile.verification : [])
       .map((entry) => ({
         label: safeStringOrNull(entry?.label, dropped, 60) ?? '',
