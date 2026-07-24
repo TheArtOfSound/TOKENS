@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-24T19:59:19.010Z",
+  "generatedAt": "2026-07-24T20:08:29.306Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 284914785,
-    "outputTokens": 90306181,
-    "cacheCreationTokens": 644120373,
-    "cacheReadTokens": 33565803839,
-    "cachedTokens": 34209924212,
-    "freshTokens": 375220966,
-    "totalTokens": 34585145178,
+    "inputTokens": 179265051,
+    "outputTokens": 78545982,
+    "cacheCreationTokens": 646571088,
+    "cacheReadTokens": 29088543169,
+    "cachedTokens": 29735114257,
+    "freshTokens": 257811033,
+    "totalTokens": 29992925290,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -27,13 +27,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 272308753,
-      "outputTokens": 28728507,
+      "inputTokens": 166658298,
+      "outputTokens": 16603058,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 9615532544,
-      "cachedTokens": 9615532544,
-      "freshTokens": 301037260,
-      "totalTokens": 9916569804,
+      "cacheReadTokens": 4917103872,
+      "cachedTokens": 4917103872,
+      "freshTokens": 183261356,
+      "totalTokens": 5100365228,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -47,13 +47,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12606032,
-      "outputTokens": 61577674,
-      "cacheCreationTokens": 644120373,
-      "cacheReadTokens": 23950271295,
-      "cachedTokens": 24594391668,
-      "freshTokens": 74183706,
-      "totalTokens": 24668575374,
+      "inputTokens": 12606753,
+      "outputTokens": 61942924,
+      "cacheCreationTokens": 646571088,
+      "cacheReadTokens": 24171439297,
+      "cachedTokens": 24818010385,
+      "freshTokens": 74549677,
+      "totalTokens": 24892560062,
       "estimatedCostUsd": null
     }
   },
@@ -71,13 +71,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3370024,
-      "outputTokens": 638898,
+      "inputTokens": 1370570,
+      "outputTokens": 253106,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 174106368,
-      "cachedTokens": 174106368,
-      "freshTokens": 4008922,
-      "totalTokens": 178115290,
+      "cacheReadTokens": 68897280,
+      "cachedTokens": 68897280,
+      "freshTokens": 1623676,
+      "totalTokens": 70520956,
       "estimatedCostUsd": null
     },
     {
@@ -93,13 +93,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 17405571,
-      "outputTokens": 1898364,
+      "inputTokens": 5831379,
+      "outputTokens": 633747,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 744860416,
-      "cachedTokens": 744860416,
-      "freshTokens": 19303935,
-      "totalTokens": 764164351,
+      "cacheReadTokens": 249705728,
+      "cachedTokens": 249705728,
+      "freshTokens": 6465126,
+      "totalTokens": 256170854,
       "estimatedCostUsd": null
     },
     {
@@ -115,13 +115,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 10856567,
-      "outputTokens": 873714,
+      "inputTokens": 3641056,
+      "outputTokens": 292562,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 284934912,
-      "cachedTokens": 284934912,
-      "freshTokens": 11730281,
-      "totalTokens": 296665193,
+      "cacheReadTokens": 95740800,
+      "cachedTokens": 95740800,
+      "freshTokens": 3933618,
+      "totalTokens": 99674418,
       "estimatedCostUsd": null
     },
     {
@@ -137,13 +137,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 10590251,
-      "outputTokens": 1530597,
+      "inputTokens": 5329299,
+      "outputTokens": 771480,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 303299584,
-      "cachedTokens": 303299584,
-      "freshTokens": 12120848,
-      "totalTokens": 315420432,
+      "cacheReadTokens": 152290176,
+      "cachedTokens": 152290176,
+      "freshTokens": 6100779,
+      "totalTokens": 158390955,
       "estimatedCostUsd": null
     },
     {
@@ -159,13 +159,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 18729295,
-      "outputTokens": 1885418,
+      "inputTokens": 12828813,
+      "outputTokens": 1148654,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 491528448,
-      "cachedTokens": 491528448,
-      "freshTokens": 20614713,
-      "totalTokens": 512143161,
+      "cacheReadTokens": 303610880,
+      "cachedTokens": 303610880,
+      "freshTokens": 13977467,
+      "totalTokens": 317588347,
       "estimatedCostUsd": null
     },
     {
@@ -181,13 +181,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 777698,
-      "outputTokens": 6124,
+      "inputTokens": 776178,
+      "outputTokens": 5812,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 1239680,
-      "cachedTokens": 1239680,
-      "freshTokens": 783822,
-      "totalTokens": 2023502,
+      "cacheReadTokens": 909696,
+      "cachedTokens": 909696,
+      "freshTokens": 781990,
+      "totalTokens": 1691686,
       "estimatedCostUsd": null
     },
     {
@@ -203,13 +203,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 9233357,
-      "outputTokens": 1364178,
+      "inputTokens": 9229149,
+      "outputTokens": 1356614,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 171899648,
-      "cachedTokens": 171899648,
-      "freshTokens": 10597535,
-      "totalTokens": 182497183,
+      "cacheReadTokens": 170532096,
+      "cachedTokens": 170532096,
+      "freshTokens": 10585763,
+      "totalTokens": 181117859,
       "estimatedCostUsd": null
     },
     {
@@ -225,13 +225,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 414489,
-      "outputTokens": 2470,
+      "inputTokens": 412581,
+      "outputTokens": 1108,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 212736,
-      "cachedTokens": 212736,
-      "freshTokens": 416959,
-      "totalTokens": 629695,
+      "cacheReadTokens": 11008,
+      "cachedTokens": 11008,
+      "freshTokens": 413689,
+      "totalTokens": 424697,
       "estimatedCostUsd": null
     },
     {
@@ -247,13 +247,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3545790,
-      "outputTokens": 662886,
+      "inputTokens": 3331650,
+      "outputTokens": 617173,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 135451264,
-      "cachedTokens": 135451264,
-      "freshTokens": 4208676,
-      "totalTokens": 139659940,
+      "cacheReadTokens": 130583168,
+      "cachedTokens": 130583168,
+      "freshTokens": 3948823,
+      "totalTokens": 134531991,
       "estimatedCostUsd": null
     },
     {
@@ -269,13 +269,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 5380782,
-      "outputTokens": 685384,
+      "inputTokens": 5253648,
+      "outputTokens": 653197,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 153892352,
-      "cachedTokens": 153892352,
-      "freshTokens": 6066166,
-      "totalTokens": 159958518,
+      "cacheReadTokens": 149302528,
+      "cachedTokens": 149302528,
+      "freshTokens": 5906845,
+      "totalTokens": 155209373,
       "estimatedCostUsd": null
     },
     {
@@ -291,13 +291,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 642269,
-      "outputTokens": 94662,
+      "inputTokens": 608003,
+      "outputTokens": 81973,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 19748992,
-      "cachedTokens": 19748992,
-      "freshTokens": 736931,
-      "totalTokens": 20485923,
+      "cacheReadTokens": 18745088,
+      "cachedTokens": 18745088,
+      "freshTokens": 689976,
+      "totalTokens": 19435064,
       "estimatedCostUsd": null
     },
     {
@@ -313,13 +313,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1523025,
-      "outputTokens": 288353,
+      "inputTokens": 1395904,
+      "outputTokens": 273038,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 78608896,
-      "cachedTokens": 78608896,
-      "freshTokens": 1811378,
-      "totalTokens": 80420274,
+      "cacheReadTokens": 76765184,
+      "cachedTokens": 76765184,
+      "freshTokens": 1668942,
+      "totalTokens": 78434126,
       "estimatedCostUsd": null
     },
     {
@@ -356,13 +356,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2799731,
-      "outputTokens": 262652,
+      "inputTokens": 2525489,
+      "outputTokens": 241826,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 79107840,
-      "cachedTokens": 79107840,
-      "freshTokens": 3062383,
-      "totalTokens": 82170223,
+      "cacheReadTokens": 67053056,
+      "cachedTokens": 67053056,
+      "freshTokens": 2767315,
+      "totalTokens": 69820371,
       "estimatedCostUsd": null
     },
     {
@@ -408,28 +408,6 @@
       "estimatedCostUsd": null
     },
     {
-      "date": "2026-04-14",
-      "provider": "codex",
-      "displayName": "Codex",
-      "models": [
-        "gpt-5.3-codex",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.5",
-        "gpt-5.6-luna",
-        "gpt-5.6-sol",
-        "gpt-5.6-terra"
-      ],
-      "inputTokens": 13185,
-      "outputTokens": 21105,
-      "cacheCreationTokens": 0,
-      "cacheReadTokens": 1589760,
-      "cachedTokens": 1589760,
-      "freshTokens": 34290,
-      "totalTokens": 1624050,
-      "estimatedCostUsd": null
-    },
-    {
       "date": "2026-04-15",
       "provider": "claude",
       "displayName": "Claude Code",
@@ -448,28 +426,6 @@
       "cachedTokens": 215531089,
       "freshTokens": 451847,
       "totalTokens": 215982936,
-      "estimatedCostUsd": null
-    },
-    {
-      "date": "2026-04-15",
-      "provider": "codex",
-      "displayName": "Codex",
-      "models": [
-        "gpt-5.3-codex",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.5",
-        "gpt-5.6-luna",
-        "gpt-5.6-sol",
-        "gpt-5.6-terra"
-      ],
-      "inputTokens": 317905,
-      "outputTokens": 508865,
-      "cacheCreationTokens": 0,
-      "cacheReadTokens": 38330880,
-      "cachedTokens": 38330880,
-      "freshTokens": 826770,
-      "totalTokens": 39157650,
       "estimatedCostUsd": null
     },
     {
@@ -506,13 +462,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 949158,
-      "outputTokens": 102257,
+      "inputTokens": 827964,
+      "outputTokens": 81625,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 53390720,
-      "cachedTokens": 53390720,
-      "freshTokens": 1051415,
-      "totalTokens": 54442135,
+      "cacheReadTokens": 33441024,
+      "cachedTokens": 33441024,
+      "freshTokens": 909589,
+      "totalTokens": 34350613,
       "estimatedCostUsd": null
     },
     {
@@ -549,13 +505,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3269791,
-      "outputTokens": 629771,
+      "inputTokens": 2506506,
+      "outputTokens": 325952,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 359864064,
-      "cachedTokens": 359864064,
-      "freshTokens": 3899562,
-      "totalTokens": 363763626,
+      "cacheReadTokens": 134217856,
+      "cachedTokens": 134217856,
+      "freshTokens": 2832458,
+      "totalTokens": 137050314,
       "estimatedCostUsd": null
     },
     {
@@ -592,13 +548,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2474860,
-      "outputTokens": 730671,
+      "inputTokens": 1613328,
+      "outputTokens": 120482,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 191872768,
-      "cachedTokens": 191872768,
-      "freshTokens": 3205531,
-      "totalTokens": 195078299,
+      "cacheReadTokens": 46214656,
+      "cachedTokens": 46214656,
+      "freshTokens": 1733810,
+      "totalTokens": 47948466,
       "estimatedCostUsd": null
     },
     {
@@ -656,13 +612,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1873855,
-      "outputTokens": 296203,
+      "inputTokens": 1474983,
+      "outputTokens": 165218,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 160234880,
-      "cachedTokens": 160234880,
-      "freshTokens": 2170058,
-      "totalTokens": 162404938,
+      "cacheReadTokens": 65148800,
+      "cachedTokens": 65148800,
+      "freshTokens": 1640201,
+      "totalTokens": 66789001,
       "estimatedCostUsd": null
     },
     {
@@ -699,13 +655,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 4756568,
-      "outputTokens": 644290,
+      "inputTokens": 3804072,
+      "outputTokens": 396180,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 303805568,
-      "cachedTokens": 303805568,
-      "freshTokens": 5400858,
-      "totalTokens": 309206426,
+      "cacheReadTokens": 170628352,
+      "cachedTokens": 170628352,
+      "freshTokens": 4200252,
+      "totalTokens": 174828604,
       "estimatedCostUsd": null
     },
     {
@@ -721,13 +677,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 5956764,
-      "outputTokens": 778913,
+      "inputTokens": 4323795,
+      "outputTokens": 441302,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 329685504,
-      "cachedTokens": 329685504,
-      "freshTokens": 6735677,
-      "totalTokens": 336421181,
+      "cacheReadTokens": 133453184,
+      "cachedTokens": 133453184,
+      "freshTokens": 4765097,
+      "totalTokens": 138218281,
       "estimatedCostUsd": null
     },
     {
@@ -869,13 +825,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 6530523,
-      "outputTokens": 363462,
+      "inputTokens": 3500140,
+      "outputTokens": 74627,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 104938112,
-      "cachedTokens": 104938112,
-      "freshTokens": 6893985,
-      "totalTokens": 111832097,
+      "cacheReadTokens": 28893952,
+      "cachedTokens": 28893952,
+      "freshTokens": 3574767,
+      "totalTokens": 32468719,
       "estimatedCostUsd": null
     },
     {
@@ -891,13 +847,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2099959,
-      "outputTokens": 243916,
+      "inputTokens": 1384262,
+      "outputTokens": 168859,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 160460032,
-      "cachedTokens": 160460032,
-      "freshTokens": 2343875,
-      "totalTokens": 162803907,
+      "cacheReadTokens": 76765824,
+      "cachedTokens": 76765824,
+      "freshTokens": 1553121,
+      "totalTokens": 78318945,
       "estimatedCostUsd": null
     },
     {
@@ -913,13 +869,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1350180,
-      "outputTokens": 162462,
+      "inputTokens": 796525,
+      "outputTokens": 110637,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 117744128,
-      "cachedTokens": 117744128,
-      "freshTokens": 1512642,
-      "totalTokens": 119256770,
+      "cacheReadTokens": 61870976,
+      "cachedTokens": 61870976,
+      "freshTokens": 907162,
+      "totalTokens": 62778138,
       "estimatedCostUsd": null
     },
     {
@@ -998,13 +954,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 914391,
-      "outputTokens": 109922,
+      "inputTokens": 603957,
+      "outputTokens": 58314,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 47532928,
-      "cachedTokens": 47532928,
-      "freshTokens": 1024313,
-      "totalTokens": 48557241,
+      "cacheReadTokens": 17446144,
+      "cachedTokens": 17446144,
+      "freshTokens": 662271,
+      "totalTokens": 18108415,
       "estimatedCostUsd": null
     },
     {
@@ -1041,13 +997,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2601999,
-      "outputTokens": 423199,
+      "inputTokens": 2050553,
+      "outputTokens": 216245,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 193093632,
-      "cachedTokens": 193093632,
-      "freshTokens": 3025198,
-      "totalTokens": 196118830,
+      "cacheReadTokens": 82743168,
+      "cachedTokens": 82743168,
+      "freshTokens": 2266798,
+      "totalTokens": 85009966,
       "estimatedCostUsd": null
     },
     {
@@ -1084,13 +1040,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 4105915,
-      "outputTokens": 731625,
+      "inputTokens": 2238193,
+      "outputTokens": 230983,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 312265216,
-      "cachedTokens": 312265216,
-      "freshTokens": 4837540,
-      "totalTokens": 317102756,
+      "cacheReadTokens": 94772096,
+      "cachedTokens": 94772096,
+      "freshTokens": 2469176,
+      "totalTokens": 97241272,
       "estimatedCostUsd": null
     },
     {
@@ -1106,13 +1062,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1766128,
-      "outputTokens": 138793,
+      "inputTokens": 1664607,
+      "outputTokens": 124511,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 53432832,
-      "cachedTokens": 53432832,
-      "freshTokens": 1904921,
-      "totalTokens": 55337753,
+      "cacheReadTokens": 42656000,
+      "cachedTokens": 42656000,
+      "freshTokens": 1789118,
+      "totalTokens": 44445118,
       "estimatedCostUsd": null
     },
     {
@@ -1149,13 +1105,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3704750,
-      "outputTokens": 463472,
+      "inputTokens": 2653334,
+      "outputTokens": 243297,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 277197312,
-      "cachedTokens": 277197312,
-      "freshTokens": 4168222,
-      "totalTokens": 281365534,
+      "cacheReadTokens": 96796672,
+      "cachedTokens": 96796672,
+      "freshTokens": 2896631,
+      "totalTokens": 99693303,
       "estimatedCostUsd": null
     },
     {
@@ -1177,28 +1133,6 @@
       "cachedTokens": 125052988,
       "freshTokens": 154784,
       "totalTokens": 125207772,
-      "estimatedCostUsd": null
-    },
-    {
-      "date": "2026-05-22",
-      "provider": "codex",
-      "displayName": "Codex",
-      "models": [
-        "gpt-5.3-codex",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.5",
-        "gpt-5.6-luna",
-        "gpt-5.6-sol",
-        "gpt-5.6-terra"
-      ],
-      "inputTokens": 225600,
-      "outputTokens": 344604,
-      "cacheCreationTokens": 0,
-      "cacheReadTokens": 68365824,
-      "cachedTokens": 68365824,
-      "freshTokens": 570204,
-      "totalTokens": 68936028,
       "estimatedCostUsd": null
     },
     {
@@ -1235,13 +1169,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1955277,
-      "outputTokens": 313887,
+      "inputTokens": 1552656,
+      "outputTokens": 220833,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 161849600,
-      "cachedTokens": 161849600,
-      "freshTokens": 2269164,
-      "totalTokens": 164118764,
+      "cacheReadTokens": 81862656,
+      "cachedTokens": 81862656,
+      "freshTokens": 1773489,
+      "totalTokens": 83636145,
       "estimatedCostUsd": null
     },
     {
@@ -1257,13 +1191,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2462896,
-      "outputTokens": 319766,
+      "inputTokens": 1770265,
+      "outputTokens": 188886,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 192993408,
-      "cachedTokens": 192993408,
-      "freshTokens": 2782662,
-      "totalTokens": 195776070,
+      "cacheReadTokens": 86427904,
+      "cachedTokens": 86427904,
+      "freshTokens": 1959151,
+      "totalTokens": 88387055,
       "estimatedCostUsd": null
     },
     {
@@ -1279,13 +1213,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 830184,
-      "outputTokens": 104487,
+      "inputTokens": 210370,
+      "outputTokens": 29963,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 103790208,
-      "cachedTokens": 103790208,
-      "freshTokens": 934671,
-      "totalTokens": 104724879,
+      "cacheReadTokens": 11657728,
+      "cachedTokens": 11657728,
+      "freshTokens": 240333,
+      "totalTokens": 11898061,
       "estimatedCostUsd": null
     },
     {
@@ -1322,13 +1256,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1802864,
-      "outputTokens": 554080,
+      "inputTokens": 331485,
+      "outputTokens": 5661,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 104073472,
-      "cachedTokens": 104073472,
-      "freshTokens": 2356944,
-      "totalTokens": 106430416,
+      "cacheReadTokens": 914432,
+      "cachedTokens": 914432,
+      "freshTokens": 337146,
+      "totalTokens": 1251578,
       "estimatedCostUsd": null
     },
     {
@@ -1365,13 +1299,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2277075,
-      "outputTokens": 368389,
+      "inputTokens": 213845,
+      "outputTokens": 9713,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 97928448,
-      "cachedTokens": 97928448,
-      "freshTokens": 2645464,
-      "totalTokens": 100573912,
+      "cacheReadTokens": 2394496,
+      "cachedTokens": 2394496,
+      "freshTokens": 223558,
+      "totalTokens": 2618054,
       "estimatedCostUsd": null
     },
     {
@@ -1408,13 +1342,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1017549,
-      "outputTokens": 501226,
+      "inputTokens": 77548,
+      "outputTokens": 6724,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 114347904,
-      "cachedTokens": 114347904,
-      "freshTokens": 1518775,
-      "totalTokens": 115866679,
+      "cacheReadTokens": 1935616,
+      "cachedTokens": 1935616,
+      "freshTokens": 84272,
+      "totalTokens": 2019888,
       "estimatedCostUsd": null
     },
     {
@@ -1451,13 +1385,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3911258,
-      "outputTokens": 502133,
+      "inputTokens": 2348806,
+      "outputTokens": 207455,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 223097344,
-      "cachedTokens": 223097344,
-      "freshTokens": 4413391,
-      "totalTokens": 227510735,
+      "cacheReadTokens": 96075264,
+      "cachedTokens": 96075264,
+      "freshTokens": 2556261,
+      "totalTokens": 98631525,
       "estimatedCostUsd": null
     },
     {
@@ -1494,13 +1428,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 6092825,
-      "outputTokens": 785642,
+      "inputTokens": 3318470,
+      "outputTokens": 303329,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 401842048,
-      "cachedTokens": 401842048,
-      "freshTokens": 6878467,
-      "totalTokens": 408720515,
+      "cacheReadTokens": 123938560,
+      "cachedTokens": 123938560,
+      "freshTokens": 3621799,
+      "totalTokens": 127560359,
       "estimatedCostUsd": null
     },
     {
@@ -1537,13 +1471,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 42674693,
-      "outputTokens": 834814,
+      "inputTokens": 5735794,
+      "outputTokens": 290521,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 339528320,
-      "cachedTokens": 339528320,
-      "freshTokens": 43509507,
-      "totalTokens": 383037827,
+      "cacheReadTokens": 119401856,
+      "cachedTokens": 119401856,
+      "freshTokens": 6026315,
+      "totalTokens": 125428171,
       "estimatedCostUsd": null
     },
     {
@@ -1580,13 +1514,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3676401,
-      "outputTokens": 332464,
+      "inputTokens": 1778641,
+      "outputTokens": 123065,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 190855680,
-      "cachedTokens": 190855680,
-      "freshTokens": 4008865,
-      "totalTokens": 194864545,
+      "cacheReadTokens": 40642176,
+      "cachedTokens": 40642176,
+      "freshTokens": 1901706,
+      "totalTokens": 42543882,
       "estimatedCostUsd": null
     },
     {
@@ -1623,13 +1557,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 5841480,
-      "outputTokens": 549916,
+      "inputTokens": 3184468,
+      "outputTokens": 224711,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 254469760,
-      "cachedTokens": 254469760,
-      "freshTokens": 6391396,
-      "totalTokens": 260861156,
+      "cacheReadTokens": 81196672,
+      "cachedTokens": 81196672,
+      "freshTokens": 3409179,
+      "totalTokens": 84605851,
       "estimatedCostUsd": null
     },
     {
@@ -1666,13 +1600,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 8579905,
-      "outputTokens": 871891,
+      "inputTokens": 2982062,
+      "outputTokens": 290893,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 314698496,
-      "cachedTokens": 314698496,
-      "freshTokens": 9451796,
-      "totalTokens": 324150292,
+      "cacheReadTokens": 118475648,
+      "cachedTokens": 118475648,
+      "freshTokens": 3272955,
+      "totalTokens": 121748603,
       "estimatedCostUsd": null
     },
     {
@@ -1709,13 +1643,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1589324,
-      "outputTokens": 148744,
+      "inputTokens": 384158,
+      "outputTokens": 24909,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 92514944,
-      "cachedTokens": 92514944,
-      "freshTokens": 1738068,
-      "totalTokens": 94253012,
+      "cacheReadTokens": 8608512,
+      "cachedTokens": 8608512,
+      "freshTokens": 409067,
+      "totalTokens": 9017579,
       "estimatedCostUsd": null
     },
     {
@@ -1773,13 +1707,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1530096,
-      "outputTokens": 167288,
+      "inputTokens": 1373304,
+      "outputTokens": 155256,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 67208448,
-      "cachedTokens": 67208448,
-      "freshTokens": 1697384,
-      "totalTokens": 68905832,
+      "cacheReadTokens": 49894400,
+      "cachedTokens": 49894400,
+      "freshTokens": 1528560,
+      "totalTokens": 51422960,
       "estimatedCostUsd": null
     },
     {
@@ -1816,13 +1750,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1649592,
-      "outputTokens": 105306,
+      "inputTokens": 1647257,
+      "outputTokens": 104959,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 38544896,
-      "cachedTokens": 38544896,
-      "freshTokens": 1754898,
-      "totalTokens": 40299794,
+      "cacheReadTokens": 38393984,
+      "cachedTokens": 38393984,
+      "freshTokens": 1752216,
+      "totalTokens": 40146200,
       "estimatedCostUsd": null
     },
     {
@@ -1859,13 +1793,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1896499,
-      "outputTokens": 149843,
+      "inputTokens": 1882183,
+      "outputTokens": 148082,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 56645760,
-      "cachedTokens": 56645760,
-      "freshTokens": 2046342,
-      "totalTokens": 58692102,
+      "cacheReadTokens": 56072832,
+      "cachedTokens": 56072832,
+      "freshTokens": 2030265,
+      "totalTokens": 58103097,
       "estimatedCostUsd": null
     },
     {
@@ -2010,13 +1944,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2556169,
-      "outputTokens": 284481,
+      "inputTokens": 2546767,
+      "outputTokens": 282582,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 73300352,
-      "cachedTokens": 73300352,
-      "freshTokens": 2840650,
-      "totalTokens": 76141002,
+      "cacheReadTokens": 72696704,
+      "cachedTokens": 72696704,
+      "freshTokens": 2829349,
+      "totalTokens": 75526053,
       "estimatedCostUsd": null
     },
     {
@@ -2137,13 +2071,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3421643,
-      "outputTokens": 225870,
+      "inputTokens": 3409597,
+      "outputTokens": 225374,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 81933056,
-      "cachedTokens": 81933056,
-      "freshTokens": 3647513,
-      "totalTokens": 85580569,
+      "cacheReadTokens": 81295488,
+      "cachedTokens": 81295488,
+      "freshTokens": 3634971,
+      "totalTokens": 84930459,
       "estimatedCostUsd": null
     },
     {
@@ -2222,13 +2156,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3862534,
-      "outputTokens": 617728,
+      "inputTokens": 3817211,
+      "outputTokens": 607109,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 133937920,
-      "cachedTokens": 133937920,
-      "freshTokens": 4480262,
-      "totalTokens": 138418182,
+      "cacheReadTokens": 131587072,
+      "cachedTokens": 131587072,
+      "freshTokens": 4424320,
+      "totalTokens": 136011392,
       "estimatedCostUsd": null
     },
     {
@@ -2265,13 +2199,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1016038,
-      "outputTokens": 127663,
+      "inputTokens": 998028,
+      "outputTokens": 125901,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 22493184,
-      "cachedTokens": 22493184,
-      "freshTokens": 1143701,
-      "totalTokens": 23636885,
+      "cacheReadTokens": 21314560,
+      "cachedTokens": 21314560,
+      "freshTokens": 1123929,
+      "totalTokens": 22438489,
       "estimatedCostUsd": null
     },
     {
@@ -2287,13 +2221,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 445846,
-      "outputTokens": 46512,
+      "inputTokens": 443177,
+      "outputTokens": 46383,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 10188032,
-      "cachedTokens": 10188032,
-      "freshTokens": 492358,
-      "totalTokens": 10680390,
+      "cacheReadTokens": 10033664,
+      "cachedTokens": 10033664,
+      "freshTokens": 489560,
+      "totalTokens": 10523224,
       "estimatedCostUsd": null
     },
     {
@@ -2435,13 +2369,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 881620,
-      "outputTokens": 137539,
+      "inputTokens": 878473,
+      "outputTokens": 135651,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 33034624,
-      "cachedTokens": 33034624,
-      "freshTokens": 1019159,
-      "totalTokens": 34053783,
+      "cacheReadTokens": 32612096,
+      "cachedTokens": 32612096,
+      "freshTokens": 1014124,
+      "totalTokens": 33626220,
       "estimatedCostUsd": null
     },
     {
@@ -2457,13 +2391,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2466997,
-      "outputTokens": 261913,
+      "inputTokens": 2436666,
+      "outputTokens": 258476,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 54971008,
-      "cachedTokens": 54971008,
-      "freshTokens": 2728910,
-      "totalTokens": 57699918,
+      "cacheReadTokens": 53976320,
+      "cachedTokens": 53976320,
+      "freshTokens": 2695142,
+      "totalTokens": 56671462,
       "estimatedCostUsd": null
     },
     {
@@ -2564,13 +2498,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3411436,
-      "outputTokens": 382656,
+      "inputTokens": 3303515,
+      "outputTokens": 373379,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 83754240,
-      "cachedTokens": 83754240,
-      "freshTokens": 3794092,
-      "totalTokens": 87548332,
+      "cacheReadTokens": 78939136,
+      "cachedTokens": 78939136,
+      "freshTokens": 3676894,
+      "totalTokens": 82616030,
       "estimatedCostUsd": null
     },
     {
@@ -2607,13 +2541,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2218430,
-      "outputTokens": 316163,
+      "inputTokens": 2153760,
+      "outputTokens": 306857,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 41274368,
-      "cachedTokens": 41274368,
-      "freshTokens": 2534593,
-      "totalTokens": 43808961,
+      "cacheReadTokens": 39296768,
+      "cachedTokens": 39296768,
+      "freshTokens": 2460617,
+      "totalTokens": 41757385,
       "estimatedCostUsd": null
     },
     {
@@ -2650,13 +2584,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2304396,
-      "outputTokens": 206947,
+      "inputTokens": 2302346,
+      "outputTokens": 206136,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 87391232,
-      "cachedTokens": 87391232,
-      "freshTokens": 2511343,
-      "totalTokens": 89902575,
+      "cacheReadTokens": 87232128,
+      "cachedTokens": 87232128,
+      "freshTokens": 2508482,
+      "totalTokens": 89740610,
       "estimatedCostUsd": null
     },
     {
@@ -2672,13 +2606,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 13758333,
-      "outputTokens": 993122,
+      "inputTokens": 13664383,
+      "outputTokens": 984478,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 324361472,
-      "cachedTokens": 324361472,
-      "freshTokens": 14751455,
-      "totalTokens": 339112927,
+      "cacheReadTokens": 321315840,
+      "cachedTokens": 321315840,
+      "freshTokens": 14648861,
+      "totalTokens": 335964701,
       "estimatedCostUsd": null
     },
     {
@@ -2694,13 +2628,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 6529848,
-      "outputTokens": 484244,
+      "inputTokens": 6526323,
+      "outputTokens": 483959,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 145569792,
-      "cachedTokens": 145569792,
-      "freshTokens": 7014092,
-      "totalTokens": 152583884,
+      "cacheReadTokens": 145356288,
+      "cachedTokens": 145356288,
+      "freshTokens": 7010282,
+      "totalTokens": 152366570,
       "estimatedCostUsd": null
     },
     {
@@ -2780,13 +2714,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 5312062,
-      "outputTokens": 418845,
+      "inputTokens": 5295410,
+      "outputTokens": 418462,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 176482816,
-      "cachedTokens": 176482816,
-      "freshTokens": 5730907,
-      "totalTokens": 182213723,
+      "cacheReadTokens": 176000256,
+      "cachedTokens": 176000256,
+      "freshTokens": 5713872,
+      "totalTokens": 181714128,
       "estimatedCostUsd": null
     },
     {
@@ -2866,13 +2800,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 1819058,
-      "outputTokens": 170210,
+      "inputTokens": 1812681,
+      "outputTokens": 169932,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 34832128,
-      "cachedTokens": 34832128,
-      "freshTokens": 1989268,
-      "totalTokens": 36821396,
+      "cacheReadTokens": 34557184,
+      "cachedTokens": 34557184,
+      "freshTokens": 1982613,
+      "totalTokens": 36539797,
       "estimatedCostUsd": null
     },
     {
@@ -2909,13 +2843,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 2062734,
-      "outputTokens": 185124,
+      "inputTokens": 2029400,
+      "outputTokens": 182513,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 42286848,
-      "cachedTokens": 42286848,
-      "freshTokens": 2247858,
-      "totalTokens": 44534706,
+      "cacheReadTokens": 41164800,
+      "cachedTokens": 41164800,
+      "freshTokens": 2211913,
+      "totalTokens": 43376713,
       "estimatedCostUsd": null
     },
     {
@@ -2994,13 +2928,13 @@
         "claude-opus-4-8",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 31864,
-      "outputTokens": 1178757,
-      "cacheCreationTokens": 16683734,
-      "cacheReadTokens": 558009792,
-      "cachedTokens": 574693526,
-      "freshTokens": 1210621,
-      "totalTokens": 575904147,
+      "inputTokens": 32585,
+      "outputTokens": 1544007,
+      "cacheCreationTokens": 19134449,
+      "cacheReadTokens": 779177794,
+      "cachedTokens": 798312243,
+      "freshTokens": 1576592,
+      "totalTokens": 799888835,
       "estimatedCostUsd": null
     }
   ],
@@ -3013,8 +2947,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6bf7612",
-        "changedFiles": 8
+        "commit": "ddab367",
+        "changedFiles": 0
       },
       "stack": [
         "React",
@@ -3047,7 +2981,7 @@
         "css": 2,
         "tsx": 11
       },
-      "lastModified": "2026-07-24T19:58:43.733Z",
+      "lastModified": "2026-07-24T20:05:36.023Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3058,13 +2992,21 @@
       "category": "Research",
       "status": "research",
       "description": "Latent Order Language Model architecture and validation work.",
-      "found": false,
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
       "stack": [],
       "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "fileCounts": {
+        "py": 12,
+        "js": 1
+      },
+      "lastModified": "2026-03-08T23:15:11.381Z",
       "scannerWarnings": [
-        "no-scored-candidate"
+        "match:scored score:280 folder~lolm, text~lolm, text~latent-order"
       ]
     },
     {
@@ -3074,18 +3016,18 @@
       "description": "Verification, encryption, and proof-layer experiments.",
       "found": true,
       "git": {
-        "branch": "rescue/codex-autoloop-20260610-195045",
-        "commit": "1fd165d",
-        "changedFiles": 67
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "py": 7
+        "docs": 1
       },
-      "lastModified": "2026-06-12T16:59:58.356Z",
+      "lastModified": "2026-04-19T07:28:22.557Z",
       "scannerWarnings": [
-        "match:scored score:395 folder=nfet, text~nfet"
+        "match:scored score:1175 folder~qev, text~qev, text~qev-desktop, text~qira-encryption-vault, domain=secure.imagineqira.com, domain=qev-desktop"
       ]
     },
     {
@@ -3140,13 +3082,28 @@
       "category": "Intelligence",
       "status": "active",
       "description": "Phoenix traffic intelligence surface.",
-      "found": false,
+      "found": true,
+      "git": {
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
+      },
       "stack": [],
-      "scripts": [],
-      "fileCounts": {},
-      "lastModified": null,
+      "scripts": [
+        "research",
+        "draft",
+        "today",
+        "linkedin",
+        "all",
+        "status"
+      ],
+      "fileCounts": {
+        "docs": 10,
+        "json": 10
+      },
+      "lastModified": "2026-06-06T16:06:35.036Z",
       "scannerWarnings": [
-        "no-scored-candidate"
+        "match:scored score:560 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json"
       ],
       "publicUrl": "https://pti.imagineqira.com"
     },
@@ -3173,8 +3130,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6bf7612",
-        "changedFiles": 8
+        "commit": "ddab367",
+        "changedFiles": 1
       },
       "stack": [
         "React",
@@ -3207,16 +3164,16 @@
         "css": 2,
         "tsx": 11
       },
-      "lastModified": "2026-07-24T19:58:43.733Z",
+      "lastModified": "2026-07-24T20:06:55.958Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
     }
   ],
   "scanner": {
-    "rootsChecked": 2,
+    "rootsChecked": 5,
     "allowlistedProjects": 8,
-    "foundProjects": 4,
+    "foundProjects": 6,
     "privacyMode": "allowlist_no_paths"
   },
   "warnings": [
@@ -3270,7 +3227,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 34585145178,
+    "exactTotalTokens": 29992925290,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3373,7 +3330,7 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "projectsActive": 4
+      "projectsActive": 6
     },
     "work": {
       "artifacts": [
@@ -3434,8 +3391,8 @@
           "url": null,
           "period": "2026",
           "linkedProject": "LOLM",
-          "verification": "self_reported",
-          "basis": "Self-reported; not independently verified."
+          "verification": "collector_observed",
+          "basis": "The local collector independently observed git/file activity for this project."
         },
         {
           "type": "research",
@@ -3449,7 +3406,7 @@
         }
       ],
       "outcomes": [],
-      "collectorObserved": 5,
+      "collectorObserved": 6,
       "totalArtifacts": 7,
       "totalOutcomes": 0
     },
@@ -3471,10 +3428,10 @@
       "note": "Availability, engagement, and compensation are set by the member. They are self-declared preferences, not verified terms."
     },
     "efficiency": {
-      "cachedSharePct": 98.9,
-      "freshSharePct": 1.1,
-      "outputSharePct": 24.1,
-      "avgTokensPerActiveDay": 360261929,
+      "cachedSharePct": 99.1,
+      "freshSharePct": 0.9,
+      "outputSharePct": 30.5,
+      "avgTokensPerActiveDay": 312426305,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet."
     },
     "verification": [
@@ -3486,7 +3443,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (96 active days; 4 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (96 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Identity-linked",
@@ -3506,7 +3463,7 @@
       {
         "label": "Third-party-confirmed",
         "status": "pending",
-        "basis": "No client, employer, repository owner, or research organization has confirmed an outcome. 5 artifact(s) are collector-observed, which shows local activity but not authorship, quality, or results."
+        "basis": "No client, employer, repository owner, or research organization has confirmed an outcome. 6 artifact(s) are collector-observed, which shows local activity but not authorship, quality, or results."
       },
       {
         "label": "Self-submitted",
@@ -3566,7 +3523,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "b6269376baf37a5deffee5c8a72e70a03afeae7d1bca9766a21c0e1719781a7b",
+    "snapshotSha256": "e070437d2f2abd7aafd2db12620e2825ff457c0a674bb2ae5ffaa34bf27ee689",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3576,12 +3533,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T19:59:19.081Z",
-    "nonce": "3320f962-254b-49eb-bc52-f260df4120f5",
+    "issuedAt": "2026-07-24T20:08:29.367Z",
+    "nonce": "dd768bc5-1afc-436d-83f8-afb3b3f14fbf",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "216d64102a1c1b3455aaacf0b9fa425faa1b07e3cc7d9dbc3727b1616c97db6a",
-    "signature": "5B7sEms2FBQtPNEtcO+rccHy2wTiQHkhiqg+eqycV8DRbKg7ZGQAh9d9VDb+Qxxklzb6iPGJVlX1gF/HCNDABQ==",
+    "payloadSha256": "ecc9bed092e6e909aabf6fcc89034e568156a982343b0d541a3cee0e17f30544",
+    "signature": "8FDf97eFTz5+UmEOjtWHPiblbND6NvvgWE68ZVTi28hCmhsAiRJ1QrAfi9+J3AG7Y1xd8SYWiS5ibmUN4lSLBg==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
