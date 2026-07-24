@@ -10,6 +10,7 @@
 import { useMemo } from 'react';
 import { compactNumber, fullNumber } from '../lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
+import { ActivityDisclaimer } from './ActivityDisclaimer';
 
 export function initials(name: string): string {
   return name
@@ -141,10 +142,14 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
     <div className="profile-work" id="work">
       <div className="section-kicker"><span /> CONNECTED WORK &amp; EVIDENCE</div>
       <div className="work-head">
-        <h3>Work evidence</h3>
+        <h3>Featured work</h3>
         <p>
           {work.collectorObserved} of {work.totalArtifacts} connected {work.totalArtifacts === 1 ? 'artifact was' : 'artifacts were'}{' '}
           independently observed by the local collector. The rest are self-submitted links or claims and are labeled as such.
+        </p>
+        <p className="work-caveat">
+          <strong>“Collector observed”</strong> means the collector saw this project active on the member’s device. It does{' '}
+          <strong>not</strong> independently verify authorship, quality, ownership, or commercial results.
         </p>
       </div>
 
@@ -208,11 +213,17 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
 
 export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsageSnapshot['profile']>; daily: PublicUsageSnapshot['daily'] }) {
   const { identity, activity, verification } = profile;
+  const contact = identity.contact ?? null;
   return (
     <section className="profile" id="profile">
+      {/* 1. Identity, availability, and the recruiter action lead. */}
       <div className="profile-card">
         <div className="profile-id">
-          <div className="profile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
+          {identity.avatarUrl ? (
+            <img className="profile-avatar profile-photo" src={identity.avatarUrl} alt={`${identity.displayName} headshot`} loading="lazy" />
+          ) : (
+            <div className="profile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
+          )}
           <div>
             <h2 className="profile-name">
               {identity.displayName}
@@ -232,25 +243,32 @@ export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsa
             ) : null}
           </div>
         </div>
-        <div className="profile-verify">
-          {verification.map((item) => <VerificationChip key={item.label} item={item} />)}
+
+        <div className="profile-actions">
+          {contact ? (
+            <a
+              className="profile-cta"
+              href={contact.href}
+              {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+            >
+              {contact.label}
+            </a>
+          ) : null}
+          <div className="profile-verify">
+            {verification.map((item) => <VerificationChip key={item.label} item={item} />)}
+          </div>
         </div>
       </div>
 
       {identity.bio ? <p className="profile-bio">{identity.bio}</p> : null}
 
-      <div className="profile-stats">
-        <div><strong>{fullNumber(activity.activeDays)}</strong><span>Active AI-work days</span></div>
-        <div><strong>{activity.currentStreakDays}</strong><span>Current streak (days)</span></div>
-        <div><strong>{activity.longestStreakDays}</strong><span>Longest streak (days)</span></div>
-        <div><strong>{activity.activeDaysLast30}</strong><span>Active in last 30 days</span></div>
-        <div><strong>{activity.toolsUsed.length}</strong><span>AI tools used</span></div>
-        <div><strong>{activity.projectsActive}</strong><span>Projects active</span></div>
-      </div>
+      {/* 2 + 3. Featured work and outcomes — what they built comes before telemetry. */}
+      <WorkEvidenceSection work={profile.work} />
 
+      {/* 4. AI-tool experience. */}
       <div className="profile-cols">
         <div className="profile-block">
-          <h3>Tools &amp; models</h3>
+          <h3>AI tools &amp; models</h3>
           <div className="tag-row">{activity.toolsUsed.map((tool) => <span key={tool} className="tag-strong">{tool}</span>)}</div>
           {activity.modelsUsed.length ? <div className="tag-row">{activity.modelsUsed.slice(0, 10).map((model) => <span key={model}>{model}</span>)}</div> : null}
         </div>
@@ -260,13 +278,21 @@ export function ProfileView({ profile, daily }: { profile: NonNullable<PublicUsa
         </div>
       </div>
 
-      <div className="profile-heatmap">
-        <div className="section-kicker"><span /> VERIFIED ACTIVITY · LAST 26 WEEKS</div>
+      {/* 5. Detailed telemetry, last — and explicitly framed as not a score. */}
+      <div className="profile-telemetry">
+        <div className="section-kicker"><span /> ACTIVITY &amp; EFFICIENCY DETAILS</div>
+        <ActivityDisclaimer compact />
+        <div className="profile-stats">
+          <div><strong>{fullNumber(activity.activeDays)}</strong><span>Active AI-work days</span></div>
+          <div><strong>{activity.currentStreakDays}</strong><span>Current streak (days)</span></div>
+          <div><strong>{activity.longestStreakDays}</strong><span>Longest streak (days)</span></div>
+          <div><strong>{activity.activeDaysLast30}</strong><span>Active in last 30 days</span></div>
+          <div><strong>{activity.toolsUsed.length}</strong><span>AI tools used</span></div>
+          <div><strong>{activity.projectsActive}</strong><span>Projects active</span></div>
+        </div>
         <ActivityHeatmap daily={daily} referenceDate={activity.referenceDate} />
         <p className="profile-note">{profile.note}</p>
       </div>
-
-      <WorkEvidenceSection work={profile.work} />
     </section>
   );
 }

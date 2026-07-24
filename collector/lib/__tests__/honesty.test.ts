@@ -82,14 +82,18 @@ describe('work evidence cannot overstate itself', () => {
   });
 });
 
-describe('unverifiable categories stay pending', () => {
-  it('identity and outcome verification are never claimed as verified', () => {
+describe('unverifiable evidence tiers stay honest', () => {
+  it('provider/benchmark/third-party tiers are pending; identity is self-submitted; never faked as verified', () => {
     const categories = deriveVerification(
       buildProfile(identity, daily, providers, '2026-07-01', [], {}).activity,
     );
-    const identityCat = categories.find((c) => c.label === 'Identity verified');
-    const outcomeCat = categories.find((c) => c.label === 'Outcome verified');
-    expect(identityCat?.status).toBe('pending');
-    expect(outcomeCat?.status).toBe('pending');
+    const status = (label: string) => categories.find((c) => c.label === label)?.status;
+    expect(status('Provider-attested')).toBe('pending');
+    expect(status('Benchmark-assessed')).toBe('pending');
+    expect(status('Third-party-confirmed')).toBe('pending');
+    expect(status('Self-submitted')).toBe('self_submitted');
+    // Nothing may be marked 'verified' except the two device-local facts.
+    const verified = categories.filter((c) => c.status === 'verified').map((c) => c.label).sort();
+    expect(verified).toEqual(['Collector-observed', 'Device-signed']);
   });
 });

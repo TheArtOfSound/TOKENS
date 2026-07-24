@@ -353,3 +353,28 @@ summary:focus:not(:focus-visible) {
   .why-grid { grid-template-columns: 1fr; }
   .footer-cols { grid-template-columns: 1fr 1fr; }
 }
+
+/* Recruiter action + reordered profile ------------------------------------- */
+.profile-card{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;justify-content:space-between}
+.profile-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-left:auto}
+.profile-cta{display:inline-block;padding:15px 24px;border-radius:12px;background:#06070c;color:#fff;
+  text-decoration:none;font-weight:900;letter-spacing:-.01em;font-size:1.02rem;white-space:nowrap;
+  box-shadow:0 10px 30px rgba(6,7,12,.22);transition:transform .08s ease,filter .12s ease}
+.profile-cta:hover{filter:brightness(1.14);transform:translateY(-1px)}
+.profile-cta:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.profile-photo{object-fit:cover}
+.work-caveat{margin:8px 0 0;font-size:.82rem;color:var(--muted);line-height:1.5;max-width:760px}
+.profile-telemetry{margin-top:32px;padding-top:8px;border-top:1px solid var(--line)}
+.profile-telemetry .profile-stats{margin-top:14px}
+@media(max-width:720px){
+  .profile-actions{align-items:stretch;width:100%;margin-left:0}
+  .profile-cta{text-align:center}
+}
+
+/* Permanent "not a score" disclaimer + demoted activity details ------------- */
+.activity-disclaimer{margin:0 0 16px;padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--blue);
+  border-radius:10px;background:var(--soft);color:var(--muted);font-size:.9rem;line-height:1.55;max-width:820px}
+.activity-disclaimer strong{color:var(--ink)}
+.activity-disclaimer-compact{margin:10px 0 0;padding:8px 12px;font-size:.82rem;border-left-width:2px}
+.activity-details{position:relative;z-index:1;margin-top:44px;padding-top:30px;border-top:1px solid var(--line)}
+.activity-details h2{margin:8px 0 14px;font-size:clamp(1.7rem,3vw,2.4rem);letter-spacing:-.05em}

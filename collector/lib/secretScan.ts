@@ -57,6 +57,13 @@ const RULES: Rule[] = [
   [/(?:^|[^A-Za-z0-9])\.env(?:\.[A-Za-z]+)?\b/, '.env reference'],
   // Email address (URLs like https://x.com do not contain '@' so are not matched).
   [/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/, 'email address'],
+  // Bearer / Authorization token.
+  [/\bBearer\s+[A-Za-z0-9._~+/-]{10,}=*/i, 'bearer token'],
+  [/\bAuthorization\s*[:=]\s*\S+/i, 'authorization header'],
+  // Credentials embedded in a URL: scheme://user:pass@host
+  [/[a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:[^/\s:@]+@/i, 'credential in URL userinfo'],
+  // Credential passed in a URL query string.
+  [/[?&](?:api[_-]?key|access[_-]?token|auth[_-]?token|token|password|passwd|secret)=[^&\s#]+/i, 'credential in URL query'],
 ];
 
 /** Control chars (except tab \x09, newline \x0a, carriage return \x0d) must not appear in published text. */
@@ -103,10 +110,29 @@ function scanString(value: string, path: string, findings: ProhibitedFinding[], 
   }
 }
 
+/**
+ * Exact JSON paths where an email address is DELIBERATELY published.
+ *
+ * The scanner strips emails everywhere because it exists to keep addresses that
+ * leak from logs out of the public data. The one place a member intentionally
+ * publishes an email is their contact action, which the publisher has already
+ * structurally validated as a `mailto:`. Only email findings are waived here, and
+ * only at this exact path — every other prohibited pattern (paths, keys, tokens)
+ * still fails closed even at this field.
+ */
+const EMAIL_ALLOWED_PATHS = new Set(['$.profile.identity.contact.href']);
+
 /** Recursively scan any value for prohibited content. Returns all findings. */
 export function scanForProhibited(value: unknown, path = '$', findings: ProhibitedFinding[] = []): ProhibitedFinding[] {
   if (typeof value === 'string') {
+    const before = findings.length;
     scanString(value, path, findings);
+    // Waive an email-only finding at an allowlisted contact path.
+    if (EMAIL_ALLOWED_PATHS.has(path)) {
+      for (let i = findings.length - 1; i >= before; i -= 1) {
+        if (/email/i.test(findings[i].label)) findings.splice(i, 1);
+      }
+    }
     return findings;
   }
   if (Array.isArray(value)) {

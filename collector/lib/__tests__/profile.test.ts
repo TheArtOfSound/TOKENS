@@ -73,29 +73,32 @@ describe('deriveActivity', () => {
   });
 });
 
-describe('deriveVerification (honest categories)', () => {
-  it('marks sustained usage verified only past the threshold; never fakes identity/work', () => {
-    // 20 active days across a >56-day span
+describe('deriveVerification (evidence ladder)', () => {
+  it('uses precise ladder labels — never a generic "verified"', () => {
     const many: NormalizedDaily[] = [];
     for (let i = 0; i < 20; i += 1) many.push(day(addDaysUtc('2026-01-01', i * 4)));
     const activity = deriveActivity(many, summarizeProviders(many), addDaysUtc('2026-01-01', 76), 3);
     const v = deriveVerification(activity);
     const byLabel = Object.fromEntries(v.map((x) => [x.label, x.status]));
-    expect(byLabel['Collector verified']).toBe('verified');
-    expect(byLabel['Provider reported']).toBe('reported');
-    expect(byLabel['Sustained usage']).toBe('verified');
-    expect(byLabel['Active across multiple projects']).toBe('verified');
-    expect(byLabel['Identity verified']).toBe('pending');
-    expect(byLabel['Work evidence']).toBe('pending'); // no artifacts connected
-    expect(byLabel['Outcome verified']).toBe('pending');
+
+    // The only things claimed as established are the two we can actually prove.
+    expect(byLabel['Device-signed']).toBe('verified');
+    expect(byLabel['Collector-observed']).toBe('verified');
+    // Stronger tiers are honestly pending until real evidence exists.
+    expect(byLabel['Provider-attested']).toBe('pending');
+    expect(byLabel['Benchmark-assessed']).toBe('pending');
+    expect(byLabel['Third-party-confirmed']).toBe('pending');
+    expect(byLabel['Self-submitted']).toBe('self_submitted');
+
+    // No item may carry a bare "Verified" label.
+    expect(v.some((x) => x.label.toLowerCase().trim() === 'verified')).toBe(false);
   });
 
-  it('marks sustained usage unverified for a short history and single project', () => {
-    const few = [day('2026-06-01'), day('2026-06-02')];
-    const activity = deriveActivity(few, summarizeProviders(few), '2026-06-02', 1);
-    const byLabel = Object.fromEntries(deriveVerification(activity).map((x) => [x.label, x.status]));
-    expect(byLabel['Sustained usage']).toBe('unverified');
-    expect(byLabel['Active across multiple projects']).toBe('unverified');
+  it('every category states verified-by-what in its basis', () => {
+    const activity = deriveActivity([day('2026-06-01')], summarizeProviders([day('2026-06-01')]), '2026-06-01', 1);
+    for (const cat of deriveVerification(activity)) {
+      expect(cat.basis.length).toBeGreaterThan(20);
+    }
   });
 });
 
@@ -140,13 +143,14 @@ describe('deriveWorkEvidence (evidence, not claims)', () => {
     expect(work.collectorObserved).toBe(0);
   });
 
-  it('lifts "Work evidence" to reported once a collector-observed artifact exists, but never lifts outcomes', () => {
+  it('a collector-observed artifact never lifts outcomes above pending', () => {
     const rows = [day('2026-06-01')];
     const activity = deriveActivity(rows, summarizeProviders(rows), '2026-06-01', 2);
     const work = deriveWorkEvidence({ artifacts: [{ type: 'repository', title: 'T', linkedProject: 'TOKENS' }] }, scanned);
     const byLabel = Object.fromEntries(deriveVerification(activity, work).map((x) => [x.label, x.status]));
-    expect(byLabel['Work evidence']).toBe('reported');
-    expect(byLabel['Outcome verified']).toBe('pending');
+    // Collector-observed activity is established, but third-party outcome confirmation is not.
+    expect(byLabel['Third-party-confirmed']).toBe('pending');
+    expect(work.collectorObserved).toBe(1);
   });
 });
 

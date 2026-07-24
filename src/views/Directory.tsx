@@ -19,6 +19,7 @@ import {
 import { verifySnapshotInBrowser } from '../lib/verify';
 import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
+import { ActivityDisclaimer } from './ActivityDisclaimer';
 
 function initials(name: string): string {
   return name
@@ -156,8 +157,9 @@ export function Directory() {
           <h2>People measuring their AI work</h2>
           <p className="muted">
             Every figure below comes from that person's own signed snapshot and is verified in your browser.
-            Profiles are not ranked by token volume — volume is evidence of practice, not of skill.
+            Profiles are ordered by recency, never ranked by token volume.
           </p>
+          <ActivityDisclaimer compact />
         </div>
         <a className="cta" href={href({ name: 'join' })}>
           Add your profile
@@ -207,7 +209,7 @@ export function Directory() {
                   <dd>{summary.activeDays || '—'}</dd>
                 </div>
                 <div>
-                  <dt>Measured tokens</dt>
+                  <dt>AI activity</dt>
                   <dd>{summary.totalTokens ? compactNumber(summary.totalTokens) : '—'}</dd>
                 </div>
                 <div>

@@ -83,6 +83,8 @@ export interface ProfileBlock {
     workCategories: string[];
     openTo: string[];
     links: { label: string; url: string }[];
+    avatarUrl?: string | null;
+    contact?: { label: string; href: string } | null;
   };
   activity: {
     referenceDate: string;

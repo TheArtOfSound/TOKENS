@@ -274,7 +274,9 @@
             "availability",
             "workCategories",
             "openTo",
-            "links"
+            "links",
+            "avatarUrl",
+            "contact"
           ],
           "properties": {
             "displayName": {
@@ -346,6 +348,19 @@
                     "pattern": "^https://"
                   }
                 }
+              }
+            },
+            "avatarUrl": {
+              "type": ["string", "null"],
+              "pattern": "^https://"
+            },
+            "contact": {
+              "type": ["object", "null"],
+              "additionalProperties": false,
+              "required": ["label", "href"],
+              "properties": {
+                "label": { "type": "string", "maxLength": 40 },
+                "href": { "type": "string", "pattern": "^(https://|mailto:)" }
               }
             }
           }

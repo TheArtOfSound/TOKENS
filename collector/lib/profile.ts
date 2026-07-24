@@ -23,6 +23,12 @@ export interface ProfileLink {
   label: string;
   url: string;
 }
+export interface ProfileContact {
+  /** Button text, e.g. "Invite to opportunity" or "Contact Bryan". */
+  label: string;
+  /** mailto: or https: — the recruiter action target. */
+  href: string;
+}
 export interface ProfileIdentity {
   displayName: string;
   headline: string;
@@ -33,6 +39,10 @@ export interface ProfileIdentity {
   workCategories?: string[];
   openTo?: string[];
   links?: ProfileLink[];
+  /** Optional professional headshot (https URL the member self-hosts). */
+  avatarUrl?: string | null;
+  /** Primary recruiter action. */
+  contact?: ProfileContact | null;
 }
 
 // ---- measured activity (derived from daily data) ----
@@ -267,49 +277,56 @@ export function deriveWorkEvidence(config: WorkConfig, qiraProjects: ScannedProj
   };
 }
 
+/**
+ * Evidence ladder.
+ *
+ * Reddit review made the point sharply: a generic "verified" badge is
+ * misleading, because it collapses very different strengths of evidence. Every
+ * item now names EXACTLY what was checked, in a fixed ladder from strongest
+ * independent evidence to weakest self-assertion. Nothing here says "verified"
+ * without saying verified-by-what.
+ */
 export function deriveVerification(activity: ProfileActivity, work?: WorkEvidence): VerificationCategory[] {
-  const sustained = activity.activeDays >= SUSTAINED_MIN_DAYS && activity.spanDays >= SUSTAINED_MIN_SPAN;
   const observed = work?.collectorObserved ?? 0;
   return [
     {
-      label: 'Collector verified',
+      label: 'Device-signed',
       status: 'verified',
-      // Do NOT claim "open source" here: the repo has no LICENSE and the hardened
-      // collector is not yet published. Claim only what is demonstrably true.
-      basis: 'Aggregate built by the local collector on this machine; the snapshot hash verifies the public file was not altered after generation.',
-    },
-    {
-      label: 'Provider reported',
-      status: 'reported',
-      basis: 'Token counts come from provider usage accounting parsed out of local Claude Code / Codex logs.',
-    },
-    {
-      label: 'Sustained usage',
-      status: sustained ? 'verified' : 'unverified',
-      basis: `${activity.activeDays} active AI-work days over a ${activity.spanDays}-day span (threshold: ${SUSTAINED_MIN_DAYS} days across ${SUSTAINED_MIN_SPAN} days).`,
-    },
-    {
-      label: 'Active across multiple projects',
-      status: activity.projectsActive >= 2 ? 'verified' : 'unverified',
-      basis: `${activity.projectsActive} allowlisted project(s) detected locally.`,
-    },
-    {
-      label: 'Work evidence',
-      status: observed > 0 ? 'reported' : 'pending',
       basis:
-        observed > 0
-          ? `${observed} connected work artifact(s) independently observed by the local collector.`
-          : 'No collector-observed work artifacts connected yet.',
+        'The published snapshot was signed by a key held on this device and has not changed since. ' +
+        'This proves integrity, not identity, and not that the source logs were genuine.',
     },
     {
-      label: 'Identity verified',
-      status: 'pending',
-      basis: 'No identity verification has been performed. Name and headline are self-submitted.',
+      label: 'Collector-observed',
+      status: 'verified',
+      basis:
+        `AI activity was read from the provider's own usage accounting in local logs on this device ` +
+        `(${activity.activeDays} active days; ${activity.projectsActive} project(s) seen locally). ` +
+        'This is device-local observation, not independent confirmation.',
     },
     {
-      label: 'Outcome verified',
+      label: 'Provider-attested',
       status: 'pending',
-      basis: 'No third-party-confirmed outcomes are connected. Outcomes are self-reported until verified.',
+      basis:
+        'No provider has independently confirmed this usage (no OAuth usage API, billing export, or ' +
+        'enterprise attestation is connected yet). This is a stronger tier when available.',
+    },
+    {
+      label: 'Benchmark-assessed',
+      status: 'pending',
+      basis: 'No practical, reproducible assessment has been completed and attached to this profile.',
+    },
+    {
+      label: 'Third-party-confirmed',
+      status: observed > 0 ? 'pending' : 'pending',
+      basis:
+        'No client, employer, repository owner, or research organization has confirmed an outcome. ' +
+        `${observed} artifact(s) are collector-observed, which shows local activity but not authorship, quality, or results.`,
+    },
+    {
+      label: 'Self-submitted',
+      status: 'self_submitted',
+      basis: 'Identity, headline, links, work artifacts, and any outcomes were entered by the member and are not independently verified.',
     },
   ];
 }

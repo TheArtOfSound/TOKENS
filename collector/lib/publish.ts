@@ -93,6 +93,8 @@ export interface PublishedProfile {
     workCategories: string[];
     openTo: string[];
     links: PublishedProfileLink[];
+    avatarUrl: string | null;
+    contact: { label: string; href: string } | null;
   };
   activity: {
     referenceDate: string;
@@ -301,6 +303,34 @@ const WORK_TYPES = ['repository', 'deployment', 'publication', 'case_study', 'ev
 const WORK_VERIFICATIONS = ['collector_observed', 'link_provided', 'self_reported'];
 
 /** Publish the profile block: identity strings sanitized, activity coerced, links https-only. */
+/** Avatar: https images only. A data: URI would bloat the signed payload; a
+ *  non-https URL is dropped rather than published. */
+function publishAvatar(value: unknown, dropped: string[]): string | null {
+  const url = safeStringOrNull(value, dropped, 300);
+  return url && HTTPS_URL_RE.test(url) ? url : null;
+}
+
+/**
+ * Contact action: a label plus a `mailto:` or `https:` target.
+ *
+ * The href is validated STRUCTURALLY, not run through the secret scanner:
+ * publishing the member's own contact channel is the explicit purpose, and the
+ * scanner strips email addresses (it exists to keep emails out of LOG-derived
+ * data). We still forbid anything but a well-formed mailto or https URL, so a
+ * `javascript:` or path can never slip through. The label still goes through the
+ * scanner — it should never carry a secret.
+ */
+function publishContact(value: unknown, dropped: string[]): { label: string; href: string } | null {
+  if (!value || typeof value !== 'object') return null;
+  const contact = value as { label?: unknown; href?: unknown };
+  const label = safeStringOrNull(contact.label, dropped, 40);
+  const href = typeof contact.href === 'string' ? contact.href.trim().slice(0, 200) : '';
+  if (!label || !href) return null;
+  const okMailto = /^mailto:[^\s@]+@[^\s@]+\.[^\s@]+(\?[^\s]*)?$/.test(href);
+  const okHttps = HTTPS_URL_RE.test(href) && !/[\s<>"']/.test(href);
+  return okMailto || okHttps ? { label, href } : null;
+}
+
 function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProfile {
   const id = profile.identity;
   const links: PublishedProfileLink[] = (Array.isArray(id.links) ? id.links : [])
@@ -327,6 +357,8 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       workCategories: safeStrings(id.workCategories, dropped, 10, 40),
       openTo: safeStrings(id.openTo, dropped, 10, 40),
       links,
+      avatarUrl: publishAvatar(id.avatarUrl, dropped),
+      contact: publishContact(id.contact, dropped),
     },
     activity: {
       referenceDate: validDate(a.referenceDate) ?? new Date(0).toISOString().slice(0, 10),

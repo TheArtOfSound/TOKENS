@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { compactNumber, currency, dateTime, fullNumber, percent } from './lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
 import { ProfileView } from './views/ProfileView';
+import { ActivityDisclaimer } from './views/ActivityDisclaimer';
 import { Directory } from './views/Directory';
 import { Join } from './views/Join';
 import { Member } from './views/Member';
@@ -317,7 +318,7 @@ function SiteFooter() {
       <div className="footer-inner">
         <div className="footer-brand">
           <div className="brand"><QiraLogo /> <span>QIRA</span></div>
-          <p>A verified AI-work network. Measured on your machine, signed on your device, verified in the browser.</p>
+          <p>A local-first evidence layer for AI-assisted work. Measured on your machine, signed on your device, verified in your browser.</p>
         </div>
         <nav className="footer-cols" aria-label="Footer">
           <div>
@@ -396,11 +397,11 @@ export default function App() {
       {route.name === 'home' && (
         <>
         <section className="hero" id="top">
-          <div className="hero-pill"><span /> Verified AI-work network</div>
-          <h1>A professional record of AI work you can actually verify.</h1>
-          <p>Run an open-source collector on your own machine. It measures the AI work you already do, and produces a signed summary you publish yourself — no account, and your prompts, code, and file paths never leave your computer.</p>
-          <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Measure your own work →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
-          <ul className="hero-facts"><li>Measured, not self-reported</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
+          <div className="hero-pill"><span /> Local-first evidence layer for AI-assisted work</div>
+          <h1>Evidence of how you work with AI — not a token leaderboard.</h1>
+          <p>TOKENS turns the AI work you already do into a portable professional record: what you built, the tools and models you use, how efficiently you work, and which parts are independently trustworthy. It runs on your machine — no account, and your prompts, code, and file paths never leave your computer.</p>
+          <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Build your evidence record →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
+          <ul className="hero-facts"><li>Work &amp; outcomes first</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
         </section>
 
@@ -415,15 +416,6 @@ export default function App() {
 
         {snapshot.profile ? <ProfileView profile={snapshot.profile} daily={snapshot.daily} /> : null}
 
-        <section className="metrics-grid">
-          <MetricCard label="All-time tokens" value={compactNumber(snapshot.totals.totalTokens)} detail={fullNumber(snapshot.totals.totalTokens)} tone="dark" evidence="derived" />
-          <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} evidence="provider-reported" />
-          <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" evidence="provider-reported" />
-          <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" evidence="estimated" />
-          <MetricCard label="Largest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} evidence="derived" />
-          <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" evidence="metadata" />
-        </section>
-  
         <div className="panel-grid" id="scanner">
           <CachePanel snapshot={snapshot} />
           <ProviderPanel snapshot={snapshot} />
@@ -432,6 +424,21 @@ export default function App() {
           <VerificationPanel snapshot={snapshot} />
           <DailyChart snapshot={snapshot} />
         </div>
+
+        {/* Raw activity totals come LAST and are explicitly not a score. */}
+        <section className="activity-details" id="activity-details">
+          <div className="section-kicker"><span /> ACTIVITY &amp; RESOURCE USAGE</div>
+          <h2>Activity details</h2>
+          <ActivityDisclaimer />
+          <div className="metrics-grid">
+            <MetricCard label="AI activity volume" value={compactNumber(snapshot.totals.totalTokens)} detail={`${fullNumber(snapshot.totals.totalTokens)} tokens`} tone="dark" evidence="derived" />
+            <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={`${percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} — efficiency signal`} evidence="provider-reported" />
+            <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" evidence="provider-reported" />
+            <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" evidence="estimated" />
+            <MetricCard label="Busiest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} evidence="derived" />
+            <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" evidence="metadata" />
+          </div>
+        </section>
   
         <ProjectScanner projects={qiraProjects} />
   
