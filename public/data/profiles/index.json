@@ -1,6 +1,6 @@
 {
   "_comment": "Member registry. Each entry points at a snapshot the MEMBER hosts and signs; this file only records where to find it. To join, publish your own signed snapshot and open a pull request adding an entry here. Removing your entry removes you from the directory -- this project stores nothing of yours. The registry does NOT vouch for identity; every profile shows identity verification as pending.",
-  "updatedAt": "2026-07-24T00:00:00.000Z",
+  "updatedAt": "2026-07-24T03:22:57.590Z",
   "members": [
     {
       "handle": "bryan",
@@ -8,11 +8,23 @@
       "headline": "Founder, Qira LLC — AI systems, agent tooling, and applied research",
       "location": "Phoenix, Arizona, US",
       "availability": "Open to paid AI evaluations, research participation, beta programs, and consulting.",
-      "workCategories": ["AI evaluation", "Agent tooling", "Applied research", "Consulting", "Product engineering"],
+      "workCategories": [
+        "AI evaluation",
+        "Agent tooling",
+        "Applied research",
+        "Consulting",
+        "Product engineering"
+      ],
       "snapshotUrl": "/data/latest.json",
       "links": [
-        { "label": "Qira", "url": "https://imagineqira.com" },
-        { "label": "GitHub", "url": "https://github.com/TheArtOfSound" }
+        {
+          "label": "Qira",
+          "url": "https://imagineqira.com"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/TheArtOfSound"
+        }
       ],
       "operator": true
     }

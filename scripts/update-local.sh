@@ -36,6 +36,10 @@ fi
 # Install only if needed (immutable). node_modules present => skip the ~30s reinstall.
 [ -d node_modules ] || npm ci
 
+# Ingest BEFORE collect. The collector now publishes from the event ledger, so
+# skipping this would republish whatever the ledger last held and the site would
+# silently freeze while still looking freshly generated.
+npm run ingest
 npm run collect
 npm run validate:data
 npm run build
