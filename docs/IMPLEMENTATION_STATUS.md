@@ -89,12 +89,13 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 2. **Cold scan is still ~72s** the first time, or after a project is added/renamed (the depth-5 discovery walk). Warm runs are ~0.7s. Scope roots with `QIRA_SCAN_ROOTS`; force re-discovery with `TOKENS_SCAN_FORCE=1`.
 3. **Base64 secret detection is one level deep**; deeply nested encodings could evade the defense-in-depth scanner (the allowlist makes placement hard regardless).
 4. **Hostname/username detection outside path context is not attempted** (false-positive tradeoff) — see PRIVACY_BOUNDARY.
-5. **No cloud backend yet**, so authenticated ingestion and replay protection are designed but not built. Note: Ed25519 device signing is **Phase 1** in the dossier and does not require a backend — it is simply not built.
+5. **No cloud backend yet**, so authenticated ingestion and replay protection are designed but not built.
 6. **Cross-platform paths tested by fixtures only**, not on real Windows/Linux machines.
 7. **Legacy `collector/collect.ts` (v0.2.1)** remains, unused; safe to delete once confirmed unreferenced.
 8. **`qiraProjects` publishes git branch names** of allowlisted repos (scanned + truncated); avoid encoding sensitive info in branch names.
-10. **No key revocation.** A compromised device key cannot yet be repudiated — there is no published revocation list. Rotation works (delete the Keychain item and re-run).
 9. **Work artifacts are only as strong as their badge.** `collector_observed` proves the *project exists and is active on this machine* — it does **not** prove authorship, quality, or that the linked URL is genuinely that project. `link_provided` and `self_reported` assert nothing. Outcomes are never verifiable today.
+10. **No key revocation.** A compromised device key cannot yet be repudiated — there is no published revocation list. Rotation works: delete the Keychain item and re-run.
+11. **The signature is a device attestation, not proof of log authenticity.** Anyone controlling this Mac could feed the collector fabricated provider logs and it would sign them faithfully.
 
 ## Definition of Done for Phase 1 (dossier §38) — remaining
 - Restore live publishing (R1).
