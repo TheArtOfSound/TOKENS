@@ -33,7 +33,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 92/92 |
+| Unit tests (`vitest run`) | ✅ 142/142 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -49,7 +49,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Secret/PII/path scanner | ✅ done, tested | nested + base64 + control chars |
 | Compact history | ✅ done | 28 MB → 27 KB |
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
-| Test suite | ✅ done | 92 tests, adversarial fixtures |
+| Test suite | ✅ done | 142 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
@@ -63,6 +63,10 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | **Upload preview / export / delete** | ✅ done | `npm run consent`, `consent:preview` (exact published bytes), `consent:export`, `consent:delete` |
 | **Ed25519 device signing** | ✅ done, tested | keypair in macOS Keychain, signed manifest (nonce/scope/issuedAt/digest), `npm run verify`; 21 tests incl. tamper detection |
 | **Canonical JSON (RFC 8785 subset)** | ✅ done, tested | replaces `JSON.stringify` key-order dependence so a non-JS verifier can reproduce the signing bytes; spec published in `docs/architecture/CANONICALIZATION.md` |
+| **Canonical event model** | ✅ done, tested | event-level records read from provider JSONL; allowlist extraction; HMAC pseudonyms; 28 tests |
+| **SQLite event ledger** | ✅ done, tested | `node:sqlite` + WAL, append-only migrations with tested `down`, 21 tests |
+| **Versioned adapter framework** | ✅ done, tested | per-provider extractors (Claude + Codex); Codex is stateful for model attribution |
+| **Incremental log scanning** | ✅ done, tested | byte-offset checkpoints; rotation/truncation/partial-line handling; **135,655 events from ~2.15 GB in ~20s** |
 | Mobile responsiveness | ✅ fixed | eliminated pre-existing horizontal overflow (chart/SVG) |
 | Docs / threat model / privacy | ✅ done | full `docs/**` set |
 | Live publishing restore | ✅ done | R1 resolved by merge (no force-push); both lineages preserved on branches; launchd re-enabled |
@@ -73,14 +77,14 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | ~~Incremental/checkpointed scan~~ | ✅ **now built** | See the measured numbers in the built table above. |
 | ~~Consent / upload-preview / export / delete~~ | ✅ **now built** | See the built table above. |
 | ~~Ed25519 device signing~~ | ✅ **now built** | See the built table above. Revocation lists remain unimplemented. |
-| Canonical **event** model | ⛔ **Phase 1 — not built** | Finest granularity is a daily per-provider aggregate. No `eventId`, `ingestedAt`, per-record evidence class, or session pseudonym. Blocks ~40 downstream requirements. |
-| Adapter framework | ⛔ **not built** | 0 of 11. Providers are hardcoded, not pluggable versioned adapters. |
+| ~~Canonical event model~~ | ✅ **now built** | See the built table above. |
+| ~~Adapter framework~~ | ✅ **now built** | Versioned adapters with per-provider extractors; adding a provider touches no shared code. |
 | ~~Accessibility~~ | ✅ **now built** (partial) | focus-visible, reduced-motion, skip link, `main` landmark, heatmap grid marked decorative with a 95-row accessible table. Full WCAG 2.2 AA audit still not performed. |
 
 ### Later phases (dossier gates these — correctly deferred)
 | Area | Status | Notes |
 | --- | --- | --- |
-| SQLite event ledger | ⬜ Phase 2 | depends on the event model above |
+| ~~SQLite event ledger~~ | ✅ **now built** | `node:sqlite`, WAL, append-only migrations with tested rollback. |
 | Cloud sync / authenticated ingest | ⬜ Phase 2+ | no backend exists by design |
 | Opportunity marketplace / employer search | ⬜ Phase 4+ | dossier explicitly warns against building this first |
 
@@ -96,6 +100,8 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 9. **Work artifacts are only as strong as their badge.** `collector_observed` proves the *project exists and is active on this machine* — it does **not** prove authorship, quality, or that the linked URL is genuinely that project. `link_provided` and `self_reported` assert nothing. Outcomes are never verifiable today.
 10. **No key revocation.** A compromised device key cannot yet be repudiated — there is no published revocation list. Rotation works: delete the Keychain item and re-run.
 11. **The signature is a device attestation, not proof of log authenticity.** Anyone controlling this Mac could feed the collector fabricated provider logs and it would sign them faithfully.
+12. **Codex event-level totals run +6.7% above `ccusage` and the cause is not yet identified.** Claude agrees to −0.1%. Until this is run down, the published figures still source Codex from `ccusage`, not from the event ledger. See `docs/architecture/EVENT_LEDGER.md` §5.
+13. **Two records sharing a provider message id collapse to one event**, even if a token count was revised — first write wins. This is the fix for a +124% duplicate-inflation bug; the tradeoff is deliberate.
 
 ## Definition of Done for Phase 1 (dossier §38) — remaining
 - Restore live publishing (R1).
