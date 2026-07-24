@@ -11,3 +11,10 @@ public/data/raw/
 tsconfig.tsbuildinfo
 .tmp-bin/
 .tokens-cache/
+
+# From the origin lineage -- kept: these also protect the Ed25519 device key.
+*.env
+credentials.json
+*.pem
+*.key
+.credentials

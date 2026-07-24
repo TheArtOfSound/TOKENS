@@ -1,0 +1,44 @@
+{
+  "summary": "First-pass full-stack testing of Qira Agent Usage Observatory. All 6 backend API tests PASSED (health, /api/usage/latest shape, live drift, history, projects, ingest+history append) and all frontend acceptance criteria verified end-to-end on the public REACT_APP_BACKEND_URL.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_observatory_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py apply_drift() mutates the in-memory snapshot dict but does not persist drifted totals back to MongoDB. This is intentional (anchor-based recompute) and works, but the result is that history snapshots written via ingest contain only the moment-of-ingest totals, not the drifted live totals. Acceptable for this design.",
+    "POST /api/usage/ingest accepts arbitrary JSON with no Pydantic schema. Acceptable for a private publisher endpoint, but consider a minimal Pydantic model + optional shared-secret header before any public exposure.",
+    "CORS is allow_origins=['*'] with allow_credentials=True. FastAPI / starlette will silently downgrade credentials for wildcard origins; not a blocker for this read-only dashboard but worth pinning to the FE origin.",
+    "seed_if_empty() only runs on cold start with empty DB. If /app/public/data/latest.json is updated, the change will not flow into Mongo unless DB is wiped or POST /api/usage/ingest is called. Document this for the publisher workflow.",
+    "Frontend polls every 2s with no exponential backoff on failure; on a long outage this hammers the API. Minor."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_observatory_api.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (6/6)",
+    "frontend": "100% (all acceptance criteria)"
+  },
+  "test_credentials": "N/A - public read-only dashboard, no auth",
+  "seed_data_creation": "Ingest test temporarily overwrote 'latest' with a minimal payload, then restored the original /app/public/data/latest.json via a second ingest call. Verified GET /api/usage/latest after restore returns the full ~30.8B token snapshot with 2 providers and 8 projects.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend regression suite lives at /app/backend/tests/test_observatory_api.py and is safe to re-run (it self-restores the snapshot after ingest). The live drift test sleeps 3.2s and requires >=30,000 token delta - the rate is ~18,850 tokens/sec so this has a wide safety margin. Public URL: https://f9f1a35f-8aed-4298-b93e-8563c5b42f70.preview.emergentagent.com",
+  "observed_metrics": {
+    "live_drift_3s_backend": "~56,500 tokens delta",
+    "live_drift_5s_frontend_hero": "83,975 tokens delta",
+    "totals.totalTokens": "~30,846,000,000",
+    "project_rows_rendered": 8,
+    "providers_rendered": ["Codex", "Claude Code"]
+  },
+  "rca of the issue": "No issues found."
+}

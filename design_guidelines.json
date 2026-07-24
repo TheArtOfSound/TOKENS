@@ -1,0 +1,119 @@
+{
+  "project_name": "Qira Agent Usage Observatory",
+  "theme": "Dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast) fused with Retro-Futurism (The Technical Look)",
+  "vibe": "Supreme, premium, evidence-not-hype, live instrumentation, authoritative telemetry",
+  "colors": {
+    "background": {
+      "base": "#030303",
+      "surface": "#0A0A0A",
+      "surface_elevated": "#121212"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#8A8F98",
+      "muted": "#4A4D54"
+    },
+    "border": {
+      "default": "#1C1C1C",
+      "focus": "#333333"
+    },
+    "accents": {
+      "live_pulse": "#FF3B30",
+      "warning": "#FFB000",
+      "verified": "#00E5FF",
+      "claude_split": "#FFFFFF",
+      "codex_split": "#555555"
+    }
+  },
+  "typography": {
+    "font_families": {
+      "headings": "Cabinet Grotesk, sans-serif",
+      "body": "Outfit, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "hierarchy": {
+      "h1_hero_metric": "text-6xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tighter leading-none font-mono text-white",
+      "h2_panel": "text-2xl font-bold tracking-tight text-white uppercase",
+      "h3_widget": "text-xs font-bold tracking-[0.2em] text-secondary uppercase",
+      "body": "text-sm text-secondary leading-relaxed font-body",
+      "hash_code": "text-xs font-mono text-muted tracking-widest break-all"
+    },
+    "rules": [
+      "NEVER use Inter, Roboto, or Space Grotesk.",
+      "Metrics, data, and hashes must use JetBrains Mono.",
+      "Overlines/Widget Titles MUST be Uppercase + Tiny + Wide Spacing (tracking-[0.2em])."
+    ]
+  },
+  "surfaces_and_layout": {
+    "strategy": "GRID BORDERS (The Technical Look) - No soft shadows.",
+    "container": "Use a border-collapse style layout. Create the grid by wrapping widgets in a parent with `bg-[#1C1C1C] p-[1px] gap-[1px]` and set all child items to `bg-[#0A0A0A]`. This creates perfect 1px hairline technical borders.",
+    "spacing_scale": "Use p-8 or p-10 inside metric cards. Let the numbers breathe.",
+    "bento_grid_structure": {
+      "base": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-[1px]",
+      "hero_token_metric": "col-span-1 md:col-span-3 lg:col-span-2 row-span-2 h-full flex flex-col justify-between",
+      "cache_ratio": "col-span-1 lg:col-span-1 row-span-1",
+      "provider_split": "col-span-1 lg:col-span-1 row-span-1",
+      "daily_usage_chart": "col-span-1 md:col-span-3 lg:col-span-2 row-span-2",
+      "verification_layer": "col-span-1 md:col-span-2 lg:col-span-2 row-span-2",
+      "project_matrix": "col-span-1 md:col-span-3 lg:col-span-4 row-span-2"
+    }
+  },
+  "background_and_visuals": {
+    "animated_network_field": "Implement a pure CSS/SVG moving grid or TSParticles network background behind the UI. Keep opacity very low (5-10%) to ensure data contrast.",
+    "noise_texture": "Overlay a fixed `pointer-events-none opacity-[0.03]` SVG grain/noise texture across the entire viewport to give a premium matte finish."
+  },
+  "motion_and_interactions": {
+    "live_pulse": "CSS animation `@keyframes pulse` applied to a 6px red (#FF3B30) dot next to the 'LIVE' timestamp.",
+    "number_counters": "Use Framer Motion `useSpring` and `useTransform` to animate the token usage numbers counting up rapidly.",
+    "staggered_reveals": "Add `initial={{ opacity: 0, y: 15 }}` to bento grid children with staggered delays (0.05s increments).",
+    "hover_states": "Interactive elements must turn pure white on hover with `transition-colors duration-200`. Row hovers in the matrix should trigger a subtle `bg-[#121212]`."
+  },
+  "components": [
+    {
+      "name": "Navigation / Header",
+      "usage": "Top of page, sticky",
+      "rules": "Glassmorphism background (bg-black/60 backdrop-blur-xl) with border-b border-[#1C1C1C]. Left: QIRA text logo in Cabinet Grotesk. Right: Pulsing red dot + 'LIVE OBSERVATORY' + Current UTC timestamp (monospace)."
+    },
+    {
+      "name": "Token Usage Hero Metric",
+      "usage": "Dominant top-left bento widget",
+      "rules": "Displays all-time tokens (e.g., '14,204,910,394'). Use JetBrains Mono, extreme scaling. Subtitle: 'TOTAL TOKENS PROCESSED'. Optical alignment: bottom-left anchored."
+    },
+    {
+      "name": "Daily Usage Ledger",
+      "usage": "Bar chart area",
+      "rules": "Use Recharts or Shadcn Chart. Monochromatic bars (pure white for latest, muted gray for past). Hide default axes, use a minimal custom tooltip. No grid lines."
+    },
+    {
+      "name": "Project Matrix Scanner",
+      "usage": "Dense data table",
+      "rules": "Shadcn Table component. Hide external borders. Columns: Repo, Git State, Token Burn, Last Scanned. Align numbers right, text left. Use JetBrains Mono for table cells."
+    },
+    {
+      "name": "Verification Proof Layer",
+      "usage": "Terminal-style panel",
+      "rules": "Add subtle CSS scanlines (`repeating-linear-gradient`). Text is strictly monospace. Show Snapshot Hash (truncated), Schema Version, and a simulated scrolling log of 'Logs Withheld'."
+    }
+  ],
+  "accessibility_and_testing": {
+    "contrast": "Text must meet APCA standards. Deep black background ensures white text is > 4.5:1.",
+    "testing_attributes": [
+      "data-testid='hero-token-counter'",
+      "data-testid='live-status-indicator'",
+      "data-testid='cache-ratio-panel'",
+      "data-testid='provider-split-chart'",
+      "data-testid='daily-usage-chart'",
+      "data-testid='project-matrix-table'",
+      "data-testid='verification-hash-panel'"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "NOTE: Codebase uses .js files, NOT .tsx. Implement React components using standard ES6 modules (.jsx/.js).",
+    "Install dependencies: `yarn add framer-motion recharts tsparticles @tsparticles/engine @tsparticles/react`.",
+    "DO NOT use standard Shadcn Card default styles (no rounded corners, no standard borders). Override them using the Grid Borders strategy defined above.",
+    "Ensure all big numbers use a library like `framer-motion` to count up on initial render.",
+    "Use pure HTML/Tailwind for the bento layout to maintain absolute control over the hairlines.",
+    "Avoid color overload. The UI must be stark monochrome (#0A0A0A to #FFFFFF) with ONLY the live pulse using color (#FF3B30)."
+  ]
+}

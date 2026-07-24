@@ -42,6 +42,34 @@ npm run build
 
 # The collector is idempotent: if usage data did not change it rewrites nothing,
 # so there is nothing to commit and we exit quietly (no more 30-minute no-op commits).
+
+# --- Optional: publish the snapshot to a live ingest endpoint (from the origin lineage) ---
+# Kept from origin/main. Entirely opt-in: with the env vars unset this is a no-op,
+# so the default path stays local-first with no network egress. The payload is the
+# already-sanitized, schema-validated, signed public snapshot -- never raw logs.
+if [ -f "$REPO_DIR/.env" ]; then
+  # shellcheck disable=SC1091
+  set -a; . "$REPO_DIR/.env"; set +a
+fi
+
+if [ -n "${TOKENS_INGEST_URL:-}" ] && [ -n "${TOKENS_INGEST_TOKEN:-}" ]; then
+  echo "Publishing snapshot to live observatory: $TOKENS_INGEST_URL"
+  HTTP_CODE="$(curl -sS -o /tmp/qira-ingest-response.json -w "%{http_code}" \
+    -X POST "$TOKENS_INGEST_URL" \
+    -H "Content-Type: application/json" \
+    -H "X-Ingest-Token: $TOKENS_INGEST_TOKEN" \
+    --data-binary @"$REPO_DIR/public/data/latest.json" || echo "000")"
+  if [ "$HTTP_CODE" = "200" ]; then
+    echo "Live observatory updated (HTTP 200)."
+  else
+    echo "WARNING: ingest POST returned HTTP $HTTP_CODE" >&2
+    cat /tmp/qira-ingest-response.json >&2 || true
+    echo >&2
+  fi
+else
+  echo "Skipping live observatory push (TOKENS_INGEST_URL / TOKENS_INGEST_TOKEN not set)."
+fi
+
 if git diff --quiet -- public/data; then
   echo "No public data changes to publish."
   exit 0
