@@ -1,0 +1,240 @@
+{
+  "model": "signal → provenance → allowed claim → confidence → limitations",
+  "noUniversalScore": true,
+  "combinedAuthorityRule": "A combined figure never inherits more authority than its weakest supporting evidence. TOKENS publishes no universal or combined skill, quality, or employability score.",
+  "universalNonClaims": [
+    "identity",
+    "authorship",
+    "permission",
+    "expertise",
+    "quality",
+    "causation",
+    "business impact"
+  ],
+  "signals": [
+    {
+      "id": "active-day",
+      "signal": "Active AI-work day",
+      "provenance": "Collector-derived from provider-reported usage in local logs.",
+      "allowedClaim": "AI-assisted activity occurred on a given calendar day.",
+      "confidence": "high",
+      "establishes": [
+        "That AI tooling was used on that day"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "hours worked",
+        "effort",
+        "output value"
+      ],
+      "status": "built"
+    },
+    {
+      "id": "token-volume",
+      "signal": "Token volume",
+      "provenance": "Provider-reported usage accounting, deduplicated at the event level.",
+      "allowedClaim": "A quantity of model usage was accounted for.",
+      "confidence": "high",
+      "establishes": [
+        "How much model usage occurred"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "skill",
+        "productivity",
+        "effort",
+        "that more is better"
+      ],
+      "status": "built"
+    },
+    {
+      "id": "signed-snapshot",
+      "signal": "Signed snapshot",
+      "provenance": "Ed25519 signature by a device key, verifiable in the browser.",
+      "allowedClaim": "This record was produced by a specific device key and has not been altered since.",
+      "confidence": "high",
+      "establishes": [
+        "Record integrity",
+        "That one key produced it"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "who holds the key",
+        "that the source logs were genuine"
+      ],
+      "status": "built"
+    },
+    {
+      "id": "collector-observed-repo",
+      "signal": "Collector-observed repository",
+      "provenance": "Local filesystem/git scan on the member’s own machine.",
+      "allowedClaim": "A project is present and active on the member’s machine.",
+      "confidence": "medium",
+      "establishes": [
+        "Local presence of a project",
+        "Recent local git/file activity"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "ownership",
+        "that the linked URL is that project"
+      ],
+      "status": "built"
+    },
+    {
+      "id": "identity-proof",
+      "signal": "Identity proof (account control)",
+      "provenance": "A statement signed by the device key, published by the member under an external account (e.g. a public GitHub gist), fetched and verified in the browser.",
+      "allowedClaim": "The holder of this signing key also controls the named external account.",
+      "confidence": "medium",
+      "establishes": [
+        "Control of the linked account is tied to the signing key"
+      ],
+      "doesNotEstablish": [
+        "legal identity",
+        "that the external account itself is genuine or belongs to a real named person",
+        "authorship",
+        "expertise",
+        "quality",
+        "permission"
+      ],
+      "status": "built"
+    },
+    {
+      "id": "merged-pull-request",
+      "signal": "Merged pull request",
+      "provenance": "Imported from a version-control host (planned adapter).",
+      "allowedClaim": "A change authored under an identity landed in a repository.",
+      "confidence": "medium",
+      "establishes": [
+        "That a change was merged"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "code quality",
+        "that it stayed",
+        "impact"
+      ],
+      "status": "roadmap"
+    },
+    {
+      "id": "post-merge-durability",
+      "signal": "Post-merge durability",
+      "provenance": "Version-control history tracked over time (planned; see DURABILITY_SPEC.md).",
+      "allowedClaim": "A landed change survived N days without revert, rewrite, or hotfix.",
+      "confidence": "medium",
+      "establishes": [
+        "That a change persisted for a measured window",
+        "Absence of corrective rework in that window"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "that the author is skilled",
+        "that stability was caused by the change"
+      ],
+      "status": "roadmap"
+    },
+    {
+      "id": "passing-benchmark",
+      "signal": "Passing benchmark",
+      "provenance": "A defined assessment run under stated conditions (planned).",
+      "allowedClaim": "A performance level was achieved on a specific benchmark under stated conditions.",
+      "confidence": "conditional",
+      "establishes": [
+        "Performance on that benchmark, on that date"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "general expertise",
+        "performance outside the benchmark"
+      ],
+      "status": "roadmap"
+    },
+    {
+      "id": "third-party-confirmation",
+      "signal": "Third-party confirmation",
+      "provenance": "An attestation from a named external party (planned).",
+      "allowedClaim": "A named party confirmed a specific claimed outcome.",
+      "confidence": "conditional",
+      "establishes": [
+        "That a specific outcome was confirmed by that party"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "generalizable skill",
+        "that AI caused the outcome"
+      ],
+      "status": "roadmap"
+    },
+    {
+      "id": "self-submitted",
+      "signal": "Self-submitted claim",
+      "provenance": "Entered by the member. Not verified.",
+      "allowedClaim": "The member asserts this.",
+      "confidence": "none",
+      "establishes": [
+        "That the member made the claim"
+      ],
+      "doesNotEstablish": [
+        "identity",
+        "authorship",
+        "permission",
+        "expertise",
+        "quality",
+        "causation",
+        "business impact",
+        "that the claim is true"
+      ],
+      "status": "built"
+    }
+  ],
+  "note": "Read a profile bottom-up: each badge maps to a signal here, and the badge can support only that signal’s allowed claim at its stated confidence. Combining badges does not raise their authority."
+}

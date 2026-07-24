@@ -26,6 +26,7 @@ import { computeContentHash, publishSnapshot, type PublishedSnapshot } from './l
 import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { detectAnomalies } from './lib/anomaly';
+import { buildClaimAuthority } from './lib/claims';
 import { buildProfile, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
@@ -298,6 +299,13 @@ function main(): void {
   writeFileSync(
     path.join(OUT_DIR, 'key-history.json'),
     `${JSON.stringify(buildPublicKeyHistory(sig.keyId, sig.publicKey, published.generatedAt), null, 2)}\n`,
+  );
+
+  // Claim-authority ladder: static reference for what every badge can and cannot
+  // establish. Published so a reader (or an employer) can hold the profile to it.
+  writeFileSync(
+    path.join(OUT_DIR, 'claim-authority.json'),
+    `${JSON.stringify(buildClaimAuthority(), null, 2)}\n`,
   );
 
   writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);

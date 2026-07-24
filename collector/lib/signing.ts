@@ -469,3 +469,55 @@ export function buildPublicKeyHistory(currentKeyId: string, currentPublicKey: st
   });
   return { updatedAt: now, activeKeyId: currentKeyId, keys };
 }
+
+// ---------------------------------------------------------------------------
+// Identity proofs (account-control verification)
+// ---------------------------------------------------------------------------
+
+/**
+ * Sign a small statement object with the device key. Used for identity proofs:
+ * the member publishes a signed "I control key <keyId>" statement under an
+ * external account (e.g. a public gist), and a verifier confirms the same key
+ * that signed the profile also signed the statement. That ties account control
+ * to the key — it does NOT establish legal identity (see claims.ts).
+ */
+export function signStatement(statement: Record<string, unknown>, privateKeyPem: string): string {
+  const bytes = canonicalize(statement);
+  return sign(null, Buffer.from(bytes, 'utf8'), createPrivateKey(privateKeyPem)).toString('base64');
+}
+
+/** Verify a signed statement against a base64 SPKI public key. */
+export function verifyStatement(statement: Record<string, unknown>, signatureB64: string, publicKeyB64: string): boolean {
+  try {
+    const key = createPublicKey({ key: Buffer.from(publicKeyB64, 'base64'), format: 'der', type: 'spki' });
+    return verify(null, Buffer.from(canonicalize(statement), 'utf8'), key, Buffer.from(signatureB64, 'base64'));
+  } catch {
+    return false;
+  }
+}
+
+export interface IdentityProofDocument {
+  purpose: 'tokens-identity';
+  version: 1;
+  keyId: string;
+  publicKey: string;
+  github: string | null;
+  statement: string;
+  issuedAt: string;
+  signature: string;
+}
+
+/** Build the signed proof document a member publishes to prove account control. */
+export function buildIdentityProof(privateKeyPem: string, issuedAt: string, github: string | null): IdentityProofDocument {
+  const { base64, keyId } = publicKeyFrom(privateKeyPem);
+  const body = {
+    purpose: 'tokens-identity' as const,
+    version: 1 as const,
+    keyId,
+    publicKey: base64,
+    github,
+    statement: `I control the TOKENS signing key ${keyId}. Published to link this account to my TOKENS profile.`,
+    issuedAt,
+  };
+  return { ...body, signature: signStatement(body, privateKeyPem) };
+}

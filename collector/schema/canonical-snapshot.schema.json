@@ -331,7 +331,8 @@
             "openTo",
             "links",
             "avatarUrl",
-            "contact"
+            "contact",
+            "identityProofs"
           ],
           "properties": {
             "displayName": {
@@ -430,6 +431,31 @@
                 "href": {
                   "type": "string",
                   "pattern": "^(https://|mailto:)"
+                }
+              }
+            },
+            "identityProofs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "handle",
+                  "gistId"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "handle": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "gistId": {
+                    "type": "string",
+                    "maxLength": 64
+                  }
                 }
               }
             }

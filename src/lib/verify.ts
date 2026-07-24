@@ -63,6 +63,17 @@ function write(value: unknown, out: string[]): void {
   out.push('null');
 }
 
+/** Verify an Ed25519 signature (all base64) over a UTF-8 message, in-browser. */
+export async function verifyEd25519(publicKeyB64: string, signatureB64: string, message: string): Promise<boolean> {
+  if (!crypto?.subtle) return false;
+  try {
+    const key = await crypto.subtle.importKey('spki', base64ToBytes(publicKeyB64), { name: 'Ed25519' }, false, ['verify']);
+    return await crypto.subtle.verify('Ed25519', key, base64ToBytes(signatureB64), new TextEncoder().encode(message));
+  } catch {
+    return false;
+  }
+}
+
 function base64ToBytes(base64: string): ArrayBuffer {
   const binary = atob(base64);
   const buffer = new ArrayBuffer(binary.length);

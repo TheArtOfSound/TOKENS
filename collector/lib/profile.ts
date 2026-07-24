@@ -29,9 +29,15 @@ export interface ProfileContact {
   /** mailto: or https: — the recruiter action target. */
   href: string;
 }
+export interface IdentityProof {
+  type: 'github';
+  handle: string;
+  gistId: string;
+}
 export interface ProfileIdentity {
   displayName: string;
   headline: string;
+  identityProofs?: IdentityProof[];
   pronouns?: string | null;
   location?: string | null;
   bio?: string | null;

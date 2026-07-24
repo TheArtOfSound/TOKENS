@@ -8,7 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateKeyPairSync } from 'node:crypto';
 import { canonicalize } from '../canonicalJson';
-import { decodeKeychainValue, isRevoked, payloadDigest, publicKeyFrom, signSnapshot, verifySnapshot, verifySnapshotWithRevocations } from '../signing';
+import { buildIdentityProof, decodeKeychainValue, isRevoked, payloadDigest, publicKeyFrom, signSnapshot, verifySnapshot, verifySnapshotWithRevocations, verifyStatement } from '../signing';
 
 function testKey(): string {
   const { privateKey } = generateKeyPairSync('ed25519');
@@ -203,5 +203,32 @@ describe('key revocation', () => {
     const doc = signed();
     (doc.totals as Record<string, unknown>).totalTokens = 1;
     expect(verifySnapshotWithRevocations(doc, []).valid).toBe(false);
+  });
+});
+
+describe('identity proofs', () => {
+  const key = testKey();
+
+  it('builds a proof that verifies against its own key', () => {
+    const proof = buildIdentityProof(key, '2026-07-24T00:00:00Z', 'TheArtOfSound');
+    const { signature, ...body } = proof;
+    expect(verifyStatement(body, signature, proof.publicKey)).toBe(true);
+    expect(proof.github).toBe('TheArtOfSound');
+    expect(proof.purpose).toBe('tokens-identity');
+  });
+
+  it('fails verification if the statement is tampered with', () => {
+    const proof = buildIdentityProof(key, '2026-07-24T00:00:00Z', 'TheArtOfSound');
+    const { signature, ...body } = proof;
+    const tampered = { ...body, github: 'someone-else' };
+    expect(verifyStatement(tampered, signature, proof.publicKey)).toBe(false);
+  });
+
+  it('fails verification against a different key', () => {
+    const proof = buildIdentityProof(key, '2026-07-24T00:00:00Z', null);
+    const { signature, ...body } = proof;
+    const otherKey = testKey();
+    const { base64: otherPub } = publicKeyFrom(otherKey);
+    expect(verifyStatement(body, signature, otherPub)).toBe(false);
   });
 });

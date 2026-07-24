@@ -7,9 +7,10 @@
  * operator's.
  */
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { compactNumber, fullNumber } from '../lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
+import { verifyIdentityProof, type IdentityResult } from '../lib/identity';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
 
 export function initials(name: string): string {
@@ -301,14 +302,63 @@ function IntegrityPanel({ integrity }: { integrity: PublicUsageSnapshot['integri
   );
 }
 
+function IdentityProofs({
+  proofs,
+  keyId,
+}: {
+  proofs: NonNullable<PublicUsageSnapshot['profile']>['identity']['identityProofs'];
+  keyId?: string;
+}) {
+  const [results, setResults] = useState<IdentityResult[]>([]);
+  useEffect(() => {
+    if (!proofs?.length) return;
+    setResults(proofs.map((p) => ({ type: 'github' as const, handle: p.handle, url: `https://github.com/${p.handle}`, state: 'checking' as const, detail: '' })));
+    proofs.forEach((proof, i) => {
+      verifyIdentityProof(proof, keyId).then((r) =>
+        setResults((prev) => {
+          const next = [...prev];
+          next[i] = r;
+          return next;
+        }),
+      );
+    });
+  }, [proofs, keyId]);
+  if (!proofs?.length) return null;
+  return (
+    <div className="identity-proofs">
+      {results.map((r) => (
+        <a
+          key={r.handle}
+          className={`idp idp-${r.state}`}
+          href={r.url}
+          target="_blank"
+          rel="noreferrer"
+          title={r.detail}
+        >
+          <span aria-hidden="true" className="idp-dot" />
+          {r.state === 'verified'
+            ? `Controls github.com/${r.handle} ✓`
+            : r.state === 'failed'
+              ? `Identity proof failed (@${r.handle})`
+              : r.state === 'unreachable'
+                ? `Identity proof unreachable (@${r.handle})`
+                : `Verifying @${r.handle}…`}
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export function ProfileView({
   profile,
   daily,
   integrity,
+  keyId,
 }: {
   profile: NonNullable<PublicUsageSnapshot['profile']>;
   daily: PublicUsageSnapshot['daily'];
   integrity?: PublicUsageSnapshot['integrity'];
+  keyId?: string;
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -339,6 +389,7 @@ export function ProfileView({
                 ))}
               </div>
             ) : null}
+            <IdentityProofs proofs={identity.identityProofs} keyId={keyId} />
           </div>
         </div>
 

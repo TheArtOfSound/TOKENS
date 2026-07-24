@@ -6,11 +6,30 @@
   "location": "Phoenix Metro, Arizona, US",
   "bio": "Building Qira: local-first AI measurement, verified AI-work identity, and applied agent research. Daily hands-on user of Claude Code and Codex across research and product surfaces.",
   "availability": "Open to paid AI evaluations, research participation, beta programs, and consulting.",
-  "workCategories": ["AI evaluation", "Agent tooling", "Applied research", "Consulting", "Product engineering"],
-  "openTo": ["Paid evaluations", "Research studies", "Beta testing", "Contract work", "Consulting", "Expert interviews"],
+  "workCategories": [
+    "AI evaluation",
+    "Agent tooling",
+    "Applied research",
+    "Consulting",
+    "Product engineering"
+  ],
+  "openTo": [
+    "Paid evaluations",
+    "Research studies",
+    "Beta testing",
+    "Contract work",
+    "Consulting",
+    "Expert interviews"
+  ],
   "links": [
-    { "label": "Qira", "url": "https://imagineqira.com" },
-    { "label": "GitHub", "url": "https://github.com/TheArtOfSound" }
+    {
+      "label": "Qira",
+      "url": "https://imagineqira.com"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/TheArtOfSound"
+    }
   ],
   "_avatarUrl_comment": "Optional professional headshot. Must be an https URL you host. Falls back to initials if omitted.",
   "avatarUrl": null,
@@ -18,5 +37,12 @@
   "contact": {
     "label": "Invite to an opportunity",
     "href": "mailto:bryanleonard237@gmail.com?subject=Opportunity%20via%20TOKENS%20profile"
-  }
+  },
+  "identityProofs": [
+    {
+      "type": "github",
+      "handle": "TheArtOfSound",
+      "gistId": "5801ea9971a85f3de6001f17be35cbfe"
+    }
+  ]
 }

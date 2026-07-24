@@ -93,6 +93,7 @@ export interface PublishedProfile {
     workCategories: string[];
     openTo: string[];
     links: PublishedProfileLink[];
+    identityProofs: { type: string; handle: string; gistId: string }[];
     avatarUrl: string | null;
     contact: { label: string; href: string } | null;
   };
@@ -356,6 +357,28 @@ function publishContact(value: unknown, dropped: string[]): { label: string; hre
   return okMailto || okHttps ? { label, href } : null;
 }
 
+const GH_HANDLE_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$/;
+const GIST_ID_RE = /^[a-f0-9]{6,64}$/i;
+
+/** Publish identity proofs: only well-formed GitHub handle + gist id survive. */
+function publishIdentityProofs(
+  proofs: unknown,
+  dropped: string[],
+): { type: string; handle: string; gistId: string }[] {
+  if (!Array.isArray(proofs)) return [];
+  return proofs
+    .map((p) => {
+      const proof = p as { type?: unknown; handle?: unknown; gistId?: unknown };
+      const handle = safeStringOrNull(proof.handle, dropped, 40);
+      const gistId = safeStringOrNull(proof.gistId, dropped, 64);
+      if (proof.type !== 'github' || !handle || !gistId) return null;
+      if (!GH_HANDLE_RE.test(handle) || !GIST_ID_RE.test(gistId)) return null;
+      return { type: 'github', handle, gistId };
+    })
+    .filter((p): p is { type: string; handle: string; gistId: string } => p !== null)
+    .slice(0, 6);
+}
+
 function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProfile {
   const id = profile.identity;
   const links: PublishedProfileLink[] = (Array.isArray(id.links) ? id.links : [])
@@ -382,6 +405,7 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       workCategories: safeStrings(id.workCategories, dropped, 10, 40),
       openTo: safeStrings(id.openTo, dropped, 10, 40),
       links,
+      identityProofs: publishIdentityProofs(id.identityProofs, dropped),
       avatarUrl: publishAvatar(id.avatarUrl, dropped),
       contact: publishContact(id.contact, dropped),
     },

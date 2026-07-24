@@ -466,3 +466,38 @@ summary:focus:not(:focus-visible) {
 .advanced summary:hover{color:var(--ink)}
 .advanced .command{margin-top:10px}
 .os-note{margin:24px 0 0;padding:14px 16px;border:1px dashed var(--line);border-radius:12px;font-size:.86rem;line-height:1.6}
+
+/* Claim-authority page ----------------------------------------------------- */
+.claims-page{position:relative;z-index:1;max-width:920px;margin:0 auto;padding-top:48px}
+.claims-page h2{font-size:clamp(1.9rem,3.5vw,3.1rem);line-height:1.03;letter-spacing:-.06em;margin:0 0 14px}
+.claims-invariant{margin:18px 0;padding:18px 20px;border:2px solid #06070c;border-radius:14px;background:#06070c;color:#fff;line-height:1.5}
+.claims-invariant strong{color:#9bd2ff}
+.claims-universal{margin:22px 0;padding:18px 20px;border:1px solid #f0c8ce;border-radius:14px;background:#fff4f5}
+.claims-universal h3{margin:0 0 10px;font-size:1rem}
+.claims-universal ul{margin:0;padding-left:18px;columns:2;color:#9f1239;font-weight:700}
+.claims-ladder{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:16px;counter-reset:claim}
+.claim-row{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.9);box-shadow:0 12px 40px rgba(20,30,50,.05);padding:20px}
+.claim-roadmap{opacity:.9;background:#fafbfc}
+.claim-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.claim-head h3{margin:0;font-size:1.2rem;letter-spacing:-.03em;flex:1 1 auto}
+.claim-status{font-size:.66rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+.claim-status-built{background:#edf7f1;color:#166534}
+.claim-status-roadmap{background:#f1f3f6;color:#667085}
+.claim-conf{font-size:.66rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.claim-body{margin:0;display:grid;gap:10px}
+.claim-body>div{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.claim-body dt{color:var(--faint);font-size:.7rem;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
+.claim-body dd{margin:0;color:var(--ink);line-height:1.5}
+.claim-allowed{font-weight:650}
+.claim-body dd ul{margin:0;padding-left:16px}
+.claim-yes li{color:#166534}
+.claim-no li{color:#9f1239}
+@media(max-width:640px){.claim-body>div{grid-template-columns:1fr;gap:3px}.claims-universal ul{columns:1}}
+
+/* Identity proofs (account-control badges) --------------------------------- */
+.identity-proofs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.idp{display:inline-flex;align-items:center;gap:7px;font-size:.76rem;font-weight:800;letter-spacing:.01em;padding:6px 11px;border-radius:999px;border:1px solid currentColor;text-decoration:none}
+.idp-dot{width:7px;height:7px;border-radius:999px;background:currentColor}
+.idp-verified{color:#166534;background:#edf7f1}
+.idp-failed{color:#9f1239;background:#fff4f5}
+.idp-unreachable,.idp-checking{color:#667085;background:#f1f3f6}
