@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T21:16:41.895Z",
+  "generatedAt": "2026-07-24T21:47:00.069Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3083,8 +3083,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "b745888",
-        "changedFiles": 5
+        "commit": "f05b861",
+        "changedFiles": 3
       },
       "stack": [
         "React",
@@ -3117,7 +3117,7 @@
         "css": 2,
         "tsx": 14
       },
-      "lastModified": "2026-07-24T21:08:53.522Z",
+      "lastModified": "2026-07-24T21:46:54.926Z",
       "scannerWarnings": [
         "match:scored score:1115 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com, package.json, vite"
       ],
@@ -3266,8 +3266,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "b745888",
-        "changedFiles": 5
+        "commit": "f05b861",
+        "changedFiles": 3
       },
       "stack": [
         "React",
@@ -3300,7 +3300,7 @@
         "css": 2,
         "tsx": 14
       },
-      "lastModified": "2026-07-24T21:08:53.522Z",
+      "lastModified": "2026-07-24T21:46:54.926Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, text~qira-ledger, domain=ledger.imagineqira.com, package."
       ]
@@ -3660,7 +3660,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "a1eddb6724df9ec901d923fc18d3acb9395ad35cd8fc2e364b71bf6547984296",
+    "snapshotSha256": "a55bb5e614fd1a56ba8377dd438e1c172a7c6cc098e8fe844ab2b1497b8bc9c7",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3670,12 +3670,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-24T21:16:41.974Z",
-    "nonce": "98e6fcf8-23a2-48c7-bda0-479637fb12aa",
+    "issuedAt": "2026-07-24T21:47:00.137Z",
+    "nonce": "1aa3e4a1-5761-4deb-8a03-6a2c2ef26f8a",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "533a2a9654510c05951a044c2bb28220435c7106547d159498e72d913e23fc35",
-    "signature": "WYolFvLD76ZyDXoQZbmHR2b92hHUISpI+KkAP4kBua7ncuUjzQ9R9tOd/al8p/aQ1ol/GIgmaX1yXBPY8sxqCg==",
+    "payloadSha256": "5a04bfb1dab77d479c75f6f9ba9eb6cfeb04602bfbfc27d9daa7a96ec322cdd6",
+    "signature": "LRpkbsj0Suhf4tLe0KhQ+wEAV82qD7qfoPHohlevEd8YLacwL7yMt8jog8TyNWi6knOthumd7cpjTVP7wbavCg==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
