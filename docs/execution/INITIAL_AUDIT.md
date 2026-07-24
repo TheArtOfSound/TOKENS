@@ -4,6 +4,11 @@ _Audit date: 2026-07-23 · Auditor: Claude (Opus 4.8) principal-engineer session
 
 This is the verified, runtime-grounded state of the TOKENS project as found on Bryan's Mac. It deliberately separates **what the documentation claimed** from **what the running system actually does** (per the dossier: "Do not conflate documentation with verified runtime behavior").
 
+> **Provenance note (added during the honesty pass).** The findings below were gathered from the untouched
+> baseline *before* any code was changed. However, this file was **committed last** (`05776c3`), after the
+> seven architectural commits — so git history alone does not demonstrate the claimed ordering. Treat the
+> baseline figures here as recorded-then-committed, not as independently timestamped pre-change evidence.
+
 ## 1. Repository & environment (verified)
 
 | Item | Value |
@@ -59,10 +64,10 @@ Reported, derived, and estimated values were indistinguishable; `estimatedCostUs
 `package.json` used `"latest"` for every dependency — non-reproducible builds. **Fixed this session** (D6): pinned to exact installed versions.
 
 ### F7 — Zero automated tests (HIGH, verifiability)
-No test runner, no tests. **Fixed this session** (D7): 35 tests across normalization, dedup, privacy/redaction, allowlist publication, schema validation, history, and strangler equivalence.
+No test runner, no tests. **Fixed this session** (D7): 53 tests across normalization, dedup, privacy/redaction, allowlist publication, schema validation, history, and strangler equivalence.
 
 ### F8 — Collector scanner is slow / broad (MEDIUM, efficiency + privacy)
-`qiraScanner.ts` walks `~/Projects, ~/nous, ~/Developer, ~/Code, ~/Desktop, ~/Sites, ~/Documents` to depth 5 and reads up to 20 KB of up to 80 files per candidate for scoring. A full run exceeded 2 minutes interactively. Only derived metadata is published (never file contents), but the scan is expensive and reads broadly. Scoped via `QIRA_SCAN_ROOTS`. Flagged for future incremental/scoped redesign (roadmap).
+`qiraScanner.ts` walks `~/Projects, ~/nous, ~/Developer, ~/Code, ~/Desktop, ~/Sites, ~/Documents` to depth 5 and reads up to 20 KB of up to 80 files per candidate for scoring. A full run exceeded 2 minutes interactively. Only derived metadata is published (never file contents), but the scan is expensive and reads broadly. Scoped via `QIRA_SCAN_ROOTS`. Flagged for incremental/scoped redesign — this is **dossier Phase 1 scope**, not roadmap.
 
 ### F9 — `memory/test_credentials.md` on `origin/main` (LOW, hygiene — NOT a secret leak)
 A file by that name exists on `origin/main` (public repo). Inspected safely (redacted): it is a **notes file** stating the app has no auth and describing the Mongo collection layout in prose. **No API keys, passwords, or connection strings** were found. Recommendation: rename/remove for hygiene; it does disclose that a backend ingest API is unauthenticated. No credential rotation emergency.

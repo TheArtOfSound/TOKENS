@@ -274,7 +274,9 @@ export function deriveVerification(activity: ProfileActivity, work?: WorkEvidenc
     {
       label: 'Collector verified',
       status: 'verified',
-      basis: 'Aggregate built by the open-source local collector; the snapshot hash verifies the public file was not altered after generation.',
+      // Do NOT claim "open source" here: the repo has no LICENSE and the hardened
+      // collector is not yet published. Claim only what is demonstrably true.
+      basis: 'Aggregate built by the local collector on this machine; the snapshot hash verifies the public file was not altered after generation.',
     },
     {
       label: 'Provider reported',

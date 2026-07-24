@@ -2,7 +2,11 @@
 
 Each phase advances only on **objective evidence** (dossier §07). Do not build the social/marketplace/enterprise layer before the collector and privacy foundation are proven. Prefer one fully-working vertical slice over many half-built screens.
 
-## Phase 0 — Reproducible baseline  ✅ (this session)
+## Phase 0 — Reproducible baseline  ⚠️ NOT MET (deploy gate unmet)
+
+> Rebuild, scan, and validate are reproducible, but the exit gate also requires **deploy with no
+> undocumented manual steps**. Publishing is blocked by the R1 origin divergence and the launchd job is
+> unloaded, so this phase cannot be marked complete.
 **Exit gate:** the observatory can be rebuilt, scanned, validated, and deployed with zero undocumented manual steps.
 - ✅ Clean `npm ci` install; typecheck; tests; `validate:data`; build all green.
 - ✅ Deploy path documented (CI: `npm ci` → typecheck → test → validate → audit → build → Pages).

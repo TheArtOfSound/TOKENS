@@ -33,8 +33,9 @@ jobs:
         run: npm test
       - name: Validate published data (schema + hash + secret scan)
         run: npm run validate:data
-      - name: Dependency audit (advisory)
-        run: npm audit --audit-level=high || true
+      - name: Dependency audit (blocking)
+        # Must be able to fail the build. A `|| true` here makes the gate decorative.
+        run: npm audit --audit-level=high
       - name: Build
         run: npm run build
         env:

@@ -15,7 +15,7 @@ The causal chain must stay explicit at every step:
 - ✅ **Content minimization:** raw prompts/responses/code/paths never persisted or published.
 - ✅ **Open, inspectable collector:** source + public schema + methods documented.
 - ◑ **Explicit, revocable consent:** privacy posture + `fieldsPublished` shown; full interactive upload-preview with per-field toggles = roadmap.
-- ✅ **Promotion integrity (design):** data model keeps organic evidence separate from any future paid placement.
+- ⬜ **Promotion integrity:** NOT built. No promotion, labeling, or ranking code exists in any form. The intent is that organic evidence stays separate from paid placement, but nothing enforces it yet.
 
 ## Users & jobs-to-be-done
 - ✅ **AI power user:** one accurate view across Claude Code + Codex with lifetime history, daily patterns, cost, cache effectiveness, and a shareable surface. (Gemini/Cursor/Ollama/etc. = future adapters.)

@@ -8,7 +8,7 @@ _Written so another engineer (or agent) can continue without guessing. Session: 
 - Recovery branch **`recovery/main-2026-07-23`** points at `c7154ba` (preserves the 1,252 local data commits).
 - The launchd collector job is **disabled** for safety (R6).
 - Regenerated `public/data/latest.json` (schema 2.0.0) + compact `history.json` are on the branch and validated.
-- All checks green: typecheck, 35 tests, `validate:data`, build, `npm audit` (0 vulns).
+- All checks green: typecheck, 53 tests, `validate:data`, build, `npm audit` (0 vulns).
 
 ## To reopen and continue the project
 ```bash
@@ -48,10 +48,23 @@ Whatever you choose: **do not force-push without a backup branch**, and make the
 - The pre-session HEAD is `c7154ba` (also `recovery/main-2026-07-23`).
 
 ## Key files added/changed this session
-- Added: `collector/lib/{canonical,normalize,secretScan,publish,history,snapshot}.ts`, `collector/lib/__tests__/*.test.ts`, `collector/fixtures/*`, `collector/schema/canonical-snapshot.schema.json`, `vitest.config.ts`, `.claude/launch.json`, `docs/**`.
+- Added: `collector/lib/{canonical,normalize,secretScan,publish,history,snapshot,profile}.ts`, `collector/lib/__tests__/*.test.ts`, `collector/fixtures/*`, `collector/schema/canonical-snapshot.schema.json`, `vitest.config.ts`, `.claude/launch.json`, `profile/{profile,work}.json`, `docs/**`.
 - Rewritten: `collector/collectV2.ts`, `collector/validateLatest.ts`, `scripts/update-local.sh`, `.github/workflows/pages.yml`, `package.json`.
-- Frontend: `src/App.tsx`, `src/lib/usage.ts`, `src/styles.css` (measurement/methodology UI).
+- Frontend: `src/App.tsx`, `src/lib/usage.ts`, `src/styles.css` (measurement/methodology UI, profile, activity heatmap, work evidence).
 - Legacy `collector/collect.ts` (v0.2.1) left in place, unused; safe to delete once confirmed unreferenced.
 
+## Later additions in the same session (this file was originally written at commit `05776c3` and did not cover them)
+- **Professional profile layer** — `collector/lib/profile.ts`: identity-first profile, derived activity
+  (active AI-work days, streaks, tools/models), honest verification categories. Self-submitted identity in
+  `profile/profile.json`, sanitized on publish.
+- **Activity heatmap** — 26-week GitHub-style calendar driven by measured daily data.
+- **Connected work artifacts + outcomes** — `profile/work.json`; three-tier evidence badges
+  (`collector_observed` / `link_provided` / `self_reported`), with badge forgery blocked in `publish.ts`.
+  Outcomes are always `self_reported`.
+- **Documentation honesty pass** — a full-dossier audit (496 requirements) found **14 overclaims in this
+  repo's own docs**; all were corrected. See `docs/IMPLEMENTATION_STATUS.md` for measured coverage (14.8%).
+
 ## Next highest-value step
-Resolve R1 (choose the canonical lineage), then re-enable the hardened publisher so the live site updates again. After that: implement the incremental/scoped collector scan (R5) to meet the performance budget.
+Resolve R1 (choose the canonical lineage), then re-enable the hardened publisher so the live site updates again.
+After that, the dossier's **Phase 1** gaps in priority order: incremental/checkpointed scan + event ledger (R5),
+the consent/upload-preview layer, and Ed25519 device signing. These are Phase 1 in the dossier — not roadmap.

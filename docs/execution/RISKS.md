@@ -10,7 +10,7 @@ Local `main` is 1,252 ahead / 11 behind `origin/main`; merge-base `216d9c9`. Ori
 
 ## R2 — Privacy / content-leak is existential (H, MITIGATED)
 A blocklist validator could leak any unanticipated field.
-**Mitigation:** allowlist publication transform (construct, not redact) + nested secret scanner + fail-closed collector write + schema `additionalProperties:false` + `validate:data` gate + 35 tests incl. adversarial fixtures. Verified: 0 prohibited patterns in the regenerated data and in all served `dist/` assets.
+**Mitigation:** allowlist publication transform (construct, not redact) + nested secret scanner + fail-closed collector write + schema `additionalProperties:false` + `validate:data` gate + 53 tests incl. adversarial fixtures. Verified: 0 prohibited patterns in the regenerated data and in all served `dist/` assets.
 **Residual:** base64 decode is one level deep; hostname/username detection outside path context is intentionally not attempted (documented in PRIVACY_BOUNDARY).
 
 ## R3 — Data-accuracy / inflation (H, MITIGATED)
@@ -19,7 +19,7 @@ No provenance previously; risk of double-counting and of estimates being read as
 
 ## R4 — Non-reproducible builds (M, MITIGATED)
 `"latest"` everywhere.
-**Mitigation:** all deps pinned to exact versions; CI uses `npm ci`; upgrade policy documented. 0 npm-audit vulnerabilities.
+**Mitigation:** all deps pinned to exact versions; CI uses `npm ci`. No upgrade policy document exists yet. 0 npm-audit vulnerabilities.
 
 ## R5 — Collector inefficiency / broad filesystem read (M, PARTIALLY MITIGATED)
 `qiraScanner` walks the home dir to depth 5 and reads file contents for scoring; a full run took ~114s and one broad run exceeded 2 minutes.

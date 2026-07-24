@@ -38,4 +38,4 @@ macOS/Linux/Windows/`/private` paths · Anthropic/OpenAI/AWS/GitHub/Google/Slack
 ## What a viewer can independently verify
 - Recompute the SHA-256 over the published snapshot (with `snapshotSha256` nulled) and compare to `verification.snapshotSha256`.
 - Confirm `verification.rawLogsPublished === false` and `privacy.rawContentPersisted === false`.
-- Read the open-source collector to confirm the allowlist and scanner behavior.
+- Read the collector source to confirm the allowlist and scanner behavior. (Note: the repo has no LICENSE yet, so the code is not formally open source — see IMPLEMENTATION_STATUS "Known limitations".)

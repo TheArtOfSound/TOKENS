@@ -25,10 +25,10 @@ Scope: the local collector, the public JSON artifact, the static site, and the d
 | T5 | **Over-claiming** integrity | Presenting the hash as proof logs were immutable | `verification.proves` states exactly what it proves; UI mirrors it | **Mitigated** |
 | T6 | **Data inflation / double counting** | Same day counted from multiple sources | Deterministic dedup by `date:provider`, keep-max not sum; reconciliation warnings | **Mitigated** |
 | T7 | **Fabricated data** | NaN/negative/injected metrics | Numeric coercion to safe non-negative; null-with-reason cost; totals re-derived | **Mitigated** |
-| T8 | **Supply-chain** compromise | Malicious dep update | Deps pinned to exact versions; `npm ci`; `npm audit` in CI (advisory) | **Partially mitigated** (see R-dep) |
+| T8 | **Supply-chain** compromise | Malicious dep update | Deps pinned to exact versions; `npm ci`; `npm audit --audit-level=high` now **blocking** in CI (was `\|\| true`, i.e. decorative). Still no SBOM, no signed release, no revocation list. | **Partially mitigated** (see R-dep) |
 | T9 | **Denial of data** / stale site | Push rejected, collector loops | Idempotent no-op skip; no-clobber-on-empty; push resilience in update script | **Improved** (divergence still needs Bryan) |
 | T10 | **Local resource abuse** | Broad filesystem scan | `QIRA_SCAN_ROOTS` scoping; roadmap: incremental scan | **Partially mitigated** |
-| T11 | **Repo history exposure** | Secrets committed historically | History reviewed; `test_credentials.md` on origin is a notes file, no secrets (F9) | **Reviewed** |
+| T11 | **Repo history exposure** | Secrets committed historically | History reviewed **once, manually** — not automated, not re-run per commit; `test_credentials.md` on origin is a notes file, no secrets (F9) | **Reviewed once — not continuously enforced** |
 | T12 | **XSS** in the site | Malicious string rendered | React escapes by default; all rendered strings pass the secret/allowlist filter; no `dangerouslySetInnerHTML` | **Mitigated** |
 | T13 | **Prompt-injection via tool data** | Instructions embedded in scanned files/logs | Collector treats all scanned content as data, never executes it; no LLM in the collector path | **Mitigated** |
 

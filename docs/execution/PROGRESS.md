@@ -13,7 +13,7 @@
 - **Allowlist publication transform** (`publish.ts`) — constructs the published object from approved fields; unknown fields cannot pass through.
 - **Nested secret/PII/path scanner** (`secretScan.ts`) with base64 + control-char handling; fail-closed collector write.
 - **Upgraded validator** (`validateLatest.ts`): JSON-Schema (Ajv 2020) + hash verification + secret scan over `latest.json` and `history.json`.
-- **35 tests** (vitest) incl. adversarial privacy fixtures and strangler equivalence.
+- **53 tests** (vitest) incl. adversarial privacy fixtures and strangler equivalence.
 - **Idempotent + no-clobber collector**; **history.json 28 MB → 27 KB**.
 - **Frontend honesty UI**: evidence tags per metric, Measurement & Methodology panel, honest "hash proves" copy.
 - **Pinned deps + hardened CI** (`npm ci`, typecheck, tests, validate, audit, build); **0 vulnerabilities**.
@@ -33,4 +33,4 @@
 
 ### Not done (deferred by design — see ROADMAP)
 - Origin/local reconciliation (needs Bryan — R1).
-- Cloud sync backend, authenticated ingest, SQLite ledger, Rust core, incremental checkpoint scan, Ed25519 device signing, connected work-artifact verification, opportunity marketplace, employer search.
+- Cloud sync backend, authenticated ingest, SQLite ledger, Rust core, incremental checkpoint scan, Ed25519 device signing, opportunity marketplace, employer search. (Connected work-artifact verification IS built — see IMPLEMENTATION_STATUS; only third-party *outcome* verification remains unbuilt.)

@@ -1,6 +1,11 @@
 # Qira Agent Usage Observatory
 
-A public, auto-updated portfolio dashboard for local coding-agent token usage across Claude Code and Codex.
+A public portfolio dashboard for local coding-agent token usage across Claude Code and Codex.
+
+> **Current state (2026-07-23):** automatic publishing is **not running**. The `com.qira.tokens.collector`
+> launchd job is unloaded, and the live site serves a snapshot from 2026-06-18 (collector 0.3.0) while local
+> is 0.4.0. See `docs/IMPLEMENTATION_STATUS.md`. Do not describe this as auto-updating until the publisher is
+> re-enabled and the origin divergence (R1) is resolved.
 
 This repo is designed to work as a static GitHub Pages site backed by sanitized JSON generated on Bryan's Mac. The public site never needs direct access to the machine, raw logs, prompts, session text, private repo names, local paths, hostnames, usernames, API keys, or `.env` values.
 
@@ -55,15 +60,16 @@ npm run build
 open "http://localhost:5199"
 ```
 
-The collector tries these commands and uses whatever succeeds:
+The collector runs exactly these two commands:
 
 ```bash
-ccusage daily --json
 ccusage claude daily --json
 ccusage codex daily --json
-ccusage monthly --json
-ccusage session --json
 ```
+
+`ccusage session --json` is **deliberately never used**: session records carry local filesystem paths.
+See [`docs/security/PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md). `daily`/`monthly` aggregate
+modes are not invoked either — the two per-provider calls above are the only source of usage data.
 
 ## Publish updated data from your Mac
 

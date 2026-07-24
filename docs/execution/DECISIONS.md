@@ -32,11 +32,11 @@ Governing order of authority (from the dossier): protect data/secrets → preser
 **Known limitation:** Does not attempt to detect arbitrary hostnames/usernames outside path context (would false-positive). Documented in PRIVACY_BOUNDARY.
 
 ## D6 — Pin all dependencies to exact versions; add `npm ci` to CI
-**Decision:** `package.json` pins every dependency to the exact installed version (react 19.2.7, vite 8.0.16, typescript 6.0.3, tsx 4.22.4, ajv 8.17.1, vitest 3.2.4, etc.). CI switched from `npm install` to `npm ci` for immutable installs.
+**Decision:** `package.json` pins every dependency to the exact installed version (react 19.2.7, vite 8.0.16, typescript 6.0.3, tsx 4.22.4, ajv 8.20.0, vitest 3.2.7, etc.). CI switched from `npm install` to `npm ci` for immutable installs.
 **Why:** `"latest"` everywhere made builds non-reproducible (dossier P0.4). Pinned only after the baseline build was verified green.
 
 ## D7 — Add a real test suite (vitest) and wire it into CI as a release gate
-**Decision:** 35 tests across normalization/dedup, adversarial privacy, allowlist publication, JSON-Schema validation, compact history, and strangler equivalence. CI runs typecheck → tests → validate:data → build; any failure blocks deploy.
+**Decision:** 53 tests across normalization/dedup, adversarial privacy, allowlist publication, JSON-Schema validation, compact history, and strangler equivalence. CI runs typecheck → tests → validate:data → build; any failure blocks deploy.
 **Why:** Zero tests meant no change was safe. Successful compilation is not completion.
 
 ## D8 — Idempotent collector + no-clobber + fail-closed publication

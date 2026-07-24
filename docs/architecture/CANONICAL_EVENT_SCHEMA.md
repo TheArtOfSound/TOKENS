@@ -1,5 +1,10 @@
 # TOKENS — Canonical Evidence Model & Published Schema
 
+> **Scope warning.** Despite this file’s name, TOKENS has **no event-level record type**. The finest
+> granularity anywhere is a daily per-provider aggregate row. There is no `eventId`, `ingestedAt`,
+> per-record evidence class, session pseudonym, or source fingerprint. This document describes the
+> **published snapshot contract**. A true canonical *event* model is unbuilt (dossier §16, §20).
+
 Schema version **2.0.0**. Machine-readable JSON Schema: [`collector/schema/canonical-snapshot.schema.json`](../../collector/schema/canonical-snapshot.schema.json). Types: [`collector/lib/canonical.ts`](../../collector/lib/canonical.ts).
 
 ## Measurement classes (the core of the model)
