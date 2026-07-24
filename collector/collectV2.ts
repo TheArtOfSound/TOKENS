@@ -27,6 +27,7 @@ import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { detectAnomalies } from './lib/anomaly';
 import { buildClaimAuthority } from './lib/claims';
+import { renderBadge } from './lib/badge';
 import { buildProfile, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
@@ -306,6 +307,14 @@ function main(): void {
   writeFileSync(
     path.join(OUT_DIR, 'claim-authority.json'),
     `${JSON.stringify(buildClaimAuthority(), null, 2)}\n`,
+  );
+
+  // Embeddable badge for a README / personal site. Reports ACTIVE DAYS, never
+  // token volume — a token count on a README is the vanity metric this project
+  // exists to avoid.
+  writeFileSync(
+    path.join(OUT_DIR, 'badge.svg'),
+    renderBadge({ activeDays: published.profile?.activity.activeDays ?? 0 }),
   );
 
   writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);

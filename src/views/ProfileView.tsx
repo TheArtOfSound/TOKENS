@@ -351,16 +351,63 @@ function IdentityProofs({
   );
 }
 
+/**
+ * Embeddable badge — the distribution loop.
+ *
+ * A member pastes this into their README or site and it links back to their
+ * verifiable profile. It deliberately reports ACTIVE DAYS, never token volume:
+ * a token count on a README is precisely the vanity metric this project refuses.
+ */
+function BadgeEmbed({ handle }: { handle?: string }) {
+  const [copied, setCopied] = useState<string | null>(null);
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ledger.imagineqira.com';
+  const badgeUrl = `${origin}${import.meta.env.BASE_URL}data/badge.svg`;
+  const profileUrl = handle ? `${origin}${href({ name: 'member', handle })}` : origin;
+  const snippets: Array<[string, string]> = [
+    ['Markdown', `[![TOKENS verified](${badgeUrl})](${profileUrl})`],
+    ['HTML', `<a href="${profileUrl}"><img src="${badgeUrl}" alt="TOKENS verified AI-work profile"></a>`],
+  ];
+  const copy = (label: string, text: string) => {
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(label);
+      window.setTimeout(() => setCopied(null), 1600);
+    }, () => setCopied(null));
+  };
+  return (
+    <div className="jcard jcard-pad badge-embed">
+      <h3 className="jcard-title">Share this profile</h3>
+      <p className="jcard-sub">
+        Add a live badge to your README or site. It shows active AI-work days — never token volume — and links
+        here so anyone can re-verify the signature themselves.
+      </p>
+      <img className="badge-preview" src={badgeUrl} alt="TOKENS verified badge preview" />
+      <div className="badge-snippets">
+        {snippets.map(([label, text]) => (
+          <div className="badge-snippet" key={label}>
+            <span className="badge-snippet-label">{label}</span>
+            <code>{text}</code>
+            <button type="button" className="btn btn-ghost" onClick={() => copy(label, text)}>
+              {copied === label ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ProfileView({
   profile,
   daily,
   integrity,
   keyId,
+  handle,
 }: {
   profile: NonNullable<PublicUsageSnapshot['profile']>;
   daily: PublicUsageSnapshot['daily'];
   integrity?: PublicUsageSnapshot['integrity'];
   keyId?: string;
+  handle?: string;
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -448,6 +495,8 @@ export function ProfileView({
           <p className="profile-bio">{identity.bio}</p>
         </div>
       ) : null}
+
+      <BadgeEmbed handle={handle} />
 
       {/* Availability & engagement — a buyer sees terms without inferring cost from tokens. */}
       <OpportunityPanel opportunity={profile.opportunity} openTo={identity.openTo} contact={contact} />

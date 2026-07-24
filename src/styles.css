@@ -740,3 +740,12 @@ body.jobsite{background:var(--page-bg)}
 /* Meta line: separators come from CSS so a wrapped line never leads with "·". */
 .jprofile-meta>span+span::before,.jprofile-meta>span+a::before{content:"·";margin-right:8px;color:var(--faint)}
 .jprofile-meta>a+a::before{content:"·";margin-right:8px;color:var(--faint)}
+
+/* Badge embed -------------------------------------------------------------- */
+.badge-preview{display:block;margin:0 0 16px}
+.badge-snippets{display:grid;gap:10px}
+.badge-snippet{display:flex;align-items:center;gap:12px;background:#0b0e14;border-radius:8px;padding:10px 12px;overflow:hidden}
+.badge-snippet-label{flex:0 0 auto;color:#9bd2ff;font-size:.66rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.badge-snippet code{flex:1 1 auto;min-width:0;overflow-x:auto;white-space:nowrap;background:none;padding:0;color:#e8ecf5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem}
+.badge-snippet .btn{flex:0 0 auto;height:30px;padding:0 12px;font-size:.76rem;color:#fff;border-color:rgba(255,255,255,.25)}
+.badge-snippet .btn:hover{background:rgba(255,255,255,.12);color:#fff}
