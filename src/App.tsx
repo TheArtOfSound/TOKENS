@@ -10,6 +10,8 @@ import { Verify } from './views/Verify';
 import { Employer } from './views/Employer';
 import { Compare } from './views/Compare';
 import { Claims } from './views/Claims';
+import { Privacy } from './views/Privacy';
+import { Terms } from './views/Terms';
 import { href, useRoute } from './lib/router';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
@@ -369,6 +371,13 @@ function SiteFooter() {
             <a href="./data/latest.json" target="_blank" rel="noreferrer">Inspect a snapshot</a>
           </div>
           <div>
+            <h4>Trust</h4>
+            <a href={href({ name: 'claims' })}>What evidence proves</a>
+            <a href={href({ name: 'privacy' })}>Privacy</a>
+            <a href={href({ name: 'terms' })}>Terms</a>
+            <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security policy</a>
+          </div>
+          <div>
             <h4>Qira</h4>
             <a href="https://imagineqira.com" target="_blank" rel="noreferrer">imagineqira.com</a>
           </div>
@@ -376,6 +385,7 @@ function SiteFooter() {
       </div>
       <div className="footer-legal">
         <span>© {new Date().getFullYear()} Qira LLC</span>
+        <span>No analytics. No accounts. No data collected from visitors.</span>
         <span>Activity is evidence of practice — not a measure of skill, seniority, or employability.</span>
       </div>
     </footer>
@@ -429,6 +439,8 @@ export default function App() {
       {route.name === 'employer' && <Employer />}
       {route.name === 'compare' && <Compare />}
       {route.name === 'claims' && <Claims />}
+      {route.name === 'privacy' && <Privacy />}
+      {route.name === 'terms' && <Terms />}
       {route.name === 'join' && <Join />}
       {route.name === 'verify' && <Verify />}
       {route.name === 'member' && <Member handle={route.handle} />}

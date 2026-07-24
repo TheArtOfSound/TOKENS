@@ -26,7 +26,9 @@ export type Route =
   | { name: 'verify' }
   | { name: 'employer' }
   | { name: 'compare' }
-  | { name: 'claims' };
+  | { name: 'claims' }
+  | { name: 'privacy' }
+  | { name: 'terms' };
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, ''); // '' at a domain root
 
@@ -44,6 +46,8 @@ export function parsePath(pathname: string): Route {
   if (path === '/employer' || path === '/hire' || path === '/for-employers') return { name: 'employer' };
   if (path === '/compare') return { name: 'compare' };
   if (path === '/claims' || path === '/evidence') return { name: 'claims' };
+  if (path === '/privacy') return { name: 'privacy' };
+  if (path === '/terms') return { name: 'terms' };
   const member = path.match(/^\/u\/([a-z0-9][a-z0-9-]{1,38})$/);
   if (member) return { name: 'member', handle: member[1] };
   return { name: 'home' };
@@ -66,6 +70,10 @@ export function href(route: Route): string {
       return `${b}/compare`;
     case 'claims':
       return `${b}/claims`;
+    case 'privacy':
+      return `${b}/privacy`;
+    case 'terms':
+      return `${b}/terms`;
     default:
       return `${b}/`;
   }

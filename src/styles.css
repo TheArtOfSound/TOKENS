@@ -521,3 +521,18 @@ summary:focus:not(:focus-visible) {
 @media(prefers-reduced-motion:reduce){.skeleton::after{animation:none}}
 .profile-skeleton{display:flex;flex-direction:column;gap:14px;max-width:1220px;margin:0 auto;padding-top:24px}
 .profile-skeleton .sk-row{height:20px}
+
+/* Legal pages (privacy / terms) -------------------------------------------- */
+.legal-page{position:relative;z-index:1;max-width:760px;margin:0 auto;padding-top:48px}
+.legal-page h2{font-size:clamp(1.9rem,3.5vw,3.1rem);line-height:1.03;letter-spacing:-.06em;margin:0 0 14px}
+.legal-page h3{margin:34px 0 10px;font-size:1.15rem;letter-spacing:-.03em}
+.legal-page p{color:var(--muted);line-height:1.65;max-width:68ch}
+.legal-page .lede{color:var(--ink);font-size:1.1rem}
+.legal-page strong{color:var(--ink)}
+.legal-list{margin:0;padding-left:20px;display:grid;gap:10px}
+.legal-list li{color:var(--muted);line-height:1.6}
+.legal-highlight{margin:24px 0;padding:22px;border:1px solid #cfe3d5;border-radius:18px;background:#f2fbf5}
+.legal-highlight h3{margin:0 0 8px;font-size:1.05rem}
+.legal-highlight p{margin:0 0 8px}
+.legal-note{margin:34px 0 18px;padding:16px 18px;border:1px solid var(--line);border-left:3px solid #d29922;border-radius:12px;background:var(--soft);color:var(--muted);line-height:1.6;font-size:.92rem}
+.footer-legal span+span{opacity:.85}
