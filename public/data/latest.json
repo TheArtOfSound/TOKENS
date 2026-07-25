@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-25T05:32:15.510Z",
+  "generatedAt": "2026-07-25T06:02:52.010Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 284933890,
-    "outputTokens": 91670874,
-    "cacheCreationTokens": 658420501,
-    "cacheReadTokens": 34339408453,
-    "cachedTokens": 34997828954,
-    "freshTokens": 376604764,
-    "totalTokens": 35374433718,
+    "inputTokens": 284934259,
+    "outputTokens": 91863770,
+    "cacheCreationTokens": 661691783,
+    "cacheReadTokens": 34442439758,
+    "cachedTokens": 35104131541,
+    "freshTokens": 376798029,
+    "totalTokens": 35480929570,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -48,13 +48,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12625137,
-      "outputTokens": 62942367,
-      "cacheCreationTokens": 658420501,
-      "cacheReadTokens": 24723875909,
-      "cachedTokens": 25382296410,
-      "freshTokens": 75567504,
-      "totalTokens": 25457863914,
+      "inputTokens": 12625506,
+      "outputTokens": 63135263,
+      "cacheCreationTokens": 661691783,
+      "cacheReadTokens": 24826907214,
+      "cachedTokens": 25488598997,
+      "freshTokens": 75760769,
+      "totalTokens": 25564359766,
       "estimatedCostUsd": null
     }
   },
@@ -3064,13 +3064,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 50969,
-      "outputTokens": 2543450,
-      "cacheCreationTokens": 30983862,
-      "cacheReadTokens": 1331614406,
-      "cachedTokens": 1362598268,
-      "freshTokens": 2594419,
-      "totalTokens": 1365192687,
+      "inputTokens": 51338,
+      "outputTokens": 2736346,
+      "cacheCreationTokens": 34255144,
+      "cacheReadTokens": 1434645711,
+      "cachedTokens": 1468900855,
+      "freshTokens": 2787684,
+      "totalTokens": 1471688539,
       "estimatedCostUsd": null
     }
   ],
@@ -3083,7 +3083,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6392047",
+        "commit": "fe04c99",
         "changedFiles": 0
       },
       "stack": [],
@@ -3240,7 +3240,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "6392047",
+        "commit": "fe04c99",
         "changedFiles": 0
       },
       "stack": [
@@ -3267,14 +3267,14 @@
       "fileCounts": {
         "docs": 26,
         "py": 2,
-        "ts": 67,
+        "ts": 68,
         "json": 27,
         "js": 13,
         "html": 4,
         "css": 2,
         "tsx": 16
       },
-      "lastModified": "2026-07-25T05:32:08.301Z",
+      "lastModified": "2026-07-25T06:02:46.005Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3337,7 +3337,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 35374433718,
+    "exactTotalTokens": 35480929570,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3412,12 +3412,12 @@
       }
     },
     "activity": {
-      "referenceDate": "2026-07-25",
+      "referenceDate": "2026-07-24",
       "activeDays": 96,
       "firstActiveDate": "2026-02-26",
       "lastActiveDate": "2026-07-24",
       "spanDays": 149,
-      "activeDaysLast30": 28,
+      "activeDaysLast30": 29,
       "activeDaysLast90": 71,
       "currentStreakDays": 4,
       "longestStreakDays": 26,
@@ -3541,8 +3541,8 @@
     "efficiency": {
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
-      "outputSharePct": 24.3,
-      "avgTokensPerActiveDay": 368483685,
+      "outputSharePct": 24.4,
+      "avgTokensPerActiveDay": 369593016,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet."
     },
     "verification": [
@@ -3634,7 +3634,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "5c0638850dabb4d101e8c26be378f34ac2aa63ebcff79df9c7158cd06ca3fdf7",
+    "snapshotSha256": "62188c617aac07b8abb318d2106e070a0b86c5f95e4dbadb892150e4326e15fd",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3644,12 +3644,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-25T05:32:15.654Z",
-    "nonce": "b1b64062-ab1a-413b-9342-ba50ac12deec",
+    "issuedAt": "2026-07-25T06:02:52.081Z",
+    "nonce": "3aa61b1f-3e0d-4c32-8d37-ef2a57d769d2",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "6fe865930d1ecd135b2ba5667abfab9b2afba0be645eaec50aec5d265c7bfd44",
-    "signature": "lRScOq1NGrPmRiiB1vM+T1uHu434sFtBz4/ZftcwE3Suqc4Ablvu6QVceyQmW15K5b2SrrO/txdCuxdYtBNODg==",
+    "payloadSha256": "8226e18c3bb2b609b53574ca8764450aa4f8f36e19760cf47ece64b9dfc729ff",
+    "signature": "j2yOkB0nV12rvvc8BtUMlbv8qX4WrAPlHhWWIf3wECgljlln2nNFtIzNw6Q/nYtF0B/l9OlkH6yRoFMl/AKxDg==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
