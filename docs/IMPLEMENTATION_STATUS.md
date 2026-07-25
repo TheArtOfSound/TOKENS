@@ -33,7 +33,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Check | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`) | ✅ pass |
-| Unit tests (`vitest run`) | ✅ 147/147 |
+| Unit tests (`vitest run`) | ✅ 241/241 |
 | Data validation (`validate:data`) | ✅ schema + hash + secret scan |
 | Build (`tsc -b && vite build`) | ✅ pass |
 | Dependency audit | ✅ 0 vulnerabilities |
@@ -49,7 +49,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | Secret/PII/path scanner | ✅ done, tested | nested + base64 + control chars |
 | Compact history | ✅ done | 28 MB → 27 KB |
 | Validator / release gate | ✅ done | Ajv 2020 + hash + scan |
-| Test suite | ✅ done | 147 tests, adversarial fixtures |
+| Test suite | ✅ done | 241 tests, adversarial fixtures |
 | Frontend honesty UI | ✅ done | evidence tags + methodology panel |
 | Professional profile (identity + activity + verification) | ✅ done, tested | identity-first, evidence-backed; `profile.ts` + UI; 8 tests |
 | Activity heatmap (26-week) | ✅ done | GitHub-style, driven by measured daily data |
@@ -80,7 +80,7 @@ event ledger (0/17), canonical event model, adapter framework (0/11), accessibil
 | ~~Ed25519 device signing~~ | ✅ **now built** | Including rotation and revocation. |
 | ~~Canonical event model~~ | ✅ **now built** | See the built table above. |
 | ~~Adapter framework~~ | ✅ **now built** | Versioned adapters with per-provider extractors; adding a provider touches no shared code. |
-| ~~Accessibility~~ | ✅ **now built** (partial) | focus-visible, reduced-motion, skip link, `main` landmark, heatmap grid marked decorative with a 95-row accessible table. Full WCAG 2.2 AA audit still not performed. |
+| ~~Accessibility~~ | ✅ **now built** | focus-visible (incl. select/input/textarea), reduced-motion, skip link, `main` landmark, accessible heatmap table. **Contrast audited with computed ratios**: `--faint` was 2.75–3.03:1 and is now #667082 (4.54–4.99:1); 6 hardcoded low-contrast greys fixed; avatar initials over the gradient's light centre were 1.61:1 and now carry a shadow. Remaining: no automated axe/Lighthouse run in CI. |
 
 ### Later phases (dossier gates these — correctly deferred)
 | Area | Status | Notes |

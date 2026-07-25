@@ -159,7 +159,7 @@ export function Join() {
           <li><strong>Measured, not estimated.</strong> Token counts come from the providers' own usage accounting in your local logs.</li>
           <li><strong>A signature proves integrity, not identity.</strong> It shows a snapshot came from a specific device key and was not altered. It doesn't prove who you are, and it can't prove your provider logs were genuine — anyone controlling a machine could feed the collector fabricated logs.</li>
           <li><strong>Volume is not skill.</strong> Nothing here ranks people by token count, and no profile infers expertise from usage. Activity is evidence of practice.</li>
-          <li><strong>Identity, work, and outcome verification are not built yet.</strong> Every profile shows those as pending rather than implying they were checked.</li>
+          <li><strong>Each evidence tier says exactly what it checked.</strong> You can link an external account (e.g. GitHub) and visitors verify that in their own browser — it proves you control that account, not your legal identity. Provider-attested usage, benchmarks, and third-party-confirmed outcomes are stronger tiers that are <em>not</em> built yet, and every profile shows them as pending rather than implying they were checked.</li>
         </ul>
         <p><a href={href({ name: 'verify' })}>How verification works →</a></p>
       </section>
