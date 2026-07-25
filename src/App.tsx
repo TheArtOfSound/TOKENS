@@ -75,8 +75,25 @@ function MethodologyPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   );
 }
 
-function QiraLogo() {
-  return <div className="brand-mark" aria-hidden="true"><span /></div>;
+/**
+ * Brand mark: ledger rows resolving into a verification check.
+ *
+ * Inline rather than an <img> so it inherits crisp rendering at any size and
+ * needs no extra request. Mirrors public/favicon.svg — keep the two in sync.
+ * Plain filled polygons only (no strokes, no nested transforms) so every
+ * rasteriser produces the same shape.
+ */
+function LedgerMark() {
+  return (
+    <svg className="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <rect width="64" height="64" rx="15" fill="#0d1220" />
+      <rect x="11" y="17" width="19" height="4.5" rx="2.25" fill="#8593ad" />
+      <rect x="11" y="28" width="12" height="4.5" rx="2.25" fill="#66738d" />
+      <rect x="11" y="39" width="16" height="4.5" rx="2.25" fill="#4d5a73" />
+      <path d="M45.4,18.2 L54.6,25.8 L32.4,52.9 L18.8,39.2 L27.2,30.8 L31.6,35.1 Z" fill="#0d1220" />
+      <path d="M47.3,19.8 L52.7,24.2 L32.3,49.2 L20.5,37.5 L25.5,32.5 L31.7,38.8 Z" fill="#22c55e" />
+    </svg>
+  );
 }
 
 function NetworkField() {
@@ -161,7 +178,7 @@ function ProjectScanner({ projects }: { projects: QiraProjectScan[] }) {
 
   return (
     <section className="project-section" id="projects">
-      <div className="tier-label"><span /> TIER 1 — QIRA SYSTEMS ONLY</div>
+      <div className="tier-label"><span /> TIER 1 — ALLOWLISTED PROJECTS ONLY</div>
       <div className="section-title-row project-title-row">
         <div>
           <h2>Qira project matrix.</h2>
@@ -400,7 +417,7 @@ function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <div className="brand"><QiraLogo /> <span>QIRA</span></div>
+          <div className="brand"><LedgerMark /> <span>LEDGER</span></div>
           <p>A local-first evidence layer for AI-assisted work. Measured on your machine, signed on your device, verified in your browser.</p>
         </div>
         <nav className="footer-cols" aria-label="Footer">
@@ -471,7 +488,7 @@ export default function App() {
       <a className="skip-link" href="#top">Skip to main content</a>
       <NetworkField />
       <header className="topbar">
-        <a className="brand" href={href({ name: 'home' })}><QiraLogo /> <span>QIRA</span></a>
+        <a className="brand" href={href({ name: 'home' })}><LedgerMark /> <span>LEDGER</span></a>
         {/* Job sites put search in the header. Submitting jumps to the people
             directory with the query applied. */}
         <form

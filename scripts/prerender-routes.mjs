@@ -53,14 +53,14 @@ function withMeta(source, { title, description, url }) {
 }
 
 const ROUTES = [
-  ['people', 'People measuring their AI work — QIRA', 'Browse professionals whose AI work is backed by a signed, browser-verifiable record instead of a self-written résumé.'],
-  ['employer', 'Find people by evidence, not by résumé — QIRA', 'Search candidates backed by signed snapshots you verify in your own browser. Evidence and availability first; activity volume is never the ranking.'],
-  ['join', 'Measure your own AI work — QIRA', 'Run an open-source collector on your machine. It measures the AI work you already do and produces a signed summary you publish yourself. No account.'],
-  ['verify', 'How verification works — QIRA', 'Paste any snapshot URL and verify its Ed25519 signature yourself, in your own browser. You do not have to trust us.'],
-  ['claims', 'What evidence can and cannot establish — QIRA', 'Every badge maps to one signal, one allowed claim, and stated limitations. No universal score: a combined figure never inherits more authority than its weakest evidence.'],
-  ['compare', 'Where TOKENS fits — QIRA', 'Not a better usage monitor — the portable evidence layer above them. Honest comparison against metering and audit tools, including where they are stronger.'],
-  ['privacy', 'Privacy — QIRA', 'No analytics, no accounts, no data collected from visitors. Local-first by design: your prompts, code, and file paths never leave your computer.'],
-  ['terms', 'Terms of use — QIRA', 'A free, open-source, local-first tool plus a public directory. No identity guarantee, no skill rating, no warranty.'],
+  ['people', 'People measuring their AI work — Ledger', 'Browse professionals whose AI work is backed by a signed, browser-verifiable record instead of a self-written résumé.'],
+  ['employer', 'Find people by evidence, not by résumé — Ledger', 'Search candidates backed by signed snapshots you verify in your own browser. Evidence and availability first; activity volume is never the ranking.'],
+  ['join', 'Measure your own AI work — Ledger', 'Run an open-source collector on your machine. It measures the AI work you already do and produces a signed summary you publish yourself. No account.'],
+  ['verify', 'How verification works — Ledger', 'Paste any snapshot URL and verify its Ed25519 signature yourself, in your own browser. You do not have to trust us.'],
+  ['claims', 'What evidence can and cannot establish — Ledger', 'Every badge maps to one signal, one allowed claim, and stated limitations. No universal score: a combined figure never inherits more authority than its weakest evidence.'],
+  ['compare', 'Where TOKENS fits — Ledger', 'Not a better usage monitor — the portable evidence layer above them. Honest comparison against metering and audit tools, including where they are stronger.'],
+  ['privacy', 'Privacy — Ledger', 'No analytics, no accounts, no data collected from visitors. Local-first by design: your prompts, code, and file paths never leave your computer.'],
+  ['terms', 'Terms of use — Ledger', 'A free, open-source, local-first tool plus a public directory. No identity guarantee, no skill rating, no warranty.'],
 ];
 
 function emit(routePath, meta) {
