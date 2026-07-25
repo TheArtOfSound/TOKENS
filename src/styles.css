@@ -782,3 +782,8 @@ textarea:focus-visible{
 .member-avatar{
   text-shadow:0 1px 3px rgba(0,0,0,.85), 0 0 10px rgba(0,0,0,.6);
 }
+
+/* Render-failure notice ---------------------------------------------------- */
+.render-error{padding:18px 20px;border:1px solid #f0c8ce;border-left:3px solid #9f1239;border-radius:10px;background:#fff4f5;margin:12px 0}
+.render-error strong{display:block;color:#9f1239;margin-bottom:6px}
+.render-error p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.55}

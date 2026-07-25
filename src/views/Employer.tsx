@@ -15,6 +15,7 @@ import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
 import { safeUrl, linkProps } from '../lib/safeUrl';
 import { SignatureBadge } from './SignatureBadge';
+import { ErrorBoundary } from './ErrorBoundary';
 
 function initials(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || 'Q';
@@ -108,8 +109,10 @@ export function Employer() {
 
       <ul className="candidate-list jcard">
         {results.map((p) => (
-          <Candidate key={p.member.handle} p={p} expanded={!!expanded[p.member.handle]} onToggle={() =>
-            setExpanded((prev) => ({ ...prev, [p.member.handle]: !prev[p.member.handle] }))} />
+          <ErrorBoundary key={p.member.handle} label={`the profile for @${p.member.handle}`}>
+            <Candidate p={p} expanded={!!expanded[p.member.handle]} onToggle={() =>
+              setExpanded((prev) => ({ ...prev, [p.member.handle]: !prev[p.member.handle] }))} />
+          </ErrorBoundary>
         ))}
       </ul>
 

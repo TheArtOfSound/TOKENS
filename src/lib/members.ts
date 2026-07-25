@@ -46,6 +46,55 @@ function resolveUrl(snapshotUrl: string): string {
 }
 
 /** A complete, safe-to-render placeholder — every array is real, never undefined. */
+/**
+ * Coercion helpers for THIRD-PARTY snapshot JSON.
+ *
+ * Members self-host their own snapshots, so every field here is attacker- or
+ * accident-controlled. The previous code used TypeScript casts
+ * (`opportunity.compensation as string`), which do nothing at runtime: a JSON
+ * object in that field reached JSX and React threw "Objects are not valid as a
+ * React child" — crashing the ENTIRE directory for every visitor because of one
+ * bad member. Casts are not validation; these functions are.
+ *
+ * Strings are also length-capped so a multi-megabyte value cannot wedge layout
+ * or the render.
+ */
+const MAX_LEN = 300;
+
+function str(value: unknown, max = MAX_LEN): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  // Strip bidi overrides: they let a name render deceptively (spoofing risk on
+  // an identity product) without changing the underlying characters.
+  const clean = trimmed.replace(/[\u202a-\u202e\u2066-\u2069\u200e\u200f]/g, '');
+  return clean.slice(0, max) || null;
+}
+
+function num(value: unknown): number {
+  const n = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
+/** Array of clean strings only — drops non-strings rather than rendering them. */
+function strArray(value: unknown, maxItems = 24, maxLen = 60): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((v) => str(v, maxLen)).filter((v): v is string => v !== null).slice(0, maxItems);
+}
+
+/** A record only if it really is a plain object. */
+function obj(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+}
+
+/** Contact is only usable when BOTH fields are real strings. */
+function contactOf(value: unknown): { label: string; href: string } | null {
+  const c = obj(value);
+  const label = str(c.label, 60);
+  const href = str(c.href, 400);
+  return label && href ? { label, href } : null;
+}
+
 export function emptyMemberProfile(member: RegistryMember): MemberProfile {
   return {
     member,
@@ -77,39 +126,46 @@ export async function loadMemberProfile(member: RegistryMember): Promise<MemberP
     if (!response.ok) return { ...base, signature: 'unreachable', error: `HTTP ${response.status}` };
     const snapshot = (await response.json()) as Record<string, unknown>;
     const outcome = await verifySnapshotInBrowser(snapshot);
-    const profile = (snapshot.profile ?? {}) as Record<string, Record<string, unknown>>;
-    const activity = profile.activity ?? {};
-    const identity = profile.identity ?? {};
-    const opportunity = profile.opportunity ?? {};
-    const efficiency = profile.efficiency ?? {};
-    const work = profile.work ?? {};
-    const totals = (snapshot.totals ?? {}) as Record<string, unknown>;
-    const strArr = (v: unknown) => (Array.isArray(v) ? (v as string[]) : []);
+    const profile = obj(snapshot.profile);
+    const activity = obj(profile.activity);
+    const identity = obj(profile.identity);
+    const opportunity = obj(profile.opportunity);
+    const efficiency = obj(profile.efficiency);
+    const work = obj(profile.work);
+    const totals = obj(snapshot.totals);
 
     return {
       ...base,
       signature: outcome.state,
       signatureReason: outcome.reason,
-      generatedAt: (snapshot.generatedAt as string) ?? undefined,
-      activeDays: Number(activity.activeDays) || 0,
-      activeDaysLast30: Number(activity.activeDaysLast30) || 0,
-      totalTokens: Number(totals.totalTokens) || 0,
-      toolsUsed: strArr(activity.toolsUsed),
-      modelsUsed: strArr(activity.modelsUsed),
-      projectsActive: Number(activity.projectsActive) || 0,
-      collectorObserved: Number(work.collectorObserved) || 0,
-      lastActiveDate: (activity.lastActiveDate as string) ?? null,
-      cachedSharePct: typeof efficiency.cachedSharePct === 'number' ? (efficiency.cachedSharePct as number) : null,
-      workCategories: strArr(identity.workCategories),
-      openTo: strArr(identity.openTo),
-      engagementTypes: strArr(opportunity.engagementTypes),
-      compensation: (opportunity.compensation as string) ?? null,
-      workArrangement: (opportunity.workArrangement as string) ?? null,
-      timezone: (opportunity.timezone as string) ?? null,
-      contact: (identity.contact as { label: string; href: string } | null) ?? null,
-      identityProofs: Array.isArray(identity.identityProofs)
-        ? (identity.identityProofs as { type: string; handle: string }[]).filter((p) => p && p.handle)
-        : [],
+      generatedAt: str(snapshot.generatedAt, 40) ?? undefined,
+      activeDays: num(activity.activeDays),
+      activeDaysLast30: num(activity.activeDaysLast30),
+      totalTokens: num(totals.totalTokens),
+      toolsUsed: strArray(activity.toolsUsed, 8, 40),
+      modelsUsed: strArray(activity.modelsUsed, 24, 80),
+      projectsActive: num(activity.projectsActive),
+      collectorObserved: num(work.collectorObserved),
+      lastActiveDate: str(activity.lastActiveDate, 40),
+      cachedSharePct: typeof efficiency.cachedSharePct === 'number' && Number.isFinite(efficiency.cachedSharePct)
+        ? Math.max(0, Math.min(100, efficiency.cachedSharePct))
+        : null,
+      workCategories: strArray(identity.workCategories, 10, 40),
+      openTo: strArray(identity.openTo, 10, 40),
+      engagementTypes: strArray(opportunity.engagementTypes, 12, 40),
+      compensation: str(opportunity.compensation, 80),
+      workArrangement: str(opportunity.workArrangement, 60),
+      timezone: str(opportunity.timezone, 60),
+      contact: contactOf(identity.contact),
+      identityProofs: (Array.isArray(identity.identityProofs) ? identity.identityProofs : [])
+        .map((raw) => {
+          const p = obj(raw);
+          const type = str(p.type, 20);
+          const handle = str(p.handle, 40);
+          return type && handle ? { type, handle } : null;
+        })
+        .filter((p): p is { type: string; handle: string } => p !== null)
+        .slice(0, 6),
     };
   } catch (error) {
     return { ...base, signature: 'unreachable', error: error instanceof Error ? error.message : 'fetch failed' };

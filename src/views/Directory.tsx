@@ -16,6 +16,7 @@ import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
 import { SignatureBadge } from './SignatureBadge';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export { SignatureBadge };
 
@@ -130,7 +131,11 @@ export function Directory() {
                 <p className="muted" style={{ margin: 0 }}>No profiles match these filters.</p>
               </div>
             ) : (
-              results.map((p) => <ResultRow key={p.member.handle} p={p} />)
+              results.map((p) => (
+                <ErrorBoundary key={p.member.handle} label={`the profile for @${p.member.handle}`}>
+                  <ResultRow p={p} />
+                </ErrorBoundary>
+              ))
             )}
           </div>
 

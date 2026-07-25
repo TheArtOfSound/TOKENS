@@ -15,6 +15,7 @@ import { PublicUsageSnapshot } from '../lib/usage';
 import { ProfileView } from './ProfileView';
 import { SignatureBadge } from './Directory';
 import { href } from '../lib/router';
+import { ErrorBoundary } from './ErrorBoundary';
 import { safeUrl, linkProps } from '../lib/safeUrl';
 
 interface State {
@@ -149,7 +150,9 @@ export function Member({ handle }: { handle: string }) {
       )}
 
       {profile ? (
-        <ProfileView profile={profile} daily={state.snapshot.daily} integrity={state.snapshot.integrity} keyId={state.keyId} handle={handle} />
+        <ErrorBoundary label={`the profile for @${handle}`}>
+          <ProfileView profile={profile} daily={state.snapshot.daily} integrity={state.snapshot.integrity} keyId={state.keyId} handle={handle} />
+        </ErrorBoundary>
       ) : (
         <section className="panel wide-panel">
           <h2>{state.member.displayName}</h2>
