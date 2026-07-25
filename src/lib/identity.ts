@@ -36,9 +36,38 @@ interface Proof {
 }
 
 /** Verify one identity proof against the profile's signing keyId. */
+/**
+ * Both values below come from a member's self-hosted snapshot, and both get
+ * interpolated into a github.com URL. Validate their shape before use.
+ *
+ * gistId is the important one: it is interpolated into the api.github.com path,
+ * so an unvalidated value like "../../repos/x/y" would traverse to a DIFFERENT
+ * endpoint. A crafted response from that endpoint could then satisfy the
+ * owner-matching check and forge an identity badge — the one badge that must not
+ * be forgeable.
+ */
+const GIST_ID_RE = /^[a-f0-9]{20,64}$/i;
+// GitHub usernames: alphanumeric or single hyphens, no leading/trailing hyphen, <=39.
+const GH_HANDLE_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$/;
+
+export function isValidGistId(value: unknown): value is string {
+  return typeof value === 'string' && GIST_ID_RE.test(value);
+}
+export function isValidGitHubHandle(value: unknown): value is string {
+  return typeof value === 'string' && GH_HANDLE_RE.test(value);
+}
+
 export async function verifyIdentityProof(proof: Proof, snapshotKeyId: string | undefined): Promise<IdentityResult> {
   const url = `https://github.com/${proof.handle}`;
   const base: IdentityResult = { type: 'github', handle: proof.handle, url, state: 'checking', detail: '' };
+
+  // Reject malformed inputs before they reach a URL.
+  if (!isValidGitHubHandle(proof.handle)) {
+    return { ...base, state: 'failed', detail: 'The claimed GitHub handle is not a valid username.' };
+  }
+  if (!isValidGistId(proof.gistId)) {
+    return { ...base, state: 'failed', detail: 'The identity proof references an invalid gist id.' };
+  }
   if (proof.type !== 'github') return { ...base, state: 'failed', detail: 'Unsupported proof type.' };
 
   try {

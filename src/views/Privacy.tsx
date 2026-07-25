@@ -33,7 +33,7 @@ export function Privacy() {
         <p className="muted">
           It is hosted on GitHub Pages, which — like any web host — processes connection data such as IP
           addresses in its server logs. That is GitHub's processing, governed by{' '}
-          <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noreferrer">
+          <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">
             GitHub's Privacy Statement
           </a>
           . We do not have access to those logs.
@@ -98,7 +98,7 @@ export function Privacy() {
       </div>
 
       <p className="muted">
-        Technical detail: <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/PRIVACY.md" target="_blank" rel="noreferrer">docs/PRIVACY.md</a>{' '}
+        Technical detail: <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/PRIVACY.md" target="_blank" rel="noopener noreferrer">docs/PRIVACY.md</a>{' '}
         · <a href={href({ name: 'claims' })}>What each signal can establish →</a>
       </p>
     </section>

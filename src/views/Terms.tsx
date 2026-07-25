@@ -72,7 +72,7 @@ export function Terms() {
 
       <p className="muted">
         <a href={href({ name: 'privacy' })}>Privacy →</a> ·{' '}
-        <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security policy →</a>
+        <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security policy →</a>
       </p>
     </section>
   );

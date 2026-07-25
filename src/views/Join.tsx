@@ -85,7 +85,7 @@ export function Join() {
           Requires <strong>Node 22+</strong> and <strong>git</strong>. The installer only clones the
           open-source collector and installs dependencies — it never reads your logs or publishes anything.
           Prefer to read it first? It's ~40 lines:{' '}
-          <a href={active.script} target="_blank" rel="noreferrer">inspect {active.script}</a>.
+          <a href={active.script} target="_blank" rel="noopener noreferrer">inspect {active.script}</a>.
         </p>
         <details className="advanced">
           <summary>Advanced: install from source</summary>
@@ -150,7 +150,7 @@ export function Join() {
         Keeping it current: run <code>npm run collect</code> whenever you want to refresh. To automate it,
         macOS uses launchd (<code>bash scripts/install-launchd.sh</code>), Linux a cron job, and Windows Task
         Scheduler — all optional. See{' '}
-        <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/CROSS_PLATFORM.md" target="_blank" rel="noreferrer">the cross-platform guide</a>.
+        <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/CROSS_PLATFORM.md" target="_blank" rel="noopener noreferrer">the cross-platform guide</a>.
       </p>
 
       <section className="join-honest">

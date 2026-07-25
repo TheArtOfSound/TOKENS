@@ -12,7 +12,22 @@ import { compactNumber, fullNumber } from '../lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
 import { verifyIdentityProof, type IdentityResult } from '../lib/identity';
 import { href } from '../lib/router';
+import { safeUrl, safeImageUrl, linkProps } from '../lib/safeUrl';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
+
+/**
+ * Contact link for member-controlled data.
+ *
+ * The href is sanitized because a member's snapshot is hand-writable: the old
+ * code set href unconditionally and only used startsWith('http') to pick
+ * target/rel, so `javascript:` URLs rendered as working links. If the value is
+ * unsafe we render the label as plain text rather than a link.
+ */
+function ContactLink({ contact, className }: { contact: { label: string; href: string }; className: string }) {
+  const safe = safeUrl(contact.href, { allowMailto: true });
+  if (!safe) return <span className={className} aria-disabled="true">{contact.label}</span>;
+  return <a className={className} href={safe.href} {...linkProps(safe)}>{contact.label}</a>;
+}
 
 export function initials(name: string): string {
   return name
@@ -171,7 +186,10 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
               <div className="work-foot">
                 {item.period ? <span>{item.period}</span> : null}
                 {item.linkedProject ? <span>linked: {item.linkedProject}</span> : null}
-                {item.url ? <a href={item.url} target="_blank" rel="noreferrer">Open ↗</a> : null}
+                {(() => {
+                  const safe = safeUrl(item.url);
+                  return safe ? <a href={safe.href} {...linkProps(safe)}>Open ↗</a> : null;
+                })()}
               </div>
             </article>
           );
@@ -249,9 +267,7 @@ function OpportunityPanel({
       </div>
       <div className="opportunity-foot">
         {contact ? (
-          <a className="cta cta-sm" href={contact.href} {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}>
-            {contact.label}
-          </a>
+          <ContactLink contact={contact} className="cta cta-sm" />
         ) : null}
         <span className="opportunity-note">{opportunity.note}</span>
       </div>
@@ -333,7 +349,7 @@ function IdentityProofs({
           className={`idp idp-${r.state}`}
           href={r.url}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           title={r.detail}
         >
           <span aria-hidden="true" className="idp-dot" />
@@ -423,9 +439,9 @@ export function ProfileView({
         <div className="jprofile-cover" aria-hidden="true" />
         <div className="jprofile-body">
           <div className={`jprofile-avatar-wrap ${isOpenToWork ? 'is-open' : ''}`}>
-            {identity.avatarUrl ? (
+            {safeImageUrl(identity.avatarUrl) ? (
               <div className="jprofile-avatar">
-                <img src={identity.avatarUrl} alt={`${identity.displayName} headshot`} loading="lazy" />
+                <img src={safeImageUrl(identity.avatarUrl) ?? ''} alt={`${identity.displayName} headshot`} loading="lazy" />
               </div>
             ) : (
               <div className="jprofile-avatar" aria-hidden="true">{initials(identity.displayName)}</div>
@@ -443,21 +459,17 @@ export function ProfileView({
               <p className="jprofile-meta">
                 {identity.location ? <span>{identity.location}</span> : null}
                 {activity.toolsUsed.length ? <span>{activity.toolsUsed.join(' · ')}</span> : null}
-                {identity.links.map((link) => (
-                  <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>
-                ))}
+                {identity.links.map((link) => {
+                  const safe = safeUrl(link.url);
+                  if (!safe) return null; // member-controlled: drop anything not https
+                  return <a key={link.url} href={safe.href} {...linkProps(safe)}>{link.label} ↗</a>;
+                })}
               </p>
               <IdentityProofs proofs={identity.identityProofs} keyId={keyId} />
 
               <div className="jprofile-actions">
                 {contact ? (
-                  <a
-                    className="btn btn-primary"
-                    href={contact.href}
-                    {...(contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
-                  >
-                    {contact.label}
-                  </a>
+                  <ContactLink contact={contact} className="btn btn-primary" />
                 ) : null}
                 <a className="btn btn-secondary" href="#work">View work</a>
                 <a className="btn btn-ghost" href={href({ name: 'claims' })}>What this proves</a>

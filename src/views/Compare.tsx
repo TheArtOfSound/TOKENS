@@ -71,7 +71,7 @@ export function Compare() {
           <li>
             <strong>Metering tools</strong> are better at live monitoring, rate limits, and forecasting. TOKENS
             can <em>import</em> their machine-readable history rather than duplicate it — see{' '}
-            <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/architecture/IMPORTING.md" target="_blank" rel="noreferrer">the import framework</a>.
+            <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/architecture/IMPORTING.md" target="_blank" rel="noopener noreferrer">the import framework</a>.
           </li>
           <li>
             <strong>Audit tools</strong> are better at issue-to-PR provenance and cross-session workflow history.

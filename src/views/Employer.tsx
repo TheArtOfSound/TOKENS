@@ -13,6 +13,7 @@ import { useMemo, useState } from 'react';
 import { useMemberProfiles, type MemberProfile } from '../lib/members';
 import { compactNumber } from '../lib/format';
 import { href } from '../lib/router';
+import { safeUrl, linkProps } from '../lib/safeUrl';
 import { SignatureBadge } from './SignatureBadge';
 
 function initials(name: string): string {
@@ -170,11 +171,16 @@ function Candidate({ p, expanded, onToggle }: { p: MemberProfile; expanded: bool
       <div className="candidate-foot">
         <SignatureBadge state={p.signature} reason={p.signatureReason ?? p.error} />
         <div className="candidate-actions">
-          {p.contact ? (
-            <a className="cta cta-sm" href={p.contact.href} {...(p.contact.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}>
-              {p.contact.label}
-            </a>
-          ) : null}
+          {(() => {
+            // Member-controlled href: sanitize, or render the label as plain text.
+            const safe = p.contact ? safeUrl(p.contact.href, { allowMailto: true }) : null;
+            if (!p.contact) return null;
+            return safe ? (
+              <a className="cta cta-sm" href={safe.href} {...linkProps(safe)}>{p.contact.label}</a>
+            ) : (
+              <span className="cta cta-sm" aria-disabled="true">{p.contact.label}</span>
+            );
+          })()}
           <a className="candidate-view" href={href({ name: 'member', handle: m.handle })}>View profile →</a>
         </div>
       </div>

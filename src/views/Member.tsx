@@ -15,6 +15,7 @@ import { PublicUsageSnapshot } from '../lib/usage';
 import { ProfileView } from './ProfileView';
 import { SignatureBadge } from './Directory';
 import { href } from '../lib/router';
+import { safeUrl, linkProps } from '../lib/safeUrl';
 
 interface State {
   status: 'loading' | 'ready' | 'missing' | 'error';
@@ -162,9 +163,12 @@ export function Member({ handle }: { handle: string }) {
           <div>
             <span>Snapshot source</span>
             <strong>
-              <a href={state.member.snapshotUrl} target="_blank" rel="noreferrer">
-                self-hosted by member
-              </a>
+              {(() => {
+                const safe = safeUrl(state.member.snapshotUrl);
+                return safe
+                  ? <a href={safe.href} {...linkProps(safe)}>self-hosted by member</a>
+                  : <span>self-hosted by member</span>;
+              })()}
             </strong>
           </div>
           <div>
