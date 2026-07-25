@@ -61,9 +61,15 @@ export function Verify() {
         <li>
           <h2>1. The collector signs locally</h2>
           <p>
-            An Ed25519 keypair is generated on the member's machine and the private key is stored in their OS
-            keychain. The snapshot is canonicalized (a fixed RFC 8785 subset, so byte order is deterministic),
-            hashed with SHA-256, and that digest is signed together with a nonce, scope, and issue time.
+            The collector writes the member's totals into one file — the <strong>snapshot</strong> — and signs
+            it with a key that is generated on their machine and never leaves it. Before signing, the file is
+            rewritten in a fixed byte order, so that the same data always produces the same bytes no matter
+            which computer wrote it. Those bytes are then reduced to a short fingerprint, and it is the
+            fingerprint that gets signed.
+          </p>
+          <p className="muted">
+            The details, if you want them: canonicalization follows a subset of RFC 8785, the fingerprint is
+            SHA-256, and the signature covers that digest together with a nonce, a scope, and an issue time.
           </p>
         </li>
         <li>

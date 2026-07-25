@@ -57,7 +57,7 @@ export function Join() {
   return (
     <section className="join" id="join">
       <header className="join-head">
-        <h1>Measure your own AI work</h1>
+        <h1>Add your profile</h1>
         <p className="lede">
           Ledger runs on your machine — macOS, Linux, or Windows. It reads the usage logs Claude Code and
           Codex already write, counts tokens, and produces a signed summary you can publish. There is no

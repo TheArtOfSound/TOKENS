@@ -83,7 +83,7 @@ export function Compare() {
           </li>
         </ul>
         <p>
-          <a href={href({ name: 'verify' })}>How verification works →</a> · <a href={href({ name: 'join' })}>Build your evidence record →</a>
+          <a href={href({ name: 'verify' })}>How verification works →</a> · <a href={href({ name: 'join' })}>Add your profile →</a>
         </p>
       </section>
     </section>

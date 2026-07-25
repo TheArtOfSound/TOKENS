@@ -176,7 +176,7 @@ export function buildClaimAuthority(): ClaimAuthority {
     model: 'signal → provenance → allowed claim → confidence → limitations',
     noUniversalScore: true,
     combinedAuthorityRule:
-      'A combined figure never inherits more authority than its weakest supporting evidence. TOKENS publishes no universal or combined skill, quality, or employability score.',
+      'A combined figure never inherits more authority than its weakest supporting evidence. Ledger publishes no universal or combined skill, quality, or employability score.',
     universalNonClaims: [...UNIVERSAL_NON_CLAIMS],
     signals: CLAIM_LADDER,
     note:

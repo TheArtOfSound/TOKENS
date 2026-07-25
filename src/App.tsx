@@ -288,12 +288,12 @@ function HowItWorks() {
         <li>
           <span className="how-num">1</span>
           <h3>Measure locally</h3>
-          <p>An open-source collector reads the usage logs Claude Code and Codex already write on your machine, and counts tokens into a private local ledger. Prompts, code, and file paths are never read.</p>
+          <p>You install a small open-source program — the <strong>collector</strong> — which reads the usage logs Claude Code and Codex already write on your machine and counts tokens into a private local ledger. Prompts, code, and file paths are never read.</p>
         </li>
         <li>
           <span className="how-num">2</span>
           <h3>Sign on your device</h3>
-          <p>Your summary is signed with an Ed25519 key generated on your Mac and kept in your keychain. The private key never leaves the device — the signature is what makes the numbers tamper-evident.</p>
+          <p>The collector writes your totals to a single file — your <strong>snapshot</strong> — and signs it with a key generated on your own machine and kept in your keychain. The private key never leaves the device, and the signature is what makes the numbers tamper-evident.</p>
         </li>
         <li>
           <span className="how-num">3</span>
@@ -302,7 +302,7 @@ function HowItWorks() {
         </li>
       </ol>
       <div className="band-cta">
-        <a className="cta" href={href({ name: 'join' })}>Measure your own work →</a>
+        <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
         <a className="ghost" href={href({ name: 'verify' })}>How verification works</a>
       </div>
     </section>
@@ -352,7 +352,7 @@ function ValueForBoth() {
             <li><strong>Opportunities come to you</strong> — evaluations, research, beta programs, contract work — via your contact action.</li>
             <li><strong>You are never paid by token volume.</strong> That would reward waste. Efficiency and outcomes are what matter.</li>
           </ul>
-          <a className="cta cta-sm" href={href({ name: 'join' })}>Build your record →</a>
+          <a className="cta cta-sm" href={href({ name: 'join' })}>Add your profile →</a>
         </div>
         <div className="value-col">
           <h3>If you hire or recruit</h3>
@@ -532,7 +532,7 @@ export default function App() {
           <div className="hero-pill"><span /> Local-first evidence layer for AI-assisted work</div>
           <h1>Evidence of how you work with AI — not a token leaderboard.</h1>
           <p>Ledger turns the AI work you already do into a portable professional record: what you built, the tools and models you use, how efficiently you work, and which parts are independently trustworthy. It runs on your machine — no account, and your prompts, code, and file paths never leave your computer.</p>
-          <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Build your evidence record →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
+          <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Add your profile →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
           <ul className="hero-facts"><li>Work &amp; outcomes first</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
         </section>
