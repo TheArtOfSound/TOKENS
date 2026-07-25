@@ -374,14 +374,42 @@ function IdentityProofs({
  * verifiable profile. It deliberately reports ACTIVE DAYS, never token volume:
  * a token count on a README is precisely the vanity metric this project refuses.
  */
+const BADGE_VARIANTS = [
+  {
+    id: 'inline',
+    file: 'badge.svg',
+    name: 'Inline',
+    blurb: 'Your active-day count. Sits inline with other README badges.',
+  },
+  {
+    id: 'mark',
+    file: 'badge-mark.svg',
+    name: 'Mark',
+    blurb: 'No numbers at all — just that a signed snapshot exists.',
+  },
+  {
+    id: 'card',
+    file: 'badge-card.svg',
+    name: 'Card',
+    blurb: 'The full record, and the caveats that go with it, on one image.',
+  },
+] as const;
+
 function BadgeEmbed({ handle }: { handle?: string }) {
   const [copied, setCopied] = useState<string | null>(null);
+  const [variant, setVariant] = useState<string>('inline');
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ledger.imagineqira.com';
-  const badgeUrl = `${origin}${import.meta.env.BASE_URL}data/badge.svg`;
+  const chosen = BADGE_VARIANTS.find((v) => v.id === variant) ?? BADGE_VARIANTS[0];
+
+  // Each member serves their own badge next to their own snapshot. Pointing at
+  // this site's file would hand every member the operator's numbers to paste
+  // into their README.
+  const badgeUrl = `${origin}${import.meta.env.BASE_URL}data/${chosen.file}`;
   const profileUrl = handle ? `${origin}${href({ name: 'member', handle })}` : origin;
+  const alt = 'Ledger — signed record of AI-assisted work, verifiable in your browser';
   const snippets: Array<[string, string]> = [
-    ['Markdown', `[![Ledger verified](${badgeUrl})](${profileUrl})`],
-    ['HTML', `<a href="${profileUrl}"><img src="${badgeUrl}" alt="Ledger verified AI-work profile"></a>`],
+    ['Markdown', `[![${alt}](${badgeUrl})](${profileUrl})`],
+    ['HTML', `<a href="${profileUrl}"><img src="${badgeUrl}" alt="${alt}"></a>`],
   ];
   const copy = (label: string, text: string) => {
     navigator.clipboard?.writeText(text).then(() => {
@@ -389,14 +417,33 @@ function BadgeEmbed({ handle }: { handle?: string }) {
       window.setTimeout(() => setCopied(null), 1600);
     }, () => setCopied(null));
   };
+
   return (
     <div className="jcard jcard-pad badge-embed">
-      <h2 className="jcard-title">Share this profile</h2>
+      <h2 className="jcard-title">Put this on your README</h2>
       <p className="jcard-sub">
-        Add a live badge to your README or site. It shows active AI-work days — never token volume — and links
-        here so anyone can re-verify the signature themselves.
+        Every badge links back here so a reader can re-check the signature themselves. Pick how much you want
+        to publish — none of them show token volume.
       </p>
-      <img className="badge-preview" src={badgeUrl} alt="Ledger verified badge preview" />
+
+      <div className="badge-picker" role="radiogroup" aria-label="Badge style">
+        {BADGE_VARIANTS.map((v) => (
+          <button
+            key={v.id}
+            type="button"
+            role="radio"
+            aria-checked={v.id === variant}
+            className={`badge-option${v.id === variant ? ' is-on' : ''}`}
+            onClick={() => setVariant(v.id)}
+          >
+            <span className="badge-option-name">{v.name}</span>
+            <span className="badge-option-blurb">{v.blurb}</span>
+          </button>
+        ))}
+      </div>
+
+      <img className="badge-preview" src={badgeUrl} alt={`${chosen.name} badge preview`} />
+
       <div className="badge-snippets">
         {snippets.map(([label, text]) => (
           <div className="badge-snippet" key={label}>

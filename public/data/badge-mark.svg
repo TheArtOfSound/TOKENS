@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="293" height="20" viewBox="0 0 293 20" role="img" aria-label="Ledger — signed activity snapshot, as of 2026-07-25">
+  <title>Ledger — signed activity snapshot, as of 2026-07-25</title>
+  <style>
+    .band{fill:#12161C} .onband{fill:#FFFFFF} .paper{fill:#F6F4EF}
+    .paper2{fill:#EAE6DC} .ink{fill:#12161C} .ink2{fill:#4A5462} .rule{fill:#C9C3B5}
+    
+    @media (prefers-color-scheme:dark){
+      .band{fill:#0B0E13} .onband{fill:#E9E7E2} .paper{fill:#161A21}
+      .paper2{fill:#1E242D} .ink{fill:#E9E7E2} .ink2{fill:#9AA4B2} .rule{fill:#2E3542}
+      
+    }
+  </style>
+  <clipPath id="c"><rect width="293" height="20" rx="3"/></clipPath>
+  <g clip-path="url(#c)" shape-rendering="crispEdges">
+    <rect width="293" height="20" class="paper" fill="#F6F4EF"/>
+    <rect width="71" height="20" class="band" fill="#12161C"/>
+    <rect x="220" width="73" height="20" class="paper2" fill="#EAE6DC"/>
+    <rect x="220" width="1" height="20" class="rule" fill="#C9C3B5"/>
+  </g>
+  <g>
+    <text x="35.5" y="13.6" class="onband" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" text-anchor="middle" textLength="53">LEDGER</text>
+    <text x="145.5" y="13.6" class="ink" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="10.5" text-anchor="middle" textLength="133">signed activity snapshot</text>
+    <text x="256.5" y="13.4" class="ink2" font-family="ui-monospace,DejaVu Sans Mono,Menlo,Consolas,monospace" font-size="9.5" text-anchor="middle" textLength="57">2026-07-25</text>
+  </g>
+</svg>

@@ -27,8 +27,8 @@ import { buildCompactHistory } from './lib/history';
 import { scanForProhibited } from './lib/secretScan';
 import { detectAnomalies } from './lib/anomaly';
 import { buildClaimAuthority } from './lib/claims';
-import { renderBadge } from './lib/badge';
-import { buildProfile, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
+import { renderBadge, BADGE_FILENAMES, type BadgeVariant, type BadgeFacts } from './lib/badge';
+import { buildProfile, localDateIn, activeDates, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
 import { randomUUID } from 'node:crypto';
@@ -47,6 +47,28 @@ const REGISTRY = path.join(process.cwd(), 'public', 'data', 'profiles', 'index.j
  * snapshots hosted elsewhere and must never be rewritten by someone else's
  * collector run.
  */
+/**
+ * Where this member's badge should link.
+ *
+ * A badge that is not a link asserts without citing, so renderBadge refuses to
+ * build one without this. Self-hosters override the origin with LEDGER_SITE_URL;
+ * the handle comes from the operator entry in the local registry.
+ */
+function profileUrlForBadge(): string {
+  const origin = (process.env.LEDGER_SITE_URL ?? 'https://ledger.imagineqira.com').replace(/\/+$/, '');
+  try {
+    const registry = JSON.parse(readFileSync(REGISTRY, 'utf8')) as {
+      members?: Array<Record<string, unknown>>;
+    };
+    const mine = registry.members?.find((m) => m.operator === true);
+    const handle = typeof mine?.handle === 'string' ? mine.handle : '';
+    if (handle) return `${origin}/u/${handle}`;
+  } catch {
+    /* fall through to the site root */
+  }
+  return origin;
+}
+
 function syncRegistryEntry(identity: ProfileIdentity, generatedAt: string): void {
   try {
     const registry = JSON.parse(readFileSync(REGISTRY, 'utf8')) as {
@@ -240,11 +262,14 @@ function main(): void {
     gitCommit: process.env.GITHUB_SHA ?? null,
   });
 
+  // The member's OWN calendar date, not the UTC one. See localDateIn().
+  const referenceDate = localDateIn(draft.timezone, draft.generatedAt);
+
   draft.profile = buildProfile(
     readProfileConfig(),
     daily,
     draft.providers,
-    draft.generatedAt.slice(0, 10),
+    referenceDate,
     qira.projects,
     readWorkConfig(),
     readOpportunityConfig(),
@@ -262,7 +287,7 @@ function main(): void {
   // to catch large retroactive backfills. Flags, never accuses.
   draft.integrity = detectAnomalies(
     daily,
-    draft.generatedAt.slice(0, 10),
+    referenceDate,
     (existing?.daily as unknown as typeof daily) ?? [],
   );
 
@@ -334,13 +359,24 @@ function main(): void {
     `${JSON.stringify(buildClaimAuthority(), null, 2)}\n`,
   );
 
-  // Embeddable badge for a README / personal site. Reports ACTIVE DAYS, never
-  // token volume — a token count on a README is the vanity metric this project
-  // exists to avoid.
-  writeFileSync(
-    path.join(OUT_DIR, 'badge.svg'),
-    renderBadge({ activeDays: published.profile?.activity.activeDays ?? 0 }),
-  );
+  // Embeddable badges for a README / personal site. Three variants so a member
+  // can choose how much to publish: the count, a bare signed-snapshot mark, or
+  // the full card that carries its own caveats. Never token volume — a token
+  // count on a README is the vanity metric this project exists to avoid.
+  const activity = published.profile?.activity;
+  const badgeFacts: BadgeFacts = {
+    activeDays: activity?.activeDays ?? 0,
+    asOf: activity?.referenceDate ?? referenceDate,
+    lastActiveDate: activity?.lastActiveDate ?? null,
+    firstActiveDate: activity?.firstActiveDate ?? null,
+    toolsUsed: activity?.toolsUsed ?? [],
+    profileUrl: profileUrlForBadge(),
+    signature: 'verifiable',
+    activeDates: activeDates(daily),
+  };
+  for (const variant of Object.keys(BADGE_FILENAMES) as BadgeVariant[]) {
+    writeFileSync(path.join(OUT_DIR, BADGE_FILENAMES[variant]), renderBadge(badgeFacts, variant));
+  }
 
   writeFileSync(LATEST, `${JSON.stringify(signed, null, 2)}\n`);
   const history = buildCompactHistory(daily, published.generatedAt);

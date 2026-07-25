@@ -829,3 +829,33 @@ textarea:focus-visible{
 .btn-sm{height:32px;padding:0 14px;font-size:.85rem}
 .rg-note{margin:14px 0 0;font-size:.86rem;line-height:1.55}
 @media(max-width:640px){.rg-fields{grid-template-columns:1fr}}
+
+/* Badge picker — a member chooses how much to publish, and sees it before they
+   paste it. Previously there was one hardcoded badge and no preview of choice. */
+.badge-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin: 14px 0 16px;
+}
+.badge-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.badge-option:hover { border-color: var(--accent); }
+.badge-option.is-on {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.badge-option-name { font-weight: 650; font-size: 0.92rem; }
+.badge-option-blurb { color: var(--faint); font-size: 0.8rem; line-height: 1.45; }
+.badge-preview { max-width: 100%; height: auto; }

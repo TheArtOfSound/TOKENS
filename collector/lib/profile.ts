@@ -233,6 +233,38 @@ export function diffDaysUtc(from: string, to: string): number {
   return Math.round((toUtc(to) - toUtc(from)) / DAY_MS);
 }
 
+/**
+ * The calendar date at `instant` in IANA zone `timeZone`.
+ *
+ * The reference date used to be `generatedAt.slice(0, 10)`, i.e. the UTC date.
+ * For anyone west of UTC who works in the evening that is TOMORROW: a collect
+ * run at 22:32 in Phoenix is 05:32Z the next day. The published snapshot then
+ * carried referenceDate 2026-07-25 next to lastActiveDate 2026-07-24, so the
+ * badge's as-of stamp read one day ahead of any work it could possibly describe
+ * — a freshness claim the data does not support, on the one line whose whole job
+ * is to let the reader judge freshness.
+ *
+ * It also silently skewed currentStreakDays and activeDaysLast30/90, which are
+ * all measured as offsets from the reference date.
+ *
+ * en-CA formats as YYYY-MM-DD, which is what every date in this codebase is.
+ */
+export function localDateIn(timeZone: string, instant: string): string {
+  const parsed = Date.parse(instant);
+  if (Number.isNaN(parsed)) throw new Error(`localDateIn: unparseable instant ${instant}`);
+  try {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(parsed);
+  } catch {
+    // Unknown zone: fall back to UTC rather than throwing mid-publish.
+    return new Date(parsed).toISOString().slice(0, 10);
+  }
+}
+
 /** Distinct active calendar dates (union across providers), sorted ascending. */
 export function activeDates(daily: NormalizedDaily[]): string[] {
   return [...new Set(daily.filter((row) => row.totalTokens > 0).map((row) => row.date))].sort((a, b) =>
