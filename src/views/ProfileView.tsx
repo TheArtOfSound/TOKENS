@@ -451,10 +451,10 @@ export function ProfileView({
 
           <div className="jprofile-top">
             <div className="jprofile-id">
-              <h2 className="jprofile-name">
+              <h1 className="jprofile-name">
                 {identity.displayName}
                 {identity.pronouns ? <span className="profile-pronouns"> · {identity.pronouns}</span> : null}
-              </h2>
+              </h1>
               <p className="jprofile-headline">{identity.headline}</p>
               <p className="jprofile-meta">
                 {identity.location ? <span>{identity.location}</span> : null}

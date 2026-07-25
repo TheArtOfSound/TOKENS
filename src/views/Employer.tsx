@@ -1,12 +1,13 @@
 /**
  * Employer surface.
  *
- * The buyer-facing view. It answers "what am I actually getting?" before any
- * token number: relevant work, evidence strength, availability, and engagement
- * terms. Raw activity volume is hidden behind "activity details" per the
- * feedback, so a recruiter never reads a big number as skill or salary.
+ * Same job-site layout as the people directory (sticky filter rail + result
+ * rows) so the two read as one product rather than two eras of the design.
  *
- * Filters operate on data read from each member's signed snapshot.
+ * The buyer-specific difference: this view answers "what am I actually getting?"
+ * before any token number — relevant work, evidence strength, availability, and
+ * terms. Raw activity volume stays behind a disclosure so a recruiter never
+ * mistakes a big number for capability or a pay grade.
  */
 
 import { useMemo, useState } from 'react';
@@ -29,6 +30,7 @@ export function Employer() {
   const [category, setCategory] = useState('');
   const [minDays, setMinDays] = useState(0);
   const [openToOnly, setOpenToOnly] = useState(false);
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const categories = useMemo(() => {
@@ -44,120 +46,165 @@ export function Employer() {
         if (tool && !p.toolsUsed.includes(tool)) return false;
         if (category && !p.workCategories.includes(category)) return false;
         if (minDays && p.activeDays < minDays) return false;
+        if (verifiedOnly && p.signature !== 'valid') return false;
         if (openToOnly && p.openTo.length === 0 && p.engagementTypes.length === 0) return false;
         return true;
       }),
-    [profiles, tool, category, minDays, openToOnly],
+    [profiles, tool, category, minDays, openToOnly, verifiedOnly],
   );
 
   if (error) {
     return (
-      <section className="panel wide-panel">
+      <div className="jcard jcard-pad">
         <h2>Find people</h2>
         <p className="muted">The directory could not be loaded ({error}).</p>
-      </section>
+      </div>
     );
   }
 
+  const filtersActive = Boolean(tool || category || minDays || openToOnly || verifiedOnly);
+
   return (
-    <section className="employer" id="employer">
-      <header className="employer-head">
+    <section className="employer-page" id="employer">
+      <div className="jsearch">
+        <aside className="jfilters">
+          <div className="jcard jcard-pad">
+            <h4>Refine candidates</h4>
+            <div className="fgroup">
+              <label htmlFor="emp-tool">Tool</label>
+              <select id="emp-tool" value={tool} onChange={(e) => setTool(e.target.value)}>
+                <option value="">Any tool</option>
+                {TOOLS.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="fgroup">
+              <label htmlFor="emp-cat">Work category</label>
+              <select id="emp-cat" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="">Any category</option>
+                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="fgroup">
+              <label htmlFor="emp-days">Minimum experience</label>
+              <select id="emp-days" value={minDays} onChange={(e) => setMinDays(Number(e.target.value))}>
+                {[0, 10, 30, 60, 90].map((d) => (
+                  <option key={d} value={d}>{d === 0 ? 'Any' : `${d}+ active days`}</option>
+                ))}
+              </select>
+            </div>
+            <div className="fgroup">
+              <h4>Evidence</h4>
+              <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
+              <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
+            </div>
+            {filtersActive ? (
+              <div className="fgroup">
+                <button
+                  className="btn btn-ghost"
+                  style={{ height: 34 }}
+                  onClick={() => { setTool(''); setCategory(''); setMinDays(0); setOpenToOnly(false); setVerifiedOnly(false); }}
+                >
+                  Clear all
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </aside>
+
         <div>
-          <h2>Find people by evidence, not by résumé.</h2>
-          <p className="muted">
-            Every candidate below is backed by a signed snapshot verified in your browser. Results emphasize
-            relevant work, evidence strength, and availability. Activity volume is available on request — it is
-            never the ranking.
-          </p>
-        </div>
-      </header>
+          <div className="jresult-head">
+            <div>
+              <h1 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>
+                Find people by evidence, not by résumé
+              </h1>
+              <p className="jresult-count">
+                {results.length} {results.length === 1 ? 'candidate' : 'candidates'} · every figure read from
+                their own signed snapshot and verified in your browser
+              </p>
+            </div>
+          </div>
 
-      <div className="employer-filters jcard jcard-pad">
-        <label>Tool
-          <select value={tool} onChange={(e) => setTool(e.target.value)}>
-            <option value="">Any</option>
-            {TOOLS.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </label>
-        <label>Work category
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Any</option>
-            {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-        </label>
-        <label>Min. active days
-          <select value={minDays} onChange={(e) => setMinDays(Number(e.target.value))}>
-            {[0, 10, 30, 60, 90].map((d) => <option key={d} value={d}>{d === 0 ? 'Any' : `${d}+`}</option>)}
-          </select>
-        </label>
-        <label className="toggle">
-          <input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} />
-          Open to opportunities
-        </label>
+          <div className="jcard">
+            {results.length === 0 ? (
+              <div className="jcard-pad">
+                <p className="muted" style={{ margin: 0 }}>No candidates match these filters yet.</p>
+              </div>
+            ) : (
+              results.map((p) => (
+                <ErrorBoundary key={p.member.handle} label={`the profile for @${p.member.handle}`}>
+                  <Candidate
+                    p={p}
+                    expanded={!!expanded[p.member.handle]}
+                    onToggle={() => setExpanded((prev) => ({ ...prev, [p.member.handle]: !prev[p.member.handle] }))}
+                  />
+                </ErrorBoundary>
+              ))
+            )}
+          </div>
+
+          {profiles.length > 0 && profiles.length < 5 ? (
+            <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
+              <h3 style={{ margin: '0 0 6px' }}>This talent pool is new.</h3>
+              <p className="muted" style={{ margin: '0 0 14px' }}>
+                {profiles.length === 1 ? 'There is' : 'There are'} {profiles.length} verified{' '}
+                {profiles.length === 1 ? 'profile' : 'profiles'} so far. Everyone here is backed by a signed,
+                browser-verifiable record rather than a self-written résumé — and the pool grows as people publish.
+              </p>
+              <a className="btn btn-primary" href={href({ name: 'join' })}>Invite someone to add theirs →</a>
+            </div>
+          ) : null}
+
+          <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
+            <p className="muted" style={{ margin: 0, fontSize: '.88rem', lineHeight: 1.6 }}>
+              A verified signature proves a snapshot is authentic and unaltered. A linked account proves the
+              member controls that account — <strong>not</strong> their legal identity. Provider-attested usage
+              and third-party-confirmed outcomes are separate, stronger tiers, shown per profile.{' '}
+              <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
+            </p>
+          </div>
+        </div>
       </div>
-
-      {results.length === 0 ? <p className="muted">No candidates match these filters yet.</p> : null}
-
-      {profiles.length > 0 && profiles.length < 5 ? (
-        <div className="employer-early">
-          <strong>This talent pool is new.</strong> {profiles.length === 1 ? 'There is' : 'There are'}{' '}
-          {profiles.length} verified {profiles.length === 1 ? 'profile' : 'profiles'} so far. Everyone here is backed by a signed,
-          browser-verifiable record rather than a self-written résumé — and the pool grows as people publish.
-          <a href={href({ name: 'join' })}>Invite someone to add theirs →</a>
-        </div>
-      ) : null}
-
-      <ul className="candidate-list jcard">
-        {results.map((p) => (
-          <ErrorBoundary key={p.member.handle} label={`the profile for @${p.member.handle}`}>
-            <Candidate p={p} expanded={!!expanded[p.member.handle]} onToggle={() =>
-              setExpanded((prev) => ({ ...prev, [p.member.handle]: !prev[p.member.handle] }))} />
-          </ErrorBoundary>
-        ))}
-      </ul>
-
-      <p className="directory-footnote">
-        A verified signature proves a snapshot is authentic and unaltered. A linked account proves the member
-        controls that account — <strong>not</strong> their legal identity. Provider-attested usage and
-        third-party-confirmed outcomes are separate, stronger tiers, shown per profile.{' '}
-        <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
-      </p>
     </section>
   );
 }
 
 function Candidate({ p, expanded, onToggle }: { p: MemberProfile; expanded: boolean; onToggle: () => void }) {
   const m = p.member;
+  const openTo = p.openTo.length ? p.openTo : p.engagementTypes;
+  const contact = p.contact ? safeUrl(p.contact.href, { allowMailto: true }) : null;
+
   return (
-    <li className="candidate-card">
-      <a className="candidate-id" href={href({ name: 'member', handle: m.handle })}>
-        <span className="member-avatar" aria-hidden="true">{initials(m.displayName)}</span>
-        <span className="member-identity">
-          <strong>{m.displayName}</strong>
-          <span className="member-headline">{m.headline}</span>
-          {m.location ? <span className="member-location">{m.location}</span> : null}
-        </span>
+    <article className="jresult">
+      <a href={href({ name: 'member', handle: m.handle })} aria-hidden="true" tabIndex={-1}>
+        <span className="jresult-avatar">{initials(m.displayName)}</span>
       </a>
 
-      <div className="candidate-body">
-        {p.workCategories.length ? (
-          <div className="candidate-tags">{p.workCategories.slice(0, 5).map((c) => <span key={c}>{c}</span>)}</div>
-        ) : null}
+      <div className="jresult-body">
+        <a className="jresult-name" href={href({ name: 'member', handle: m.handle })}>{m.displayName}</a>
+        <p className="jresult-headline">{m.headline}</p>
+        {m.location ? <p className="jresult-loc">{m.location}</p> : null}
 
+        {/* Evidence and terms lead — never the token count. */}
         <dl className="candidate-facts">
           {p.identityProofs.length ? (
-            <div>
-              <dt>Linked accounts</dt>
-              <dd>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(' · ')}</dd>
-            </div>
+            <div><dt>Linked accounts</dt><dd>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(' · ')}</dd></div>
           ) : null}
-          {p.collectorObserved > 0 ? <div><dt>Collector-observed work</dt><dd>{p.collectorObserved} artifact(s)</dd></div> : null}
+          {p.collectorObserved > 0 ? (
+            <div><dt>Collector-observed work</dt><dd>{p.collectorObserved} artifact{p.collectorObserved === 1 ? '' : 's'}</dd></div>
+          ) : null}
           {p.toolsUsed.length ? <div><dt>Tools</dt><dd>{p.toolsUsed.join(' · ')}</dd></div> : null}
           <div><dt>Experience</dt><dd>{p.activeDays} active days · {p.activeDaysLast30} in last 30</dd></div>
           {p.compensation ? <div><dt>Compensation</dt><dd>{p.compensation}</dd></div> : null}
-          {p.workArrangement || p.timezone ? <div><dt>Availability</dt><dd>{[p.workArrangement, p.timezone].filter(Boolean).join(' · ')}</dd></div> : null}
-          {(p.openTo.length || p.engagementTypes.length) ? <div><dt>Open to</dt><dd>{(p.openTo.length ? p.openTo : p.engagementTypes).join(' · ')}</dd></div> : null}
+          {p.workArrangement || p.timezone ? (
+            <div><dt>Availability</dt><dd>{[p.workArrangement, p.timezone].filter(Boolean).join(' · ')}</dd></div>
+          ) : null}
         </dl>
+
+        {openTo.length ? (
+          <div className="jchips">
+            {openTo.slice(0, 4).map((o) => <span className="jchip jchip-open" key={o}>{o}</span>)}
+          </div>
+        ) : null}
 
         <button className="candidate-toggle" type="button" onClick={onToggle} aria-expanded={expanded}>
           {expanded ? 'Hide activity details' : 'View activity details'}
@@ -171,22 +218,13 @@ function Candidate({ p, expanded, onToggle }: { p: MemberProfile; expanded: bool
         ) : null}
       </div>
 
-      <div className="candidate-foot">
+      <div className="jresult-side">
         <SignatureBadge state={p.signature} reason={p.signatureReason ?? p.error} />
-        <div className="candidate-actions">
-          {(() => {
-            // Member-controlled href: sanitize, or render the label as plain text.
-            const safe = p.contact ? safeUrl(p.contact.href, { allowMailto: true }) : null;
-            if (!p.contact) return null;
-            return safe ? (
-              <a className="cta cta-sm" href={safe.href} {...linkProps(safe)}>{p.contact.label}</a>
-            ) : (
-              <span className="cta cta-sm" aria-disabled="true">{p.contact.label}</span>
-            );
-          })()}
-          <a className="candidate-view" href={href({ name: 'member', handle: m.handle })}>View profile →</a>
-        </div>
+        {contact && p.contact ? (
+          <a className="btn btn-primary" href={contact.href} {...linkProps(contact)}>{p.contact.label}</a>
+        ) : null}
+        <a className="btn btn-secondary" href={href({ name: 'member', handle: m.handle })}>View profile</a>
       </div>
-    </li>
+    </article>
   );
 }

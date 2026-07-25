@@ -50,7 +50,7 @@ export function Verify() {
 
   return (
     <section className="verify-page" id="verify">
-      <h2>How verification works</h2>
+      <h1>How verification works</h1>
       <p className="lede">
         Every profile in this directory is backed by a snapshot the member hosts themselves, signed by a key
         that never leaves their machine. Your browser checks that signature directly. You do not have to trust
@@ -112,8 +112,9 @@ export function Verify() {
         <h3>What a signature does not prove</h3>
         <ul>
           <li>
-            <strong>Not identity.</strong> It proves a key signed this, not who holds the key. Identity
-            verification is not built; every profile marks it pending.
+            <strong>Not legal identity.</strong> It proves a key signed this, not who holds the key. A member
+            can additionally link an external account (e.g. GitHub), which your browser verifies here — that
+            proves control of that account, still not who they legally are.
           </li>
           <li>
             <strong>Not log authenticity.</strong> Anyone controlling a machine could feed the collector

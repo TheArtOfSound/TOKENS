@@ -61,7 +61,7 @@ export function Claims() {
 
   return (
     <section className="claims-page" id="claims">
-      <h2>What each piece of evidence can — and cannot — establish</h2>
+      <h1>What each piece of evidence can — and cannot — establish</h1>
       <p className="lede">
         Every badge on a profile maps to a signal below, and it can support only that signal’s allowed claim,
         at its stated confidence. This is the logical floor: <code>{data.model}</code>.

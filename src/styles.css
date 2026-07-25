@@ -787,3 +787,16 @@ textarea:focus-visible{
 .render-error{padding:18px 20px;border:1px solid #f0c8ce;border-left:3px solid #9f1239;border-radius:10px;background:#fff4f5;margin:12px 0}
 .render-error strong{display:block;color:#9f1239;margin-bottom:6px}
 .render-error p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.55}
+
+/* Employer result facts (shares the .jresult shell with the directory) ------ */
+.employer-page{position:relative;z-index:1;padding-top:24px}
+.candidate-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 20px;margin:12px 0 0}
+.candidate-facts>div{min-width:0}
+.candidate-facts dt{color:var(--faint);font-size:.64rem;font-weight:950;letter-spacing:.09em;text-transform:uppercase}
+.candidate-facts dd{margin:2px 0 0;font-weight:650;font-size:.92rem;color:var(--ink)}
+.candidate-toggle{margin-top:14px;background:none;border:1px dashed var(--card-border);border-radius:8px;padding:7px 12px;font:inherit;font-weight:700;font-size:.82rem;color:var(--muted);cursor:pointer}
+.candidate-toggle:hover{color:var(--ink);border-color:var(--faint)}
+.candidate-activity{margin:10px 0 0;padding:10px 12px;background:var(--soft);border-radius:8px;font-size:.86rem;color:var(--muted);line-height:1.5}
+/* The filter rail labels are real <label>s here, not headings. */
+.jfilters .fgroup>label{display:block;margin-bottom:6px;font-size:.74rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.jfilters .fgroup>label:has(input){display:flex;text-transform:none;letter-spacing:0;font-size:.92rem;font-weight:400;color:var(--ink)}

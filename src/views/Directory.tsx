@@ -116,7 +116,7 @@ export function Directory() {
         <div>
           <div className="jresult-head">
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>People measuring their AI work</h2>
+              <h1 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>People measuring their AI work</h1>
               <p className="jresult-count">
                 {results.length} {results.length === 1 ? 'profile' : 'profiles'}
                 {query ? <> for “{query}”</> : null} · never ranked by token volume

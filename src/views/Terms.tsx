@@ -13,7 +13,7 @@ import { href } from '../lib/router';
 export function Terms() {
   return (
     <section className="legal-page" id="terms">
-      <h2>Terms of use</h2>
+      <h1>Terms of use</h1>
       <p className="lede">
         TOKENS is a free, open-source, local-first tool plus a public directory. There is no account, no
         subscription, and no payment. These terms cover using this site and appearing in the directory.

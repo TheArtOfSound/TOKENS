@@ -33,7 +33,7 @@ const ROWS: Row[] = [
 export function Compare() {
   return (
     <section className="compare-page" id="compare">
-      <h2>Where TOKENS fits</h2>
+      <h1>Where Ledger fits</h1>
       <p className="lede">
         TOKENS is not trying to be the best usage monitor or the best audit trail. It is the portable evidence
         layer that sits above them: it turns measured activity, connected work, and independent verification
