@@ -18,3 +18,8 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Personal profile config — each member's own identity, never shipped in a clone.
+# A fresh clone would otherwise publish the previous owner's name and rates.
+profile/*.json
+!profile/*.example.json

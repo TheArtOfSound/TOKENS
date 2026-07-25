@@ -114,8 +114,15 @@ export function Join() {
         <li>
           <h3>5. Build your profile</h3>
           <p>
-            Edit <code>profile/profile.json</code> (name or pseudonym, headline, what you're open to) and{' '}
-            <code>profile/work.json</code>. Then generate and sign your snapshot.
+            Copy the examples, then make them yours. Your personal config is gitignored, so nothing you write
+            here is ever shipped to anyone else's clone.
+          </p>
+          <Command>cp profile/profile.example.json profile/profile.json</Command>
+          <p className="muted">
+            Edit <code>profile/profile.json</code> (name or pseudonym, headline, what you're open to). Optional
+            extras: <code>work.example.json</code> for featured work, <code>opportunity.example.json</code> for
+            availability and rates, and <code>projects.example.json</code> to let the collector look for your
+            own projects on this machine. Then generate and sign your snapshot.
           </p>
           <Command>npm run collect</Command>
           <p className="muted">

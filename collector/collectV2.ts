@@ -69,24 +69,49 @@ function syncRegistryEntry(identity: ProfileIdentity, generatedAt: string): void
   }
 }
 
-/** Read the self-submitted profile identity (profile/profile.json). Safe defaults if absent. */
+/**
+ * Read the member's own identity (profile/profile.json).
+ *
+ * There is deliberately NO usable fallback identity. Personal config is
+ * gitignored and shipped only as profile/*.example.json, because a fresh clone
+ * that inherited the previous owner's name, links, and rates would publish a
+ * profile impersonating them. If the file is missing or still holds the example
+ * placeholder, we stop and tell the member what to do rather than publish
+ * something wrong under their name.
+ */
 function readProfileConfig(): ProfileIdentity {
-  const fallback: ProfileIdentity = {
-    displayName: 'Qira',
-    headline: 'Local AI-agent work ledger',
+  const setupHint =
+    'Set up your profile first:\n' +
+    '  cp profile/profile.example.json profile/profile.json\n' +
+    '  (then edit displayName, headline, and the rest)\n' +
+    'Optional: profile/work.example.json, profile/opportunity.example.json, profile/projects.example.json';
+
+  let parsed: Partial<ProfileIdentity> | null = null;
+  try {
+    parsed = JSON.parse(readFileSync(PROFILE_CONFIG, 'utf8')) as Partial<ProfileIdentity>;
+  } catch {
+    console.error(`No profile/profile.json found.\n${setupHint}`);
+    process.exit(1);
+  }
+
+  if (!parsed || typeof parsed.displayName !== 'string' || typeof parsed.headline !== 'string') {
+    console.error(`profile/profile.json needs a displayName and a headline.\n${setupHint}`);
+    process.exit(1);
+  }
+  if (parsed.displayName === 'Your Name') {
+    console.error(
+      `profile/profile.json still contains the example placeholder ("Your Name").\n` +
+        'Edit it before publishing so the snapshot carries your identity, not a placeholder.',
+    );
+    process.exit(1);
+  }
+
+  return {
     workCategories: [],
     openTo: [],
     links: [],
-  };
-  try {
-    const parsed = JSON.parse(readFileSync(PROFILE_CONFIG, 'utf8')) as Partial<ProfileIdentity>;
-    if (parsed && typeof parsed.displayName === 'string' && typeof parsed.headline === 'string') {
-      return { ...fallback, ...parsed } as ProfileIdentity;
-    }
-  } catch {
-    /* fall through to defaults */
-  }
-  return fallback;
+    ...parsed,
+  } as ProfileIdentity;
 }
 
 /** Read self-submitted work artifacts and outcomes (profile/work.json). */

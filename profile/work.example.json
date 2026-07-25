@@ -1,0 +1,5 @@
+{
+  "_comment": "Copy to profile/work.json. Work you want to show. RULES: (1) Never invent outcomes — anything unverifiable stays out. (2) 'linkedProject' must match a project name in profile/projects.json; if the collector actually finds that project on your machine the artifact is badged 'collector-observed', otherwise it degrades to 'link-provided' or 'self-reported'. You cannot mint a badge by editing this file. (3) 'outcomes' are ALWAYS labeled self-reported.",
+  "artifacts": [],
+  "outcomes": []
+}

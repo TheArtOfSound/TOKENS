@@ -1,0 +1,10 @@
+{
+  "_comment": "Copy to profile/opportunity.json. Self-declared availability and terms, so a buyer never has to infer cost from token volume. Every field is optional — leave it null or empty to hide it. Shown clearly as member-set preferences, not verified terms.",
+  "engagementTypes": [],
+  "compensation": null,
+  "typicalProjectSize": null,
+  "workArrangement": null,
+  "timezone": null,
+  "responseTime": null,
+  "computeCostRange": null
+}

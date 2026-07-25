@@ -1,0 +1,14 @@
+{
+  "_comment": "Copy to profile/projects.json to let the collector look for YOUR projects on this machine. This is an explicit allowlist: the scanner only ever looks for projects you name here, and it publishes derived metadata (stack, git branch, file counts) — never file contents or paths. Leave 'projects' empty and no local scanning happens at all.",
+  "projects": [
+    {
+      "name": "My Project",
+      "category": "Product",
+      "status": "active",
+      "description": "One line about it.",
+      "publicUrl": "https://example.com",
+      "aliases": ["my-project", "myproject"],
+      "domains": ["example.com"]
+    }
+  ]
+}

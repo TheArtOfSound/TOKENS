@@ -45,16 +45,38 @@ export type QiraProjectScan = {
   scannerWarnings: string[];
 };
 
-const PROJECTS: ProjectDef[] = [
-  { name: 'Qira Main', category: 'Company Surface', status: 'public', publicUrl: 'https://imagineqira.com', description: 'Primary Qira research and product site.', aliases: ['imagineqira', 'imagine-qira', 'qira-site', 'qira-main'], domains: ['imagineqira.com', 'www.imagineqira.com'] },
-  { name: 'LOLM', category: 'Research', status: 'research', description: 'Latent Order Language Model architecture and validation work.', aliases: ['lolm', 'lolm-nfet', 'lolm-nfet-client', 'latent-order'], domains: ['lolm.autohustle.online', 'lolm.imagineqira.com'] },
-  { name: 'NFET / QEV', category: 'Research', status: 'research', description: 'Verification, encryption, and proof-layer experiments.', aliases: ['qev', 'nfet', 'qev-desktop', 'qev-secure', 'secure-qev', 'bry-nfet', 'qira-encryption-vault'], domains: ['secure.imagineqira.com', 'qev-desktop', 'mydigital.imagineqira.com'] },
-  { name: 'My Digital', category: 'Product', status: 'shipping', publicUrl: 'https://mydigital.imagineqira.com', description: 'QEV-backed digital goods and licensing surface.', aliases: ['my-digital', 'mydigital', 'mydigital-imagineqira', 'digital-marketplace'], domains: ['mydigital.imagineqira.com'] },
-  { name: 'Codey', category: 'Product', status: 'shipping', publicUrl: 'https://codey.imagineqira.com', description: 'Qira builder and agent-product workspace.', aliases: ['codey', 'codey-imagineqira', 'codey-ai'], domains: ['codey.imagineqira.com', 'codey.autohustle.online'] },
-  { name: 'PTI', category: 'Intelligence', status: 'active', publicUrl: 'https://pti.imagineqira.com', description: 'Phoenix traffic intelligence surface.', aliases: ['pti', 'pti-phoenix', 'pti-imagineqira', 'phoenix-traffic'], domains: ['pti.imagineqira.com'] },
-  { name: 'Question', category: 'Public Experiment', status: 'active', publicUrl: 'https://question.imagineqira.com', description: 'Qira question and cognition experiment.', aliases: ['question', 'question-imagineqira', 'qira-question'], domains: ['question.imagineqira.com'] },
-  { name: 'TOKENS', category: 'Proof Infrastructure', status: 'instrumented', description: 'Public AI-agent usage observatory.', aliases: ['tokens', 'qira-agent-usage-observatory', 'qira-ledger'], domains: ['ledger.imagineqira.com'] },
-];
+/**
+ * Project allowlist — read from the MEMBER's own profile/projects.json.
+ *
+ * This used to be a hardcoded list of the original author's projects, which meant
+ * every fresh clone scanned for (and published) someone else's project names.
+ * Now it is per-member config, and the default is an EMPTY list: no config means
+ * no local project scanning at all, which is also the privacy-safe default.
+ */
+function loadProjectDefs(): ProjectDef[] {
+  const configPath = process.env.TOKENS_PROJECTS_CONFIG || path.join(process.cwd(), 'profile', 'projects.json');
+  try {
+    const parsed = JSON.parse(readFileSync(configPath, 'utf8')) as { projects?: unknown };
+    if (!Array.isArray(parsed?.projects)) return [];
+    return parsed.projects
+      .filter((raw): raw is Record<string, unknown> => !!raw && typeof raw === 'object')
+      .map((raw) => ({
+        name: String(raw.name ?? '').slice(0, 60),
+        category: String(raw.category ?? 'Project').slice(0, 40),
+        status: String(raw.status ?? 'active').slice(0, 40),
+        publicUrl: typeof raw.publicUrl === 'string' ? raw.publicUrl : undefined,
+        description: String(raw.description ?? '').slice(0, 200),
+        aliases: Array.isArray(raw.aliases) ? raw.aliases.map(String) : [],
+        domains: Array.isArray(raw.domains) ? raw.domains.map(String) : [],
+      }))
+      .filter((def) => def.name.length > 0)
+      .slice(0, 40);
+  } catch {
+    return []; // no config -> no project scanning
+  }
+}
+
+const PROJECTS: ProjectDef[] = loadProjectDefs();
 
 const SKIP = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.turbo', 'coverage', '.cache', 'vendor', '.venv', '__pycache__']);
 const TEXT_EXT = new Set(['.json', '.md', '.txt', '.html', '.tsx', '.ts', '.jsx', '.js', '.css', '.py', '.toml', '.yml', '.yaml']);

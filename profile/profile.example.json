@@ -1,0 +1,13 @@
+{
+  "_comment": "Copy this to profile/profile.json and make it yours. Everything here is SELF-SUBMITTED and is labeled that way in the UI — it is never presented as verified. Do NOT put secrets, API keys, phone numbers, or a precise home address here; keep location city-level. Prefer a pseudonym? Just change displayName.",
+  "displayName": "Your Name",
+  "headline": "What you do — e.g. Backend engineer working with AI agents",
+  "pronouns": null,
+  "location": "City, Region, Country",
+  "bio": "A few sentences about the work you do and how you use AI tooling.",
+  "availability": null,
+  "workCategories": [],
+  "openTo": [],
+  "links": [],
+  "identityProofs": []
+}
