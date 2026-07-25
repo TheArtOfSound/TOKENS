@@ -14,6 +14,7 @@ import { Privacy } from './views/Privacy';
 import { Terms } from './views/Terms';
 import { href, navigate, useRoute } from './lib/router';
 import { safeUrl, linkProps } from './lib/safeUrl';
+import { CAVEATS } from './lib/caveats';
 
 const dataUrl = `${import.meta.env.BASE_URL}data/latest.json`;
 
@@ -449,7 +450,7 @@ function SiteFooter() {
       <div className="footer-legal">
         <span>© {new Date().getFullYear()} Qira LLC</span>
         <span>No analytics. No accounts. No data collected from visitors.</span>
-        <span>Activity is evidence of practice — not a measure of skill, seniority, or employability.</span>
+        <span>{CAVEATS.volume}</span>
       </div>
     </footer>
   );

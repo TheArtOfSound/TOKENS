@@ -12,6 +12,7 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { CAVEATS } from '../caveats';
 
 const VIEWS = path.join(__dirname, '..', '..', 'views');
 const sources = readdirSync(VIEWS)
@@ -54,4 +55,55 @@ describe('every routed page has exactly one h1', () => {
       expect((text.match(/<h1[\s>]/g) ?? []).length, `${file} h1 count`).toBe(1);
     });
   }
+});
+
+/**
+ * Caveat wording must not fork again.
+ *
+ * The "volume is not a score" point had drifted into five different wordings
+ * across the views, and the two identity notes on /people and /employer had
+ * drifted into two different claims about the same mechanism. Repetition is
+ * intentional here — the framing has to sit next to every number — but five
+ * phrasings of one idea reads as a product that is anxious about itself.
+ */
+describe('caveats stay canonical', () => {
+  // Only the STANDALONE framings that were retired. The enumerated bullets on
+  // /join and /verify ("Volume is not skill." under a "what this does and does
+  // not claim" heading) are a different rhetorical context — a list with its own
+  // per-item emphasis — and are deliberately left alone. An earlier version of
+  // this pattern was loose enough to flag "Activity is evidence of practice" in
+  // Join, which is a positive statement about what activity IS, not a retired
+  // disclaimer.
+  const RETIRED = [
+    /Token volume is not a skill, productivity, or compensation score/i,
+    /Activity volume is one signal — not a skill/i,
+    /Activity is evidence of practice — not a measure of skill/i,
+    /Volume is one activity\s*\n?\s*signal, not a skill or pay score/i,
+  ];
+
+  for (const { file, text } of sources) {
+    it(`${file} uses no retired wording of the volume caveat`, () => {
+      for (const pattern of RETIRED) expect(text).not.toMatch(pattern);
+    });
+  }
+
+  it('still states the caveat wherever a token total is rendered', () => {
+    // The guard that matters: dropping the caveat must fail, not just changing it.
+    const withTotals = sources.filter(
+      (s) => /compactNumber\(p\.totalTokens\)|totalTokens \?/.test(s.text),
+    );
+    expect(withTotals.length).toBeGreaterThan(0);
+    for (const { file, text } of withTotals) {
+      const framed = text.includes('CAVEATS.volume') || text.includes('ActivityDisclaimer');
+      expect(framed, `${file} renders a token total without the volume caveat`).toBe(true);
+    }
+  });
+
+  it('keeps the canonical strings saying what they must', () => {
+    expect(CAVEATS.volume).toMatch(/not a skill, productivity, or pay score/i);
+    expect(CAVEATS.signatureProves).toMatch(/has not been altered/i);
+    expect(CAVEATS.signatureNotIdentity).toMatch(/not legal identity/i);
+    // The signature caveat must never imply it establishes who someone is.
+    expect(CAVEATS.signatureProves).not.toMatch(/\bidentity\b/i);
+  });
 });

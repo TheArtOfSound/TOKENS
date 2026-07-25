@@ -17,6 +17,7 @@ import { href } from '../lib/router';
 import { SignatureBadge } from './SignatureBadge';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
 import { ErrorBoundary } from './ErrorBoundary';
+import { EvidenceNote } from './EvidenceNote';
 
 export { SignatureBadge };
 
@@ -153,12 +154,7 @@ export function Directory() {
 
           <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
             <ActivityDisclaimer compact />
-            <p className="muted" style={{ margin: '10px 0 0', fontSize: '.88rem', lineHeight: 1.6 }}>
-              A verified signature proves a snapshot was produced by a device key and hasn’t been altered.
-              Members can also link an external account — verified in <em>your</em> browser — which proves
-              control of that account, but <strong>not</strong> legal identity.{' '}
-              <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
-            </p>
+            <EvidenceNote />
           </div>
         </div>
       </div>

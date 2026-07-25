@@ -13,10 +13,12 @@
 import { useMemo, useState } from 'react';
 import { useMemberProfiles, type MemberProfile } from '../lib/members';
 import { compactNumber } from '../lib/format';
+import { CAVEATS } from '../lib/caveats';
 import { href } from '../lib/router';
 import { safeUrl, linkProps } from '../lib/safeUrl';
 import { SignatureBadge } from './SignatureBadge';
 import { ErrorBoundary } from './ErrorBoundary';
+import { EvidenceNote } from './EvidenceNote';
 
 function initials(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || 'Q';
@@ -151,12 +153,7 @@ export function Employer() {
           ) : null}
 
           <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
-            <p className="muted" style={{ margin: 0, fontSize: '.88rem', lineHeight: 1.6 }}>
-              A verified signature proves a snapshot is authentic and unaltered. A linked account proves the
-              member controls that account — <strong>not</strong> their legal identity. Provider-attested usage
-              and third-party-confirmed outcomes are separate, stronger tiers, shown per profile.{' '}
-              <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
-            </p>
+            <EvidenceNote tiers />
           </div>
         </div>
       </div>
@@ -208,8 +205,7 @@ function Candidate({ p, expanded, onToggle }: { p: MemberProfile; expanded: bool
         {expanded ? (
           <p className="candidate-activity">
             AI activity volume: <strong>{p.totalTokens ? compactNumber(p.totalTokens) : '—'}</strong> tokens
-            {p.cachedSharePct != null ? ` · ${p.cachedSharePct}% cache reuse` : ''}. Volume is one activity
-            signal, not a skill or pay score.
+            {p.cachedSharePct != null ? ` · ${p.cachedSharePct}% cache reuse` : ''}. {CAVEATS.volume}
           </p>
         ) : null}
       </div>
