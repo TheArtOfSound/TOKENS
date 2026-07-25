@@ -422,26 +422,26 @@ function SiteFooter() {
         </div>
         <nav className="footer-cols" aria-label="Footer">
           <div>
-            <h4>Product</h4>
+            <h3>Product</h3>
             <a href={href({ name: 'directory' })}>People</a>
             <a href={href({ name: 'join' })}>Add your profile</a>
             <a href={href({ name: 'verify' })}>Verification</a>
           </div>
           <div>
-            <h4>Open source</h4>
+            <h3>Open source</h3>
             <a href="https://github.com/TheArtOfSound/TOKENS" target="_blank" rel="noopener noreferrer">Repository</a>
             <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
             <a href="./data/latest.json" target="_blank" rel="noopener noreferrer">Inspect a snapshot</a>
           </div>
           <div>
-            <h4>Trust</h4>
+            <h3>Trust</h3>
             <a href={href({ name: 'claims' })}>What evidence proves</a>
             <a href={href({ name: 'privacy' })}>Privacy</a>
             <a href={href({ name: 'terms' })}>Terms</a>
             <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security policy</a>
           </div>
           <div>
-            <h4>Qira</h4>
+            <h3>Qira</h3>
             <a href="https://imagineqira.com" target="_blank" rel="noopener noreferrer">imagineqira.com</a>
           </div>
         </nav>

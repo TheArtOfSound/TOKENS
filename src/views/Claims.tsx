@@ -72,7 +72,7 @@ export function Claims() {
       </div>
 
       <div className="claims-universal">
-        <h3>None of these signals — alone or combined — establish:</h3>
+        <h2>None of these signals — alone or combined — establish:</h2>
         <ul>
           {data.universalNonClaims.map((n) => (
             <li key={n}>{n}</li>

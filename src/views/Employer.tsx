@@ -66,10 +66,18 @@ export function Employer() {
 
   return (
     <section className="employer-page" id="employer">
+      <header className="jpage-head">
+        <h1>Find people by evidence, not by résumé</h1>
+        <p className="jresult-count">
+          {results.length} {results.length === 1 ? 'candidate' : 'candidates'} · every figure read from their
+          own signed snapshot and verified in your browser
+        </p>
+      </header>
+
       <div className="jsearch">
         <aside className="jfilters">
           <div className="jcard jcard-pad">
-            <h4>Refine candidates</h4>
+            <h2 className="jfilters-title">Refine candidates</h2>
             <div className="fgroup">
               <label htmlFor="emp-tool">Tool</label>
               <select id="emp-tool" value={tool} onChange={(e) => setTool(e.target.value)}>
@@ -93,7 +101,7 @@ export function Employer() {
               </select>
             </div>
             <div className="fgroup">
-              <h4>Evidence</h4>
+              <h2>Evidence</h2>
               <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
               <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
             </div>
@@ -112,18 +120,6 @@ export function Employer() {
         </aside>
 
         <div>
-          <div className="jresult-head">
-            <div>
-              <h1 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>
-                Find people by evidence, not by résumé
-              </h1>
-              <p className="jresult-count">
-                {results.length} {results.length === 1 ? 'candidate' : 'candidates'} · every figure read from
-                their own signed snapshot and verified in your browser
-              </p>
-            </div>
-          </div>
-
           <div className="jcard">
             {results.length === 0 ? (
               <div className="jcard-pad">
@@ -144,7 +140,7 @@ export function Employer() {
 
           {profiles.length > 0 && profiles.length < 5 ? (
             <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
-              <h3 style={{ margin: '0 0 6px' }}>This talent pool is new.</h3>
+              <h2 style={{ margin: '0 0 6px' }}>This talent pool is new.</h2>
               <p className="muted" style={{ margin: '0 0 14px' }}>
                 {profiles.length === 1 ? 'There is' : 'There are'} {profiles.length} verified{' '}
                 {profiles.length === 1 ? 'profile' : 'profiles'} so far. Everyone here is backed by a signed,

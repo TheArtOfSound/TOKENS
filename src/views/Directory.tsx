@@ -74,11 +74,19 @@ export function Directory() {
 
   return (
     <section className="directory-page" id="people">
+      <header className="jpage-head">
+        <h1>People measuring their AI work</h1>
+        <p className="jresult-count">
+          {results.length} {results.length === 1 ? 'profile' : 'profiles'}
+          {query ? <> for “{query}”</> : null} · never ranked by token volume
+        </p>
+      </header>
+
       <div className="jsearch">
         {/* Filter rail */}
         <aside className="jfilters">
           <div className="jcard jcard-pad">
-            <h4>Refine</h4>
+            <h2 className="jfilters-title">Refine</h2>
             <div className="fgroup">
               <label className="visually-hidden" htmlFor="dir-q">Search people</label>
               <input
@@ -91,14 +99,14 @@ export function Directory() {
               />
             </div>
             <div className="fgroup">
-              <h4>Tool</h4>
-              <select value={tool} onChange={(e) => setTool(e.target.value)}>
+              <label htmlFor="dir-tool">Tool</label>
+              <select id="dir-tool" value={tool} onChange={(e) => setTool(e.target.value)}>
                 <option value="">Any tool</option>
                 {tools.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div className="fgroup">
-              <h4>Evidence</h4>
+              <h2>Evidence</h2>
               <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
               <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
             </div>
@@ -115,13 +123,6 @@ export function Directory() {
         {/* Results */}
         <div>
           <div className="jresult-head">
-            <div>
-              <h1 style={{ margin: 0, fontSize: '1.35rem', letterSpacing: '-.03em' }}>People measuring their AI work</h1>
-              <p className="jresult-count">
-                {results.length} {results.length === 1 ? 'profile' : 'profiles'}
-                {query ? <> for “{query}”</> : null} · never ranked by token volume
-              </p>
-            </div>
             <a className="btn btn-primary" href={href({ name: 'join' })}>Add your profile</a>
           </div>
 
@@ -141,7 +142,7 @@ export function Directory() {
 
           {profiles.length > 0 && profiles.length < 5 ? (
             <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
-              <h3 style={{ margin: '0 0 6px' }}>This directory is just getting started.</h3>
+              <h2 style={{ margin: '0 0 6px' }}>This directory is just getting started.</h2>
               <p className="muted" style={{ margin: '0 0 14px' }}>
                 Every profile here is a signed, browser-verifiable record of real AI work — not a self-written
                 résumé. Be one of the first; it takes about ten minutes.

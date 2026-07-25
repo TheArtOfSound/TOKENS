@@ -59,7 +59,7 @@ export function Verify() {
 
       <ol className="steps">
         <li>
-          <h3>1. The collector signs locally</h3>
+          <h2>1. The collector signs locally</h2>
           <p>
             An Ed25519 keypair is generated on the member's machine and the private key is stored in their OS
             keychain. The snapshot is canonicalized (a fixed RFC 8785 subset, so byte order is deterministic),
@@ -67,7 +67,7 @@ export function Verify() {
           </p>
         </li>
         <li>
-          <h3>2. Your browser re-derives the same bytes</h3>
+          <h2>2. Your browser re-derives the same bytes</h2>
           <p>
             This page canonicalizes the snapshot the same way, recomputes the digest, and verifies the
             signature against the public key embedded in the file. If a single byte of the data changed after
@@ -75,7 +75,7 @@ export function Verify() {
           </p>
         </li>
         <li>
-          <h3>3. Revoked keys are rejected</h3>
+          <h2>3. Revoked keys are rejected</h2>
           <p>
             A cryptographically valid signature from a key its owner has revoked is still reported as invalid.
             Revocations are published separately from snapshots so a compromised key cannot suppress its own
@@ -109,7 +109,7 @@ export function Verify() {
       )}
 
       <section className="join-honest">
-        <h3>What a signature does not prove</h3>
+        <h2>What a signature does not prove</h2>
         <ul>
           <li>
             <strong>Not legal identity.</strong> It proves a key signed this, not who holds the key. A member

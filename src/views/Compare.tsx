@@ -66,7 +66,7 @@ export function Compare() {
       </div>
 
       <section className="join-honest">
-        <h3>Integrations, not competitors</h3>
+        <h2>Integrations, not competitors</h2>
         <ul>
           <li>
             <strong>Metering tools</strong> are better at live monitoring, rate limits, and forecasting. TOKENS

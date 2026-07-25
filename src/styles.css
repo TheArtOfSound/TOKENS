@@ -343,7 +343,7 @@ summary:focus:not(:focus-visible) {
 .footer-brand .brand { font-weight: 950; letter-spacing: .18em; font-size: 1.2rem; margin-bottom: 14px; }
 .footer-brand p { margin: 0; color: var(--muted); line-height: 1.6; max-width: 42ch; }
 .footer-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.footer-cols h4 { margin: 0 0 12px; font-size: .72rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
+.footer-cols h3 { margin: 0 0 12px; font-size: .72rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
 .footer-cols a { display: block; margin-bottom: 9px; color: var(--muted); text-decoration: none; font-size: .92rem; }
 .footer-cols a:hover { color: var(--ink); text-decoration: underline; }
 .footer-legal { width: min(1220px, calc(100% - 40px)); margin: 0 auto; padding: 20px 0 40px;
@@ -800,3 +800,32 @@ textarea:focus-visible{
 /* The filter rail labels are real <label>s here, not headings. */
 .jfilters .fgroup>label{display:block;margin-bottom:6px;font-size:.74rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
 .jfilters .fgroup>label:has(input){display:flex;text-transform:none;letter-spacing:0;font-size:.92rem;font-weight:400;color:var(--ink)}
+
+/* Page title above the search grid ----------------------------------------
+   The h1 used to sit inside the results column, which put the filter rail's
+   headings ahead of it in DOM order — a screen reader reached "Refine / Tool /
+   Evidence" before the page title. Hoisting it fixes the reading order and
+   reads better besides. */
+.jpage-head{margin:0 0 16px}
+.jpage-head h1{margin:0 0 4px;font-size:1.5rem;letter-spacing:-.035em}
+.jfilters-title{margin:0 0 10px;font-size:.74rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.jfilters h3{margin:0 0 10px;font-size:.74rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.jresult-head:empty{display:none}
+
+/* Registry-entry generator ------------------------------------------------- */
+.registry-gen{margin:18px 0 8px}
+.rg-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 18px}
+.rg-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.rg-wide{grid-column:1/-1}
+.rg-field label{font-size:.74rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.rg-field label span{display:block;margin-top:2px;font-size:.72rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted)}
+.rg-field input{height:40px;padding:0 12px;border:1px solid var(--card-border);border-radius:8px;background:#fff;font:inherit;color:var(--ink)}
+.rg-field input[aria-invalid="true"]{border-color:#9f1239}
+.rg-err{margin:0;color:#9f1239;font-size:.82rem}
+.rg-outlabel{display:block;margin:0 0 8px;font-size:.74rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.registry-gen .badge-snippet code{white-space:pre;font-size:.76rem;line-height:1.5}
+.registry-gen .badge-snippet .btn[disabled]{opacity:.45;cursor:not-allowed}
+.rg-steps{margin:18px 0 0;padding-left:20px;display:grid;gap:10px;color:var(--muted);line-height:1.6}
+.btn-sm{height:32px;padding:0 14px;font-size:.85rem}
+.rg-note{margin:14px 0 0;font-size:.86rem;line-height:1.55}
+@media(max-width:640px){.rg-fields{grid-template-columns:1fr}}

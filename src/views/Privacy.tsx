@@ -25,7 +25,7 @@ export function Privacy() {
       </p>
 
       <div className="legal-highlight">
-        <h3>What this site collects about visitors</h3>
+        <h2>What this site collects about visitors</h2>
         <p>
           <strong>Nothing.</strong> No analytics, no tracking pixels, no cookies set by this application, no
           fingerprinting, no advertising. The site is a static bundle; it has no backend and no database.
@@ -40,7 +40,7 @@ export function Privacy() {
         </p>
       </div>
 
-      <h3>Requests your browser makes on this site</h3>
+      <h2>Requests your browser makes on this site</h2>
       <ul className="legal-list">
         <li>
           <strong>This origin</strong> — the app bundle and published JSON (<code>data/latest.json</code>,
@@ -56,7 +56,7 @@ export function Privacy() {
         </li>
       </ul>
 
-      <h3>What the collector does on your machine</h3>
+      <h2>What the collector does on your machine</h2>
       <p>
         The collector runs locally and reads the usage logs Claude Code and Codex already write. It is
         allowlist-based: it names the handful of fields it wants and constructs a new object, so a field it
@@ -74,21 +74,21 @@ export function Privacy() {
         <code>npm run consent:delete</code>).
       </p>
 
-      <h3>What you choose to publish is public</h3>
+      <h2>What you choose to publish is public</h2>
       <p>
         A published profile is a public document on the internet. Your name or pseudonym, headline, links,
         availability, and measured activity are visible to anyone, and may be cached or indexed by third
         parties outside our control. Publish nothing you would not want public.
       </p>
 
-      <h3>Deleting your data</h3>
+      <h2>Deleting your data</h2>
       <p>
         We hold nothing of yours to delete. Remove your entry from the registry and you are out of the
         directory; stop hosting your snapshot and it is gone. Copies already cached or indexed elsewhere are
         outside anyone's control — including ours.
       </p>
 
-      <h3>Children</h3>
+      <h2>Children</h2>
       <p>This is a professional tool and is not directed to children under 13.</p>
 
       <div className="legal-note">

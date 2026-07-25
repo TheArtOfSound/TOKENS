@@ -159,7 +159,7 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
     <div className="profile-work" id="work">
       <div className="section-kicker"><span /> CONNECTED WORK &amp; EVIDENCE</div>
       <div className="work-head">
-        <h3>Featured work</h3>
+        <h2>Featured work</h2>
         <p>
           {work.collectorObserved} of {work.totalArtifacts} connected {work.totalArtifacts === 1 ? 'artifact was' : 'artifacts were'}{' '}
           independently observed by the local collector. The rest are self-submitted links or claims and are labeled as such.
@@ -197,7 +197,7 @@ function WorkEvidenceSection({ work }: { work: WorkBlock | undefined }) {
       </div>
 
       <div className="work-outcomes">
-        <h3>Outcomes</h3>
+        <h2>Outcomes</h2>
         {work.outcomes?.length ? (
           <>
             <p className="work-outcome-note">
@@ -284,7 +284,7 @@ function EfficiencyPanel({ efficiency }: { efficiency: ProfileBlockT['efficiency
   if (!cells.length) return null;
   return (
     <div className="efficiency-panel">
-      <h3>Efficiency signals</h3>
+      <h2>Efficiency signals</h2>
       <div className="efficiency-cells">
         {cells.map(([label, value]) => (
           <div key={label}><strong>{value}</strong><span>{label}</span></div>
@@ -391,7 +391,7 @@ function BadgeEmbed({ handle }: { handle?: string }) {
   };
   return (
     <div className="jcard jcard-pad badge-embed">
-      <h3 className="jcard-title">Share this profile</h3>
+      <h2 className="jcard-title">Share this profile</h2>
       <p className="jcard-sub">
         Add a live badge to your README or site. It shows active AI-work days — never token volume — and links
         here so anyone can re-verify the signature themselves.
@@ -481,7 +481,7 @@ export function ProfileView({
               declared availability — never inferred. */}
           {isOpenToWork ? (
             <div className="open-card">
-              <h3>Open to work</h3>
+              <h2>Open to work</h2>
               <p>{(identity.openTo.length ? identity.openTo : profile.opportunity?.engagementTypes ?? []).join(' · ')}</p>
               {identity.availability ? <p className="open-detail">{identity.availability}</p> : null}
             </div>
@@ -503,7 +503,7 @@ export function ProfileView({
 
       {identity.bio ? (
         <div className="jcard jcard-pad">
-          <h3 className="jcard-title">About</h3>
+          <h2 className="jcard-title">About</h2>
           <p className="profile-bio">{identity.bio}</p>
         </div>
       ) : null}
@@ -519,13 +519,13 @@ export function ProfileView({
       {/* 4. AI-tool experience. */}
       <div className="profile-cols">
         <div className="profile-block">
-          <h3>AI tools &amp; models</h3>
+          <h2>AI tools &amp; models</h2>
           <div className="tag-row">{activity.toolsUsed.map((tool) => <span key={tool} className="tag-strong">{tool}</span>)}</div>
           {activity.modelsUsed.length ? <div className="tag-row">{activity.modelsUsed.slice(0, 10).map((model) => <span key={model}>{model}</span>)}</div> : null}
         </div>
         <div className="profile-block">
-          {identity.workCategories.length ? <><h3>Work categories</h3><div className="tag-row">{identity.workCategories.map((category) => <span key={category}>{category}</span>)}</div></> : null}
-          {identity.openTo.length ? <><h3>Open to</h3><div className="tag-row">{identity.openTo.map((item) => <span key={item} className="tag-open">{item}</span>)}</div></> : null}
+          {identity.workCategories.length ? <><h2>Work categories</h2><div className="tag-row">{identity.workCategories.map((category) => <span key={category}>{category}</span>)}</div></> : null}
+          {identity.openTo.length ? <><h2>Open to</h2><div className="tag-row">{identity.openTo.map((item) => <span key={item} className="tag-open">{item}</span>)}</div></> : null}
         </div>
       </div>
 

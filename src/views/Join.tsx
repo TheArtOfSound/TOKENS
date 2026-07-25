@@ -11,6 +11,7 @@
 
 import { useState } from 'react';
 import { href } from '../lib/router';
+import { RegistryEntry } from './RegistryEntry';
 
 function Command({ children }: { children: string }) {
   const [copied, setCopied] = useState(false);
@@ -66,7 +67,7 @@ export function Join() {
 
       {/* Primary route */}
       <div className="install-primary">
-        <h3>1. Install</h3>
+        <h2>1. Install</h2>
         <div className="os-tabs" role="tablist" aria-label="Operating system">
           {(Object.keys(INSTALL) as OS[]).map((key) => (
             <button
@@ -97,22 +98,22 @@ export function Join() {
       {/* Shared flow — identical on every OS */}
       <ol className="steps">
         <li>
-          <h3>2. See what it would read, before it reads anything</h3>
+          <h2>2. See what it would read, before it reads anything</h2>
           <p>Lists every source it can see, what each extracts, and what it discards. Any source can be turned off and stays off.</p>
           <Command>npm run consent</Command>
         </li>
         <li>
-          <h3>3. Measure</h3>
+          <h2>3. Measure</h2>
           <p>Reads your local provider logs into a private SQLite ledger on your machine. Incremental — about 20 seconds the first run, near-instant after.</p>
           <Command>npm run ingest</Command>
         </li>
         <li>
-          <h3>4. Review exactly what would be published</h3>
+          <h2>4. Review exactly what would be published</h2>
           <p>Prints the full payload, field by field. Nothing is published until you have seen this. If it contains anything unexpected, that is a bug and the collector should fail rather than publish it.</p>
           <Command>npm run consent:preview</Command>
         </li>
         <li>
-          <h3>5. Build your profile</h3>
+          <h2>5. Build your profile</h2>
           <p>
             Copy the examples, then make them yours. Your personal config is gitignored, so nothing you write
             here is ever shipped to anyone else's clone.
@@ -132,7 +133,7 @@ export function Join() {
           </p>
         </li>
         <li>
-          <h3>6. Publish it</h3>
+          <h2>6. Publish it</h2>
           <p>
             Host <code>public/data/latest.json</code> anywhere you control — GitHub Pages, your own domain, any
             static host — then open a pull request adding your entry to{' '}
@@ -140,6 +141,7 @@ export function Join() {
           </p>
           <Command>npm run build</Command>
           <p className="muted">You keep hosting your own data. Removing your entry removes you from the directory — we hold nothing of yours to delete.</p>
+          <RegistryEntry />
           <p>Your data stays yours, and these work at any time, on any OS:</p>
           <Command>npm run consent:export</Command>
           <Command>npm run consent:delete</Command>
@@ -154,7 +156,7 @@ export function Join() {
       </p>
 
       <section className="join-honest">
-        <h3>What this does and does not claim</h3>
+        <h2>What this does and does not claim</h2>
         <ul>
           <li><strong>Measured, not estimated.</strong> Token counts come from the providers' own usage accounting in your local logs.</li>
           <li><strong>A signature proves integrity, not identity.</strong> It shows a snapshot came from a specific device key and was not altered. It doesn't prove who you are, and it can't prove your provider logs were genuine — anyone controlling a machine could feed the collector fabricated logs.</li>
