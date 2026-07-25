@@ -35,7 +35,7 @@ export function Compare() {
     <section className="compare-page" id="compare">
       <h1>Where Ledger fits</h1>
       <p className="lede">
-        TOKENS is not trying to be the best usage monitor or the best audit trail. It is the portable evidence
+        Ledger is not trying to be the best usage monitor or the best audit trail. It is the portable evidence
         layer that sits above them: it turns measured activity, connected work, and independent verification
         into a professional record you own. Where specialized tools are stronger, the right move is to import
         their output — not reinvent it.
@@ -49,7 +49,7 @@ export function Compare() {
               <th scope="col">Capability</th>
               <th scope="col">Metering<br /><small>ccusage, Claude Code Usage Monitor</small></th>
               <th scope="col">Audit trail<br /><small>AgentRail</small></th>
-              <th scope="col">TOKENS<br /><small>evidence layer</small></th>
+              <th scope="col">Ledger<br /><small>evidence layer</small></th>
             </tr>
           </thead>
           <tbody>
@@ -69,16 +69,16 @@ export function Compare() {
         <h2>Integrations, not competitors</h2>
         <ul>
           <li>
-            <strong>Metering tools</strong> are better at live monitoring, rate limits, and forecasting. TOKENS
+            <strong>Metering tools</strong> are better at live monitoring, rate limits, and forecasting. Ledger
             can <em>import</em> their machine-readable history rather than duplicate it — see{' '}
             <a href="https://github.com/TheArtOfSound/TOKENS/blob/main/docs/architecture/IMPORTING.md" target="_blank" rel="noopener noreferrer">the import framework</a>.
           </li>
           <li>
             <strong>Audit tools</strong> are better at issue-to-PR provenance and cross-session workflow history.
-            An adapter that imports completed-work evidence into a TOKENS profile is the intended direction.
+            An adapter that imports completed-work evidence into a Ledger profile is the intended direction.
           </li>
           <li>
-            <strong>Résumés and LinkedIn</strong> carry claims. TOKENS carries signed, browser-verifiable
+            <strong>Résumés and LinkedIn</strong> carry claims. Ledger carries signed, browser-verifiable
             evidence with an explicit ladder of how strong each piece is.
           </li>
         </ul>

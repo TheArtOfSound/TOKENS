@@ -531,7 +531,7 @@ export default function App() {
         <section className="hero" id="top">
           <div className="hero-pill"><span /> Local-first evidence layer for AI-assisted work</div>
           <h1>Evidence of how you work with AI — not a token leaderboard.</h1>
-          <p>TOKENS turns the AI work you already do into a portable professional record: what you built, the tools and models you use, how efficiently you work, and which parts are independently trustworthy. It runs on your machine — no account, and your prompts, code, and file paths never leave your computer.</p>
+          <p>Ledger turns the AI work you already do into a portable professional record: what you built, the tools and models you use, how efficiently you work, and which parts are independently trustworthy. It runs on your machine — no account, and your prompts, code, and file paths never leave your computer.</p>
           <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Build your evidence record →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
           <ul className="hero-facts"><li>Work &amp; outcomes first</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}

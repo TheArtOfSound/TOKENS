@@ -380,8 +380,8 @@ function BadgeEmbed({ handle }: { handle?: string }) {
   const badgeUrl = `${origin}${import.meta.env.BASE_URL}data/badge.svg`;
   const profileUrl = handle ? `${origin}${href({ name: 'member', handle })}` : origin;
   const snippets: Array<[string, string]> = [
-    ['Markdown', `[![TOKENS verified](${badgeUrl})](${profileUrl})`],
-    ['HTML', `<a href="${profileUrl}"><img src="${badgeUrl}" alt="TOKENS verified AI-work profile"></a>`],
+    ['Markdown', `[![Ledger verified](${badgeUrl})](${profileUrl})`],
+    ['HTML', `<a href="${profileUrl}"><img src="${badgeUrl}" alt="Ledger verified AI-work profile"></a>`],
   ];
   const copy = (label: string, text: string) => {
     navigator.clipboard?.writeText(text).then(() => {
@@ -396,7 +396,7 @@ function BadgeEmbed({ handle }: { handle?: string }) {
         Add a live badge to your README or site. It shows active AI-work days — never token volume — and links
         here so anyone can re-verify the signature themselves.
       </p>
-      <img className="badge-preview" src={badgeUrl} alt="TOKENS verified badge preview" />
+      <img className="badge-preview" src={badgeUrl} alt="Ledger verified badge preview" />
       <div className="badge-snippets">
         {snippets.map(([label, text]) => (
           <div className="badge-snippet" key={label}>

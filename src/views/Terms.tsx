@@ -15,7 +15,7 @@ export function Terms() {
     <section className="legal-page" id="terms">
       <h1>Terms of use</h1>
       <p className="lede">
-        TOKENS is a free, open-source, local-first tool plus a public directory. There is no account, no
+        Ledger is a free, open-source, local-first tool plus a public directory. There is no account, no
         subscription, and no payment. These terms cover using this site and appearing in the directory.
       </p>
 

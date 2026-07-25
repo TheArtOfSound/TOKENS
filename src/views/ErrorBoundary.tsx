@@ -38,7 +38,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, info: ErrorInfo): void {
     // No telemetry is sent anywhere — the privacy page promises no analytics, and
     // that has to stay true. The console is the local-only record.
-    console.error(`[TOKENS] render failed${this.props.label ? ` in ${this.props.label}` : ''}:`, error, info.componentStack);
+    console.error(`[Ledger] render failed${this.props.label ? ` in ${this.props.label}` : ''}:`, error, info.componentStack);
   }
 
   render(): ReactNode {

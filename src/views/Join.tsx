@@ -59,7 +59,7 @@ export function Join() {
       <header className="join-head">
         <h1>Measure your own AI work</h1>
         <p className="lede">
-          TOKENS runs on your machine — macOS, Linux, or Windows. It reads the usage logs Claude Code and
+          Ledger runs on your machine — macOS, Linux, or Windows. It reads the usage logs Claude Code and
           Codex already write, counts tokens, and produces a signed summary you can publish. There is no
           account, and your prompts, code, and file paths never leave your computer.
         </p>

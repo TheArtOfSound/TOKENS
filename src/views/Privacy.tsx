@@ -19,7 +19,7 @@ export function Privacy() {
     <section className="legal-page" id="privacy">
       <h1>Privacy</h1>
       <p className="lede">
-        TOKENS is local-first. There is no account, no server that receives your data, and no analytics on
+        Ledger is local-first. There is no account, no server that receives your data, and no analytics on
         this site. The short version: <strong>we do not collect anything from you</strong> — because there is
         nowhere for it to go.
       </p>
