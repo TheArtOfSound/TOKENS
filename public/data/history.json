@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
   "kind": "compact_daily_series",
-  "generatedAt": "2026-07-26T10:08:15.464Z",
-  "updatedThrough": "2026-07-25",
-  "pointCount": 139,
+  "generatedAt": "2026-07-26T10:38:30.375Z",
+  "updatedThrough": "2026-07-26",
+  "pointCount": 140,
   "points": [
     {
       "date": "2026-02-26",
@@ -1115,6 +1115,14 @@
       "totalTokens": 401023631,
       "freshTokens": 12594319,
       "cachedTokens": 388429312,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-07-26",
+      "provider": "claude",
+      "totalTokens": 5589805,
+      "freshTokens": 16656,
+      "cachedTokens": 5573149,
       "estimatedCostUsd": null
     }
   ],

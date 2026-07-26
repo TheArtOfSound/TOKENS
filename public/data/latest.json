@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-26T10:08:15.464Z",
+  "generatedAt": "2026-07-26T10:38:30.375Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 296577538,
-    "outputTokens": 93010244,
-    "cacheCreationTokens": 664247526,
-    "cacheReadTokens": 34898870741,
-    "cachedTokens": 35563118267,
-    "freshTokens": 389587782,
-    "totalTokens": 35952706049,
+    "inputTokens": 296577550,
+    "outputTokens": 93026888,
+    "cacheCreationTokens": 665154460,
+    "cacheReadTokens": 34903536956,
+    "cachedTokens": 35568691416,
+    "freshTokens": 389604438,
+    "totalTokens": 35958295854,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -48,13 +48,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12626055,
-      "outputTokens": 63330148,
-      "cacheCreationTokens": 664247526,
-      "cacheReadTokens": 24894908885,
-      "cachedTokens": 25559156411,
-      "freshTokens": 75956203,
-      "totalTokens": 25635112614,
+      "inputTokens": 12626067,
+      "outputTokens": 63346792,
+      "cacheCreationTokens": 665154460,
+      "cacheReadTokens": 24899575100,
+      "cachedTokens": 25564729560,
+      "freshTokens": 75972859,
+      "totalTokens": 25640702419,
       "estimatedCostUsd": null
     }
   },
@@ -3116,6 +3116,28 @@
       "freshTokens": 12594319,
       "totalTokens": 401023631,
       "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-07-26",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 12,
+      "outputTokens": 16644,
+      "cacheCreationTokens": 906934,
+      "cacheReadTokens": 4666215,
+      "cachedTokens": 5573149,
+      "freshTokens": 16656,
+      "totalTokens": 5589805,
+      "estimatedCostUsd": null
     }
   ],
   "qiraProjects": [
@@ -3127,7 +3149,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "21e60e7",
+        "commit": "c2a6990",
         "changedFiles": 6
       },
       "stack": [],
@@ -3284,7 +3306,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "21e60e7",
+        "commit": "c2a6990",
         "changedFiles": 6
       },
       "stack": [
@@ -3318,7 +3340,7 @@
         "css": 2,
         "tsx": 17
       },
-      "lastModified": "2026-07-26T10:08:11.724Z",
+      "lastModified": "2026-07-26T10:38:22.912Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3381,7 +3403,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 35952706049,
+    "exactTotalTokens": 35958295854,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3457,13 +3479,13 @@
     },
     "activity": {
       "referenceDate": "2026-07-26",
-      "activeDays": 97,
+      "activeDays": 98,
       "firstActiveDate": "2026-02-26",
-      "lastActiveDate": "2026-07-25",
-      "spanDays": 150,
-      "activeDaysLast30": 28,
-      "activeDaysLast90": 72,
-      "currentStreakDays": 5,
+      "lastActiveDate": "2026-07-26",
+      "spanDays": 151,
+      "activeDaysLast30": 29,
+      "activeDaysLast90": 73,
+      "currentStreakDays": 6,
       "longestStreakDays": 26,
       "toolsUsed": [
         "Codex",
@@ -3586,7 +3608,7 @@
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
       "outputSharePct": 23.9,
-      "avgTokensPerActiveDay": 370646454,
+      "avgTokensPerActiveDay": 366921386,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet."
     },
     "verification": [
@@ -3598,7 +3620,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (97 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (98 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Identity-linked",
@@ -3678,7 +3700,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "8ea72c0f01ab8d6b8bf75328662a4543e7310295b1868cc4f5da30128cb34001",
+    "snapshotSha256": "dd354dd0b5049914e1dfeb2662cc4bbfaa26b0022dd59f3bfa2893ba1f0a0ed5",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -3688,12 +3710,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-26T10:08:15.507Z",
-    "nonce": "d2fd92b9-4d7e-4988-aac0-c2b4bdf309b6",
+    "issuedAt": "2026-07-26T10:38:30.442Z",
+    "nonce": "729074ed-110b-49dc-bb49-27acc6a50500",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "c06ca7943906f9d41bf2cb9e50a1269919d8bfcd66a7f57e9c39b7c97d82544d",
-    "signature": "IwUqbRSJ7OxeHCBxWiOXIxL+/yN3YTk2AI+BWQbh/nHS+UdpRArDyF9p9OIZcI2h7NlorddIIocwwiahR/2tCA==",
+    "payloadSha256": "cfbd9fa373f5caac74e337e011133506e4712d6276f950142e64e1a282865e85",
+    "signature": "SwlbsZrDYxKdCcNjEKuvgePAb2gXLkOmYrpPNrkZrSIAoC8RUVfy1FeAZYnPJTmNBzV1wWeZkObOps3EruCaBA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
