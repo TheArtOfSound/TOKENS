@@ -188,9 +188,10 @@ export function Member({ handle }: { handle: string }) {
           </div>
         </div>
         <p className="muted">
-          Verified in your browser — this site did not vouch for it. A valid signature proves the snapshot came
-          from that device key unaltered. It does not prove the person's identity, and it cannot prove their
-          provider logs were genuine. <a href={href({ name: 'verify' })}>How verification works</a>
+          Device-signed activity record — re-checked in your browser; this site did not vouch for it.
+          The signature confirms integrity and signing key of this snapshot. It does not independently prove
+          identity, authorship, skill, source honesty, permission, or outcomes.{' '}
+          <a href={href({ name: 'verify' })}>How signatures work</a>
         </p>
       </section>
     </>

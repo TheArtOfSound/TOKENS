@@ -298,13 +298,18 @@ function HowItWorks() {
         </li>
         <li>
           <span className="how-num">3</span>
-          <h3>Publish &amp; be verified</h3>
-          <p>You host the signed summary yourself. Anyone who opens your profile re-checks the signature in their own browser — they don&apos;t have to trust you, this site, or us.</p>
+          <h3>Preview, then publish</h3>
+          <p>
+            You see the exact public payload, then choose: publish through Ledger, register a self-hosted
+            snapshot, or keep everything private. A signature makes the bytes tamper-evident — it does not
+            prove the underlying logs were honest.
+          </p>
         </li>
       </ol>
       <div className="band-cta">
-        <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
-        <a className="ghost" href={href({ name: 'verify' })}>How verification works</a>
+        <a className="cta" href={href({ name: 'member', handle: 'bryan' })}>Example profile →</a>
+        <a className="ghost" href={href({ name: 'verify' })}>How signatures work</a>
+        <a className="ghost" href={href({ name: 'join' })}>Join</a>
       </div>
     </section>
   );
@@ -312,10 +317,10 @@ function HowItWorks() {
 
 function WhyDifferent() {
   const points = [
-    { t: 'Measured, not self-reported', d: 'Token counts come from the providers’ own usage accounting in your local logs — not a number you type in.' },
-    { t: 'Private by construction', d: 'Extraction is an allowlist: only a handful of named fields are ever read. Identifiers are kept as keyed hashes. Nothing is uploaded to us.' },
-    { t: 'Cryptographically verifiable', d: 'Every profile is signed on-device and re-verified in the visitor’s browser. Tampering breaks the signature.' },
-    { t: 'You own your data', d: 'You host your own snapshot. Remove it and you’re gone — there is no account and nothing of yours for us to keep.' },
+    { t: 'Claim-bounded evidence', d: 'Every signal carries provenance, allowed claims, excluded claims, and limitations — never a generic “verified expert” badge.' },
+    { t: 'Measured, not self-reported', d: 'Token counts come from provider usage accounting in local logs — activity evidence, not a number you type in as skill.' },
+    { t: 'Private by construction', d: 'Publication constructs a new allowlisted object. Unknown fields fail closed. Prompts, code, and paths never leave the machine.' },
+    { t: 'Device-signed, browser-checked', d: 'Snapshots are sealed with a local device key. Visitors re-check integrity in their own browser. Integrity is not source honesty.' },
   ];
   return (
     <section className="band why" id="why">
@@ -332,8 +337,8 @@ function WhyDifferent() {
         ))}
       </div>
       <p className="why-honest">
-        What a signature does <strong>not</strong> prove: who you are, or that your provider logs were genuine.
-        Identity verification isn&apos;t built yet, and every profile says so. We&apos;d rather state that plainly than imply a check we don&apos;t run.
+        {CAVEATS.signatureProves} {CAVEATS.signatureNotHonesty} Account login is not identity verification.
+        Token volume is never treated as expertise, rank, or compensation.
       </p>
     </section>
   );
@@ -619,24 +624,28 @@ export default function App() {
       {route.name === 'home' && (
         <>
         <section className="hero">
-          <div className="hero-pill"><span /> Local-first · no account · open source</div>
-          <h1>Evidence of how you work with AI — not a token leaderboard.</h1>
-          <p>Turn the AI work you already do into a portable professional record: what you built, the tools you use, and which parts anyone can verify. Runs on your machine — prompts, code, and file paths never leave your computer.</p>
+          <div className="hero-pill"><span /> Local-first · claim-bounded evidence · open source</div>
+          <h1>A portable evidence record for AI-assisted work.</h1>
+          <p>
+            Not a token tracker, not an expertise score, and not a leaderboard. Connect locally observed AI
+            activity to work artifacts, assessments, and outcomes — with an explicit claim boundary on every
+            signal. Runs on your machine; prompts, code, and file paths never leave your computer.
+          </p>
           <div className="hero-actions">
-            <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
+            <a className="cta" href={href({ name: 'member', handle: 'bryan' })}>See an example profile →</a>
             <a href={href({ name: 'directory' })}>Browse people</a>
-            <a className="hero-link-quiet" href={href({ name: 'employer' })}>I&apos;m hiring</a>
+            <a className="hero-link-quiet" href={href({ name: 'join' })}>Add your profile</a>
           </div>
           <ul className="hero-facts">
-            <li>Work &amp; outcomes first</li>
-            <li>Signed on your device</li>
-            <li>Verified in your browser</li>
-            <li>You host your own data</li>
+            <li>Work &amp; durability first</li>
+            <li>Device-signed records</li>
+            <li>Integrity re-checked in your browser</li>
+            <li>Publish only when you choose</li>
           </ul>
           <div className="trust-strip" aria-label="How Ledger works in three steps">
-            <div><strong>1. Measure</strong><span>Local collector reads your existing AI usage logs</span></div>
-            <div><strong>2. Sign</strong><span>Your device key seals a summary — private key never leaves</span></div>
-            <div><strong>3. Share</strong><span>Anyone re-checks the signature in their browser</span></div>
+            <div><strong>1. Measure</strong><span>Local collector reads existing AI usage logs — never auto-publishes</span></div>
+            <div><strong>2. Sign</strong><span>Device key seals a public summary — private key never leaves</span></div>
+            <div><strong>3. Publish</strong><span>Explicit step: Ledger-hosted, self-host, or stay private</span></div>
           </div>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
         </section>
@@ -676,17 +685,60 @@ export default function App() {
 
         {/* Raw activity totals come LAST and are explicitly not a score. */}
         <section className="activity-details" id="activity-details">
-          <div className="section-kicker"><span /> ACTIVITY &amp; RESOURCE USAGE</div>
-          <h2>Activity details</h2>
+          <div className="section-kicker"><span /> ACTIVITY DETAILS</div>
+          <h2>Activity details — resource usage, not rank</h2>
           <ActivityDisclaimer />
           <div className="metrics-grid">
-            <MetricCard label="AI activity volume" value={compactNumber(snapshot.totals.totalTokens)} detail={`${fullNumber(snapshot.totals.totalTokens)} tokens`} tone="dark" evidence="derived" />
-            <MetricCard label="Cached context" value={compactNumber(snapshot.totals.cachedTokens)} detail={`${percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} — efficiency signal`} evidence="provider-reported" />
-            <MetricCard label="Fresh tokens" value={compactNumber(snapshot.totals.freshTokens)} detail="input + output" evidence="provider-reported" />
-            <MetricCard label="Estimated cost" value={currency(snapshot.totals.estimatedCostUsd)} detail="ccusage estimate" evidence="estimated" />
-            <MetricCard label="Busiest day" value={largestDay ? compactNumber(largestDay.totalTokens) : '—'} detail={largestDay?.date ?? 'pending'} evidence="derived" />
-            <MetricCard label="Qira projects" value={String(qiraProjects.length)} detail="allowlisted only" tone="quiet" evidence="metadata" />
+            <MetricCard
+              label="Total tokens (sum)"
+              value={compactNumber(snapshot.totals.totalTokens)}
+              detail={`${fullNumber(snapshot.totals.totalTokens)} — not a skill score`}
+              tone="quiet"
+              evidence="derived"
+            />
+            <MetricCard
+              label="Fresh input"
+              value={compactNumber(snapshot.totals.inputTokens)}
+              detail="provider-reported"
+              evidence="provider-reported"
+            />
+            <MetricCard
+              label="Output tokens"
+              value={compactNumber(snapshot.totals.outputTokens)}
+              detail="provider-reported"
+              evidence="provider-reported"
+            />
+            <MetricCard
+              label="Cached context"
+              value={compactNumber(snapshot.totals.cachedTokens)}
+              detail={`${percent(snapshot.totals.cachedTokens, snapshot.totals.totalTokens)} of total`}
+              evidence="provider-reported"
+            />
+            <MetricCard
+              label="Estimated cost"
+              value={currency(snapshot.totals.estimatedCostUsd)}
+              detail="price-table estimate, not an invoice"
+              evidence="estimated"
+            />
+            <MetricCard
+              label="Active AI-work days"
+              value={snapshot.profile ? String(snapshot.profile.activity.activeDays) : '—'}
+              detail={
+                snapshot.profile
+                  ? `${snapshot.profile.activity.activeDaysLast30} in last 30 · streak ${snapshot.profile.activity.currentStreakDays}`
+                  : 'from collector'
+              }
+              tone="dark"
+              evidence="collector-observed"
+            />
           </div>
+          <p className="muted activity-busiest">
+            Peak day volume (context only):{' '}
+            {largestDay
+              ? `${compactNumber(largestDay.totalTokens)} on ${largestDay.date} — still not proficiency.`
+              : '—'}{' '}
+            Projects in local allowlist scan: {qiraProjects.length}.
+          </p>
         </section>
   
         {/* The operator's local project scan: also real, also 2,300px. Same treatment. */}

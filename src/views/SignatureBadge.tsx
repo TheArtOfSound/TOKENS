@@ -1,26 +1,20 @@
 /**
  * Signature state badge.
  *
- * Extracted from Directory so the directory, employer, and member views can all
- * import it without depending on a page component. State is never conveyed by
- * colour alone — each state also carries distinct text.
+ * Never a generic "Verified" person badge. Valid state means device-signed
+ * integrity of the published bytes — not identity, skill, or source honesty.
  */
 
 import type { SignatureState } from '../lib/registry';
-
-const LABEL: Record<SignatureState, string> = {
-  checking: 'Verifying…',
-  valid: 'Signature verified',
-  invalid: 'Signature failed',
-  unsigned: 'Unsigned',
-  unreachable: 'Unreachable',
-};
+import { signatureAuthorityLabel } from '../lib/evidenceAuthority';
 
 export function SignatureBadge({ state, reason }: { state: SignatureState; reason?: string }) {
+  const auth = signatureAuthorityLabel(state === 'valid' ? 'valid' : state);
+  const title = reason ?? auth.explains;
   return (
-    <span className={`sig sig-${state}`} title={reason ?? LABEL[state]}>
+    <span className={`sig sig-${state}`} title={title}>
       <span aria-hidden="true" className="sig-dot" />
-      {LABEL[state]}
+      {auth.label}
     </span>
   );
 }

@@ -100,10 +100,27 @@ describe('caveats stay canonical', () => {
   });
 
   it('keeps the canonical strings saying what they must', () => {
-    expect(CAVEATS.volume).toMatch(/not a skill, productivity, or pay score/i);
-    expect(CAVEATS.signatureProves).toMatch(/has not been altered/i);
+    expect(CAVEATS.volume).toMatch(/evidence of activity/i);
+    expect(CAVEATS.volume).toMatch(/not expertise, productivity, efficiency, or professional value/i);
+    expect(CAVEATS.signatureProves).toMatch(/integrity and signing key/i);
+    expect(CAVEATS.signatureNotHonesty).toMatch(/source honesty/i);
     expect(CAVEATS.signatureNotIdentity).toMatch(/not legal identity/i);
-    // The signature caveat must never imply it establishes who someone is.
+    // The integrity sentence must never claim identity was proven.
     expect(CAVEATS.signatureProves).not.toMatch(/\bidentity\b/i);
+    expect(CAVEATS.productFrame).toMatch(/portable evidence record/i);
   });
+});
+
+describe('no overclaiming verification language in views', () => {
+  const OVERCLAIM = [
+    /Verified AI (?:worker|expert|professional)/i,
+    /proven expert/i,
+    /objective expertise score/i,
+    /verified skill\b/i,
+  ];
+  for (const { file, text } of sources) {
+    it(`${file} avoids generic verified-expertise language`, () => {
+      for (const pattern of OVERCLAIM) expect(text, `${file} matched ${pattern}`).not.toMatch(pattern);
+    });
+  }
 });

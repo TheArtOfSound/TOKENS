@@ -18,8 +18,24 @@ export function ActivityDisclaimer({ compact = false }: { compact?: boolean }) {
     );
   }
   return (
-    <p className="activity-disclaimer">
+    <p className="activity-disclaimer" role="note">
       <strong>{CAVEATS.volume}</strong> {CAVEATS.volumeWhy}
+    </p>
+  );
+}
+
+/** Short integrity note for signature panels. */
+export function SignatureDisclaimer({ compact = false }: { compact?: boolean }) {
+  if (compact) {
+    return (
+      <p className="activity-disclaimer activity-disclaimer-compact">
+        {CAVEATS.signatureProves} {CAVEATS.signatureNotHonesty}
+      </p>
+    );
+  }
+  return (
+    <p className="activity-disclaimer" role="note">
+      <strong>{CAVEATS.signatureProves}</strong> {CAVEATS.signatureNotHonesty} {CAVEATS.signatureNotIdentity}
     </p>
   );
 }

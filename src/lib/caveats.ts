@@ -23,18 +23,33 @@
  */
 
 export const CAVEATS = {
-  /** Goes next to every token total, without exception. */
-  volume: 'Volume is not a skill, productivity, or pay score.',
+  /**
+   * Goes next to every token total, without exception.
+   * Reddit: people still read totals as skill/spend/competition — this sentence
+   * must sit beside the number every time.
+   */
+  volume:
+    'Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value.',
 
   /** The follow-on, where there is room for it. */
   volumeWhy:
-    'It is one activity signal, read alongside work artifacts, efficiency, and confirmed outcomes. Producing the same result with fewer tokens is better, not worse.',
+    'Read it alongside work artifacts, durability, assessments, and confirmed outcomes. Producing the same result with fewer tokens is better, not worse. Totals can be inflated by waste; they are never a rank or pay basis.',
 
   /** What a signature genuinely establishes. */
   signatureProves:
-    'A signature proves a snapshot came from a device key and has not been altered since.',
+    'This signature confirms the integrity and signing key of this snapshot.',
 
-  /** And what it does not — the inference the claim ladder exists to block. */
+  /**
+   * Full integrity ≠ honesty boundary — required next to verification UI.
+   * A fabricated log set can still be correctly signed.
+   */
+  signatureNotHonesty:
+    'It does not independently prove identity, authorship, skill, source honesty, permission, or outcomes.',
+
+  /** Account control vs legal identity. */
   signatureNotIdentity:
-    'It does not prove who holds that key. Linking an external account proves control of that account — not legal identity.',
+    'Login or a linked account proves control of that account — not legal identity.',
+
+  /** Preferred product framing (headline-adjacent). */
+  productFrame: 'A portable evidence record for AI-assisted work.',
 } as const;
