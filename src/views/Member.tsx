@@ -151,7 +151,14 @@ export function Member({ handle }: { handle: string }) {
 
       {profile ? (
         <ErrorBoundary label={`the profile for @${handle}`}>
-          <ProfileView profile={profile} daily={state.snapshot.daily} integrity={state.snapshot.integrity} keyId={state.keyId} handle={handle} />
+          <ProfileView
+            profile={profile}
+            daily={state.snapshot.daily}
+            integrity={state.snapshot.integrity}
+            keyId={state.keyId}
+            handle={handle}
+            claimAuthority={state.snapshot.claimAuthority}
+          />
         </ErrorBoundary>
       ) : (
         <section className="panel wide-panel">

@@ -1066,6 +1066,24 @@ textarea:focus-visible{
   .mobile-nav,.menu-toggle-bars i{transition:none}
 }
 
+/* ---- Claim-bounded evidence badges ---- */
+.ebadge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.ebadge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:var(--soft);font-size:.7rem;font-weight:800;color:var(--muted);letter-spacing:.01em}
+.ebadge b{font-size:.65rem;opacity:.85}
+.ebadge-tier{font-style:normal;font-weight:650;opacity:.75;text-transform:capitalize;font-size:.62rem}
+.ebadge.is-absent{opacity:.55}
+.ebadge-device_signed{background:rgba(13,148,136,.1);color:#0f766e;border-color:rgba(13,148,136,.28)}
+.ebadge-collector_observed{background:rgba(49,92,255,.1);color:#2947cc;border-color:rgba(49,92,255,.22)}
+.ebadge-provider_attested{background:rgba(79,70,229,.1);color:#4338ca;border-color:rgba(79,70,229,.22)}
+.ebadge-self_submitted{background:rgba(180,83,9,.08);color:#92400e;border-color:rgba(180,83,9,.2)}
+.ebadge-benchmark_assessed,.ebadge-third_party_confirmed{background:rgba(107,114,128,.1);color:#4b5563}
+.ebadge-more{font-size:.72rem;font-weight:750;color:var(--blue,#315cff);text-decoration:none}
+.ebadge-more:hover{text-decoration:underline}
+.ebadge-compact{padding:3px 8px;font-size:.66rem}
+.jresult-tokens{color:var(--faint);font-weight:600}
+.profile-verify .ebadge-row{margin-top:0}
+.profile-verify .activity-disclaimer-compact{margin-top:10px;width:100%}
+
 /* ---- Join wizard (one-click publish vertical slice) ---- */
 .join-wizard .join-head-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .join-progress-8{grid-template-columns:repeat(4,minmax(0,1fr))}

@@ -18,6 +18,7 @@ import { SignatureBadge } from './SignatureBadge';
 import { ActivityDisclaimer } from './ActivityDisclaimer';
 import { ErrorBoundary } from './ErrorBoundary';
 import { EvidenceNote } from './EvidenceNote';
+import { EvidenceBadgeRow } from './EvidenceBadge';
 
 export { SignatureBadge };
 
@@ -124,7 +125,7 @@ export function Directory() {
             </div>
             <div className="fgroup">
               <h2>Evidence</h2>
-              <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
+              <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Device-signed only</label>
               <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
             </div>
             {filtersActive ? (
@@ -213,7 +214,8 @@ function ResultRow({ p }: { p: MemberProfile }) {
             {p.activeDays ? <span><b>{p.activeDays}</b> active AI-work days</span> : null}
             {p.collectorObserved ? <span><b>{p.collectorObserved}</b> collector-observed {p.collectorObserved === 1 ? 'artifact' : 'artifacts'}</span> : null}
             {p.identityProofs.length ? <span>Linked: <b>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(', ')}</b></span> : null}
-            {p.totalTokens ? <span>{compactNumber(p.totalTokens)} tokens measured</span> : null}
+            {/* Token totals sit last and are never the lead signal. */}
+            {p.totalTokens ? <span className="jresult-tokens">{compactNumber(p.totalTokens)} tokens (activity only)</span> : null}
           </div>
 
           {(p.toolsUsed.length || openTo.length) ? (
@@ -221,6 +223,15 @@ function ResultRow({ p }: { p: MemberProfile }) {
               {p.toolsUsed.map((t) => <span className="jchip" key={t}>{t}</span>)}
               {openTo.slice(0, 3).map((o) => <span className="jchip jchip-open" key={o}>{o}</span>)}
             </div>
+          ) : null}
+
+          {p.claimSignals.length ? (
+            <EvidenceBadgeRow
+              signals={p.claimSignals}
+              onlyPresent
+              compact
+              max={4}
+            />
           ) : null}
         </div>
       </a>

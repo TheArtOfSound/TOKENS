@@ -13,7 +13,8 @@ import { MEASUREMENT_LABEL, PublicUsageSnapshot } from '../lib/usage';
 import { verifyIdentityProof, type IdentityResult } from '../lib/identity';
 import { href } from '../lib/router';
 import { safeUrl, safeImageUrl, linkProps } from '../lib/safeUrl';
-import { ActivityDisclaimer } from './ActivityDisclaimer';
+import { ActivityDisclaimer, SignatureDisclaimer } from './ActivityDisclaimer';
+import { EvidenceBadgeRow } from './EvidenceBadge';
 
 /**
  * Contact link for member-controlled data.
@@ -465,12 +466,14 @@ export function ProfileView({
   integrity,
   keyId,
   handle,
+  claimAuthority,
 }: {
   profile: NonNullable<PublicUsageSnapshot['profile']>;
   daily: PublicUsageSnapshot['daily'];
   integrity?: PublicUsageSnapshot['integrity'];
   keyId?: string;
   handle?: string;
+  claimAuthority?: PublicUsageSnapshot['claimAuthority'];
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -534,17 +537,24 @@ export function ProfileView({
             </div>
           ) : null}
 
-          {/* Evidence tiers. Met tiers lead; unmet collapse into one link. */}
+          {/* Claim-bounded evidence: prefer snapshot claimAuthority when present. */}
           <div className="profile-verify">
-            {verification.filter((v) => v.status !== 'pending').map((item) => (
-              <VerificationChip key={item.label} item={item} />
-            ))}
-            {verification.some((v) => v.status === 'pending') ? (
-              <a className="vchip vchip-more" href={href({ name: 'claims' })}>
-                +{verification.filter((v) => v.status === 'pending').length} evidence tiers not yet met →
-              </a>
-            ) : null}
+            {claimAuthority?.signals?.length ? (
+              <EvidenceBadgeRow signals={claimAuthority.signals} onlyPresent max={8} />
+            ) : (
+              <>
+                {verification.filter((v) => v.status !== 'pending').map((item) => (
+                  <VerificationChip key={item.label} item={item} />
+                ))}
+                {verification.some((v) => v.status === 'pending') ? (
+                  <a className="vchip vchip-more" href={href({ name: 'claims' })}>
+                    +{verification.filter((v) => v.status === 'pending').length} evidence tiers not yet met →
+                  </a>
+                ) : null}
+              </>
+            )}
           </div>
+          <SignatureDisclaimer compact />
         </div>
       </div>
 

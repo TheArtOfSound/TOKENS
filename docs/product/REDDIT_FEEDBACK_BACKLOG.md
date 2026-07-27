@@ -23,8 +23,8 @@ are durable enough to drive product work.
 | # | Finding | Status | Where / next |
 | --- | --- | --- | --- |
 | 1 | Token volume overpowers the product | ◑ | Hero de-centered; totals under Activity Details + disclaimer. Keep auditing directory/employer prominence. |
-| 2 | Every signal needs claim boundaries | ◑ | `src/lib/evidenceAuthority.ts` + badges. Full snapshot schema wiring = Sprint 2 remainder. |
-| 3 | Signature language overstates trust | ◑ | Device-signed language; explicit “integrity ≠ honesty” caveats. |
+| 2 | Every signal needs claim boundaries | ✅ | `claimAuthority` on published snapshots; EvidenceBadge on profile/directory; `/claims` ladder. |
+| 3 | Signature language overstates trust | ✅ | Device-signed badges; integrity ≠ honesty on profile, directory, evidence notes. |
 | 4 | Publication too complicated | ✅ | `/join` wizard + `publish/` service (Sprint 1 vertical slice). Desktop installers still ⬜. |
 | 5 | Accepted-change rate ≠ proficiency | ✅/N/A | Product does not ship acceptance-rate skill scores. Keep it that way. |
 | 6 | Post-merge durability is better | ⬜ | Sprint 4 |

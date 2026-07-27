@@ -170,6 +170,29 @@ export interface SnapshotVerification {
   proves?: string;
 }
 
+/** Claim-bounded signal from the published claimAuthority block. */
+export interface ClaimAuthoritySignal {
+  signalType: string;
+  provenance: string;
+  tier: string;
+  allowedClaims: string[];
+  excludedClaims: string[];
+  confidence: 'high' | 'medium' | 'low' | string;
+  limitations: string[];
+  badgeLabel: string;
+  present: boolean;
+  explains: string;
+}
+
+export interface ClaimAuthorityBlock {
+  model: string;
+  combinedAuthorityRule: string;
+  universalNonClaims: string[];
+  tierOrder: string[];
+  signals: ClaimAuthoritySignal[];
+  note: string;
+}
+
 export interface PublicUsageSnapshot {
   generatedAt: string;
   timezone: string;
@@ -192,6 +215,8 @@ export interface PublicUsageSnapshot {
   profile?: ProfileBlock;
   integrity?: { checks: { name: string; status: 'ok' | 'flag'; detail: string }[]; flags: number; note: string };
   verification: SnapshotVerification;
+  /** Present on collector ≥0.4 publications. */
+  claimAuthority?: ClaimAuthorityBlock;
 }
 
 export const sampleSnapshot: PublicUsageSnapshot = {

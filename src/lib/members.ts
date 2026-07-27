@@ -36,6 +36,19 @@ export interface MemberProfile {
   contact: { label: string; href: string } | null;
   /** Self-declared external accounts; verified live on the profile page. */
   identityProofs: { type: string; handle: string }[];
+  /** Present claim-authority signals from the signed snapshot (when published). */
+  claimSignals: {
+    signalType: string;
+    badgeLabel: string;
+    tier: string;
+    present: boolean;
+    explains: string;
+    allowedClaims: string[];
+    excludedClaims: string[];
+    confidence: string;
+    limitations: string[];
+    provenance: string;
+  }[];
   error?: string;
 }
 
@@ -43,6 +56,32 @@ function resolveUrl(snapshotUrl: string): string {
   return snapshotUrl.startsWith('/')
     ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${snapshotUrl}`
     : snapshotUrl;
+}
+
+function parseClaimSignals(snapshot: Record<string, unknown>): MemberProfile['claimSignals'] {
+  const block = obj(snapshot.claimAuthority);
+  const signals = Array.isArray(block.signals) ? block.signals : [];
+  return signals
+    .map((raw) => {
+      const s = obj(raw);
+      const signalType = str(s.signalType, 60);
+      const badgeLabel = str(s.badgeLabel, 60);
+      if (!signalType || !badgeLabel) return null;
+      return {
+        signalType,
+        badgeLabel,
+        tier: str(s.tier, 40) ?? 'self_submitted',
+        present: s.present === true,
+        explains: str(s.explains, 400) ?? '',
+        allowedClaims: strArray(s.allowedClaims, 12, 40),
+        excludedClaims: strArray(s.excludedClaims, 20, 40),
+        confidence: str(s.confidence, 12) ?? 'low',
+        limitations: strArray(s.limitations, 8, 120),
+        provenance: str(s.provenance, 80) ?? '',
+      };
+    })
+    .filter((s): s is NonNullable<typeof s> => s !== null)
+    .slice(0, 24);
 }
 
 /** A complete, safe-to-render placeholder — every array is real, never undefined. */
@@ -116,6 +155,7 @@ export function emptyMemberProfile(member: RegistryMember): MemberProfile {
     timezone: null,
     contact: null,
     identityProofs: [],
+    claimSignals: [],
   };
 }
 
@@ -166,6 +206,7 @@ export async function loadMemberProfile(member: RegistryMember): Promise<MemberP
         })
         .filter((p): p is { type: string; handle: string } => p !== null)
         .slice(0, 6),
+      claimSignals: parseClaimSignals(snapshot),
     };
   } catch (error) {
     return { ...base, signature: 'unreachable', error: error instanceof Error ? error.message : 'fetch failed' };

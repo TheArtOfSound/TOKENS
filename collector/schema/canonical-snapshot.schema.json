@@ -867,6 +867,125 @@
         }
       }
     },
+    "claimAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Claim-bounded evidence ladder: signal → provenance → allowed/excluded claims → confidence → limitations. Optional on historical snapshots; always emitted by collector ≥0.4.",
+      "required": [
+        "model",
+        "combinedAuthorityRule",
+        "universalNonClaims",
+        "tierOrder",
+        "signals",
+        "note"
+      ],
+      "properties": {
+        "model": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "combinedAuthorityRule": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "universalNonClaims": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "tierOrder": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "signals": {
+          "type": "array",
+          "maxItems": 24,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "signalType",
+              "provenance",
+              "tier",
+              "allowedClaims",
+              "excludedClaims",
+              "confidence",
+              "limitations",
+              "badgeLabel",
+              "present",
+              "explains"
+            ],
+            "properties": {
+              "signalType": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "provenance": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "tier": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "allowedClaims": {
+                "type": "array",
+                "maxItems": 12,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                }
+              },
+              "excludedClaims": {
+                "type": "array",
+                "maxItems": 20,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                }
+              },
+              "confidence": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              },
+              "limitations": {
+                "type": "array",
+                "maxItems": 8,
+                "items": {
+                  "type": "string",
+                  "maxLength": 120
+                }
+              },
+              "badgeLabel": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "present": {
+                "type": "boolean"
+              },
+              "explains": {
+                "type": "string",
+                "maxLength": 400
+              }
+            }
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
     "signature": {
       "type": "object",
       "required": [

@@ -28,6 +28,7 @@ import { canonicalize } from './canonicalJson';
 import type { NormalizedDaily, ProviderSummary } from './normalize';
 import type { ProfileBlock, VerificationStatus } from './profile';
 import { disabledFields, disabledSources, type ConsentConfig, type FieldKey } from './consent';
+import { buildClaimAuthority, type ClaimAuthorityBlock } from './evidenceAuthority';
 
 // ---------- Published (frozen contract + additive) shapes ----------
 
@@ -185,6 +186,8 @@ export interface PublishedSnapshot {
   sourceOfTruth: 'event_ledger' | 'ccusage_aggregate';
   providerConfidence: Record<string, { confidence: string; note: string }>;
   verification: PublishedVerification;
+  /** Claim-bounded evidence ladder for every badge on this snapshot. */
+  claimAuthority: ClaimAuthorityBlock;
 }
 
 /** The draft the collector assembles before publication. May contain extra fields. */
@@ -602,6 +605,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'sourceOfTruth',
       'providerConfidence',
       'verification',
+      'claimAuthority',
     ],
     // Stated in the published file so a viewer can see the user withheld
     // something, without revealing what the withheld values were.
@@ -653,6 +657,29 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
         'The hash proves the published snapshot was not altered after generation. ' +
         'It does not prove the private source logs were immutable, only that this public file is intact.',
     },
+    claimAuthority: buildClaimAuthority({
+      hasActivity: Boolean(profile?.activity?.activeDays && profile.activity.activeDays > 0) || daily.length > 0,
+      hasTokenTotals: totals.totalTokens > 0,
+      // Signature is layered on after publish; claim is that a device-signed
+      // record is the intended publication mode. present flips true once signed.
+      hasSignature: false,
+      hasCollectorObservedWork: Boolean(profile?.work?.collectorObserved && profile.work.collectorObserved > 0),
+      hasLinkProvidedWork: Boolean(
+        profile?.work?.artifacts?.some((a) => a.verification === 'link_provided'),
+      ),
+      hasSelfReportedOutcomes: Boolean(profile?.work?.totalOutcomes && profile.work.totalOutcomes > 0),
+      hasSelfSubmittedIdentity: Boolean(profile?.identity?.displayName),
+      hasIdentityProofs: Boolean(profile?.identity?.identityProofs?.length),
+    }),
+  };
+
+  // After assembly, mark device-signed signal as intended (collector always signs
+  // before write). The browser re-checks the actual signature independently.
+  published.claimAuthority = {
+    ...published.claimAuthority,
+    signals: published.claimAuthority.signals.map((s) =>
+      s.signalType === 'device_signed_snapshot' ? { ...s, present: true } : s,
+    ),
   };
 
   published.verification.snapshotSha256 = computeSnapshotHash(published);

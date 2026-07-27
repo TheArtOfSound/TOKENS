@@ -15,7 +15,8 @@ import { href } from '../lib/router';
 export function EvidenceNote({ tiers = false }: { tiers?: boolean }) {
   return (
     <p className="muted evidence-note">
-      {CAVEATS.signatureProves} {CAVEATS.signatureNotIdentity}
+      {CAVEATS.signatureProves} {CAVEATS.signatureNotHonesty} {CAVEATS.signatureNotIdentity}{' '}
+      {CAVEATS.volume}
       {tiers ? ' Provider-attested usage and third-party-confirmed outcomes are separate, stronger tiers, shown per profile.' : ''}{' '}
       <a href={href({ name: 'claims' })}>What each signal can and cannot establish →</a>
     </p>

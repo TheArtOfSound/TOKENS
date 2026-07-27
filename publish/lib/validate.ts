@@ -33,6 +33,7 @@ export const ALLOWED_TOP_LEVEL = new Set([
   'sourceOfTruth',
   'providerConfidence',
   'verification',
+  'claimAuthority',
   'signature',
 ]);
 
