@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { compactNumber, currency, dateTime, fullNumber, percent } from './lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
 import { ProfileView } from './views/ProfileView';
@@ -456,6 +456,120 @@ function SiteFooter() {
   );
 }
 
+const NAV_LINKS: Array<{ route: Parameters<typeof href>[0]; label: string }> = [
+  { route: { name: 'directory' }, label: 'People' },
+  { route: { name: 'employer' }, label: 'For employers' },
+  { route: { name: 'verify' }, label: 'Verification' },
+  { route: { name: 'claims' }, label: 'Evidence' },
+  { route: { name: 'compare' }, label: 'Compare' },
+];
+
+function SiteHeader({ routeName }: { routeName: string }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close the drawer on route change and Escape; lock body scroll while open.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [routeName]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
+  const runSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const q = new FormData(event.currentTarget).get('q');
+    const query = typeof q === 'string' && q.trim() ? `?q=${encodeURIComponent(q.trim())}` : '';
+    setMenuOpen(false);
+    navigate(`${href({ name: 'directory' })}${query}`);
+  };
+
+  return (
+    <header className={`topbar ${menuOpen ? 'is-menu-open' : ''}`}>
+      <a className="brand" href={href({ name: 'home' })}><LedgerMark /> <span>LEDGER</span></a>
+
+      {/* Job sites put search in the header. Submitting jumps to the people
+          directory with the query applied. */}
+      <form className="topsearch" role="search" onSubmit={runSearch}>
+        <span className="topsearch-icon" aria-hidden="true">⌕</span>
+        <label className="visually-hidden" htmlFor="global-search">Search people by name, skill, or tool</label>
+        <input id="global-search" name="q" type="search" placeholder="Search people, skills, or tools" autoComplete="off" />
+      </form>
+
+      <nav className="desktop-nav" aria-label="Primary">
+        {NAV_LINKS.map(({ route, label }) => (
+          <a
+            key={route.name}
+            href={href(route)}
+            aria-current={routeName === route.name ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))}
+        <a className="nav-button" href={href({ name: 'join' })}>Add your profile</a>
+      </nav>
+
+      <button
+        type="button"
+        className="menu-toggle"
+        aria-expanded={menuOpen}
+        aria-controls="mobile-nav"
+        onClick={() => setMenuOpen((o) => !o)}
+      >
+        <span className="visually-hidden">{menuOpen ? 'Close menu' : 'Open menu'}</span>
+        <span className="menu-toggle-bars" aria-hidden="true">
+          <i /><i /><i />
+        </span>
+      </button>
+
+      {/* Backdrop + drawer: only interactive when open. */}
+      <button
+        type="button"
+        className="menu-backdrop"
+        tabIndex={menuOpen ? 0 : -1}
+        aria-hidden={!menuOpen}
+        onClick={() => setMenuOpen(false)}
+      >
+        <span className="visually-hidden">Close menu</span>
+      </button>
+      <nav
+        id="mobile-nav"
+        className="mobile-nav"
+        aria-label="Mobile"
+        aria-hidden={!menuOpen}
+      >
+        <form className="mobile-search" role="search" onSubmit={runSearch}>
+          <label className="visually-hidden" htmlFor="mobile-search">Search people by name, skill, or tool</label>
+          <input id="mobile-search" name="q" type="search" placeholder="Search people, skills, or tools" autoComplete="off" />
+        </form>
+        {NAV_LINKS.map(({ route, label }) => (
+          <a
+            key={route.name}
+            href={href(route)}
+            aria-current={routeName === route.name ? 'page' : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
+            {label}
+          </a>
+        ))}
+        <a className="nav-button" href={href({ name: 'join' })} onClick={() => setMenuOpen(false)}>
+          Add your profile
+        </a>
+      </nav>
+    </header>
+  );
+}
+
 export default function App() {
   const route = useRoute();
   // Grey page + white cards is the job-site convention; set once at the root.
@@ -482,41 +596,16 @@ export default function App() {
 
   const largestDay = snapshot.daily.reduce((max, day) => (day.totalTokens > max.totalTokens ? day : max), snapshot.daily[0]);
   const qiraProjects = snapshot.qiraProjects ?? sampleSnapshot.qiraProjects ?? [];
+  const showMobileCta = route.name === 'home' || route.name === 'directory' || route.name === 'employer';
 
   return (
     <>
       {/* Lets keyboard users bypass the nav; the first thing Tab reaches. */}
       <a className="skip-link" href="#top">Skip to main content</a>
       <NetworkField />
-      <header className="topbar">
-        <a className="brand" href={href({ name: 'home' })}><LedgerMark /> <span>LEDGER</span></a>
-        {/* Job sites put search in the header. Submitting jumps to the people
-            directory with the query applied. */}
-        <form
-          className="topsearch"
-          role="search"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const q = new FormData(event.currentTarget).get('q');
-            const query = typeof q === 'string' && q.trim() ? `?q=${encodeURIComponent(q.trim())}` : '';
-            navigate(`${href({ name: 'directory' })}${query}`);
-          }}
-        >
-          <span className="topsearch-icon" aria-hidden="true">⌕</span>
-          <label className="visually-hidden" htmlFor="global-search">Search people by name, skill, or tool</label>
-          <input id="global-search" name="q" type="search" placeholder="Search people, skills, or tools" />
-        </form>
-        <nav>
-          <a href={href({ name: 'directory' })} aria-current={route.name === 'directory' ? 'page' : undefined}>People</a>
-          <a href={href({ name: 'employer' })} aria-current={route.name === 'employer' ? 'page' : undefined}>For employers</a>
-          <a href={href({ name: 'verify' })} aria-current={route.name === 'verify' ? 'page' : undefined}>Verification</a>
-          <a href={href({ name: 'claims' })} aria-current={route.name === 'claims' ? 'page' : undefined}>Evidence</a>
-          <a href={href({ name: 'compare' })} aria-current={route.name === 'compare' ? 'page' : undefined}>Compare</a>
-          <a className="nav-button" href={href({ name: 'join' })}>Add your profile</a>
-        </nav>
-      </header>
+      <SiteHeader routeName={route.name} />
 
-      <main>
+      <main id="top">
       {route.name === 'directory' && <Directory />}
       {route.name === 'employer' && <Employer />}
       {route.name === 'compare' && <Compare />}
@@ -529,12 +618,26 @@ export default function App() {
 
       {route.name === 'home' && (
         <>
-        <section className="hero" id="top">
-          <div className="hero-pill"><span /> Local-first evidence layer for AI-assisted work</div>
+        <section className="hero">
+          <div className="hero-pill"><span /> Local-first · no account · open source</div>
           <h1>Evidence of how you work with AI — not a token leaderboard.</h1>
-          <p>Ledger turns the AI work you already do into a portable professional record: what you built, the tools and models you use, how efficiently you work, and which parts are independently trustworthy. It runs on your machine — no account, and your prompts, code, and file paths never leave your computer.</p>
-          <div className="hero-actions"><a className="cta" href={href({ name: 'join' })}>Add your profile →</a><a href={href({ name: 'directory' })}>Browse people</a></div>
-          <ul className="hero-facts"><li>Work &amp; outcomes first</li><li>Signed on your device</li><li>Verified in your browser</li><li>You host your own data</li></ul>
+          <p>Turn the AI work you already do into a portable professional record: what you built, the tools you use, and which parts anyone can verify. Runs on your machine — prompts, code, and file paths never leave your computer.</p>
+          <div className="hero-actions">
+            <a className="cta" href={href({ name: 'join' })}>Add your profile →</a>
+            <a href={href({ name: 'directory' })}>Browse people</a>
+            <a className="hero-link-quiet" href={href({ name: 'employer' })}>I&apos;m hiring</a>
+          </div>
+          <ul className="hero-facts">
+            <li>Work &amp; outcomes first</li>
+            <li>Signed on your device</li>
+            <li>Verified in your browser</li>
+            <li>You host your own data</li>
+          </ul>
+          <div className="trust-strip" aria-label="How Ledger works in three steps">
+            <div><strong>1. Measure</strong><span>Local collector reads your existing AI usage logs</span></div>
+            <div><strong>2. Sign</strong><span>Your device key seals a summary — private key never leaves</span></div>
+            <div><strong>3. Share</strong><span>Anyone re-checks the signature in their browser</span></div>
+          </div>
           {snapshot.isSampleData || loadState !== 'loaded' ? <div className="notice">Sample mode is active. Run <code>npm run collect</code> locally to publish the real scanner snapshot.</div> : null}
         </section>
 
@@ -600,6 +703,14 @@ export default function App() {
       )}
       </main>
       <SiteFooter />
+
+      {/* Thumb-friendly primary action on small screens. Hidden on join (already the goal). */}
+      {showMobileCta ? (
+        <div className="mobile-cta-bar" role="region" aria-label="Quick actions">
+          <a className="btn btn-primary" href={href({ name: 'join' })}>Add your profile</a>
+          <a className="btn btn-secondary" href={href({ name: 'directory' })}>Browse people</a>
+        </div>
+      ) : null}
     </>
   );
 }

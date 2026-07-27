@@ -114,7 +114,9 @@ export function useRoute(): Route {
       // Let real files (data, scripts, icons) load normally.
       if (/\.(json|svg|png|ico|sh|ps1|txt|xml|webmanifest)$/i.test(url.pathname)) return;
       event.preventDefault();
-      if (url.pathname !== window.location.pathname) navigate(url.pathname);
+      const next = `${url.pathname}${url.search}${url.hash}`;
+      const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (next !== current) navigate(next);
     };
     document.addEventListener('click', onClick);
 

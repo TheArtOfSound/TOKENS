@@ -26,12 +26,13 @@ function initials(name: string): string {
 }
 
 export function Directory() {
-  const { profiles, error } = useMemberProfiles();
+  const { profiles, loading, error } = useMemberProfiles();
   // The header search sends ?q= here.
   const [query, setQuery] = useState(() => new URLSearchParams(window.location.search).get('q') ?? '');
   const [openToOnly, setOpenToOnly] = useState(false);
   const [tool, setTool] = useState('');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     const onPop = () => setQuery(new URLSearchParams(window.location.search).get('q') ?? '');
@@ -44,6 +45,8 @@ export function Directory() {
     profiles.forEach((p) => p.toolsUsed.forEach((t) => set.add(t)));
     return [...set].sort();
   }, [profiles]);
+
+  const filtersActive = Boolean(query || tool || verifiedOnly || openToOnly);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -78,25 +81,38 @@ export function Directory() {
       <header className="jpage-head">
         <h1>People measuring their AI work</h1>
         <p className="jresult-count">
-          {results.length} {results.length === 1 ? 'profile' : 'profiles'}
-          {query ? <> for “{query}”</> : null} · never ranked by token volume
+          {loading ? 'Loading profiles…' : (
+            <>
+              {results.length} {results.length === 1 ? 'profile' : 'profiles'}
+              {query ? <> for “{query}”</> : null} · never ranked by token volume
+            </>
+          )}
         </p>
       </header>
 
       <div className="jsearch">
-        {/* Filter rail */}
-        <aside className="jfilters">
-          <div className="jcard jcard-pad">
+        {/* Filter rail — collapsible on small screens so results lead. */}
+        <aside className={`jfilters ${filtersOpen ? 'is-open' : ''}`}>
+          <button
+            type="button"
+            className="jfilters-toggle"
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen((o) => !o)}
+          >
+            <span>Filters{filtersActive ? ' · on' : ''}</span>
+            <span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span>
+          </button>
+          <div className="jcard jcard-pad jfilters-body">
             <h2 className="jfilters-title">Refine</h2>
             <div className="fgroup">
               <label className="visually-hidden" htmlFor="dir-q">Search people</label>
               <input
                 id="dir-q"
+                className="jfilters-search"
                 type="search"
                 placeholder="Name, skill, tool…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                style={{ width: '100%', height: 38, padding: '0 10px', border: '1px solid var(--card-border)', borderRadius: 8, font: 'inherit' }}
               />
             </div>
             <div className="fgroup">
@@ -111,9 +127,9 @@ export function Directory() {
               <label><input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} /> Signature verified</label>
               <label><input type="checkbox" checked={openToOnly} onChange={(e) => setOpenToOnly(e.target.checked)} /> Open to opportunities</label>
             </div>
-            {(query || tool || verifiedOnly || openToOnly) ? (
+            {filtersActive ? (
               <div className="fgroup">
-                <button className="btn btn-ghost" style={{ height: 34 }} onClick={() => { setQuery(''); setTool(''); setVerifiedOnly(false); setOpenToOnly(false); }}>
+                <button type="button" className="btn btn-ghost" style={{ height: 34 }} onClick={() => { setQuery(''); setTool(''); setVerifiedOnly(false); setOpenToOnly(false); }}>
                   Clear all
                 </button>
               </div>
@@ -128,9 +144,27 @@ export function Directory() {
           </div>
 
           <div className="jcard">
-            {results.length === 0 ? (
-              <div className="jcard-pad">
-                <p className="muted" style={{ margin: 0 }}>No profiles match these filters.</p>
+            {loading ? (
+              <div className="jcard-pad list-loading" aria-busy="true" aria-label="Loading people">
+                <div className="skeleton sk-row" style={{ width: '55%', height: 18 }} />
+                <div className="skeleton sk-row" style={{ width: '80%', height: 14 }} />
+                <div className="skeleton sk-row" style={{ width: '40%', height: 14 }} />
+                <div className="skeleton" style={{ height: 72, borderRadius: 12, marginTop: 12 }} />
+              </div>
+            ) : results.length === 0 ? (
+              <div className="jcard-pad empty-state">
+                <p className="empty-title">No profiles match these filters</p>
+                <p className="muted" style={{ margin: '0 0 14px' }}>
+                  Try clearing filters, or be the first to publish a signed profile.
+                </p>
+                <div className="empty-actions">
+                  {filtersActive ? (
+                    <button type="button" className="btn btn-ghost" onClick={() => { setQuery(''); setTool(''); setVerifiedOnly(false); setOpenToOnly(false); }}>
+                      Clear filters
+                    </button>
+                  ) : null}
+                  <a className="btn btn-primary" href={href({ name: 'join' })}>Add your profile</a>
+                </div>
               </div>
             ) : (
               results.map((p) => (
@@ -165,34 +199,35 @@ export function Directory() {
 function ResultRow({ p }: { p: MemberProfile }) {
   const m = p.member;
   const openTo = p.openTo.length ? p.openTo : p.engagementTypes;
+  const profileHref = href({ name: 'member', handle: m.handle });
   return (
     <article className="jresult">
-      <a href={href({ name: 'member', handle: m.handle })} aria-hidden="true" tabIndex={-1}>
-        <span className="jresult-avatar">{initials(m.displayName)}</span>
-      </a>
-      <div className="jresult-body">
-        <a className="jresult-name" href={href({ name: 'member', handle: m.handle })}>{m.displayName}</a>
-        <p className="jresult-headline">{m.headline}</p>
-        {m.location ? <p className="jresult-loc">{m.location}</p> : null}
+      <a className="jresult-hit" href={profileHref} aria-label={`View ${m.displayName}'s profile`}>
+        <span className="jresult-avatar" aria-hidden="true">{initials(m.displayName)}</span>
+        <div className="jresult-body">
+          <span className="jresult-name">{m.displayName}</span>
+          <p className="jresult-headline">{m.headline}</p>
+          {m.location ? <p className="jresult-loc">{m.location}</p> : null}
 
-        <div className="jresult-facts">
-          {p.activeDays ? <span><b>{p.activeDays}</b> active AI-work days</span> : null}
-          {p.collectorObserved ? <span><b>{p.collectorObserved}</b> collector-observed {p.collectorObserved === 1 ? 'artifact' : 'artifacts'}</span> : null}
-          {p.identityProofs.length ? <span>Linked: <b>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(', ')}</b></span> : null}
-          {p.totalTokens ? <span>{compactNumber(p.totalTokens)} tokens measured</span> : null}
-        </div>
-
-        {(p.toolsUsed.length || openTo.length) ? (
-          <div className="jchips">
-            {p.toolsUsed.map((t) => <span className="jchip" key={t}>{t}</span>)}
-            {openTo.slice(0, 3).map((o) => <span className="jchip jchip-open" key={o}>{o}</span>)}
+          <div className="jresult-facts">
+            {p.activeDays ? <span><b>{p.activeDays}</b> active AI-work days</span> : null}
+            {p.collectorObserved ? <span><b>{p.collectorObserved}</b> collector-observed {p.collectorObserved === 1 ? 'artifact' : 'artifacts'}</span> : null}
+            {p.identityProofs.length ? <span>Linked: <b>{p.identityProofs.map((x) => `${x.type}/${x.handle}`).join(', ')}</b></span> : null}
+            {p.totalTokens ? <span>{compactNumber(p.totalTokens)} tokens measured</span> : null}
           </div>
-        ) : null}
-      </div>
+
+          {(p.toolsUsed.length || openTo.length) ? (
+            <div className="jchips">
+              {p.toolsUsed.map((t) => <span className="jchip" key={t}>{t}</span>)}
+              {openTo.slice(0, 3).map((o) => <span className="jchip jchip-open" key={o}>{o}</span>)}
+            </div>
+          ) : null}
+        </div>
+      </a>
 
       <div className="jresult-side">
         <SignatureBadge state={p.signature} reason={p.signatureReason ?? p.error} />
-        <a className="btn btn-secondary" href={href({ name: 'member', handle: m.handle })}>View profile</a>
+        <a className="btn btn-secondary" href={profileHref}>View profile</a>
       </div>
     </article>
   );

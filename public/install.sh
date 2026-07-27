@@ -61,7 +61,8 @@ info "npm run consent          # see exactly what would be read, and turn any of
 info "npm run ingest           # measure your local Claude Code / Codex usage (~20s first run)"
 info "npm run consent:preview  # review the exact payload before anything is published"
 info "npm run collect          # build + sign your profile snapshot (private key never leaves this machine)"
+info "npm run publish:ledger -- --handle YOU --email you@example.com   # optional: publish to Ledger (explicit only)"
 echo
-info "Full walkthrough:  https://ledger.imagineqira.com/join"
+info "Or open the guided UI: https://ledger.imagineqira.com/join"
 info "Uninstall:         rm -rf \"$INSTALL_DIR\"   (and, on macOS, delete the 'tokens device key' item in Keychain Access)"
 echo

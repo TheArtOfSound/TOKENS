@@ -1,11 +1,14 @@
-# Qira Agent Usage Observatory
+# Qira Agent Usage Observatory (TOKENS / Ledger)
 
-A public portfolio dashboard for local coding-agent token usage across Claude Code and Codex.
+A local-first AI-activity ledger and public professional directory for Claude Code and Codex usage.
 
-> **Current state (2026-07-23):** automatic publishing is **not running**. The `com.qira.tokens.collector`
-> launchd job is unloaded, and the live site serves a snapshot from 2026-06-18 (collector 0.3.0) while local
-> is 0.4.0. See `docs/IMPLEMENTATION_STATUS.md`. Do not describe this as auto-updating until the publisher is
-> re-enabled and the origin divergence (R1) is resolved.
+> **Join flow (2026-07-26):** publication no longer requires a GitHub pull request.
+> Open `/join` → choose sources → load a signed snapshot → preview → **Publish**.
+> See `docs/publication/ONE_CLICK_PUBLISH.md`. Install/scan never auto-publishes.
+
+> **Current state (2026-07-23):** automatic *collector* publishing to the live site may still be unloaded.
+> The `com.qira.tokens.collector` launchd job history and origin divergence notes remain in
+> `docs/IMPLEMENTATION_STATUS.md`.
 
 This repo is designed to work as a static GitHub Pages site backed by sanitized JSON generated on Bryan's Mac. The public site never needs direct access to the machine, raw logs, prompts, session text, private repo names, local paths, hostnames, usernames, API keys, or `.env` values.
 

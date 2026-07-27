@@ -93,8 +93,40 @@ export function parseRegistry(raw: unknown): Registry {
   };
 }
 
-export async function loadRegistry(signal?: AbortSignal): Promise<Registry> {
+export async function loadStaticRegistry(signal?: AbortSignal): Promise<Registry> {
   const response = await fetch(`${import.meta.env.BASE_URL}data/profiles/index.json`, { signal });
   if (!response.ok) throw new Error(`registry ${response.status}`);
   return parseRegistry(await response.json());
+}
+
+/**
+ * Merge static registry (git-backed) with the Ledger publication service directory.
+ * Hosted (API) entries win on handle collision so one-click publish updates the UI
+ * without waiting for a registry PR. Existing static URLs keep working as fallback.
+ */
+export async function loadRegistry(signal?: AbortSignal): Promise<Registry> {
+  const staticReg = await loadStaticRegistry(signal);
+  let hostedMembers: RegistryMember[] = [];
+  try {
+    const base = (import.meta.env.VITE_PUBLISH_API_URL as string | undefined)?.replace(/\/$/, '') || '/api/publish';
+    const response = await fetch(`${base}/v1/directory`, { signal, cache: 'no-cache' });
+    if (response.ok) {
+      const data = (await response.json()) as { members?: unknown[] };
+      hostedMembers = parseRegistry({ members: data.members ?? [], updatedAt: '' }).members.map((m) => ({
+        ...m,
+        // Prefer absolute snapshot URLs from the API as-is.
+      }));
+    }
+  } catch {
+    // Publication service optional — static registry always works.
+  }
+
+  const byHandle = new Map<string, RegistryMember>();
+  for (const m of staticReg.members) byHandle.set(m.handle, m);
+  for (const m of hostedMembers) byHandle.set(m.handle, m); // hosted wins
+
+  return {
+    updatedAt: new Date().toISOString(),
+    members: [...byHandle.values()],
+  };
 }

@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ['collector/**/*.test.ts', 'src/**/*.test.ts'],
+    include: ['collector/**/*.test.ts', 'src/**/*.test.ts', 'publish/**/*.test.ts'],
     environment: 'node',
     // Several suites spawn real subprocesses (git for scan signatures, mkfifo for
     // the scanner-containment tests) and touch the filesystem. Under the full

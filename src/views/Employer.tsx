@@ -27,13 +27,14 @@ function initials(name: string): string {
 const TOOLS = ['Claude Code', 'Codex'];
 
 export function Employer() {
-  const { profiles, error } = useMemberProfiles();
+  const { profiles, loading, error } = useMemberProfiles();
   const [tool, setTool] = useState('');
   const [category, setCategory] = useState('');
   const [minDays, setMinDays] = useState(0);
   const [openToOnly, setOpenToOnly] = useState(false);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -71,14 +72,27 @@ export function Employer() {
       <header className="jpage-head">
         <h1>Find people by evidence, not by résumé</h1>
         <p className="jresult-count">
-          {results.length} {results.length === 1 ? 'candidate' : 'candidates'} · every figure read from their
-          own signed snapshot and verified in your browser
+          {loading ? 'Loading candidates…' : (
+            <>
+              {results.length} {results.length === 1 ? 'candidate' : 'candidates'} · every figure read from their
+              own signed snapshot and verified in your browser
+            </>
+          )}
         </p>
       </header>
 
       <div className="jsearch">
-        <aside className="jfilters">
-          <div className="jcard jcard-pad">
+        <aside className={`jfilters ${filtersOpen ? 'is-open' : ''}`}>
+          <button
+            type="button"
+            className="jfilters-toggle"
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen((o) => !o)}
+          >
+            <span>Filters{filtersActive ? ' · on' : ''}</span>
+            <span aria-hidden="true">{filtersOpen ? '▴' : '▾'}</span>
+          </button>
+          <div className="jcard jcard-pad jfilters-body">
             <h2 className="jfilters-title">Refine candidates</h2>
             <div className="fgroup">
               <label htmlFor="emp-tool">Tool</label>
@@ -110,6 +124,7 @@ export function Employer() {
             {filtersActive ? (
               <div className="fgroup">
                 <button
+                  type="button"
                   className="btn btn-ghost"
                   style={{ height: 34 }}
                   onClick={() => { setTool(''); setCategory(''); setMinDays(0); setOpenToOnly(false); setVerifiedOnly(false); }}
@@ -123,9 +138,30 @@ export function Employer() {
 
         <div>
           <div className="jcard">
-            {results.length === 0 ? (
-              <div className="jcard-pad">
-                <p className="muted" style={{ margin: 0 }}>No candidates match these filters yet.</p>
+            {loading ? (
+              <div className="jcard-pad list-loading" aria-busy="true" aria-label="Loading candidates">
+                <div className="skeleton sk-row" style={{ width: '55%', height: 18 }} />
+                <div className="skeleton sk-row" style={{ width: '80%', height: 14 }} />
+                <div className="skeleton" style={{ height: 72, borderRadius: 12, marginTop: 12 }} />
+              </div>
+            ) : results.length === 0 ? (
+              <div className="jcard-pad empty-state">
+                <p className="empty-title">No candidates match these filters yet</p>
+                <p className="muted" style={{ margin: '0 0 14px' }}>
+                  Clear filters to see everyone, or invite someone to publish a signed profile.
+                </p>
+                <div className="empty-actions">
+                  {filtersActive ? (
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => { setTool(''); setCategory(''); setMinDays(0); setOpenToOnly(false); setVerifiedOnly(false); }}
+                    >
+                      Clear filters
+                    </button>
+                  ) : null}
+                  <a className="btn btn-primary" href={href({ name: 'join' })}>Invite someone →</a>
+                </div>
               </div>
             ) : (
               results.map((p) => (
