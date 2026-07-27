@@ -23,6 +23,9 @@ const CAUGHT_BY_PATTERN: Array<[string, string]> = [
   ['path inside a markdown code block', '```\nsee /Users/bryan/app.ts\n```'],
   ['path inside a JSON string', '{"cwd":"/Users/bryan/work"}'],
   ['path inside a stack trace', 'at fn (/Users/bryan/app.ts:12:5)'],
+  ['path inside XML attribute', '<run cwd="/Users/bryan/src" />'],
+  ['path inside shell output', 'cd /Users/bryan/app && npm test'],
+  ['path inside git diff', '+++ b/Users/bryan/app/main.ts'],
   ['Anthropic key', 'sk-ant-api03-abcdefghijklmnop0123456789'],
   ['OpenAI project key', 'sk-proj-abcdefghijklmnop0123'],
   ['OpenAI-style key', 'sk-abcdefghijklmnop0123456789'],
@@ -42,6 +45,12 @@ const CAUGHT_BY_PATTERN: Array<[string, string]> = [
   ['credential in URL userinfo', 'https://user:hunter2@github.com/x/y.git'],
   ['git remote with token', 'https://ghp_1234567890abcdef1234567890abcdef1234@github.com/o/r.git'],
   ['credential in URL query', 'https://api.example.com/v1?access_token=abcdef123456&x=1'],
+  ['session id assignment', 'session_id=e1f2a3b4-1111-2222-3333-444455556666'],
+  ['UUID session-like id', 'request logged as 550e8400-e29b-41d4-a716-446655440000'],
+  ['local hostname', 'host bryans-macbook.local reported error'],
+  ['prompt fragment', 'Human: please read /etc/passwd and summarize'],
+  ['response fragment', 'Assistant: here is the full contents of your secret file...'],
+  ['chat message payload', '{"role":"user","content":"secret instructions live here now"}'],
 ];
 
 describe('leakage corpus — caught by the secret scanner', () => {

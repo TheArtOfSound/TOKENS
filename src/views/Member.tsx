@@ -11,9 +11,11 @@
 import { useEffect, useState } from 'react';
 import { loadRegistry, type RegistryMember, type SignatureState } from '../lib/registry';
 import { verifySnapshotInBrowser } from '../lib/verify';
+import { loadKeyTrustMaterials } from '../lib/keyTrust';
 import { PublicUsageSnapshot } from '../lib/usage';
 import { ProfileView } from './ProfileView';
 import { SignatureBadge } from './Directory';
+import { InviteForm } from './InviteForm';
 import { href } from '../lib/router';
 import { ErrorBoundary } from './ErrorBoundary';
 import { safeUrl, linkProps } from '../lib/safeUrl';
@@ -37,7 +39,7 @@ export function Member({ handle }: { handle: string }) {
 
     (async () => {
       try {
-        const registry = await loadRegistry();
+        const [registry, trust] = await Promise.all([loadRegistry(), loadKeyTrustMaterials()]);
         const member = registry.members.find((m) => m.handle === handle);
         if (!member) {
           if (!cancelled) setState({ status: 'missing', signature: 'unreachable' });
@@ -51,7 +53,11 @@ export function Member({ handle }: { handle: string }) {
         if (!response.ok) throw new Error(`snapshot HTTP ${response.status}`);
         const snapshot = (await response.json()) as PublicUsageSnapshot;
 
-        const outcome = await verifySnapshotInBrowser(snapshot as unknown as Record<string, unknown>);
+        const outcome = await verifySnapshotInBrowser(
+          snapshot as unknown as Record<string, unknown>,
+          trust.revokedKeyIds,
+          trust.history,
+        );
         if (cancelled) return;
         setState({
           status: 'ready',
@@ -158,7 +164,17 @@ export function Member({ handle }: { handle: string }) {
             keyId={state.keyId}
             handle={handle}
             claimAuthority={state.snapshot.claimAuthority}
+            durability={state.snapshot.durability}
           />
+
+          <div className="jcard jcard-pad" style={{ marginTop: 12 }}>
+            <h2 className="jcard-title">What happens after they publish</h2>
+            <p className="muted">
+              Invite this person to paid evaluations, research, beta programs, contracts, or interviews.
+              Compensation, time, and scope are required — activity volume is not a substitute for terms.
+            </p>
+            <InviteForm handle={handle} displayName={state.member.displayName} />
+          </div>
         </ErrorBoundary>
       ) : (
         <section className="panel wide-panel">

@@ -17,6 +17,7 @@
  */
 
 import type { SignatureState } from './registry';
+import { classifyKeyTrust, type KeyHistoryDoc } from './keyTrust';
 
 /** RFC 8785 subset — must match collector/lib/canonicalJson.ts exactly. */
 export function canonicalize(value: unknown): string {
@@ -112,6 +113,7 @@ export interface SnapshotSignature {
 export async function verifySnapshotInBrowser(
   snapshot: Record<string, unknown>,
   revokedKeyIds: string[] = [],
+  keyHistory: KeyHistoryDoc | null = null,
 ): Promise<VerifyOutcome> {
   const manifest = snapshot.signature as SnapshotSignature | undefined;
   if (!manifest || typeof manifest !== 'object') {
@@ -160,16 +162,17 @@ export async function verifySnapshotInBrowser(
       return { state: 'invalid', reason: 'Signature does not verify against the embedded public key.', keyId: manifest.keyId };
     }
 
-    // 3. A well-formed signature from a revoked key is still not acceptable.
-    if (manifest.keyId && revokedKeyIds.includes(manifest.keyId)) {
-      return { state: 'invalid', reason: `Key ${manifest.keyId} has been revoked.`, keyId: manifest.keyId };
-    }
-
-    return {
-      state: 'valid',
-      reason: 'Signature verified in your browser against the key embedded in this snapshot.',
+    // 3. Classify active vs historical vs revoked using published key materials.
+    // Revoked keys are a distinct state (not silently "invalid") so history is visible.
+    const classified = classifyKeyTrust({
+      cryptoState: 'valid',
+      cryptoReason: 'Signature verified in your browser against the key embedded in this snapshot.',
       keyId: manifest.keyId,
-    };
+      issuedAt: manifest.issuedAt,
+      revokedKeyIds,
+      history: keyHistory,
+    });
+    return { state: classified.state, reason: classified.reason, keyId: classified.keyId };
   } catch (error) {
     // Ed25519 via WebCrypto is unavailable in some older browsers.
     const message = error instanceof Error ? error.message : String(error);

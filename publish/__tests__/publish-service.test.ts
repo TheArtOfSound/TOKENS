@@ -389,6 +389,45 @@ describe('publication service vertical slice', () => {
     expect(() => service.me(auth.token)).toThrow(PublishError);
   });
 
+  it('requires full terms for opportunity invitations', () => {
+    expect(() =>
+      service.submitInvitation({
+        toHandle: 'alice',
+        opportunityType: 'paid_evaluation',
+        organization: '',
+        contactEmail: 'buyer@example.com',
+        compensation: '',
+        expectedTime: '',
+        scope: 'short',
+        deadline: '',
+        dataRequested: '',
+      }),
+    ).toThrow(/required|FIELD/i);
+  });
+
+  it('accepts a complete invitation and does not use token volume', () => {
+    const a = service.verifyMagicLink('a@example.com', service.requestMagicLink('a@example.com').devCode!);
+    service.publishLedger(a.token, {
+      handle: 'invitee',
+      snapshot: makeSignedSnapshot(),
+      publicationConsent: true,
+    });
+    const inv = service.submitInvitation({
+      toHandle: 'invitee',
+      opportunityType: 'paid_evaluation',
+      organization: 'Acme Labs',
+      contactEmail: 'buyer@acme.example',
+      compensation: '$200 fixed stipend',
+      expectedTime: '3 hours',
+      scope: 'Evaluate model X on two coding tasks with written notes.',
+      deadline: '2026-08-01',
+      dataRequested: 'Signed snapshot URL and 30-minute call; no raw logs',
+    });
+    expect(inv.status).toBe('submitted');
+    expect(inv.id).toMatch(/^inv_/);
+    expect(inv.note).toMatch(/volume-based ranking|compensation and scope/i);
+  });
+
   it('migrates an existing static profile', () => {
     const snapshot = makeSignedSnapshot({
       profile: {

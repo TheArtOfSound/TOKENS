@@ -55,7 +55,20 @@ export interface MemberSummary {
   error?: string;
 }
 
-export type SignatureState = 'checking' | 'valid' | 'invalid' | 'unsigned' | 'unreachable';
+/**
+ * Coarse signature UI states.
+ * - valid: cryptographically valid under active (or unclassified) key
+ * - historical: valid under a rotated, non-revoked key
+ * - revoked_key: well-formed crypto under a revoked key (not silent invalid)
+ */
+export type SignatureState =
+  | 'checking'
+  | 'valid'
+  | 'historical'
+  | 'revoked_key'
+  | 'invalid'
+  | 'unsigned'
+  | 'unreachable';
 
 const HANDLE_RE = /^[a-z0-9][a-z0-9-]{1,38}$/;
 

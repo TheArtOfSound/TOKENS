@@ -27,21 +27,21 @@ are durable enough to drive product work.
 | 3 | Signature language overstates trust | ✅ | Device-signed badges; integrity ≠ honesty on profile, directory, evidence notes. |
 | 4 | Publication too complicated | ✅ | `/join` wizard + `publish/` service (Sprint 1 vertical slice). Desktop installers still ⬜. |
 | 5 | Accepted-change rate ≠ proficiency | ✅/N/A | Product does not ship acceptance-rate skill scores. Keep it that way. |
-| 6 | Post-merge durability is better | ⬜ | Sprint 4 |
-| 7 | Buyers need cost, capability, outcomes | ◑ | Profile/opportunity fields exist; buyer search + invitation flow incomplete. |
-| 8 | Sellers need clear payoff | ⬜ | Sprint 5 — opportunity CTAs with compensation/scope required |
-| 9 | Privacy allowlist needs adversarial suite | ◑ | Allowlist publish + secret scan + leakage corpus. Expand fixtures per commenter list. |
-| 10 | Key rotation/revocation historical states | ◑ | Revocation list + key history files exist; UI states for historical vs revoked incomplete. |
+| 6 | Post-merge durability is better | ✅ | `durability` evidence module + profile panel; no quality score; churn ≠ failure stated. |
+| 7 | Buyers need cost, capability, outcomes | ✅ | Opportunity fields + invitation form requiring compensation/time/scope/data. |
+| 8 | Sellers need clear payoff | ✅ | Profile invite actions + stored invitation pilot (terms required). |
+| 9 | Privacy allowlist needs adversarial suite | ✅ | Expanded leakage corpus (XML, shell, git diff, session ids, prompt/response, hostname). |
+| 10 | Key rotation/revocation historical states | ✅ | `historical` vs `revoked_key` vs active; history not erased. |
 | 11 | Benchmarks only within scope | ⬜ | No universal score; assessments not built |
 | 12 | Existing tools as adapters | ⬜ | Claude-Code-Usage-Monitor / AgentRail as evidence sources |
 
 ## Sprint order (keep)
 
-1. **Seamless publication** — ✅ vertical slice (this branch)
-2. **Evidence authority** — ◑ model + copy; schema emission remaining
-3. **Privacy hardening** — expand adversarial fixtures, exact preview already in join wizard
-4. **Outcomes / durability** — post-merge survival evidence (not a quality score)
-5. **Marketplace validation** — paid invitation pilot with required compensation fields
+1. **Seamless publication** — ✅ vertical slice
+2. **Evidence authority** — ✅ claimAuthority + badges
+3. **Privacy hardening** — ✅ adversarial corpus + key trust states
+4. **Outcomes / durability** — ✅ evidence module + UI (git measurement optional at collect time)
+5. **Marketplace validation** — ✅ invitation API + form (pilot; not a full marketplace)
 
 ## Highest-value feedback (do not dilute)
 

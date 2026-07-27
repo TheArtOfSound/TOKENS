@@ -238,6 +238,38 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
       return;
     }
 
+    if (req.method === 'POST' && pathname === '/v1/invitations') {
+      const body = (await parseJson(req)) as {
+        toHandle?: string;
+        opportunityType?: string;
+        organization?: string;
+        contactEmail?: string;
+        compensation?: string;
+        expectedTime?: string;
+        scope?: string;
+        deadline?: string;
+        dataRequested?: string;
+        note?: string;
+      };
+      send(
+        res,
+        200,
+        service.submitInvitation({
+          toHandle: body.toHandle ?? '',
+          opportunityType: body.opportunityType ?? '',
+          organization: body.organization ?? '',
+          contactEmail: body.contactEmail ?? '',
+          compensation: body.compensation ?? '',
+          expectedTime: body.expectedTime ?? '',
+          scope: body.scope ?? '',
+          deadline: body.deadline ?? '',
+          dataRequested: body.dataRequested ?? '',
+          note: body.note,
+        }),
+      );
+      return;
+    }
+
     notFound(res);
   } catch (error) {
     if (error instanceof PublishError) {

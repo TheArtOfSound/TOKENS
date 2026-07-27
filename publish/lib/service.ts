@@ -422,6 +422,103 @@ export class PublishService {
   }
 
   /**
+   * Buyer → member opportunity invitation.
+   * Required fields force compensation/time/scope honesty — token volume is never a substitute.
+   * Does not require the buyer to have a TOKENS account (low friction pilot).
+   */
+  submitInvitation(body: {
+    toHandle: string;
+    opportunityType: string;
+    organization: string;
+    contactEmail: string;
+    compensation: string;
+    expectedTime: string;
+    scope: string;
+    deadline: string;
+    dataRequested: string;
+    note?: string;
+  }) {
+    const handle = (body.toHandle ?? '').trim().toLowerCase();
+    if (!isValidHandle(handle)) throw new PublishError('INVALID_HANDLE', 'Invalid recipient handle.');
+
+    const profile = this.store.getProfileByHandle(handle);
+    // Allow invitations to static-directory handles too (profile may only exist statically).
+    // Still require a published handle shape; no spam to arbitrary strings.
+
+    const opportunityType = (body.opportunityType ?? '').trim();
+    const allowedTypes = new Set([
+      'paid_evaluation',
+      'research_study',
+      'technical_beta',
+      'contract',
+      'interview',
+      'employment',
+    ]);
+    if (!allowedTypes.has(opportunityType)) {
+      throw new PublishError(
+        'INVALID_OPPORTUNITY_TYPE',
+        'opportunityType must be one of: paid_evaluation, research_study, technical_beta, contract, interview, employment.',
+      );
+    }
+
+    const required: Array<[string, string]> = [
+      ['organization', body.organization],
+      ['contactEmail', body.contactEmail],
+      ['compensation', body.compensation],
+      ['expectedTime', body.expectedTime],
+      ['scope', body.scope],
+      ['deadline', body.deadline],
+      ['dataRequested', body.dataRequested],
+    ];
+    for (const [name, value] of required) {
+      if (!value || !String(value).trim()) {
+        throw new PublishError('FIELD_REQUIRED', `${name} is required. Opportunities must state terms up front.`);
+      }
+    }
+    if (!isValidEmail(body.contactEmail)) {
+      throw new PublishError('INVALID_EMAIL', 'contactEmail must be a valid email.');
+    }
+    if (String(body.scope).trim().length < 20) {
+      throw new PublishError('SCOPE_TOO_SHORT', 'scope must be at least 20 characters.');
+    }
+    if (String(body.compensation).trim().length < 3) {
+      throw new PublishError('COMPENSATION_REQUIRED', 'compensation must describe pay or stipend (not token volume).');
+    }
+
+    const email = body.contactEmail.trim().toLowerCase();
+    if (!this.store.checkRateLimit(`invite:${email}`, 10, 24 * 60 * 60 * 1000)) {
+      throw new PublishError('RATE_LIMIT', 'Too many invitations from this email today.', 429);
+    }
+    if (!this.store.checkRateLimit(`invite-to:${handle}`, 30, 24 * 60 * 60 * 1000)) {
+      throw new PublishError('RATE_LIMIT', 'This profile has received too many invitations today.', 429);
+    }
+
+    const saved = this.store.insertInvitation({
+      toHandle: handle,
+      opportunityType,
+      organization: body.organization.trim().slice(0, 120),
+      contactEmail: email,
+      compensation: body.compensation.trim().slice(0, 200),
+      expectedTime: body.expectedTime.trim().slice(0, 120),
+      scope: body.scope.trim().slice(0, 2000),
+      deadline: body.deadline.trim().slice(0, 40),
+      dataRequested: body.dataRequested.trim().slice(0, 1000),
+      note: body.note?.trim().slice(0, 500) ?? null,
+    });
+
+    return {
+      status: 'submitted',
+      id: saved.id,
+      createdAt: saved.createdAt,
+      toHandle: handle,
+      profilePublished: Boolean(profile && profile.state === 'published'),
+      note:
+        'Invitation stored for the pilot. It is not an employment contract. ' +
+        'Compensation and scope were required so volume-based ranking cannot substitute for terms.',
+    };
+  }
+
+  /**
    * Seed a migrated static profile (Bryan) without requiring interactive auth.
    * Used once by the migration script; not exposed as a public unauthenticated API.
    */

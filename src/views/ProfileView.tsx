@@ -15,6 +15,7 @@ import { href } from '../lib/router';
 import { safeUrl, safeImageUrl, linkProps } from '../lib/safeUrl';
 import { ActivityDisclaimer, SignatureDisclaimer } from './ActivityDisclaimer';
 import { EvidenceBadgeRow } from './EvidenceBadge';
+import { DurabilityPanel } from './DurabilityPanel';
 
 /**
  * Contact link for member-controlled data.
@@ -467,6 +468,7 @@ export function ProfileView({
   keyId,
   handle,
   claimAuthority,
+  durability,
 }: {
   profile: NonNullable<PublicUsageSnapshot['profile']>;
   daily: PublicUsageSnapshot['daily'];
@@ -474,6 +476,7 @@ export function ProfileView({
   keyId?: string;
   handle?: string;
   claimAuthority?: PublicUsageSnapshot['claimAuthority'];
+  durability?: PublicUsageSnapshot['durability'];
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -572,6 +575,9 @@ export function ProfileView({
 
       {/* 2 + 3. Featured work and outcomes — what they built comes before telemetry. */}
       <WorkEvidenceSection work={profile.work} />
+
+      {/* Post-merge durability — evidence only, never a quality score. */}
+      <DurabilityPanel durability={durability} />
 
       {/* 4. AI-tool experience. */}
       <div className="profile-cols">

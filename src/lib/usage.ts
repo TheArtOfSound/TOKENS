@@ -217,6 +217,32 @@ export interface PublicUsageSnapshot {
   verification: SnapshotVerification;
   /** Present on collector ≥0.4 publications. */
   claimAuthority?: ClaimAuthorityBlock;
+  /** Post-merge durability evidence when measured — never a quality score. */
+  durability?: {
+    note: string;
+    doesNotEstablish: string[];
+    projects: {
+      projectName: string;
+      linkedArtifact: string | null;
+      measurementClass: string;
+      note: string;
+      limitations: string[];
+      windows: {
+        window: string;
+        days: number;
+        introducedLines: number;
+        remainingLines: number;
+        remainingPct: number | null;
+        reverts: number;
+        correctiveCommits: number;
+        hotfixes: number;
+        bugLinkedFollowUps: number;
+        failedCiAfterMerge: number;
+        filesReopened: number;
+        summary: string;
+      }[];
+    }[];
+  };
 }
 
 export const sampleSnapshot: PublicUsageSnapshot = {

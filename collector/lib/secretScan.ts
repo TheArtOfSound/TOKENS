@@ -33,6 +33,11 @@ const RULES: Rule[] = [
   [/\/home\/[A-Za-z0-9._-]+/, 'Linux home path'],
   [/[A-Za-z]:\\+Users\\+[A-Za-z0-9._-]+/, 'Windows user path'],
   [/\/private\/(?:tmp|var)\/[A-Za-z0-9._/-]+/, 'macOS private path'],
+  // Git diff / shell path fragments that still leak layout.
+  [/^\+\+\+\s+b\/(?:Users|home)\//m, 'git diff path'],
+  [/^diff --git a\/.*\/Users\//m, 'git diff path'],
+  // XML attribute path leaks (cwd="/Users/…").
+  [/\bcwd\s*=\s*["']\/(?:Users|home)\//i, 'path in XML/attribute'],
   // Provider / cloud credential shapes.
   [/sk-ant-[A-Za-z0-9_-]{12,}/, 'Anthropic API key'],
   [/sk-proj-[A-Za-z0-9_-]{12,}/, 'OpenAI project key'],
@@ -64,6 +69,15 @@ const RULES: Rule[] = [
   [/[a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:[^/\s:@]+@/i, 'credential in URL userinfo'],
   // Credential passed in a URL query string.
   [/[?&](?:api[_-]?key|access[_-]?token|auth[_-]?token|token|password|passwd|secret)=[^&\s#]+/i, 'credential in URL query'],
+  // Session / request identifiers that must never leave local logs.
+  [/\b(?:session[_-]?id|request[_-]?id|prompt[_-]?id|message[_-]?id)\s*[:=]\s*['"]?[A-Za-z0-9._-]{8,}/i, 'session identifier'],
+  [/\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/i, 'UUID session-like id'],
+  // Local hostnames that identify a machine.
+  [/\b[a-z0-9][a-z0-9-]{1,40}\.local\b/i, 'local hostname'],
+  // Prompt / response fragments (explicit markers from log dumps).
+  [/\b(?:Human|User)\s*:\s*.{20,}/i, 'prompt fragment'],
+  [/\b(?:Assistant|Model)\s*:\s*.{20,}/i, 'response fragment'],
+  [/"role"\s*:\s*"(?:user|assistant|system)"\s*,\s*"content"\s*:\s*"/i, 'chat message payload'],
 ];
 
 /** Control chars (except tab \x09, newline \x0a, carriage return \x0d) must not appear in published text. */

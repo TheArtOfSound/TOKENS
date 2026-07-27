@@ -173,7 +173,7 @@ export const EVIDENCE_TIER_LABEL: Record<EvidenceTier, string> = {
  * "Verified person" or "Verified AI worker".
  */
 export function signatureAuthorityLabel(
-  state: 'checking' | 'valid' | 'invalid' | 'unsigned' | 'unreachable' | 'revoked_key',
+  state: 'checking' | 'valid' | 'historical' | 'invalid' | 'unsigned' | 'unreachable' | 'revoked_key',
 ): { label: string; explains: string } {
   switch (state) {
     case 'checking':
@@ -182,6 +182,12 @@ export function signatureAuthorityLabel(
       return {
         label: AUTHORITIES.deviceSignedSnapshot.badgeLabel,
         explains: AUTHORITIES.deviceSignedSnapshot.explains,
+      };
+    case 'historical':
+      return {
+        label: 'Signed by rotated key',
+        explains:
+          'Integrity holds under a historical device key that was later rotated (not revoked). The record is not erased.',
       };
     case 'invalid':
       return {

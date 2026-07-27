@@ -10,6 +10,7 @@
 import { useEffect, useState } from 'react';
 import { loadRegistry, type RegistryMember, type SignatureState } from './registry';
 import { verifySnapshotInBrowser } from './verify';
+import { loadKeyTrustMaterials } from './keyTrust';
 
 export interface MemberProfile {
   member: RegistryMember;
@@ -159,13 +160,17 @@ export function emptyMemberProfile(member: RegistryMember): MemberProfile {
   };
 }
 
-export async function loadMemberProfile(member: RegistryMember): Promise<MemberProfile> {
+export async function loadMemberProfile(
+  member: RegistryMember,
+  revokedKeyIds: string[] = [],
+  keyHistory: import('./keyTrust').KeyHistoryDoc | null = null,
+): Promise<MemberProfile> {
   const base = emptyMemberProfile(member);
   try {
     const response = await fetch(resolveUrl(member.snapshotUrl), { cache: 'no-cache' });
     if (!response.ok) return { ...base, signature: 'unreachable', error: `HTTP ${response.status}` };
     const snapshot = (await response.json()) as Record<string, unknown>;
-    const outcome = await verifySnapshotInBrowser(snapshot);
+    const outcome = await verifySnapshotInBrowser(snapshot, revokedKeyIds, keyHistory);
     const profile = obj(snapshot.profile);
     const activity = obj(profile.activity);
     const identity = obj(profile.identity);
@@ -220,13 +225,13 @@ export function useMemberProfiles(): { profiles: MemberProfile[]; loading: boole
 
   useEffect(() => {
     let cancelled = false;
-    loadRegistry()
-      .then((registry) => {
+    Promise.all([loadRegistry(), loadKeyTrustMaterials()])
+      .then(([registry, trust]) => {
         if (cancelled) return;
         setProfiles(registry.members.map((member) => emptyMemberProfile(member)));
         setLoading(false);
         registry.members.forEach((member, index) => {
-          loadMemberProfile(member).then((profile) => {
+          loadMemberProfile(member, trust.revokedKeyIds, trust.history).then((profile) => {
             if (cancelled) return;
             setProfiles((prev) => {
               const next = [...prev];

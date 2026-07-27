@@ -34,6 +34,7 @@ export const ALLOWED_TOP_LEVEL = new Set([
   'providerConfidence',
   'verification',
   'claimAuthority',
+  'durability',
   'signature',
 ]);
 

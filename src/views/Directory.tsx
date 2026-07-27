@@ -54,7 +54,7 @@ export function Directory() {
     return profiles.filter((p) => {
       if (!p.member) return false;
       if (tool && !p.toolsUsed.includes(tool)) return false;
-      if (verifiedOnly && p.signature !== 'valid') return false;
+      if (verifiedOnly && p.signature !== 'valid' && p.signature !== 'historical') return false;
       if (openToOnly && p.openTo.length === 0 && p.engagementTypes.length === 0) return false;
       if (!q) return true;
       return [

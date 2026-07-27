@@ -130,6 +130,21 @@ export class PublishStore {
         created_at TEXT NOT NULL,
         category TEXT
       );
+      CREATE TABLE IF NOT EXISTS invitations (
+        id TEXT PRIMARY KEY,
+        to_handle TEXT NOT NULL,
+        opportunity_type TEXT NOT NULL,
+        organization TEXT NOT NULL,
+        contact_email TEXT NOT NULL,
+        compensation TEXT NOT NULL,
+        expected_time TEXT NOT NULL,
+        scope TEXT NOT NULL,
+        deadline TEXT NOT NULL,
+        data_requested TEXT NOT NULL,
+        note TEXT,
+        created_at TEXT NOT NULL,
+        status TEXT NOT NULL
+      );
       CREATE TABLE IF NOT EXISTS rate_limits (
         bucket TEXT PRIMARY KEY,
         count INTEGER NOT NULL,
@@ -584,6 +599,53 @@ export class PublishStore {
       createdAt: String(row.created_at),
       status: row.status as SnapshotHistoryRecord['status'],
     };
+  }
+
+  // ---------- opportunity invitations (buyer → member) ----------
+
+  insertInvitation(input: {
+    toHandle: string;
+    opportunityType: string;
+    organization: string;
+    contactEmail: string;
+    compensation: string;
+    expectedTime: string;
+    scope: string;
+    deadline: string;
+    dataRequested: string;
+    note?: string | null;
+  }): { id: string; createdAt: string } {
+    const createdAt = nowIso();
+    const invId = id('inv');
+    this.db
+      .prepare(
+        `INSERT INTO invitations (
+          id, to_handle, opportunity_type, organization, contact_email,
+          compensation, expected_time, scope, deadline, data_requested, note, created_at, status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'submitted')`,
+      )
+      .run(
+        invId,
+        input.toHandle,
+        input.opportunityType,
+        input.organization,
+        input.contactEmail,
+        input.compensation,
+        input.expectedTime,
+        input.scope,
+        input.deadline,
+        input.dataRequested,
+        input.note ?? null,
+        createdAt,
+      );
+    return { id: invId, createdAt };
+  }
+
+  countInvitationsTo(handle: string): number {
+    const row = this.db.prepare('SELECT COUNT(*) AS c FROM invitations WHERE to_handle = ?').get(handle) as {
+      c: number;
+    };
+    return Number(row?.c ?? 0);
   }
 
   // ---------- analytics (opt-in, anonymous) ----------

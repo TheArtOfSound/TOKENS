@@ -29,6 +29,7 @@ import type { NormalizedDaily, ProviderSummary } from './normalize';
 import type { ProfileBlock, VerificationStatus } from './profile';
 import { disabledFields, disabledSources, type ConsentConfig, type FieldKey } from './consent';
 import { buildClaimAuthority, type ClaimAuthorityBlock } from './evidenceAuthority';
+import type { DurabilityBlock } from './durability';
 
 // ---------- Published (frozen contract + additive) shapes ----------
 
@@ -188,6 +189,8 @@ export interface PublishedSnapshot {
   verification: PublishedVerification;
   /** Claim-bounded evidence ladder for every badge on this snapshot. */
   claimAuthority: ClaimAuthorityBlock;
+  /** Post-merge durability evidence when measured — never a quality score. */
+  durability?: DurabilityBlock;
 }
 
 /** The draft the collector assembles before publication. May contain extra fields. */
@@ -224,6 +227,8 @@ export interface DraftSnapshot {
     lastDate: string | null;
     models: string[];
   }[];
+  /** Optional durability evidence assembled by the collector from local git. */
+  durability?: DurabilityBlock;
 }
 
 export interface PublishResult {
@@ -606,6 +611,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'providerConfidence',
       'verification',
       'claimAuthority',
+      ...(draft.durability?.projects?.length ? ['durability'] : []),
     ],
     // Stated in the published file so a viewer can see the user withheld
     // something, without revealing what the withheld values were.
@@ -671,6 +677,9 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       hasSelfSubmittedIdentity: Boolean(profile?.identity?.displayName),
       hasIdentityProofs: Boolean(profile?.identity?.identityProofs?.length),
     }),
+    ...(draft.durability && Array.isArray(draft.durability.projects) && draft.durability.projects.length
+      ? { durability: publishDurability(draft.durability, dropped) }
+      : {}),
   };
 
   // After assembly, mark device-signed signal as intended (collector always signs
@@ -684,6 +693,54 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
 
   published.verification.snapshotSha256 = computeSnapshotHash(published);
   return { published, dropped };
+}
+
+/** Publish durability evidence: fixed keys only, free-form through secret scanner. */
+function publishDurability(block: DurabilityBlock, dropped: string[]): DurabilityBlock {
+  return {
+    note: safeStringOrNull(block.note, dropped, 500) ?? '',
+    doesNotEstablish: safeStrings(block.doesNotEstablish, dropped, 12, 40),
+    projects: (Array.isArray(block.projects) ? block.projects : [])
+      .map((p) => {
+        const name = safeStringOrNull(p?.projectName, dropped, 60);
+        if (!name) return null;
+        const measurementClass =
+          p.measurementClass === 'collector_observed_git' ? ('collector_observed_git' as const) : ('unavailable' as const);
+        return {
+          projectName: name,
+          linkedArtifact: safeStringOrNull(p.linkedArtifact, dropped, 100),
+          measurementClass,
+          limitations: safeStrings(p.limitations, dropped, 8, 200),
+          note: safeStringOrNull(p.note, dropped, 300) ?? '',
+          windows: (Array.isArray(p.windows) ? p.windows : [])
+            .map((w) => {
+              const window = (['24h', '7d', '30d', '90d'] as const).includes(w.window as '24h')
+                ? (w.window as '24h' | '7d' | '30d' | '90d')
+                : ('30d' as const);
+              return {
+                window,
+                days: safeCount(w.days),
+                introducedLines: safeCount(w.introducedLines),
+                remainingLines: safeCount(w.remainingLines),
+                remainingPct:
+                  typeof w.remainingPct === 'number' && Number.isFinite(w.remainingPct)
+                    ? Math.max(0, Math.min(100, w.remainingPct))
+                    : null,
+                reverts: safeCount(w.reverts),
+                correctiveCommits: safeCount(w.correctiveCommits),
+                hotfixes: safeCount(w.hotfixes),
+                bugLinkedFollowUps: safeCount(w.bugLinkedFollowUps),
+                failedCiAfterMerge: safeCount(w.failedCiAfterMerge),
+                filesReopened: safeCount(w.filesReopened),
+                summary: safeStringOrNull(w.summary, dropped, 400) ?? '',
+              };
+            })
+            .slice(0, 4),
+        };
+      })
+      .filter((p): p is NonNullable<typeof p> => p !== null)
+      .slice(0, 20),
+  };
 }
 
 /**

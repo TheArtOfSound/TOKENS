@@ -1066,6 +1066,18 @@ textarea:focus-visible{
   .mobile-nav,.menu-toggle-bars i{transition:none}
 }
 
+/* Signature states: historical rotation vs revocation (distinct, not silent invalid) */
+.sig-historical{background:rgba(49,92,255,.1);color:#2947cc;border-color:rgba(49,92,255,.25)}
+.sig-revoked_key{background:rgba(180,83,9,.12);color:#92400e;border-color:rgba(180,83,9,.3)}
+.durability-panel .durability-project{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.durability-panel h3{margin:0 0 6px;font-size:1rem}
+.durability-windows{list-style:none;margin:8px 0;padding:0;display:grid;gap:8px}
+.durability-windows li{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.durability-windows strong{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.durability-windows span{color:var(--muted);font-size:.88rem;line-height:1.45}
+.invite-box select,.invite-box input,.invite-box textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.invite-box select{height:40px}
+
 /* ---- Claim-bounded evidence badges ---- */
 .ebadge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
 .ebadge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:var(--soft);font-size:.7rem;font-weight:800;color:var(--muted);letter-spacing:.01em}
