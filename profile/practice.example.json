@@ -1,0 +1,25 @@
+{
+  "_comment": "Copy to practice.json and edit. Self-declared agent-operation practice — always labeled self-reported. No secrets, paths, or prompts.",
+
+  "tokenEfficiencyArchitecture": [
+    "Cache-first context reuse",
+    "Skills / instruction files instead of re-pasting full context"
+  ],
+
+  "contextInjectionSystems": [
+    "CLAUDE.md / AGENTS.md",
+    "Skills",
+    "MCP tools"
+  ],
+
+  "problemFocus": [
+    "What kinds of problems you use agents to solve"
+  ],
+
+  "leveragePatterns": [
+    "Where you get multi-session or multi-tool leverage"
+  ],
+
+  "operatingCostNote": "Optional note on how you think about agent operating cost.",
+  "valueDeliveredNote": "Optional note on business / product value you actually deliver (not token volume)."
+}

@@ -165,6 +165,7 @@ export function Member({ handle }: { handle: string }) {
             handle={handle}
             claimAuthority={state.snapshot.claimAuthority}
             durability={state.snapshot.durability}
+            telemetry={state.snapshot.telemetry}
           />
 
           <div className="jcard jcard-pad" style={{ marginTop: 12 }}>

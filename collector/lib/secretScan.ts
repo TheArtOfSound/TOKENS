@@ -136,6 +136,15 @@ function scanString(value: string, path: string, findings: ProhibitedFinding[], 
  */
 const EMAIL_ALLOWED_PATHS = new Set(['$.profile.identity.contact.href']);
 
+/**
+ * Paths where a UUID (or UUID-shaped value) is an intentional public crypto field,
+ * not a leaked session id. Only the UUID-session rule is waived here.
+ */
+const UUID_ALLOWED_PATHS = new Set([
+  '$.signature.nonce',
+  '$.signature.keyId',
+]);
+
 /** Recursively scan any value for prohibited content. Returns all findings. */
 export function scanForProhibited(value: unknown, path = '$', findings: ProhibitedFinding[] = []): ProhibitedFinding[] {
   if (typeof value === 'string') {
@@ -145,6 +154,12 @@ export function scanForProhibited(value: unknown, path = '$', findings: Prohibit
     if (EMAIL_ALLOWED_PATHS.has(path)) {
       for (let i = findings.length - 1; i >= before; i -= 1) {
         if (/email/i.test(findings[i].label)) findings.splice(i, 1);
+      }
+    }
+    // Waive UUID findings only on intentional signature fields.
+    if (UUID_ALLOWED_PATHS.has(path)) {
+      for (let i = findings.length - 1; i >= before; i -= 1) {
+        if (/UUID session-like id/i.test(findings[i].label)) findings.splice(i, 1);
       }
     }
     return findings;

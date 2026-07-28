@@ -125,6 +125,17 @@ export interface ProfileBlock {
     avgTokensPerActiveDay: number | null;
     note: string;
   };
+  /** Self-declared agent-operation practice (architecture, context systems, problems, leverage). */
+  practice?: {
+    tokenEfficiencyArchitecture: string[];
+    contextInjectionSystems: string[];
+    problemFocus: string[];
+    leveragePatterns: string[];
+    operatingCostNote: string | null;
+    valueDeliveredNote: string | null;
+    verification: 'self_reported';
+    note: string;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
 }
@@ -242,6 +253,30 @@ export interface PublicUsageSnapshot {
         summary: string;
       }[];
     }[];
+  };
+  /** Sanitized hierarchical agent-operation telemetry (counts + timing only). */
+  telemetry?: {
+    measurementClass: 'collector_derived' | string;
+    confidence: 'medium' | 'low' | string;
+    totalEvents: number;
+    hierarchy: Array<{
+      provider: string;
+      events: number;
+      sessions: number;
+      totalTokens: number;
+      models: Array<{ model: string; events: number; sessions: number; totalTokens: number }>;
+    }>;
+    sessions: {
+      distinctSessions: number;
+      eventsWithoutSession: number;
+      medianEventsPerSession: number | null;
+      p95EventsPerSession: number | null;
+      maxEventsPerSession: number | null;
+      medianInterEventSeconds: number | null;
+    };
+    note: string;
+    limitations: string[];
+    doesNotEstablish: string[];
   };
 }
 

@@ -193,8 +193,71 @@ export function deriveEfficiency(daily: NormalizedDaily[], activeDays: number): 
     avgTokensPerActiveDay: activeDays > 0 ? Math.round(total / activeDays) : null,
     note:
       'Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. ' +
-      'These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet.',
+      'Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). ' +
+      'Cost per outcome requires connected outcomes, which remain a separate evidence class.',
   };
+}
+
+// ---- agent practice (self-declared; Reddit: efficiency arch, context systems, problems, leverage) ----
+export interface PracticeConfig {
+  tokenEfficiencyArchitecture?: string[];
+  contextInjectionSystems?: string[];
+  problemFocus?: string[];
+  leveragePatterns?: string[];
+  operatingCostNote?: string | null;
+  valueDeliveredNote?: string | null;
+}
+
+export interface PracticeBlock {
+  tokenEfficiencyArchitecture: string[];
+  contextInjectionSystems: string[];
+  problemFocus: string[];
+  leveragePatterns: string[];
+  operatingCostNote: string | null;
+  valueDeliveredNote: string | null;
+  /** Always self-submitted — never measured by the collector. */
+  verification: 'self_reported';
+  note: string;
+}
+
+export const PRACTICE_NOTE =
+  'Token-efficiency architecture, context-injection systems, problem focus, and leverage patterns ' +
+  'are declared by the member. They are not observed by the collector. Measured efficiency ' +
+  '(cache reuse, output share) is a separate evidence class above.';
+
+export function buildPractice(config: PracticeConfig = {}): PracticeBlock {
+  const clean = (items: string[] | undefined, max = 12): string[] =>
+    (Array.isArray(items) ? items : [])
+      .filter((s): s is string => typeof s === 'string' && s.trim().length > 0)
+      .map((s) => s.trim().slice(0, 160))
+      .slice(0, max);
+  return {
+    tokenEfficiencyArchitecture: clean(config.tokenEfficiencyArchitecture),
+    contextInjectionSystems: clean(config.contextInjectionSystems),
+    problemFocus: clean(config.problemFocus),
+    leveragePatterns: clean(config.leveragePatterns),
+    operatingCostNote:
+      typeof config.operatingCostNote === 'string' && config.operatingCostNote.trim()
+        ? config.operatingCostNote.trim().slice(0, 300)
+        : null,
+    valueDeliveredNote:
+      typeof config.valueDeliveredNote === 'string' && config.valueDeliveredNote.trim()
+        ? config.valueDeliveredNote.trim().slice(0, 400)
+        : null,
+    verification: 'self_reported',
+    note: PRACTICE_NOTE,
+  };
+}
+
+export function practiceHasContent(practice: PracticeBlock): boolean {
+  return (
+    practice.tokenEfficiencyArchitecture.length > 0 ||
+    practice.contextInjectionSystems.length > 0 ||
+    practice.problemFocus.length > 0 ||
+    practice.leveragePatterns.length > 0 ||
+    Boolean(practice.operatingCostNote) ||
+    Boolean(practice.valueDeliveredNote)
+  );
 }
 
 export interface ProfileBlock {
@@ -203,6 +266,8 @@ export interface ProfileBlock {
   work: WorkEvidence;
   opportunity: OpportunityBlock;
   efficiency: EfficiencyBlock;
+  /** Self-declared agent-operation practice (optional). */
+  practice?: PracticeBlock;
   verification: VerificationCategory[];
   note: string;
 }
@@ -463,16 +528,19 @@ export function buildProfile(
   qiraProjects: ScannedProject[],
   workConfig: WorkConfig = {},
   opportunityConfig: OpportunityConfig = {},
+  practiceConfig: PracticeConfig = {},
 ): ProfileBlock {
   const projectsActive = qiraProjects.filter((p) => p.found).length;
   const activity = deriveActivity(daily, providers, referenceDate, projectsActive);
   const work = deriveWorkEvidence(workConfig, qiraProjects);
+  const practice = buildPractice(practiceConfig);
   return {
     identity,
     activity,
     work,
     opportunity: buildOpportunity(opportunityConfig),
     efficiency: deriveEfficiency(daily, activity.activeDays),
+    ...(practiceHasContent(practice) ? { practice } : {}),
     verification: deriveVerification(activity, work, (identity.identityProofs?.length ?? 0) > 0),
     note: PROFILE_NOTE,
   };

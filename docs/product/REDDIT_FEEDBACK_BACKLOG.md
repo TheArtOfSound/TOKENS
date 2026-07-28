@@ -34,6 +34,11 @@ are durable enough to drive product work.
 | 10 | Key rotation/revocation historical states | ✅ | `historical` vs `revoked_key` vs active; history not erased. |
 | 11 | Benchmarks only within scope | ⬜ | No universal score; assessments not built |
 | 12 | Existing tools as adapters | ⬜ | Claude-Code-Usage-Monitor / AgentRail as evidence sources |
+| 13 | Token efficiency architecture + context injection (AIGIS-Team) | ✅ | `profile/practice.json` + measured cache reuse as context-efficiency proxy; Practice panel |
+| 14 | Business value = cost of operating + value delivered (tommedhurst) | ✅ | operatingCostNote / valueDeliveredNote + opportunity compute profile; framed separately from tokens |
+| 15 | Problem focus + leverage patterns, not activity alone (TomCrook2020) | ✅ | problemFocus + leveragePatterns evidence class on profile |
+| 16 | AI-evaluable MD of all projects (desexmachina) | ✅ | `public/data/agent-evidence.md` + profile export card |
+| 17 | Agent telemetry / hierarchical tracing (DeCaMil, WiredOtaku) | ✅ | Sanitized provider→model→session-count hierarchy + inter-event timing; no tool payloads yet |
 
 ## Sprint order (keep)
 
@@ -42,6 +47,7 @@ are durable enough to drive product work.
 3. **Privacy hardening** — ✅ adversarial corpus + key trust states
 4. **Outcomes / durability** — ✅ evidence module + UI (git measurement optional at collect time)
 5. **Marketplace validation** — ✅ invitation API + form (pilot; not a full marketplace)
+6. **Deep agent evidence (r/agenticAI thread)** — ✅ practice, business value, MD export, telemetry hierarchy
 
 ## Highest-value feedback (do not dilute)
 

@@ -303,6 +303,206 @@ export class Ledger {
     return Number((this.db.prepare('SELECT COUNT(*) AS n FROM events').get() as { n: number }).n);
   }
 
+  /**
+   * SQL aggregates for public agent-operation telemetry.
+   * session_pseudonym is used only inside SQLite (counts / timing) and is never
+   * returned as a value that could be published.
+   */
+  telemetrySummary(): {
+    totalEvents: number;
+    eventsWithoutSession: number;
+    distinctSessions: number;
+    hierarchy: Array<{
+      provider: string;
+      events: number;
+      sessions: number;
+      totalTokens: number;
+      models: Array<{ model: string; events: number; sessions: number; totalTokens: number }>;
+    }>;
+    sessionEventCounts: number[];
+    medianInterEventSeconds: number | null;
+  } {
+    const totalEvents = Number(
+      (this.db.prepare("SELECT COUNT(*) AS n FROM events WHERE origin = 'local_log'").get() as { n: number }).n,
+    );
+    const eventsWithoutSession = Number(
+      (this.db
+        .prepare(
+          "SELECT COUNT(*) AS n FROM events WHERE origin = 'local_log' AND (session_pseudonym IS NULL OR session_pseudonym = '')",
+        )
+        .get() as { n: number }).n,
+    );
+    const distinctSessions = Number(
+      (this.db
+        .prepare(
+          "SELECT COUNT(DISTINCT session_pseudonym) AS n FROM events WHERE origin = 'local_log' AND session_pseudonym IS NOT NULL AND session_pseudonym != ''",
+        )
+        .get() as { n: number }).n,
+    );
+
+    const modelRows = this.db
+      .prepare(
+        `SELECT provider,
+                COALESCE(NULLIF(model, ''), '(unattributed)') AS model,
+                COUNT(*) AS events,
+                COUNT(DISTINCT CASE WHEN session_pseudonym IS NOT NULL AND session_pseudonym != '' THEN session_pseudonym END) AS sessions,
+                COALESCE(SUM(total_tokens), 0) AS totalTokens
+         FROM events WHERE origin = 'local_log'
+         GROUP BY provider, model
+         ORDER BY events DESC`,
+      )
+      .all() as Array<Record<string, unknown>>;
+
+    const byProvider = new Map<
+      string,
+      {
+        events: number;
+        sessions: number;
+        totalTokens: number;
+        models: Array<{ model: string; events: number; sessions: number; totalTokens: number }>;
+      }
+    >();
+    // Distinct sessions per provider need their own query (union of model-level
+    // distinct counts would over-count sessions that used multiple models).
+    const providerSessionRows = this.db
+      .prepare(
+        `SELECT provider,
+                COUNT(DISTINCT CASE WHEN session_pseudonym IS NOT NULL AND session_pseudonym != '' THEN session_pseudonym END) AS sessions
+         FROM events WHERE origin = 'local_log'
+         GROUP BY provider`,
+      )
+      .all() as Array<Record<string, unknown>>;
+    const providerSessions = new Map(
+      providerSessionRows.map((r) => [String(r.provider), Number(r.sessions) || 0]),
+    );
+
+    for (const row of modelRows) {
+      const provider = String(row.provider ?? 'unknown');
+      let prov = byProvider.get(provider);
+      if (!prov) {
+        prov = {
+          events: 0,
+          sessions: providerSessions.get(provider) ?? 0,
+          totalTokens: 0,
+          models: [],
+        };
+        byProvider.set(provider, prov);
+      }
+      const events = Number(row.events) || 0;
+      const totalTokens = Number(row.totalTokens) || 0;
+      prov.events += events;
+      prov.totalTokens += totalTokens;
+      if (prov.models.length < 24) {
+        prov.models.push({
+          model: String(row.model ?? '(unattributed)'),
+          events,
+          sessions: Number(row.sessions) || 0,
+          totalTokens,
+        });
+      }
+    }
+
+    const hierarchy = Array.from(byProvider.entries())
+      .map(([provider, prov]) => ({ provider, ...prov }))
+      .sort((a, b) => b.events - a.events)
+      .slice(0, 8);
+
+    const sessionEventCounts = (
+      this.db
+        .prepare(
+          `SELECT COUNT(*) AS n FROM events
+           WHERE origin = 'local_log' AND session_pseudonym IS NOT NULL AND session_pseudonym != ''
+           GROUP BY session_pseudonym
+           ORDER BY n ASC`,
+        )
+        .all() as Array<{ n: number }>
+    ).map((r) => Number(r.n) || 0);
+
+    // Inter-event gaps: sample a bounded set of sessions (not every event) so
+    // collect stays fast on large ledgers. Full tool-call trees are out of scope.
+    let medianInterEventSeconds: number | null = null;
+    try {
+      const sampleSessions = (
+        this.db
+          .prepare(
+            `SELECT session_pseudonym AS s FROM events
+             WHERE origin = 'local_log' AND session_pseudonym IS NOT NULL AND session_pseudonym != ''
+             GROUP BY session_pseudonym
+             ORDER BY COUNT(*) DESC
+             LIMIT 12`,
+          )
+          .all() as Array<{ s: string }>
+      ).map((r) => String(r.s));
+      const gaps: number[] = [];
+      const timesStmt = this.db.prepare(
+        `SELECT occurred_at AS t FROM events
+         WHERE origin = 'local_log' AND session_pseudonym = ?
+         ORDER BY occurred_at ASC
+         LIMIT 400`,
+      );
+      for (const s of sampleSessions) {
+        const times = (timesStmt.all(s) as Array<{ t: string }>).map((r) => Date.parse(String(r.t)));
+        for (let i = 1; i < times.length; i += 1) {
+          const prev = times[i - 1];
+          const cur = times[i];
+          if (prev == null || cur == null || !Number.isFinite(prev) || !Number.isFinite(cur)) continue;
+          const gapSec = Math.round((cur - prev) / 1000);
+          if (gapSec >= 0 && gapSec <= 3600) gaps.push(gapSec);
+        }
+      }
+      gaps.sort((a, b) => a - b);
+      if (gaps.length) {
+        medianInterEventSeconds =
+          gaps.length % 2 === 1
+            ? gaps[Math.floor(gaps.length / 2)]!
+            : Math.round((gaps[gaps.length / 2 - 1]! + gaps[gaps.length / 2]!) / 2);
+      }
+    } catch {
+      medianInterEventSeconds = null;
+    }
+
+    return {
+      totalEvents,
+      eventsWithoutSession,
+      distinctSessions,
+      hierarchy,
+      sessionEventCounts,
+      medianInterEventSeconds,
+    };
+  }
+
+  /**
+   * @deprecated Prefer telemetrySummary() — kept for small fixtures / tests.
+   * Loads every local-log row; do not use on production ledgers.
+   */
+  telemetryRows(): Array<{
+    provider: string;
+    model: string | null;
+    sessionPseudonym: string | null;
+    totalTokens: number;
+    occurredAt: string;
+  }> {
+    const rows = this.db
+      .prepare(
+        `SELECT provider, model, session_pseudonym AS sessionPseudonym,
+                total_tokens AS totalTokens, occurred_at AS occurredAt
+         FROM events WHERE origin = 'local_log'
+         ORDER BY occurred_at ASC
+         LIMIT 5000`,
+      )
+      .all() as Array<Record<string, unknown>>;
+    return rows.map((row) => ({
+      provider: String(row.provider ?? 'unknown'),
+      model: row.model == null || row.model === '' ? null : String(row.model),
+      sessionPseudonym:
+        row.sessionPseudonym == null || row.sessionPseudonym === ''
+          ? null
+          : String(row.sessionPseudonym),
+      totalTokens: Number(row.totalTokens) || 0,
+      occurredAt: String(row.occurredAt ?? ''),
+    }));
+  }
+
   /** Per-import-source rollup of imported (self-submitted) data. */
   importedSources(): ImportedSource[] {
     const rows = this.db

@@ -297,6 +297,139 @@ function EfficiencyPanel({ efficiency }: { efficiency: ProfileBlockT['efficiency
   );
 }
 
+type PracticeBlock = NonNullable<ProfileBlockT['practice']>;
+
+function PracticePanel({ practice }: { practice: PracticeBlock | undefined }) {
+  if (!practice) return null;
+  const sections: Array<[string, string[]]> = [
+    ['Token efficiency architecture', practice.tokenEfficiencyArchitecture ?? []],
+    ['Context injection systems', practice.contextInjectionSystems ?? []],
+    ['Problem focus', practice.problemFocus ?? []],
+    ['Leverage patterns', practice.leveragePatterns ?? []],
+  ].filter(([, items]) => items.length > 0) as Array<[string, string[]]>;
+  if (!sections.length && !practice.operatingCostNote && !practice.valueDeliveredNote) return null;
+  return (
+    <div className="practice-panel jcard jcard-pad" id="practice">
+      <div className="section-kicker"><span /> AGENT PRACTICE</div>
+      <h2 className="jcard-title">How they work with agents</h2>
+      <p className="jcard-sub">
+        Self-declared practice — architecture, context systems, problem types, and leverage.
+        Not measured by the collector. Measured efficiency sits under Activity details.
+      </p>
+      {sections.map(([title, items]) => (
+        <div className="practice-block" key={title}>
+          <h3>{title}</h3>
+          <ul>
+            {items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      {(practice.operatingCostNote || practice.valueDeliveredNote) ? (
+        <div className="practice-value">
+          {practice.operatingCostNote ? (
+            <div>
+              <h3>Operating cost</h3>
+              <p>{practice.operatingCostNote}</p>
+            </div>
+          ) : null}
+          {practice.valueDeliveredNote ? (
+            <div>
+              <h3>Value delivered</h3>
+              <p>{practice.valueDeliveredNote}</p>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      <p className="efficiency-note">{practice.note}</p>
+    </div>
+  );
+}
+
+function TelemetryPanel({ telemetry }: { telemetry: PublicUsageSnapshot['telemetry'] }) {
+  if (!telemetry || !telemetry.totalEvents) return null;
+  const s = telemetry.sessions;
+  return (
+    <div className="telemetry-panel jcard jcard-pad" id="telemetry">
+      <div className="section-kicker"><span /> AGENT TELEMETRY</div>
+      <h2 className="jcard-title">Operation telemetry (sanitized)</h2>
+      <p className="jcard-sub">
+        Hierarchical counts from local usage events. Casual users rarely track this;
+        operators who diagnose agent failures do. No prompts, tool payloads, or raw session ids.
+      </p>
+      <div className="profile-stats telemetry-stats">
+        <div><strong>{fullNumber(telemetry.totalEvents)}</strong><span>Usage events</span></div>
+        <div><strong>{fullNumber(s.distinctSessions)}</strong><span>Distinct sessions</span></div>
+        <div><strong>{s.medianEventsPerSession ?? '—'}</strong><span>Median events / session</span></div>
+        <div><strong>{s.p95EventsPerSession ?? '—'}</strong><span>p95 events / session</span></div>
+        <div><strong>{s.medianInterEventSeconds != null ? `${s.medianInterEventSeconds}s` : '—'}</strong><span>Median inter-event gap</span></div>
+        <div><strong>{telemetry.hierarchy.length}</strong><span>Providers</span></div>
+      </div>
+      <div className="telemetry-hierarchy">
+        {telemetry.hierarchy.map((node) => (
+          <details key={node.provider} className="telemetry-node">
+            <summary>
+              <strong>{node.provider}</strong>
+              <span>{fullNumber(node.events)} events · {fullNumber(node.sessions)} sessions</span>
+            </summary>
+            <ul>
+              {node.models.map((m) => (
+                <li key={m.model}>
+                  <code>{m.model}</code>
+                  <span>{fullNumber(m.events)} events · {fullNumber(m.sessions)} sessions</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+      <p className="efficiency-note">{telemetry.note}</p>
+      {telemetry.limitations?.length ? (
+        <details className="telemetry-limits">
+          <summary>Limitations &amp; non-claims</summary>
+          <ul>
+            {telemetry.limitations.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+          {telemetry.doesNotEstablish?.length ? (
+            <p className="efficiency-note">Does not establish: {telemetry.doesNotEstablish.join(', ')}.</p>
+          ) : null}
+        </details>
+      ) : null}
+    </div>
+  );
+}
+
+function EvidenceExport({ handle }: { handle?: string }) {
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ledger.imagineqira.com';
+  const mdUrl = `${origin}${import.meta.env.BASE_URL}data/agent-evidence.md`;
+  const jsonUrl = `${origin}${import.meta.env.BASE_URL}data/latest.json`;
+  return (
+    <div className="evidence-export jcard jcard-pad" id="evidence-export">
+      <div className="section-kicker"><span /> AI-EVALUABLE EXPORT</div>
+      <h2 className="jcard-title">Evidence dossier for review</h2>
+      <p className="jcard-sub">
+        A single Markdown file any AI or hiring evaluator can read — projects, practice,
+        activity, telemetry hierarchy, and claim boundaries. Same privacy boundary as the
+        signed JSON (no prompts, code, or paths).
+      </p>
+      <div className="evidence-export-actions">
+        <a className="btn btn-primary" href={mdUrl} target="_blank" rel="noopener noreferrer">
+          Open agent-evidence.md
+        </a>
+        <a className="btn btn-secondary" href={jsonUrl} target="_blank" rel="noopener noreferrer">
+          Open signed latest.json
+        </a>
+        {handle ? (
+          <a className="btn btn-ghost" href={href({ name: 'member', handle })}>
+            Profile URL
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function IntegrityPanel({ integrity }: { integrity: PublicUsageSnapshot['integrity'] }) {
   if (!integrity || !integrity.checks?.length) return null;
   const passed = integrity.checks.length - integrity.flags;
@@ -469,6 +602,7 @@ export function ProfileView({
   handle,
   claimAuthority,
   durability,
+  telemetry,
 }: {
   profile: NonNullable<PublicUsageSnapshot['profile']>;
   daily: PublicUsageSnapshot['daily'];
@@ -477,6 +611,7 @@ export function ProfileView({
   handle?: string;
   claimAuthority?: PublicUsageSnapshot['claimAuthority'];
   durability?: PublicUsageSnapshot['durability'];
+  telemetry?: PublicUsageSnapshot['telemetry'];
 }) {
   const { identity, activity, verification } = profile;
   const contact = identity.contact ?? null;
@@ -573,11 +708,20 @@ export function ProfileView({
       {/* Availability & engagement — a buyer sees terms without inferring cost from tokens. */}
       <OpportunityPanel opportunity={profile.opportunity} openTo={identity.openTo} contact={contact} />
 
+      {/* Business value framing (cost of operating + value delivered) sits with practice. */}
+      <PracticePanel practice={profile.practice} />
+
       {/* 2 + 3. Featured work and outcomes — what they built comes before telemetry. */}
       <WorkEvidenceSection work={profile.work} />
 
       {/* Post-merge durability — evidence only, never a quality score. */}
       <DurabilityPanel durability={durability} />
+
+      {/* AI-evaluable dossier for reviewers / other agents. */}
+      <EvidenceExport handle={handle} />
+
+      {/* Hierarchical agent-operation telemetry (sanitized). */}
+      <TelemetryPanel telemetry={telemetry} />
 
       {/* 4. AI-tool experience. */}
       <div className="profile-cols">
@@ -592,7 +736,7 @@ export function ProfileView({
         </div>
       </div>
 
-      {/* 5. Detailed telemetry, last — and explicitly framed as not a score. */}
+      {/* 5. Detailed activity, last — and explicitly framed as not a score. */}
       <div className="profile-telemetry">
         <div className="section-kicker"><span /> ACTIVITY &amp; EFFICIENCY DETAILS</div>
         <ActivityDisclaimer compact />

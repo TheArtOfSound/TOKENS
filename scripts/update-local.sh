@@ -79,7 +79,18 @@ if git diff --quiet -- public/data; then
   exit 0
 fi
 
-git add public/data/latest.json public/data/history.json
+# Stage all published public data artifacts the collector may rewrite.
+git add \
+  public/data/latest.json \
+  public/data/history.json \
+  public/data/agent-evidence.md \
+  public/data/badge.svg \
+  public/data/badge-mark.svg \
+  public/data/badge-card.svg \
+  public/data/key-history.json \
+  public/data/revoked-keys.json \
+  public/data/claim-authority.json \
+  public/data/profiles/index.json
 git commit -m "data: update agent usage $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 # Only push when it is a safe fast-forward. If the remote has diverged (as it did

@@ -30,6 +30,7 @@ import type { ProfileBlock, VerificationStatus } from './profile';
 import { disabledFields, disabledSources, type ConsentConfig, type FieldKey } from './consent';
 import { buildClaimAuthority, type ClaimAuthorityBlock } from './evidenceAuthority';
 import type { DurabilityBlock } from './durability';
+import type { TelemetryBlock } from './telemetry';
 
 // ---------- Published (frozen contract + additive) shapes ----------
 
@@ -146,6 +147,16 @@ export interface PublishedProfile {
     avgTokensPerActiveDay: number | null;
     note: string;
   };
+  practice?: {
+    tokenEfficiencyArchitecture: string[];
+    contextInjectionSystems: string[];
+    problemFocus: string[];
+    leveragePatterns: string[];
+    operatingCostNote: string | null;
+    valueDeliveredNote: string | null;
+    verification: 'self_reported';
+    note: string;
+  };
   verification: { label: string; status: VerificationStatus; basis: string }[];
   note: string;
 }
@@ -191,6 +202,11 @@ export interface PublishedSnapshot {
   claimAuthority: ClaimAuthorityBlock;
   /** Post-merge durability evidence when measured — never a quality score. */
   durability?: DurabilityBlock;
+  /**
+   * Sanitized agent-operation telemetry hierarchy (counts + timing only).
+   * No prompts, tool payloads, paths, or raw session ids.
+   */
+  telemetry?: TelemetryBlock;
 }
 
 /** The draft the collector assembles before publication. May contain extra fields. */
@@ -229,6 +245,8 @@ export interface DraftSnapshot {
   }[];
   /** Optional durability evidence assembled by the collector from local git. */
   durability?: DurabilityBlock;
+  /** Optional sanitized agent-operation telemetry from the event ledger. */
+  telemetry?: TelemetryBlock;
 }
 
 export interface PublishResult {
@@ -449,6 +467,7 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       avgTokensPerActiveDay: profile.efficiency?.avgTokensPerActiveDay == null ? null : safeCount(profile.efficiency.avgTokensPerActiveDay),
       note: safeStringOrNull(profile.efficiency?.note, dropped, 300) ?? '',
     },
+    ...(profile.practice ? { practice: publishPractice(profile.practice, dropped) } : {}),
     verification: (Array.isArray(profile.verification) ? profile.verification : [])
       .map((entry) => ({
         label: safeStringOrNull(entry?.label, dropped, 60) ?? '',
@@ -458,6 +477,22 @@ function publishProfile(profile: ProfileBlock, dropped: string[]): PublishedProf
       .filter((entry) => entry.label)
       .slice(0, 12),
     note: safeStringOrNull(profile.note, dropped, 400) ?? '',
+  };
+}
+
+function publishPractice(
+  practice: NonNullable<ProfileBlock['practice']>,
+  dropped: string[],
+): NonNullable<PublishedProfile['practice']> {
+  return {
+    tokenEfficiencyArchitecture: safeStrings(practice.tokenEfficiencyArchitecture, dropped, 12, 160),
+    contextInjectionSystems: safeStrings(practice.contextInjectionSystems, dropped, 12, 160),
+    problemFocus: safeStrings(practice.problemFocus, dropped, 12, 160),
+    leveragePatterns: safeStrings(practice.leveragePatterns, dropped, 12, 160),
+    operatingCostNote: safeStringOrNull(practice.operatingCostNote, dropped, 300),
+    valueDeliveredNote: safeStringOrNull(practice.valueDeliveredNote, dropped, 400),
+    verification: 'self_reported',
+    note: safeStringOrNull(practice.note, dropped, 400) ?? '',
   };
 }
 
@@ -612,6 +647,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
       'verification',
       'claimAuthority',
       ...(draft.durability?.projects?.length ? ['durability'] : []),
+      ...(draft.telemetry && draft.telemetry.totalEvents > 0 ? ['telemetry'] : []),
     ],
     // Stated in the published file so a viewer can see the user withheld
     // something, without revealing what the withheld values were.
@@ -680,6 +716,9 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     ...(draft.durability && Array.isArray(draft.durability.projects) && draft.durability.projects.length
       ? { durability: publishDurability(draft.durability, dropped) }
       : {}),
+    ...(draft.telemetry && draft.telemetry.totalEvents > 0
+      ? { telemetry: publishTelemetry(draft.telemetry, dropped) }
+      : {}),
   };
 
   // After assembly, mark device-signed signal as intended (collector always signs
@@ -693,6 +732,54 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
 
   published.verification.snapshotSha256 = computeSnapshotHash(published);
   return { published, dropped };
+}
+
+/** Publish telemetry: counts + model names only; never session pseudonyms. */
+function publishTelemetry(block: TelemetryBlock, dropped: string[]): TelemetryBlock {
+  return {
+    measurementClass: 'collector_derived',
+    confidence: block.confidence === 'low' ? 'low' : 'medium',
+    totalEvents: safeCount(block.totalEvents),
+    hierarchy: (Array.isArray(block.hierarchy) ? block.hierarchy : [])
+      .map((node) => ({
+        provider: safeStringOrNull(node.provider, dropped, 40) ?? 'unknown',
+        events: safeCount(node.events),
+        sessions: safeCount(node.sessions),
+        totalTokens: safeCount(node.totalTokens),
+        models: (Array.isArray(node.models) ? node.models : [])
+          .map((m) => ({
+            model: safeStringOrNull(m.model, dropped, 80) ?? '(unattributed)',
+            events: safeCount(m.events),
+            sessions: safeCount(m.sessions),
+            totalTokens: safeCount(m.totalTokens),
+          }))
+          .slice(0, 24),
+      }))
+      .slice(0, 8),
+    sessions: {
+      distinctSessions: safeCount(block.sessions?.distinctSessions),
+      eventsWithoutSession: safeCount(block.sessions?.eventsWithoutSession),
+      medianEventsPerSession:
+        block.sessions?.medianEventsPerSession == null
+          ? null
+          : safeCount(block.sessions.medianEventsPerSession),
+      p95EventsPerSession:
+        block.sessions?.p95EventsPerSession == null
+          ? null
+          : safeCount(block.sessions.p95EventsPerSession),
+      maxEventsPerSession:
+        block.sessions?.maxEventsPerSession == null
+          ? null
+          : safeCount(block.sessions.maxEventsPerSession),
+      medianInterEventSeconds:
+        block.sessions?.medianInterEventSeconds == null
+          ? null
+          : safeCount(block.sessions.medianInterEventSeconds),
+    },
+    note: safeStringOrNull(block.note, dropped, 500) ?? '',
+    limitations: safeStrings(block.limitations, dropped, 8, 240),
+    doesNotEstablish: safeStrings(block.doesNotEstablish, dropped, 12, 60),
+  };
 }
 
 /** Publish durability evidence: fixed keys only, free-form through secret scanner. */

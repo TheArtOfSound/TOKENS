@@ -825,6 +825,76 @@
               "maxLength": 300
             }
           }
+        },
+        "practice": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Self-declared agent-operation practice: efficiency architecture, context injection, problem focus, leverage. Never collector-measured.",
+          "required": [
+            "tokenEfficiencyArchitecture",
+            "contextInjectionSystems",
+            "problemFocus",
+            "leveragePatterns",
+            "operatingCostNote",
+            "valueDeliveredNote",
+            "verification",
+            "note"
+          ],
+          "properties": {
+            "tokenEfficiencyArchitecture": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "contextInjectionSystems": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "problemFocus": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "leveragePatterns": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              }
+            },
+            "operatingCostNote": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 300
+            },
+            "valueDeliveredNote": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 400
+            },
+            "verification": {
+              "const": "self_reported"
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 400
+            }
+          }
         }
       }
     },
@@ -1116,6 +1186,307 @@
         },
         "note": {
           "type": "string"
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Sanitized agent-operation telemetry hierarchy (counts + timing). No prompts, paths, or raw session ids.",
+      "required": [
+        "measurementClass",
+        "confidence",
+        "totalEvents",
+        "hierarchy",
+        "sessions",
+        "note",
+        "limitations",
+        "doesNotEstablish"
+      ],
+      "properties": {
+        "measurementClass": {
+          "const": "collector_derived"
+        },
+        "confidence": {
+          "enum": [
+            "medium",
+            "low"
+          ]
+        },
+        "totalEvents": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hierarchy": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "provider",
+              "events",
+              "sessions",
+              "totalTokens",
+              "models"
+            ],
+            "properties": {
+              "provider": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "events": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sessions": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "totalTokens": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "models": {
+                "type": "array",
+                "maxItems": 24,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "model",
+                    "events",
+                    "sessions",
+                    "totalTokens"
+                  ],
+                  "properties": {
+                    "model": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "events": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "sessions": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "totalTokens": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sessions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "distinctSessions",
+            "eventsWithoutSession",
+            "medianEventsPerSession",
+            "p95EventsPerSession",
+            "maxEventsPerSession",
+            "medianInterEventSeconds"
+          ],
+          "properties": {
+            "distinctSessions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "eventsWithoutSession": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "medianEventsPerSession": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "p95EventsPerSession": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "maxEventsPerSession": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "medianInterEventSeconds": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limitations": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string",
+            "maxLength": 240
+          }
+        },
+        "doesNotEstablish": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "maxLength": 60
+          }
+        }
+      }
+    },
+    "durability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post-merge durability evidence when measured — never a quality score.",
+      "required": [
+        "note",
+        "doesNotEstablish",
+        "projects"
+      ],
+      "properties": {
+        "note": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "doesNotEstablish": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "projects": {
+          "type": "array",
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "projectName",
+              "linkedArtifact",
+              "measurementClass",
+              "note",
+              "limitations",
+              "windows"
+            ],
+            "properties": {
+              "projectName": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "linkedArtifact": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 100
+              },
+              "measurementClass": {
+                "enum": [
+                  "collector_observed_git",
+                  "unavailable"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "limitations": {
+                "type": "array",
+                "maxItems": 8,
+                "items": {
+                  "type": "string",
+                  "maxLength": 200
+                }
+              },
+              "windows": {
+                "type": "array",
+                "maxItems": 8,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "window",
+                    "days",
+                    "introducedLines",
+                    "remainingLines",
+                    "remainingPct",
+                    "reverts",
+                    "correctiveCommits",
+                    "hotfixes",
+                    "bugLinkedFollowUps",
+                    "failedCiAfterMerge",
+                    "filesReopened",
+                    "summary"
+                  ],
+                  "properties": {
+                    "window": {
+                      "enum": [
+                        "24h",
+                        "7d",
+                        "30d",
+                        "90d"
+                      ]
+                    },
+                    "days": {
+                      "type": "integer"
+                    },
+                    "introducedLines": {
+                      "type": "integer"
+                    },
+                    "remainingLines": {
+                      "type": "integer"
+                    },
+                    "remainingPct": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "reverts": {
+                      "type": "integer"
+                    },
+                    "correctiveCommits": {
+                      "type": "integer"
+                    },
+                    "hotfixes": {
+                      "type": "integer"
+                    },
+                    "bugLinkedFollowUps": {
+                      "type": "integer"
+                    },
+                    "failedCiAfterMerge": {
+                      "type": "integer"
+                    },
+                    "filesReopened": {
+                      "type": "integer"
+                    },
+                    "summary": {
+                      "type": "string",
+                      "maxLength": 400
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

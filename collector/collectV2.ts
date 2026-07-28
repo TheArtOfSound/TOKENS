@@ -28,14 +28,18 @@ import { scanForProhibited } from './lib/secretScan';
 import { detectAnomalies } from './lib/anomaly';
 import { buildClaimAuthority } from './lib/claims';
 import { renderBadge, BADGE_FILENAMES, type BadgeVariant, type BadgeFacts } from './lib/badge';
-import { buildProfile, localDateIn, activeDates, type ProfileIdentity, type WorkConfig, type OpportunityConfig } from './lib/profile';
+import { buildProfile, localDateIn, activeDates, type ProfileIdentity, type WorkConfig, type OpportunityConfig, type PracticeConfig } from './lib/profile';
 import { isSourceEnabled, loadConsent } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
-import { randomUUID } from 'node:crypto';
+import { Ledger } from './lib/ledger';
+import { deriveTelemetry } from './lib/telemetry';
+import { renderAgentEvidenceMarkdown } from './lib/agentEvidenceMd';
+import { randomBytes } from 'node:crypto';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
 const HISTORY = path.join(OUT_DIR, 'history.json');
+const AGENT_EVIDENCE_MD = path.join(OUT_DIR, 'agent-evidence.md');
 const PROFILE_CONFIG = path.join(process.cwd(), 'profile', 'profile.json');
 const WORK_CONFIG = path.join(process.cwd(), 'profile', 'work.json');
 const REGISTRY = path.join(process.cwd(), 'public', 'data', 'profiles', 'index.json');
@@ -150,11 +154,22 @@ function readWorkConfig(): WorkConfig {
 }
 
 const OPPORTUNITY_CONFIG = path.join(process.cwd(), 'profile', 'opportunity.json');
+const PRACTICE_CONFIG = path.join(process.cwd(), 'profile', 'practice.json');
 
 /** Read self-declared availability, engagement, and compensation preferences. */
 function readOpportunityConfig(): OpportunityConfig {
   try {
     const parsed = JSON.parse(readFileSync(OPPORTUNITY_CONFIG, 'utf8')) as OpportunityConfig;
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Read self-declared agent-operation practice (architecture, context systems, problems, leverage). */
+function readPracticeConfig(): PracticeConfig {
+  try {
+    const parsed = JSON.parse(readFileSync(PRACTICE_CONFIG, 'utf8')) as PracticeConfig;
     return parsed && typeof parsed === 'object' ? parsed : {};
   } catch {
     return {};
@@ -218,6 +233,7 @@ function readExistingLatest(): PublishedSnapshot | null {
 }
 
 function main(): void {
+  console.log('Collect: start');
   mkdirSync(OUT_DIR, { recursive: true });
 
   const { config: consent, created: consentCreated } = loadConsent();
@@ -226,22 +242,9 @@ function main(): void {
     console.log('Run `npm run consent` to see exactly what each source reads, and to turn any of it off.');
   }
 
-  // A source the user disabled is never invoked -- not read then filtered.
-  const sources: RawSource[] = PROVIDERS.map(({ provider, args }) => {
-    if (!isSourceEnabled(consent, provider)) {
-      return { provider, json: null, failureWarning: `${provider} source disabled by consent; not read` };
-    }
-    const result = runCcusage(args);
-    if ('warning' in result) return { provider, json: null, failureWarning: result.warning };
-    return { provider, json: result.json };
-  });
-
-  const qira = isSourceEnabled(consent, 'projectScan')
-    ? scanQiraProjects()
-    : { projects: [], scanner: { rootsChecked: 0, allowlistedProjects: 0, foundProjects: 0, privacyMode: 'allowlist_no_paths' as const }, stats: { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false } };
-
-  // Source of truth is the event ledger. ccusage remains the fallback when the
-  // ledger has not been populated yet (`npm run ingest`).
+  // Source of truth is the event ledger. Prefer it first so we can skip ccusage
+  // when the ledger already has measured rows (ccusage is only a fallback path).
+  console.log('Collect: reading event ledger…');
   const ledgerData = process.env.TOKENS_SOURCE === 'ccusage'
     ? { rows: [], warnings: ['Forced ccusage source via TOKENS_SOURCE=ccusage.'], eventCount: 0, providerConfidence: {}, imported: [] }
     : readLedgerDaily();
@@ -250,6 +253,50 @@ function main(): void {
   } else {
     console.log('Event ledger unavailable or empty; falling back to ccusage.');
   }
+
+  // A source the user disabled is never invoked -- not read then filtered.
+  // When the ledger already supplies daily rows, skip the ccusage CLI entirely
+  // (still available as fallback when ledger is empty).
+  const sources: RawSource[] = ledgerData.rows.length
+    ? PROVIDERS.map(({ provider }) => ({ provider, json: null }))
+    : PROVIDERS.map(({ provider, args }) => {
+        if (!isSourceEnabled(consent, provider)) {
+          return { provider, json: null, failureWarning: `${provider} source disabled by consent; not read` };
+        }
+        console.log(`Collect: running ccusage for ${provider}…`);
+        const result = runCcusage(args);
+        if ('warning' in result) return { provider, json: null, failureWarning: result.warning };
+        return { provider, json: result.json };
+      });
+
+  console.log('Collect: project scan…');
+  type QiraScanResult = ReturnType<typeof scanQiraProjects>;
+  let qira: QiraScanResult;
+  if (process.env.TOKENS_SKIP_PROJECT_SCAN === '1') {
+    // Fast path for CI/dev when projects are already in the previous snapshot.
+    const prev = readExistingLatest();
+    const projects = (Array.isArray(prev?.qiraProjects) ? prev!.qiraProjects : []) as QiraScanResult['projects'];
+    qira = {
+      projects,
+      scanner: prev?.scanner ?? {
+        rootsChecked: 0,
+        allowlistedProjects: 0,
+        foundProjects: 0,
+        privacyMode: 'allowlist_no_paths' as const,
+      },
+      stats: { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false },
+    };
+    console.log('Collect: project scan skipped (TOKENS_SKIP_PROJECT_SCAN=1); reusing previous snapshot projects.');
+  } else if (isSourceEnabled(consent, 'projectScan')) {
+    qira = scanQiraProjects();
+  } else {
+    qira = {
+      projects: [],
+      scanner: { rootsChecked: 0, allowlistedProjects: 0, foundProjects: 0, privacyMode: 'allowlist_no_paths' },
+      stats: { reusedFromCheckpoint: 0, rescanned: 0, fullDiscovery: false },
+    };
+  }
+  console.log(`Collect: scan done (found ${qira.scanner.foundProjects}/${qira.scanner.allowlistedProjects}).`);
 
   const { draft, daily } = assembleDraft({
     sources,
@@ -273,6 +320,7 @@ function main(): void {
     qira.projects,
     readWorkConfig(),
     readOpportunityConfig(),
+    readPracticeConfig(),
   );
 
   draft.consent = consent;
@@ -280,6 +328,25 @@ function main(): void {
   syncRegistryEntry(readProfileConfig(), draft.generatedAt);
   draft.sourceOfTruth = ledgerData.rows.length ? 'event_ledger' : 'ccusage_aggregate';
   draft.providerConfidence = ledgerData.providerConfidence;
+
+  // Sanitized hierarchical telemetry from the event ledger (counts + timing only).
+  if (ledgerData.rows.length) {
+    console.log('Collect: deriving telemetry summary…');
+    try {
+      const ledger = new Ledger();
+      try {
+        const telemetry = deriveTelemetry(ledger);
+        if (telemetry && telemetry.totalEvents > 0) draft.telemetry = telemetry;
+      } finally {
+        ledger.close();
+      }
+    } catch (error) {
+      draft.warnings.push(
+        `Telemetry summary skipped: ${error instanceof Error ? error.message : 'ledger open failed'}`,
+      );
+    }
+  }
+  console.log('Collect: publishing allowlist transform…');
 
   const existing = readExistingLatest();
 
@@ -310,9 +377,20 @@ function main(): void {
     return;
   }
 
-  // Idempotency: if the usage content is unchanged, do not rewrite files.
+  // Idempotency: if the usage content is unchanged, do not rewrite snapshot files.
+  // Still refresh the AI-evaluable markdown export (cheap, and practice copy may
+  // change without touching measured usage).
   if (existing && computeContentHash(existing) === computeContentHash(published)) {
-    console.log('No usage-data change since last snapshot; nothing written.');
+    console.log('No usage-data change since last snapshot; snapshot files unchanged.');
+    const evidenceMd = renderAgentEvidenceMarkdown(published, {
+      profileUrl: profileUrlForBadge(),
+      telemetry: published.telemetry ?? null,
+    });
+    const mdFindings = scanForProhibited({ evidence: evidenceMd });
+    if (!mdFindings.length) {
+      writeFileSync(AGENT_EVIDENCE_MD, evidenceMd);
+      console.log(`Refreshed ${AGENT_EVIDENCE_MD}`);
+    }
     return;
   }
 
@@ -324,7 +402,9 @@ function main(): void {
     console.log(`Generated a new Ed25519 device key (stored in ${key.storage}). The private key never leaves this machine.`);
   }
   const signed: Record<string, unknown> = { ...published };
-  signed.signature = signSnapshot(signed, key.privateKeyPem, randomUUID());
+  // Hex nonce (not UUID) so the public secret scanner's UUID rule does not false-positive
+  // on the intentional signature binding value.
+  signed.signature = signSnapshot(signed, key.privateKeyPem, randomBytes(16).toString('hex'));
 
   // Verify what we are about to publish, using only the embedded public key.
   const check = verifySnapshot(signed);
@@ -382,10 +462,29 @@ function main(): void {
   const history = buildCompactHistory(daily, published.generatedAt);
   writeFileSync(HISTORY, `${JSON.stringify(history, null, 2)}\n`);
 
+  // AI-evaluable Markdown dossier (Reddit: desexmachina) — same privacy boundary
+  // as the JSON snapshot; no prompts, paths, or credentials.
+  const evidenceMd = renderAgentEvidenceMarkdown(published, {
+    profileUrl: profileUrlForBadge(),
+    telemetry: published.telemetry ?? null,
+  });
+  const mdFindings = scanForProhibited({ evidence: evidenceMd });
+  if (mdFindings.length > 0) {
+    console.warn(`agent-evidence.md blocked by secret scan (${mdFindings.length} finding(s)); skipping MD export.`);
+  } else {
+    writeFileSync(AGENT_EVIDENCE_MD, evidenceMd);
+    console.log(`Wrote ${AGENT_EVIDENCE_MD}`);
+  }
+
   console.log(`Wrote ${LATEST}`);
   console.log(`Exact total tokens: ${published.measurement.exactTotalTokens}`);
   console.log(`History points: ${history.pointCount} (through ${history.updatedThrough ?? 'n/a'})`);
   console.log(`Qira projects found: ${published.scanner.foundProjects}/${published.scanner.allowlistedProjects}`);
+  if (published.telemetry) {
+    console.log(
+      `Telemetry: ${published.telemetry.totalEvents} events, ${published.telemetry.sessions.distinctSessions} sessions across ${published.telemetry.hierarchy.length} provider(s).`,
+    );
+  }
   console.log(`Signed with device key ${(signed.signature as { keyId: string }).keyId} (${key.storage}); self-verification passed.`);
   if (dropped.length) console.warn(`Dropped ${dropped.length} unsafe free-form value(s) during publication.`);
   if (published.warnings.length) console.warn(`Warnings: ${published.warnings.length}`);

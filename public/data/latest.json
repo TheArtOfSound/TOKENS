@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-27T05:52:19.731Z",
+  "generatedAt": "2026-07-28T06:23:45.037Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 296577550,
-    "outputTokens": 93026888,
+    "inputTokens": 309082283,
+    "outputTokens": 94040778,
     "cacheCreationTokens": 665154460,
-    "cacheReadTokens": 34903536956,
-    "cachedTokens": 35568691416,
-    "freshTokens": 389604438,
-    "totalTokens": 35958295854,
+    "cacheReadTokens": 35328050492,
+    "cachedTokens": 35993204952,
+    "freshTokens": 403123061,
+    "totalTokens": 36396328013,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -27,13 +27,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 283951483,
-      "outputTokens": 29680096,
+      "inputTokens": 296456216,
+      "outputTokens": 30693986,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 10003961856,
-      "cachedTokens": 10003961856,
-      "freshTokens": 313631579,
-      "totalTokens": 10317593435,
+      "cacheReadTokens": 10428475392,
+      "cachedTokens": 10428475392,
+      "freshTokens": 327150202,
+      "totalTokens": 10755625594,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -3138,6 +3138,28 @@
       "freshTokens": 16656,
       "totalTokens": 5589805,
       "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-07-27",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 12504733,
+      "outputTokens": 1013890,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 424513536,
+      "cachedTokens": 424513536,
+      "freshTokens": 13518623,
+      "totalTokens": 438032159,
+      "estimatedCostUsd": null
     }
   ],
   "qiraProjects": [
@@ -3149,8 +3171,8 @@
       "found": true,
       "git": {
         "branch": "feat/one-click-publish",
-        "commit": "9a9bfb2",
-        "changedFiles": 21
+        "commit": "3ab4a52",
+        "changedFiles": 8
       },
       "stack": [],
       "scripts": [],
@@ -3306,8 +3328,8 @@
       "found": true,
       "git": {
         "branch": "feat/one-click-publish",
-        "commit": "f27aa8d",
-        "changedFiles": 5
+        "commit": "3ab4a52",
+        "changedFiles": 8
       },
       "stack": [
         "React",
@@ -3333,14 +3355,14 @@
       "fileCounts": {
         "docs": 29,
         "py": 2,
-        "ts": 80,
+        "ts": 87,
         "json": 27,
         "js": 13,
         "html": 4,
         "css": 2,
-        "tsx": 17
+        "tsx": 20
       },
-      "lastModified": "2026-07-27T05:52:12.160Z",
+      "lastModified": "2026-07-28T05:27:05.617Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3403,7 +3425,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 35958295854,
+    "exactTotalTokens": 36396328013,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3426,7 +3448,9 @@
       "integrity",
       "sourceOfTruth",
       "providerConfidence",
-      "verification"
+      "verification",
+      "claimAuthority",
+      "telemetry"
     ],
     "fieldsWithheld": [],
     "sourcesDisabled": []
@@ -3478,14 +3502,14 @@
       }
     },
     "activity": {
-      "referenceDate": "2026-07-26",
-      "activeDays": 98,
+      "referenceDate": "2026-07-27",
+      "activeDays": 99,
       "firstActiveDate": "2026-02-26",
-      "lastActiveDate": "2026-07-26",
-      "spanDays": 151,
+      "lastActiveDate": "2026-07-27",
+      "spanDays": 152,
       "activeDaysLast30": 29,
       "activeDaysLast90": 73,
-      "currentStreakDays": 6,
+      "currentStreakDays": 7,
       "longestStreakDays": 26,
       "toolsUsed": [
         "Codex",
@@ -3607,9 +3631,42 @@
     "efficiency": {
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
-      "outputSharePct": 23.9,
-      "avgTokensPerActiveDay": 366921386,
-      "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. These are context for the activity figures — cost per outcome requires connected outcomes, which are not built yet."
+      "outputSharePct": 23.3,
+      "avgTokensPerActiveDay": 367639677,
+      "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
+    },
+    "practice": {
+      "tokenEfficiencyArchitecture": [
+        "Cache-first context reuse (measured cache share on this profile)",
+        "Skill and instruction layering over full-prompt rewrites",
+        "Local-first collection so raw prompts never leave the machine",
+        "Signed, allowlisted publication instead of raw log dumps"
+      ],
+      "contextInjectionSystems": [
+        "Project CLAUDE.md / AGENTS.md instruction files",
+        "Grok and Claude skills (SKILL.md) for repeatable workflows",
+        "MCP / tool bindings for scoped capability access",
+        "Collector consent + per-field publication toggles",
+        "Event ledger with HMAC session pseudonyms (no raw session ids)"
+      ],
+      "problemFocus": [
+        "Evidence that someone actually operates AI agents deeply",
+        "Privacy-preserving measurement of AI-assisted work",
+        "Claim-bounded verification (no universal AI score)",
+        "Agent failure diagnosis via hierarchical telemetry summaries",
+        "Local-first tooling for Claude Code and Codex"
+      ],
+      "leveragePatterns": [
+        "Multi-tool orchestration across Claude Code and Codex on the same problems",
+        "Collector → signed snapshot → public evidence loop",
+        "Work artifacts linked to collector-observed local projects",
+        "Evidence classes kept separate: activity, work, identity, outcomes",
+        "Buyer-facing terms stated explicitly (compensation, compute profile) instead of inferred from tokens"
+      ],
+      "operatingCostNote": "Compute kept low via heavy cache reuse; cost is never inferred from raw token volume as a quality signal.",
+      "valueDeliveredNote": "Shipped open-source collector, live signed ledger, and claim-authority surface employers can re-verify in-browser.",
+      "verification": "self_reported",
+      "note": "Token-efficiency architecture, context-injection systems, problem focus, and leverage patterns are declared by the member. They are not observed by the collector. Measured efficiency (cache reuse, output share) is a separate evidence class above."
     },
     "verification": [
       {
@@ -3620,7 +3677,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (98 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (99 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Identity-linked",
@@ -3700,22 +3757,415 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "45d2484d06e79fdb18986cc06414f8a9b752b24215550cf87e08d7aca25ee362",
+    "snapshotSha256": "f7c7a123c9ebf97e586007d60de301d7734ce931cee555d2948c0ad92ffbf133",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
+  },
+  "claimAuthority": {
+    "model": "signal → provenance → allowed claim → confidence → limitations",
+    "combinedAuthorityRule": "A combined figure never inherits more authority than its weakest supporting evidence. No universal skill, quality, or employability score is published.",
+    "universalNonClaims": [
+      "identity",
+      "authorship",
+      "permission",
+      "expertise",
+      "quality",
+      "outcome"
+    ],
+    "tierOrder": [
+      "self_submitted",
+      "collector_observed",
+      "device_signed",
+      "provider_attested",
+      "benchmark_assessed",
+      "third_party_confirmed"
+    ],
+    "signals": [
+      {
+        "signalType": "collector_observed_activity",
+        "provenance": "local_provider_usage_record",
+        "tier": "collector_observed",
+        "allowedClaims": [
+          "activity_occurred"
+        ],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "quality",
+          "productivity",
+          "permission",
+          "outcome",
+          "compensation_fit"
+        ],
+        "confidence": "high",
+        "limitations": [
+          "locally controlled source",
+          "does not establish work quality"
+        ],
+        "badgeLabel": "Collector-observed activity",
+        "present": true,
+        "explains": "A compatible local usage record was observed. Not expertise or productivity."
+      },
+      {
+        "signalType": "provider_reported_token_counts",
+        "provenance": "local_claude_or_codex_accounting",
+        "tier": "provider_attested",
+        "allowedClaims": [
+          "activity_occurred"
+        ],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "quality",
+          "productivity",
+          "permission",
+          "outcome",
+          "compensation_fit"
+        ],
+        "confidence": "medium",
+        "limitations": [
+          "provider accounting, not an invoice",
+          "locally controlled source files"
+        ],
+        "badgeLabel": "Provider-reported usage",
+        "present": true,
+        "explains": "Token counts come from provider usage accounting — evidence of activity, not skill."
+      },
+      {
+        "signalType": "device_signed_snapshot",
+        "provenance": "ed25519_device_key",
+        "tier": "device_signed",
+        "allowedClaims": [
+          "snapshot_integrity",
+          "device_key_possession"
+        ],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "quality",
+          "productivity",
+          "permission",
+          "outcome",
+          "activity_occurred"
+        ],
+        "confidence": "high",
+        "limitations": [
+          "does not prove source logs were honest or unmodified",
+          "does not prove legal identity of the key holder"
+        ],
+        "badgeLabel": "Device-signed activity record",
+        "present": true,
+        "explains": "Signature confirms integrity and signing key. It does not independently prove identity, authorship, skill, source honesty, permission, or outcomes."
+      },
+      {
+        "signalType": "collector_observed_work_artifact",
+        "provenance": "local_allowlisted_project_scan",
+        "tier": "collector_observed",
+        "allowedClaims": [
+          "activity_occurred"
+        ],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "quality",
+          "productivity",
+          "permission",
+          "outcome",
+          "compensation_fit",
+          "authorship"
+        ],
+        "confidence": "medium",
+        "limitations": [
+          "local presence of a linked project",
+          "not sole authorship"
+        ],
+        "badgeLabel": "Collector-observed work",
+        "present": true,
+        "explains": "Local collector found a linked project. Not identity, quality, or sole authorship."
+      },
+      {
+        "signalType": "link_provided_work",
+        "provenance": "member_supplied_https_url",
+        "tier": "self_submitted",
+        "allowedClaims": [],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "quality",
+          "productivity",
+          "permission",
+          "outcome",
+          "compensation_fit",
+          "authorship"
+        ],
+        "confidence": "low",
+        "limitations": [
+          "URL provided by member",
+          "not independently verified"
+        ],
+        "badgeLabel": "Link provided",
+        "present": true,
+        "explains": "Public link provided by the member. Not independently verified."
+      },
+      {
+        "signalType": "self_reported_outcome",
+        "provenance": "profile_work_json",
+        "tier": "self_submitted",
+        "allowedClaims": [],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "permission",
+          "expertise",
+          "quality",
+          "outcome"
+        ],
+        "confidence": "low",
+        "limitations": [
+          "requires third-party confirmation to upgrade"
+        ],
+        "badgeLabel": "Self-reported outcome",
+        "present": false,
+        "explains": "Stated by the member. Outcome verification requires third-party confirmation."
+      },
+      {
+        "signalType": "self_submitted_identity",
+        "provenance": "profile_json",
+        "tier": "self_submitted",
+        "allowedClaims": [],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "expertise",
+          "outcome"
+        ],
+        "confidence": "low",
+        "limitations": [
+          "user-authored fields",
+          "not independently verified"
+        ],
+        "badgeLabel": "Self-submitted identity",
+        "present": true,
+        "explains": "Display name and bio are self-submitted. Not identity verification."
+      },
+      {
+        "signalType": "external_account_proof",
+        "provenance": "browser_checked_github_gist",
+        "tier": "self_submitted",
+        "allowedClaims": [
+          "account_control"
+        ],
+        "excludedClaims": [
+          "identity",
+          "expertise",
+          "authorship",
+          "outcome"
+        ],
+        "confidence": "high",
+        "limitations": [
+          "proves control of a linked account, not legal identity"
+        ],
+        "badgeLabel": "Account control (linked)",
+        "present": true,
+        "explains": "Browser-checked control of a linked account. Not legal identity."
+      },
+      {
+        "signalType": "benchmark_assessed",
+        "provenance": "defined_task_conditions",
+        "tier": "benchmark_assessed",
+        "allowedClaims": [],
+        "excludedClaims": [
+          "identity",
+          "authorship",
+          "permission",
+          "expertise",
+          "quality",
+          "outcome",
+          "expertise"
+        ],
+        "confidence": "medium",
+        "limitations": [
+          "bounded to the defined task only"
+        ],
+        "badgeLabel": "Benchmark-assessed",
+        "present": false,
+        "explains": "Not present in this snapshot. When present, only claims performance on that defined task."
+      },
+      {
+        "signalType": "third_party_confirmed_outcome",
+        "provenance": "named_party_confirmation",
+        "tier": "third_party_confirmed",
+        "allowedClaims": [
+          "outcome"
+        ],
+        "excludedClaims": [
+          "identity",
+          "expertise",
+          "authorship"
+        ],
+        "confidence": "medium",
+        "limitations": [
+          "does not prove independent causation"
+        ],
+        "badgeLabel": "Third-party confirmed",
+        "present": false,
+        "explains": "Not present in this snapshot. When present, a named party confirmed an outcome — not causation or identity."
+      }
+    ],
+    "note": "Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value. A valid device signature proves integrity of published bytes and key possession — not source honesty or legal identity."
+  },
+  "telemetry": {
+    "measurementClass": "collector_derived",
+    "confidence": "medium",
+    "totalEvents": 144924,
+    "hierarchy": [
+      {
+        "provider": "codex",
+        "events": 79756,
+        "sessions": 0,
+        "totalTokens": 10755625594,
+        "models": [
+          {
+            "model": "gpt-5.5",
+            "events": 32270,
+            "sessions": 0,
+            "totalTokens": 4674922657
+          },
+          {
+            "model": "gpt-5.3-codex",
+            "events": 17421,
+            "sessions": 0,
+            "totalTokens": 2068531929
+          },
+          {
+            "model": "gpt-5.4",
+            "events": 15953,
+            "sessions": 0,
+            "totalTokens": 2142532590
+          },
+          {
+            "model": "gpt-5.6-sol",
+            "events": 12988,
+            "sessions": 0,
+            "totalTokens": 1704764822
+          },
+          {
+            "model": "(unattributed)",
+            "events": 867,
+            "sessions": 0,
+            "totalTokens": 139113027
+          },
+          {
+            "model": "gpt-5.4-mini",
+            "events": 221,
+            "sessions": 0,
+            "totalTokens": 23923103
+          },
+          {
+            "model": "gpt-5.6-luna",
+            "events": 22,
+            "sessions": 0,
+            "totalTokens": 909042
+          },
+          {
+            "model": "gpt-5.6-terra",
+            "events": 14,
+            "sessions": 0,
+            "totalTokens": 928424
+          }
+        ]
+      },
+      {
+        "provider": "claude",
+        "events": 65168,
+        "sessions": 41,
+        "totalTokens": 25640702419,
+        "models": [
+          {
+            "model": "claude-opus-4-8",
+            "events": 37782,
+            "sessions": 36,
+            "totalTokens": 16071635092
+          },
+          {
+            "model": "claude-opus-4-7",
+            "events": 12742,
+            "sessions": 5,
+            "totalTokens": 6079361866
+          },
+          {
+            "model": "claude-fable-5",
+            "events": 5900,
+            "sessions": 18,
+            "totalTokens": 2104166417
+          },
+          {
+            "model": "claude-sonnet-4-6",
+            "events": 5488,
+            "sessions": 2,
+            "totalTokens": 187896657
+          },
+          {
+            "model": "claude-opus-4-6",
+            "events": 1396,
+            "sessions": 1,
+            "totalTokens": 722981156
+          },
+          {
+            "model": "claude-opus-5",
+            "events": 1073,
+            "sessions": 3,
+            "totalTokens": 434910863
+          },
+          {
+            "model": "claude-haiku-4-5-20251001",
+            "events": 787,
+            "sessions": 7,
+            "totalTokens": 39750368
+          }
+        ]
+      }
+    ],
+    "sessions": {
+      "distinctSessions": 41,
+      "eventsWithoutSession": 79756,
+      "medianEventsPerSession": 464,
+      "p95EventsPerSession": 4776,
+      "maxEventsPerSession": 14840,
+      "medianInterEventSeconds": 10
+    },
+    "note": "Agent-operation telemetry derived from local provider usage events. Counts and timing only — no prompts, responses, tool arguments, paths, or raw session ids. Session identity is an on-device HMAC pseudonym and is not published.",
+    "limitations": [
+      "Provider usage logs do not currently expose full tool-call trees (caller → agent → tools) with payloads.",
+      "Timing is inter-event gaps from usage timestamps, not end-to-end wall-clock traces of tool latency.",
+      "Session pseudonyms are device-local HMACs; they never leave this machine and are not in the public snapshot.",
+      "Codex event-level totals may overstate relative to ccusage aggregates; see EVENT_LEDGER docs."
+    ],
+    "doesNotEstablish": [
+      "expertise",
+      "quality_of_reasoning",
+      "that_high_event_volume_means_skill",
+      "full_tool_call_fidelity",
+      "legal_identity"
+    ]
   },
   "signature": {
     "signatureVersion": "1.0.0",
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-27T05:52:19.874Z",
-    "nonce": "0e91397f-f457-45f1-b1c6-8195a9ef068e",
+    "issuedAt": "2026-07-28T06:23:45.734Z",
+    "nonce": "f7e8d92705dfca4c28b068bcf6801881",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "3caf1133ccbb886daa839ec2f0025eb68c023c90214c71cf0e036dbbce506d00",
-    "signature": "7PoR0glKsuNflvpvfWcAPojrMAahma+4S5QptR1uAFRLPUrDfgUEEBJJGlfaLyG0NhwmYRvo+yafC18nTusZBg==",
+    "payloadSha256": "7d2f438e8b57708bf8d49b438eb7dc2666b18af1110497a68edd10b895d43c1b",
+    "signature": "taLYShy+gVe/b8Jprbtubr+joZZCESuzL6B4HtLi7GQxyIDIWCy37nY1ym9lrRyk8enQd+ntTk3v9ep36c3XBw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
