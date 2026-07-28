@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-28T06:23:45.037Z",
+  "generatedAt": "2026-07-28T06:26:22.716Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3170,16 +3170,16 @@
       "description": "Primary Qira research and product site.",
       "found": true,
       "git": {
-        "branch": "feat/one-click-publish",
-        "commit": "3ab4a52",
-        "changedFiles": 8
+        "branch": "main",
+        "commit": "3ceaa67",
+        "changedFiles": 0
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
-        "json": 9
+        "json": 11
       },
-      "lastModified": "2026-07-25T00:06:47.348Z",
+      "lastModified": "2026-07-28T06:26:19.002Z",
       "scannerWarnings": [
         "match:scored score:1060 text~imagineqira, text~imagine-qira, text~qira-site, text~qira-main, domain=imagineqira.com, domain=www.imagineqira.com"
       ],
@@ -3327,9 +3327,9 @@
       "description": "Public AI-agent usage observatory.",
       "found": true,
       "git": {
-        "branch": "feat/one-click-publish",
-        "commit": "3ab4a52",
-        "changedFiles": 8
+        "branch": "main",
+        "commit": "3ceaa67",
+        "changedFiles": 0
       },
       "stack": [
         "React",
@@ -3353,16 +3353,16 @@
         "verify"
       ],
       "fileCounts": {
-        "docs": 29,
+        "docs": 30,
         "py": 2,
-        "ts": 87,
-        "json": 27,
+        "ts": 91,
+        "json": 29,
         "js": 13,
         "html": 4,
         "css": 2,
         "tsx": 20
       },
-      "lastModified": "2026-07-28T05:27:05.617Z",
+      "lastModified": "2026-07-28T06:26:19.020Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3757,7 +3757,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "f7c7a123c9ebf97e586007d60de301d7734ce931cee555d2948c0ad92ffbf133",
+    "snapshotSha256": "8a89784ce2ea7fa84034399f2830a7c75f1d6dbaed9f913ecd58d7cb016777e8",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4160,12 +4160,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-28T06:23:45.734Z",
-    "nonce": "f7e8d92705dfca4c28b068bcf6801881",
+    "issuedAt": "2026-07-28T06:26:23.467Z",
+    "nonce": "3e9d599eb34b058cd6a915ba80f773a9",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "7d2f438e8b57708bf8d49b438eb7dc2666b18af1110497a68edd10b895d43c1b",
-    "signature": "taLYShy+gVe/b8Jprbtubr+joZZCESuzL6B4HtLi7GQxyIDIWCy37nY1ym9lrRyk8enQd+ntTk3v9ep36c3XBw==",
+    "payloadSha256": "d044ea6458f865a0879aa92bc02b567dcf4b8c0896d1f400377edfb5bf1600cd",
+    "signature": "gMkXuzRkD4sd0hJ97bCdcKo6tMrJ5MQOK+xApdUgGoJTKIKq2Wvw4TIu4hoUmOQRu9lWXiPji3v1YCBHYPU1DA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
