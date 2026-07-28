@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-28T14:33:27.846Z",
+  "generatedAt": "2026-07-28T15:03:36.289Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3171,7 +3171,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "0af5311",
+        "commit": "ebd2ad2",
         "changedFiles": 2
       },
       "stack": [],
@@ -3328,7 +3328,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "0af5311",
+        "commit": "ebd2ad2",
         "changedFiles": 2
       },
       "stack": [
@@ -3362,7 +3362,7 @@
         "css": 2,
         "tsx": 20
       },
-      "lastModified": "2026-07-28T14:33:27.497Z",
+      "lastModified": "2026-07-28T15:03:35.884Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3757,7 +3757,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "a6204363d2e42323e91919fbfe21f78099475c0a17c2a9cf4f327841f5f74ea2",
+    "snapshotSha256": "4ddd45864d88758568db93e739bd4f0fb7b8b6bd936520294988caf30e9a1b06",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4160,12 +4160,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-28T14:33:28.183Z",
-    "nonce": "cc4b7cef678322cf51bf4ea72fdd1e80",
+    "issuedAt": "2026-07-28T15:03:36.663Z",
+    "nonce": "63734ad28efb76cdfa8af7245ea65bb3",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "1f2196b0a2973e404e73e0a3b1eeacd295ef3351d7bf085c428e535bcf0c3e7b",
-    "signature": "BOCAhepHJOOA2w9MNL1wZhC/WQNTM38XaYZxOd1ETj7OOuCbKdyAtL60uW7aPDh/bnqlLILOQaKjSnXzN1QkBg==",
+    "payloadSha256": "ebda51e68858a3405761bc14708a83631ad0ef3c5402ac48b1e5a15201187ead",
+    "signature": "DeWLy2DItER6zHo3ERbB+tCwhmlGUxp4tauMXIrDjwaSzY62hGOL6Z12zN1EFIhR6vd7bGJF1nJUvRWrdiqQDA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
