@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-07-29T02:50:37.577Z
+- **Generated at:** 2026-07-29T06:12:16.158Z
 - **Collector:** 0.4.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `186a57a4bf10c434a534773df01d7ae44e2b5013a7ff1fa2a4557e43941fb42f`
+- **Snapshot hash:** `eecc59a4d6dd632a98630e997e262345630e8404b3ccfa8be76e443e3f46555a`
 
 ## Identity (self-submitted)
 
@@ -41,15 +41,15 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 
 ## Measured activity
 
-- Active AI-work days: **99**
-- Span: 2026-02-26 → 2026-07-27 (152 days)
-- Last 30 / 90 days active: 28 / 72
-- Current / longest streak (days): 7 / 26
+- Active AI-work days: **100**
+- Span: 2026-02-26 → 2026-07-28 (153 days)
+- Last 30 / 90 days active: 29 / 73
+- Current / longest streak (days): 8 / 26
 - Tools: Codex, Claude Code
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5, gpt-5.6-luna
 - Projects active (collector-observed locally): 6
 
-Exact total tokens (provider-reported sums): **36396328013**
+Exact total tokens (provider-reported sums): **36857044443**
 
 _Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value._
 
@@ -57,8 +57,8 @@ _Token volume is evidence of activity, not expertise, productivity, efficiency, 
 
 - Cache reuse share: **98.9%**
 - Fresh token share: **1.1%**
-- Output share of in+out: **23.3%**
-- Avg tokens / active day: **367639677**
+- Output share of in+out: **22.8%**
+- Avg tokens / active day: **368570444**
 
 Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class.
 
@@ -196,7 +196,7 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ## Agent operation telemetry (sanitized hierarchy)
 
-- Total usage events: **144924**
+- Total usage events: **147822**
 - Distinct sessions (local pseudonyms, count only): **41**
 - Median events / session: 464
 - p95 events / session: 4776
@@ -204,11 +204,11 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ### Hierarchy: provider → model
 
-- **codex**: 79756 events, 0 sessions, 10755625594 tokens
+- **codex**: 82654 events, 0 sessions, 11216342024 tokens
   - gpt-5.5: 32270 events, 0 sessions
   - gpt-5.3-codex: 17421 events, 0 sessions
   - gpt-5.4: 15953 events, 0 sessions
-  - gpt-5.6-sol: 12988 events, 0 sessions
+  - gpt-5.6-sol: 15886 events, 0 sessions
   - (unattributed): 867 events, 0 sessions
   - gpt-5.4-mini: 221 events, 0 sessions
   - gpt-5.6-luna: 22 events, 0 sessions

@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-29T02:50:37.577Z",
+  "generatedAt": "2026-07-29T06:12:16.158Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 309082283,
-    "outputTokens": 94040778,
+    "inputTokens": 322162727,
+    "outputTokens": 95055068,
     "cacheCreationTokens": 665154460,
-    "cacheReadTokens": 35328050492,
-    "cachedTokens": 35993204952,
-    "freshTokens": 403123061,
-    "totalTokens": 36396328013,
+    "cacheReadTokens": 35774672188,
+    "cachedTokens": 36439826648,
+    "freshTokens": 417217795,
+    "totalTokens": 36857044443,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -27,13 +27,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 296456216,
-      "outputTokens": 30693986,
+      "inputTokens": 309536660,
+      "outputTokens": 31708276,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 10428475392,
-      "cachedTokens": 10428475392,
-      "freshTokens": 327150202,
-      "totalTokens": 10755625594,
+      "cacheReadTokens": 10875097088,
+      "cachedTokens": 10875097088,
+      "freshTokens": 341244936,
+      "totalTokens": 11216342024,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -3160,6 +3160,28 @@
       "freshTokens": 13518623,
       "totalTokens": 438032159,
       "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-07-28",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 13080444,
+      "outputTokens": 1014290,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 446621696,
+      "cachedTokens": 446621696,
+      "freshTokens": 14094734,
+      "totalTokens": 460716430,
+      "estimatedCostUsd": null
     }
   ],
   "qiraProjects": [
@@ -3171,7 +3193,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1af3550",
+        "commit": "19402d3",
         "changedFiles": 0
       },
       "stack": [],
@@ -3328,7 +3350,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1af3550",
+        "commit": "19402d3",
         "changedFiles": 0
       },
       "stack": [
@@ -3362,7 +3384,7 @@
         "css": 2,
         "tsx": 20
       },
-      "lastModified": "2026-07-29T02:50:36.950Z",
+      "lastModified": "2026-07-29T06:12:15.764Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3425,7 +3447,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 36396328013,
+    "exactTotalTokens": 36857044443,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3503,13 +3525,13 @@
     },
     "activity": {
       "referenceDate": "2026-07-28",
-      "activeDays": 99,
+      "activeDays": 100,
       "firstActiveDate": "2026-02-26",
-      "lastActiveDate": "2026-07-27",
-      "spanDays": 152,
-      "activeDaysLast30": 28,
-      "activeDaysLast90": 72,
-      "currentStreakDays": 7,
+      "lastActiveDate": "2026-07-28",
+      "spanDays": 153,
+      "activeDaysLast30": 29,
+      "activeDaysLast90": 73,
+      "currentStreakDays": 8,
       "longestStreakDays": 26,
       "toolsUsed": [
         "Codex",
@@ -3631,8 +3653,8 @@
     "efficiency": {
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
-      "outputSharePct": 23.3,
-      "avgTokensPerActiveDay": 367639677,
+      "outputSharePct": 22.8,
+      "avgTokensPerActiveDay": 368570444,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -3677,7 +3699,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (99 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (100 active days; 6 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Identity-linked",
@@ -3757,7 +3779,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "186a57a4bf10c434a534773df01d7ae44e2b5013a7ff1fa2a4557e43941fb42f",
+    "snapshotSha256": "eecc59a4d6dd632a98630e997e262345630e8404b3ccfa8be76e443e3f46555a",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4023,13 +4045,13 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 144924,
+    "totalEvents": 147822,
     "hierarchy": [
       {
         "provider": "codex",
-        "events": 79756,
+        "events": 82654,
         "sessions": 0,
-        "totalTokens": 10755625594,
+        "totalTokens": 11216342024,
         "models": [
           {
             "model": "gpt-5.5",
@@ -4051,9 +4073,9 @@
           },
           {
             "model": "gpt-5.6-sol",
-            "events": 12988,
+            "events": 15886,
             "sessions": 0,
-            "totalTokens": 1704764822
+            "totalTokens": 2165481252
           },
           {
             "model": "(unattributed)",
@@ -4134,7 +4156,7 @@
     ],
     "sessions": {
       "distinctSessions": 41,
-      "eventsWithoutSession": 79756,
+      "eventsWithoutSession": 82654,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4160,12 +4182,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-29T02:50:38.319Z",
-    "nonce": "fd22c99f12f5b854765ebc6c4b70b295",
+    "issuedAt": "2026-07-29T06:12:16.582Z",
+    "nonce": "8a0c65126a568b391b2cf13f9b289935",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "d3f3a1c8dbe80181a08e81badfaebe45756a72a930ef88ef5c9a2afb7bd046bd",
-    "signature": "eXfdvYhUQ1tds+WGJynap2/WVZ4XLxtzzdRfTFSxNAYzdtVPAIg8hKw0a9mAy7mTPMEYkrIghbqntx2EiJjVAw==",
+    "payloadSha256": "407f297c2c9a1d83d9d5bf36374fe139715a64dcce1fe90a4d1485da753208d8",
+    "signature": "8la3XP2oxg0qlPQB7sphJFbGA9nlp4i+r6PCPpb3jB9lisDuZGaCkZ7U7tTIaGv9HZ609Rz4s2niD1UgtuaFAA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
