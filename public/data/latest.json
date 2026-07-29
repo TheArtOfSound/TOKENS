@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T21:06:32.430Z",
+  "generatedAt": "2026-07-29T21:42:09.531Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3215,7 +3215,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "7d5623c",
+        "commit": "4fc325a",
         "changedFiles": 0
       },
       "stack": [],
@@ -3260,16 +3260,36 @@
       "git": {
         "branch": null,
         "commit": null,
-        "changedFiles": null
+        "changedFiles": 17
       },
-      "stack": [],
-      "scripts": [],
+      "stack": [
+        "TypeScript"
+      ],
+      "scripts": [
+        "build",
+        "dev:gateway",
+        "start:gateway",
+        "verify",
+        "test",
+        "typecheck",
+        "demo:vertical",
+        "pilot:synthetic",
+        "pilot",
+        "stage2:import",
+        "install:pilot",
+        "lint"
+      ],
       "fileCounts": {
-        "docs": 1
+        "docs": 18,
+        "css": 1,
+        "js": 4,
+        "html": 4,
+        "json": 204,
+        "ts": 57
       },
-      "lastModified": "2026-04-19T07:28:22.557Z",
+      "lastModified": "2026-07-29T21:38:43.678Z",
       "scannerWarnings": [
-        "match:scored score:1175 folder~qev, text~qev, text~qev-desktop, text~qira-encryption-vault, domain=secure.imagineqira.com, domain=qev-desktop"
+        "match:scored score:1410 folder~qev, package~qev, text~qev, text~qev-desktop, domain=secure.imagineqira.com, domain=qev-desktop, package.json"
       ]
     },
     {
@@ -3372,7 +3392,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "7d5623c",
+        "commit": "4fc325a",
         "changedFiles": 0
       },
       "stack": [
@@ -3406,7 +3426,7 @@
         "css": 2,
         "tsx": 20
       },
-      "lastModified": "2026-07-29T21:06:31.754Z",
+      "lastModified": "2026-07-29T21:36:46.138Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, package~qira-agent-usage-observatory, text~qira-agent-usage-observatory, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3801,7 +3821,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "6dc301017da520a9a09028b78a750c5f9d5f9ab93a6f690a6e732fc0da96d5eb",
+    "snapshotSha256": "3907e08d601425e823afac85e72d68ee0919c51829a57b7f61872742f3ca8434",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4204,12 +4224,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-29T21:06:33.171Z",
-    "nonce": "aa548dd81a18464b3635eeeda368bf1f",
+    "issuedAt": "2026-07-29T21:42:12.947Z",
+    "nonce": "07c1403e69a9049d48b9c65cdbdaa3a7",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "b8c32e04ac1e9d0159643f23c08d9cfafd51ea6a9d14d769ece9e69aea2b65e0",
-    "signature": "AFuCGLI8pMbA0MPDhN36HHN9W4QxzcP7W7h8OY3WY3GNIdw2Sbe2doT1WXGgwrrBjzhH+xYkTakHMtjBGkBWAQ==",
+    "payloadSha256": "3f06e22e5fccabd4c341fb17210582a992b533c16530dcea14c10418c4653b7f",
+    "signature": "PN/jaPxsXA/NhEejxqBjmOUwge7B1Bp1aO00nOjFWmy6caoTqP/6uVqUKRxQPVJsZXG8jHExUCiBV+0GeqC8Cw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
