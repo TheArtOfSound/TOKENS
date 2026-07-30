@@ -7,6 +7,16 @@ set -euo pipefail
 
 export PATH="$HOME/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
+# Nobody is at the keyboard here: launchd runs this every 30 minutes with stdio
+# pointed at log files. Anything that might ask a question must know that, and
+# must never treat silence as a yes.
+#
+# The collector already infers this from stdin not being a TTY, but that
+# inference would quietly break if this script were ever wrapped in a pty, run
+# under a CI runner, or invoked through a tool that allocates a terminal. Stating
+# it explicitly means the consent guarantee does not depend on stdio plumbing.
+export TOKENS_NON_INTERACTIVE=1
+
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
 
@@ -104,10 +114,25 @@ fi
 
 BEHIND="$(git rev-list --count "HEAD..origin/$BRANCH" 2>/dev/null || echo 0)"
 if [ "$BEHIND" != "0" ]; then
-  echo "WARN: local '$BRANCH' is $BEHIND commit(s) behind origin (histories have diverged)." >&2
-  echo "      Not pushing to avoid a rejected push loop or an unsafe force-push." >&2
-  echo "      A human must reconcile local vs origin. See docs/execution/RISKS.md (R1)." >&2
-  exit 0
+  # Being behind origin is now NORMAL, not a divergence signal. Every merged
+  # directory-join pull request advances origin/main, and this job runs every 30
+  # minutes. The old behaviour — warn and exit 0 — meant that the first time
+  # anybody joined the directory, this pipeline stopped publishing and kept
+  # LOOKING healthy: exit code 0, a fresh local commit, and a site frozen at the
+  # last successful push.
+  #
+  # A rebase is safe here in a way a force-push is not: it never rewrites origin.
+  # If the histories have genuinely diverged (the historical R1 incident, two
+  # competing automations), the rebase conflicts — and then we abort and bail
+  # exactly as before rather than looping or forcing.
+  echo "Local '$BRANCH' is $BEHIND commit(s) behind origin; rebasing onto it." >&2
+  if ! git pull --rebase --autostash origin "$BRANCH" >/dev/null 2>&1; then
+    git rebase --abort >/dev/null 2>&1 || true
+    echo "WARN: rebase onto origin/$BRANCH failed — histories have truly diverged." >&2
+    echo "      Not forcing and not looping. A human must reconcile." >&2
+    echo "      See docs/execution/RISKS.md (R1)." >&2
+    exit 0
+  fi
 fi
 
 git push
