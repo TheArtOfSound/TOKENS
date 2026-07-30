@@ -43,6 +43,8 @@ interface Identity {
   displayName?: string;
   headline?: string;
   handle?: string;
+  /** Self-hosters and the operator declare where their snapshot is served. */
+  snapshotUrl?: string;
 }
 
 function readIdentity(): Identity {
@@ -181,11 +183,17 @@ async function main(): Promise<void> {
  * the member can re-run this without being asked again.
  */
 async function enroll(handle: string, identity: Identity): Promise<void> {
+  // NOTE: snapshotUrl is resolved per member below, never defaulted to the site.
+  // The first version of this defaulted to `${SITE_ORIGIN}/data/latest.json`,
+  // which is the OPERATOR's snapshot: every member who ran this would have joined
+  // the directory displaying somebody else's record under their own name. The
+  // rule now is that a member either declares where their snapshot lives or we
+  // publish it to their own repository — there is no shared fallback.
   const entry = {
     handle,
     displayName: identity.displayName,
     headline: identity.headline,
-    snapshotUrl: `${SITE_ORIGIN}/data/latest.json`,
+    snapshotUrl: '',
   };
 
   if (!has('gh', ['--version'])) {
@@ -210,6 +218,9 @@ async function enroll(handle: string, identity: Identity): Promise<void> {
   try {
     const login = gh(['api', 'user', '--jq', '.login']);
     console.log(`  GitHub account: ${login}`);
+
+    entry.snapshotUrl = resolveSnapshotUrl(login, identity, dryRun);
+    console.log(`  Your snapshot: ${entry.snapshotUrl}`);
 
     // Read the CURRENT upstream registry, not the fork's copy. A fork that has
     // been sitting stale for weeks would otherwise produce a pull request that
@@ -314,6 +325,65 @@ async function enroll(handle: string, identity: Identity): Promise<void> {
     console.log(`\nCould not open the pull request: ${error instanceof Error ? error.message : 'unknown'}`);
     printManual(entry);
   }
+}
+
+const SNAPSHOT_REPO = 'ledger-snapshot';
+
+/**
+ * Where this member's signed snapshot lives, publishing it if necessary.
+ *
+ * Order matters and there is deliberately no fallback to the Ledger site: a
+ * shared default would point every member at the operator's record.
+ *
+ *  1. An explicit `snapshotUrl` in profile.json — self-hosters, and the operator,
+ *     whose snapshot genuinely is served from the site itself.
+ *  2. Otherwise publish latest.json to `<login>/ledger-snapshot` and point at the
+ *     raw URL. raw.githubusercontent.com sends `access-control-allow-origin: *`,
+ *     which is what lets a visitor's browser fetch and verify it — checked, not
+ *     assumed, because verification silently breaks without it.
+ */
+function resolveSnapshotUrl(login: string, identity: Identity, dryRun: boolean): string {
+  const declared = typeof identity.snapshotUrl === 'string' ? identity.snapshotUrl.trim() : '';
+  if (declared) return declared;
+
+  const raw = `https://raw.githubusercontent.com/${login}/${SNAPSHOT_REPO}/main/latest.json`;
+  if (dryRun) {
+    console.log(`  [dry-run] would publish latest.json to ${login}/${SNAPSHOT_REPO}`);
+    return raw;
+  }
+
+  const body = readFileSync(SNAPSHOT, 'utf8');
+  const encoded = Buffer.from(body, 'utf8').toString('base64');
+
+  try {
+    gh(['api', `repos/${login}/${SNAPSHOT_REPO}`, '--jq', '.name']);
+  } catch {
+    console.log(`  Creating ${login}/${SNAPSHOT_REPO} (public, holds only your signed snapshot)…`);
+    gh(['repo', 'create', `${login}/${SNAPSHOT_REPO}`, '--public', '-d', 'My signed Ledger snapshot']);
+  }
+
+  // Update in place when it already exists — PUT without the current blob sha is
+  // rejected, and overwriting blindly would lose history the member may rely on.
+  let sha = '';
+  try {
+    sha = gh(['api', `repos/${login}/${SNAPSHOT_REPO}/contents/latest.json`, '--jq', '.sha']);
+  } catch {
+    /* first publish */
+  }
+
+  gh([
+    'api',
+    `repos/${login}/${SNAPSHOT_REPO}/contents/latest.json`,
+    '-X',
+    'PUT',
+    '-f',
+    'message=Publish signed Ledger snapshot',
+    '-f',
+    `content=${encoded}`,
+    ...(sha ? ['-f', `sha=${sha}`] : []),
+  ]);
+
+  return raw;
 }
 
 function printManual(entry: Record<string, unknown>): void {
