@@ -19,9 +19,11 @@ export function Privacy() {
     <section className="legal-page" id="privacy">
       <h1>Privacy</h1>
       <p className="lede">
-        Ledger is local-first. There is no account, no server that receives your data, and no analytics on
-        this site. The short version: <strong>we do not collect anything from you</strong> — because there is
-        nowhere for it to go.
+        Ledger is local-first. There is no account, no analytics on this site, and no Ledger server that
+        receives your data. Measurement happens entirely on your machine and stays there.
+        <strong> Publishing is a separate act you choose.</strong> If you join the directory, your snapshot is
+        hosted in your own repository and your entry is added to this project's public repository by a pull
+        request you open yourself — so the entry becomes public, permanently, in git history.
       </p>
 
       <div className="legal-highlight">

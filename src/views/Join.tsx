@@ -536,8 +536,10 @@ export function Join() {
               <strong>Local-first.</strong> TOKENS measures Claude Code and Codex activity on your computer.
             </li>
             <li>
-              <strong>Nothing is automatic.</strong> Install, scan, and draft stay private until you press
-              Publish.
+              <strong>Nothing publishes until you say so — once.</strong> Install, scan, and draft stay
+              private. After you opt in a single time, updates to your published profile are automatic, so
+              your record stays current without you doing anything. Withdraw any time with{' '}
+              <code>npm run unlist</code>.
             </li>
             <li>
               <strong>You control the payload.</strong> You will see the exact JSON before anything is sent.

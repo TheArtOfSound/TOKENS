@@ -29,7 +29,7 @@ import { detectAnomalies } from './lib/anomaly';
 import { buildClaimAuthority } from './lib/claims';
 import { renderBadge, BADGE_FILENAMES, type BadgeVariant, type BadgeFacts } from './lib/badge';
 import { buildProfile, localDateIn, activeDates, type ProfileIdentity, type WorkConfig, type OpportunityConfig, type PracticeConfig } from './lib/profile';
-import { isSourceEnabled, loadConsent } from './lib/consent';
+import { isSourceEnabled, loadConsent, listingState } from './lib/consent';
 import { loadOrCreateDeviceKey, loadRevocations, signSnapshot, verifySnapshot, recordKeySeen, buildPublicKeyHistory } from './lib/signing';
 import { Ledger } from './lib/ledger';
 import { deriveTelemetry } from './lib/telemetry';
@@ -74,6 +74,15 @@ function profileUrlForBadge(): string {
 }
 
 function syncRegistryEntry(identity: ProfileIdentity, generatedAt: string): void {
+  // A withdrawn listing must stop receiving updates. Without this, `npm run
+  // unlist` would remove the row and the very next collect would refresh it back
+  // into existence — the member would have opted out of nothing.
+  //
+  // 'unanswered' still refreshes, because the operator's own row predates listing
+  // consent and is theirs by construction; only an explicit no stops it.
+  const state = listingState(loadConsent().config);
+  if (state === 'withdrawn' || state === 'declined') return;
+
   try {
     const registry = JSON.parse(readFileSync(REGISTRY, 'utf8')) as {
       members?: Array<Record<string, unknown>>;

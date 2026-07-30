@@ -52,4 +52,12 @@ export const CAVEATS = {
 
   /** Preferred product framing (headline-adjacent). */
   productFrame: 'A portable evidence record for AI-assisted work.',
+
+  /**
+   * Publication consent. Measuring and publishing are different acts, and this
+   * is the sentence that says so. Used by the CLI disclosure, /privacy, /terms,
+   * and /join so the promise is worded identically everywhere it is made.
+   */
+  publicationConsent:
+    'Measuring is local and private. Publishing a profile is a separate, explicit choice you make once with `npm run list-me`, and can withdraw with `npm run unlist`.',
 } as const;

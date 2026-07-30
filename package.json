@@ -26,7 +26,9 @@
     "publish:serve": "tsx publish/server.ts",
     "publish:migrate": "tsx publish/migrate-static.ts",
     "publish:ledger": "tsx collector/publishLedger.ts",
-    "dev:all": "tsx publish/server.ts & vite"
+    "dev:all": "tsx publish/server.ts & vite",
+    "list-me": "tsx collector/listMe.ts",
+    "unlist": "tsx collector/unlist.ts"
   },
   "dependencies": {
     "react": "19.2.7",

@@ -124,3 +124,46 @@ describe('no overclaiming verification language in views', () => {
     });
   }
 });
+
+/**
+ * Publication promises must match the code.
+ *
+ * Privacy.tsx carries its own standing rule: "If any of that changes, this page
+ * must change in the same commit. An inaccurate privacy page is the single most
+ * damaging thing this project could ship." Directory enrollment changed it, so
+ * these guard the sentences that had to move — and, just as importantly, the ones
+ * that did NOT have to move.
+ */
+describe('publication promises are accurate', () => {
+  const privacy = sources.find((s) => s.file === 'Privacy.tsx')!.text;
+  const join = sources.find((s) => s.file === 'Join.tsx')!.text;
+
+  it('no longer claims there is nowhere for data to go', () => {
+    // False once joining puts an entry in a public repo.
+    expect(privacy).not.toMatch(/nowhere for it to go/i);
+    expect(privacy).not.toMatch(/we do not collect anything from you/i);
+  });
+
+  it('no longer claims nothing is automatic', () => {
+    // False after the one-time opt-in: refreshes are automatic by design.
+    expect(join).not.toMatch(/Nothing is automatic/i);
+  });
+
+  it('still keeps the promises that remain true', () => {
+    // Chosen deliberately: GitHub-native enrollment means the site really does
+    // stay a static bundle. If this ever fails, a backend was added and the
+    // whole page needs rewriting, not this assertion relaxing.
+    expect(privacy).toMatch(/no backend and no database/i);
+    // Installing and scanning still publish nothing — consent is its own command.
+    expect(join).toMatch(/Nothing becomes public because you installed or scanned/i);
+  });
+
+  it('tells the reader publication is separate, and how to undo it', () => {
+    expect(privacy).toMatch(/Publishing is a separate act you choose/i);
+    expect(join).toMatch(/npm run unlist/);
+  });
+
+  it('is honest that a published entry is permanent in git history', () => {
+    expect(privacy).toMatch(/git history/i);
+  });
+});
