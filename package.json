@@ -1,7 +1,7 @@
 {
-  "name": "qira-agent-usage-observatory",
-  "private": true,
-  "version": "0.1.0",
+  "name": "@qira/ledger",
+  "private": false,
+  "version": "0.2.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -28,21 +28,57 @@
     "publish:ledger": "tsx collector/publishLedger.ts",
     "dev:all": "tsx publish/server.ts & vite",
     "list-me": "tsx collector/listMe.ts",
-    "unlist": "tsx collector/unlist.ts"
+    "unlist": "tsx collector/unlist.ts",
+    "build:cli": "node scripts/build-cli.mjs",
+    "prepublishOnly": "npm run build:cli"
   },
-  "dependencies": {
-    "react": "19.2.7",
-    "react-dom": "19.2.7"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "25.9.3",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "ajv": "8.20.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "tsx": "4.22.4",
     "typescript": "6.0.3",
     "vite": "8.0.16",
     "vitest": "3.2.7"
+  },
+  "description": "Measure your AI-assisted work locally, sign it on your device, and publish a record anyone can verify.",
+  "author": "Qira LLC",
+  "homepage": "https://ledger.imagineqira.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheArtOfSound/TOKENS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheArtOfSound/TOKENS/issues"
+  },
+  "keywords": [
+    "ai",
+    "claude",
+    "codex",
+    "usage",
+    "evidence",
+    "provenance",
+    "verifiable",
+    "local-first",
+    "cli"
+  ],
+  "bin": {
+    "ledger": "dist-cli/ledger.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "files": [
+    "dist-cli/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

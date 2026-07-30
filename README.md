@@ -1,187 +1,124 @@
-# Qira Agent Usage Observatory (TOKENS / Ledger)
+# Ledger
 
-A local-first AI-activity ledger and public professional directory for Claude Code and Codex usage.
+**A portable evidence record for AI-assisted work.**
 
-> **Join flow (2026-07-26):** publication no longer requires a GitHub pull request.
-> Open `/join` → choose sources → load a signed snapshot → preview → **Publish**.
-> See `docs/publication/ONE_CLICK_PUBLISH.md`. Install/scan never auto-publishes.
+Measure the AI work you already do, sign it with a key that never leaves your
+machine, and — if you choose — publish a record anyone can verify in their own
+browser.
 
-> **Current state (2026-07-23):** automatic *collector* publishing to the live site may still be unloaded.
-> The `com.qira.tokens.collector` launchd job history and origin divergence notes remain in
-> `docs/IMPLEMENTATION_STATUS.md`.
-
-This repo is designed to work as a static GitHub Pages site backed by sanitized JSON generated on Bryan's Mac. The public site never needs direct access to the machine, raw logs, prompts, session text, private repo names, local paths, hostnames, usernames, API keys, or `.env` values.
-
-## What it shows
-
-- All-time token usage
-- Claude token usage
-- Codex token usage
-- Cached vs fresh token split
-- Daily usage history
-- Estimated cost
-- Provider and model split when safely available
-- Snapshot hash and collector metadata
-- Last update time
-
-## Live observatory backend
-
-In addition to the static GitHub Pages site, there is a live backend
-(FastAPI + MongoDB) that serves real-time telemetry and powers the
-embeddable badge.
-
-API endpoints (all prefixed with `/api`):
-
-- `GET /api/usage/latest` — current snapshot (totals, providers, daily, projects, verification, `live`)
-- `GET /api/usage/history` — historical token series
-- `GET /api/projects` — Qira project matrix + scanner summary
-- `GET /api/badge.svg` — live embeddable SVG badge (see below)
-- `POST /api/usage/ingest` — secured publisher endpoint (see below)
-
-### Live SVG badge
-
-Embed a live, auto-updating proof-of-work badge in any README:
-
-```md
-![Qira tokens](https://YOUR-OBSERVATORY/api/badge.svg)
-```
-
-Query params:
-
-- `metric` — `total` (default), `cost`, `cached`, `fresh`, `claude`, `codex`
-- `label` — override the left label text, e.g. `?label=Claude%20Code`
-- `live` — `1` (default, animated red pulse dot) or `0` (static)
-
-Examples:
-
-```md
-![tokens](https://YOUR-OBSERVATORY/api/badge.svg)
-![spend](https://YOUR-OBSERVATORY/api/badge.svg?metric=cost)
-![cached](https://YOUR-OBSERVATORY/api/badge.svg?metric=cached)
-```
-
-### Publishing live data from your Mac
-
-`scripts/update-local.sh` pushes the freshly collected `public/data/latest.json`
-to the live backend when these are set (e.g. in a local, untracked `.env`):
+[ledger.imagineqira.com](https://ledger.imagineqira.com)
 
 ```bash
-TOKENS_INGEST_URL=https://YOUR-OBSERVATORY/api/usage/ingest
-TOKENS_INGEST_TOKEN=<must match INGEST_SECRET on the server>
-```
-
-The ingest endpoint requires the `X-Ingest-Token` header to match the server's
-`INGEST_SECRET`, validates the payload schema, and stores real snapshots
-verbatim (no simulated drift). If the two vars are unset, the script simply
-skips the push and still commits to GitHub Pages as before.
-
-
-## Architecture
-
-```text
-Bryan's Mac
-  -> local collector runs ccusage JSON commands
-  -> collector normalizes and sanitizes metrics
-  -> public/data/*.json is updated
-  -> update script commits and pushes changed public data
-  -> GitHub Actions deploys the static site to GitHub Pages
+npm install -g @qira/ledger
 ```
 
 ## Quick start
 
-Local dev uses port `5199` by default so it does not collide with the usual Vite `5173` port.
-
 ```bash
-npm install
-npm run dev
-open "http://localhost:5199"
+mkdir my-ledger && cd my-ledger
+ledger init          # scaffold a workspace
+# edit profile/profile.json — displayName and headline
+ledger collect       # measure your local AI usage and sign it
+ledger status        # see what is measured and what is public
 ```
 
-Override the port if needed:
+Nothing is public at this point. Publishing is a separate, explicit step:
 
 ```bash
-TOKENS_DEV_PORT=5299 npm run dev
-open "http://localhost:5299"
+ledger list-me       # read the disclosure, answer once
+ledger unlist        # withdraw at any time
 ```
 
-## Run the collector once
+After you opt in once, `ledger collect` keeps your published record current
+automatically. You are never asked again.
 
-Install `ccusage` first if it is not already available on your Mac.
+## Commands
 
-```bash
-npm run collect
-npm run validate:data
-npm run build
-open "http://localhost:5199"
+| Command | What it does |
+| --- | --- |
+| `ledger init` | Create a workspace in the current directory |
+| `ledger collect` | Measure local AI usage, sign a snapshot |
+| `ledger status` | What is measured, published, and consented to |
+| `ledger list-me` | Join the public directory (asks once) |
+| `ledger unlist` | Withdraw from the public directory |
+| `ledger consent` | Review or change what may be published |
+| `ledger export` | Copy everything held locally about you |
+
+## What it reads, and what it never publishes
+
+It reads the usage logs Claude Code and Codex already write on your machine.
+
+**Published:** token counts, dates, model names, and whatever you put in your
+profile files.
+
+**Never published:** prompt text, response text, source code, absolute file
+paths, git branch names, usernames, hostnames, secrets, API keys, or raw provider
+account identifiers. Session identifiers are stored as keyed hashes under a salt
+that never leaves your machine.
+
+Publication uses an allowlist, not a blocklist: a field is published because it
+was explicitly permitted, not because nobody remembered to redact it. A
+fail-closed secret scan runs before anything is written.
+
+## What a signature does and does not prove
+
+A signature proves a snapshot came from a device key and has not been altered
+since. It does **not** prove who holds that key, and it cannot prove your provider
+logs were genuine — anyone controlling a machine could feed the collector
+fabricated logs and it would sign them faithfully.
+
+**There is no score.** Token volume is evidence of activity, not expertise,
+productivity, efficiency, or professional value. Nothing here ranks people, and
+no profile infers skill from usage. See
+[what each signal can establish](https://ledger.imagineqira.com/claims).
+
+## A workspace is a directory
+
+```
+profile/profile.json    who you are, and where your snapshot is served
+profile/consent.json    what you have agreed may be published
+public/data/            your signed snapshot and history
+.tokens-cache/          incremental scan state (safe to delete)
 ```
 
-The collector runs exactly these two commands:
+Your evidence is a folder you own, not rows in someone's database. `profile/`
+and `.tokens-cache/` are gitignored by default — they hold your identity and a
+per-device salt.
 
-```bash
-ccusage claude daily --json
-ccusage codex daily --json
-```
+## Requirements
 
-`ccusage session --json` is **deliberately never used**: session records carry local filesystem paths.
-See [`docs/security/PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md). `daily`/`monthly` aggregate
-modes are not invoked either — the two per-provider calls above are the only source of usage data.
-
-## Publish updated data from your Mac
-
-```bash
-bash scripts/update-local.sh
-```
-
-That script collects metrics, validates the sanitized output, builds the frontend, commits changed files under `public/data`, and pushes to GitHub.
-
-## Install automatic macOS updates
-
-```bash
-bash scripts/install-launchd.sh
-```
-
-Default cadence: every 30 minutes while the Mac is awake.
-
-Remove it with:
-
-```bash
-bash scripts/uninstall-launchd.sh
-```
-
-## Privacy model
-
-Raw logs are never published. See [`docs/PRIVACY.md`](docs/PRIVACY.md).
-
-Note: the collector's project scan reads the home directory and can be slow. Scope it:
-
-```bash
-QIRA_SCAN_ROOTS="$HOME/Projects,$HOME/nous" npm run collect
-```
-
-## Tests, typecheck, and data validation
-
-```bash
-npm test              # 35 unit tests: normalization, dedup, privacy/redaction, allowlist publication, schema, strangler equivalence
-npm run typecheck     # tsc --noEmit
-npm run validate:data # JSON-Schema (allowlist) + snapshot hash + nested secret scan over public/data
-npm run build         # tsc -b && vite build
-```
-
-## Measurement integrity
-
-Every published number carries a **measurement class** (`provider_reported`, `collector_derived`, `tokenizer_estimated`, …) and a method. Token counts are provider-reported usage or deterministic sums; cost is a price-table **estimate** and is never summed into token totals. Activity volume is never presented as skill, productivity, or employability. See [`docs/architecture/CANONICAL_EVENT_SCHEMA.md`](docs/architecture/CANONICAL_EVENT_SCHEMA.md).
+- **Node 22.5+** — the event ledger uses the built-in `node:sqlite`, so there are
+  no native modules and no runtime dependencies.
+- macOS, Linux, or Windows.
+- [`ccusage`](https://www.npmjs.com/package/ccusage) for Claude Code parsing, and
+  [`gh`](https://cli.github.com) if you want `list-me` to open your join pull
+  request for you.
 
 ## Privacy
 
-The published object is **constructed from an allowlist** (not redacted), then passed through a nested secret/PII/path scanner; the collector refuses to write if anything prohibited survives. See [`docs/security/PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md) and [`docs/DATA_SCHEMA.md`](docs/DATA_SCHEMA.md).
+There is no account and no Ledger server that receives your data. Measurement
+happens entirely on your machine and stays there. Publishing is a separate act
+you choose: if you join the directory, your snapshot is hosted in your own
+repository and your entry is added by a pull request you open yourself — so the
+entry is public, permanently, in git history.
 
-## Documentation
+[Privacy](https://ledger.imagineqira.com/privacy) ·
+[Terms](https://ledger.imagineqira.com/terms) ·
+[How verification works](https://ledger.imagineqira.com/verify)
 
-- Architecture: [`docs/architecture/SYSTEM_OVERVIEW.md`](docs/architecture/SYSTEM_OVERVIEW.md), [`CANONICAL_EVENT_SCHEMA.md`](docs/architecture/CANONICAL_EVENT_SCHEMA.md)
-- Security: [`docs/security/THREAT_MODEL.md`](docs/security/THREAT_MODEL.md), [`PRIVACY_BOUNDARY.md`](docs/security/PRIVACY_BOUNDARY.md), [`SECURITY.md`](SECURITY.md)
-- Product: [`docs/product/PRODUCT_REQUIREMENTS.md`](docs/product/PRODUCT_REQUIREMENTS.md), [`PHASE_GATES.md`](docs/product/PHASE_GATES.md)
-- Status & execution: [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md), [`docs/ROADMAP.md`](docs/ROADMAP.md), [`docs/execution/`](docs/execution/)
+## Development
 
-## Important limitation
+This repository contains both the CLI and the static site that renders published
+records.
 
-This repository cannot collect live usage from GitHub Actions because GitHub does not have access to Bryan's local Claude Code or Codex logs. The live behavior comes from the local Mac publisher committing fresh sanitized snapshots into this repo.
+```bash
+npm ci
+npm run collect        # same as `ledger collect`, from source
+npm run build:cli      # bundle dist-cli/
+npm run build          # build the website
+npx vitest run         # tests
+```
+
+Architecture, security, and product notes live under `docs/`.
+
+MIT © Qira LLC
