@@ -1,5 +1,5 @@
 {
-  "name": "@qira/ledger",
+  "name": "qira-ledger",
   "private": false,
   "version": "0.2.0",
   "license": "MIT",
@@ -77,8 +77,5 @@
     "dist-cli/",
     "README.md",
     "LICENSE"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+  ]
 }

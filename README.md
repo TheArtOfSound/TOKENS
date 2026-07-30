@@ -9,7 +9,7 @@ browser.
 [ledger.imagineqira.com](https://ledger.imagineqira.com)
 
 ```bash
-npm install -g @qira/ledger
+npm install -g qira-ledger
 ```
 
 ## Quick start
