@@ -271,6 +271,10 @@ summary:focus:not(:focus-visible) {
 .steps>li{border-left:2px solid var(--line);padding-left:22px}
 .steps h3{margin:0 0 8px;font-size:1.15rem;letter-spacing:-.03em}
 .steps p{margin:0 0 12px;color:var(--muted);max-width:64ch;line-height:1.6}
+/* .muted had only a font-size rule scoped to .steps. 41 elements carry
+   this class to step back from body text and every one of them rendered
+   at full --ink, which is most of why the page read as flat. */
+.muted{color:var(--muted)}
 .steps .muted{font-size:.86rem}
 
 .command{display:flex;align-items:center;gap:12px;background:#06070c;border-radius:12px;padding:13px 16px;margin-bottom:10px;overflow-x:auto}
@@ -586,6 +590,14 @@ summary:focus:not(:focus-visible) {
   --open:#0a7c3e;
   --open-soft:#e7f6ed;
   --page-bg:#f3f4f7;
+  /* Aliases for properties that were referenced but never defined, which
+     silently killed every declaration using them — including the entire
+     selected state of .badge-option. Mapped onto the existing palette
+     rather than inventing new colours. */
+  --accent:var(--brand);
+  --surface:#fff;
+  --panel:#fff;
+  --text:var(--ink);
 }
 
 /* Job sites use a grey page with white cards, not a white page. */
@@ -600,13 +612,9 @@ body.jobsite{background:var(--page-bg)}
 .jcard-sub{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 16px}
 
 /* ---- buttons (LinkedIn's pill system) ---- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;border-radius:999px;font:inherit;font-weight:700;font-size:.94rem;text-decoration:none;cursor:pointer;border:1.5px solid transparent;white-space:nowrap;transition:background .12s,border-color .12s,color .12s}
-.btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-.btn-primary:hover{background:var(--brand-dark);border-color:var(--brand-dark)}
-.btn-secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
-.btn-secondary:hover{background:#eaf1fd}
-.btn-ghost{background:transparent;color:var(--muted);border-color:var(--card-border)}
-.btn-ghost:hover{background:#f4f5f7;color:var(--ink)}
+/* The pill .btn system that used to live here was dead code: .btn is
+   redeclared further down and that later block wins, so none of these rules
+   ever rendered. Removed rather than left to mislead the next reader. */
 .btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
 /* ---- profile: cover + overlapping avatar ---- */
