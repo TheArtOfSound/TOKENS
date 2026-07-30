@@ -37,6 +37,7 @@ const REGISTRY = path.join(ROOT, 'public', 'data', 'profiles', 'index.json');
 const PROFILE = path.join(ROOT, 'profile', 'profile.json');
 const SNAPSHOT = path.join(ROOT, 'public', 'data', 'latest.json');
 const UPSTREAM = 'TheArtOfSound/TOKENS';
+const REGISTRY_PATH = 'public/data/profiles/index.json';
 
 interface Identity {
   displayName?: string;
@@ -93,13 +94,30 @@ async function main(): Promise<void> {
 
   const { config } = loadConsent();
   const state = listingState(config);
-  if (state === 'granted') {
-    console.log('You are already listed. `npm run collect` keeps it current.');
-    console.log('To withdraw:  npm run unlist');
-    return;
-  }
-
   const handle = identity.handle || deriveHandle(identity.displayName);
+
+  if (state === 'granted') {
+    const consented = config.directoryListing?.handle;
+    if (consented && consented !== handle) {
+      // The handle changed since they agreed, so the URL they consented to is
+      // not the URL they would now get. A different public address is a material
+      // change, not a detail — re-ask rather than publishing them somewhere they
+      // never saw.
+      console.log(
+        `Your handle changed from @${consented} to @${handle}, which changes your public URL.\n` +
+          'Re-confirming below.\n',
+      );
+    } else {
+      // Same handle and consent stands. Retry enrollment rather than assuming it
+      // succeeded: the first attempt may have hit a handle collision, an expired
+      // gh token, or no network, and the old early return left the member stuck
+      // with consent recorded and no way to finish joining.
+      console.log('Consent already recorded. Checking your directory entry…');
+      await enroll(handle, identity);
+      console.log('\nTo withdraw:  npm run unlist');
+      return;
+    }
+  }
   if (!handle) {
     console.error('Could not derive a handle from your display name. Set "handle" in profile/profile.json.');
     process.exit(1);
@@ -187,20 +205,113 @@ async function enroll(handle: string, identity: Identity): Promise<void> {
     return;
   }
 
+  const dryRun = process.argv.includes('--dry-run');
+
   try {
     const login = gh(['api', 'user', '--jq', '.login']);
     console.log(`  GitHub account: ${login}`);
-    console.log(`  Opening a join pull request against ${UPSTREAM}…`);
-    console.log('\nYour entry:');
-    console.log(JSON.stringify(entry, null, 2));
-    console.log(
-      '\nRun this to submit it (it opens in your browser, from your account):\n' +
-        `  gh repo fork ${UPSTREAM} --clone=false --remote=false\n` +
-        `  gh browse --repo ${UPSTREAM} public/data/profiles/index.json\n`,
-    );
-    console.log('Once merged, `npm run collect` keeps your entry current automatically.');
+
+    // Read the CURRENT upstream registry, not the fork's copy. A fork that has
+    // been sitting stale for weeks would otherwise produce a pull request that
+    // silently reverts everyone who joined in the meantime.
+    const upstreamRef = gh(['api', `repos/${UPSTREAM}/git/ref/heads/main`, '--jq', '.object.sha']);
+    const fileJson = gh([
+      'api',
+      `repos/${UPSTREAM}/contents/${REGISTRY_PATH}?ref=${upstreamRef}`,
+    ]);
+    const file = JSON.parse(fileJson) as { content: string; sha: string };
+    const registry = JSON.parse(Buffer.from(file.content, 'base64').toString('utf8')) as {
+      members?: Array<Record<string, unknown>>;
+      updatedAt?: string;
+    };
+    const members = Array.isArray(registry.members) ? registry.members : [];
+
+    // Handle collision is a hard stop, not a rename. Silently suffixing someone
+    // into `jane-dev-2` would hand them a URL they never agreed to, and the
+    // consent record already pins the exact publicUrl they were shown.
+    if (members.some((m) => m.handle === entry.handle)) {
+      console.log(`\nThe handle @${entry.handle} is already taken in the directory.`);
+      console.log('Pick another by setting "handle" in profile/profile.json, then re-run `npm run list-me`.');
+      console.log('(Your consent is recorded; you will not be asked again.)');
+      return;
+    }
+
+    const branch = `ledger-join-${entry.handle}`;
+    const next = { ...registry, members: [...members, entry], updatedAt: new Date().toISOString() };
+    const encoded = Buffer.from(`${JSON.stringify(next, null, 2)}\n`, 'utf8').toString('base64');
+
+    if (dryRun) {
+      console.log(`  [dry-run] upstream main: ${upstreamRef.slice(0, 12)}`);
+      console.log(`  [dry-run] would fork ${UPSTREAM}, branch ${branch}`);
+      console.log(`  [dry-run] registry would go from ${members.length} to ${next.members.length} members`);
+      console.log(`  [dry-run] payload bytes: ${encoded.length}`);
+      console.log('  [dry-run] no fork, no branch, no pull request created.');
+      return;
+    }
+
+    // Idempotent: gh exits non-zero if the fork exists, which is fine.
+    try {
+      gh(['repo', 'fork', UPSTREAM, '--clone=false', '--remote=false']);
+    } catch {
+      /* already forked */
+    }
+
+    // Branch in the fork, pointed at the upstream commit. Forks share an object
+    // network, so this is legal and it bases the PR on current upstream.
+    try {
+      gh([
+        'api',
+        `repos/${login}/${UPSTREAM.split('/')[1]}/git/refs`,
+        '-f',
+        `ref=refs/heads/${branch}`,
+        '-f',
+        `sha=${upstreamRef}`,
+      ]);
+    } catch {
+      console.log(`  (branch ${branch} already exists in your fork; updating it)`);
+    }
+
+    gh([
+      'api',
+      `repos/${login}/${UPSTREAM.split('/')[1]}/contents/${REGISTRY_PATH}`,
+      '-X',
+      'PUT',
+      '-f',
+      `message=Add @${entry.handle} to the Ledger directory`,
+      '-f',
+      `content=${encoded}`,
+      '-f',
+      `branch=${branch}`,
+      '-f',
+      `sha=${file.sha}`,
+    ]);
+
+    const prUrl = gh([
+      'pr',
+      'create',
+      '--repo',
+      UPSTREAM,
+      '--head',
+      `${login}:${branch}`,
+      '--base',
+      'main',
+      '--title',
+      `Add @${entry.handle} to the directory`,
+      '--body',
+      `Joining the Ledger directory.\n\n` +
+        `- Handle: \`${entry.handle}\`\n` +
+        `- Snapshot: ${entry.snapshotUrl}\n\n` +
+        `Consent recorded locally with the \`${DISCLOSURE_ID}\` disclosure. ` +
+        `Signature is verifiable in the browser at ${entry.snapshotUrl}.\n`,
+    ]);
+
+    console.log(`\nPull request opened: ${prUrl}`);
+    console.log('Once it merges you appear at ' + `${SITE_ORIGIN}/u/${entry.handle}`);
+    console.log('After that, `npm run collect` keeps your entry current automatically.');
   } catch (error) {
-    console.log(`Could not reach GitHub (${error instanceof Error ? error.message : 'unknown'}).`);
+    // Consent is already stored, so this is recoverable: re-running does not
+    // re-ask. Say what broke rather than pretending it worked.
+    console.log(`\nCould not open the pull request: ${error instanceof Error ? error.message : 'unknown'}`);
     printManual(entry);
   }
 }
