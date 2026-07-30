@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-07-30T16:34:05.368Z",
+  "generatedAt": "2026-07-30T17:04:29.761Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 324492934,
-    "outputTokens": 97398195,
-    "cacheCreationTokens": 684219284,
-    "cacheReadTokens": 36624758755,
-    "cachedTokens": 37308978039,
-    "freshTokens": 421891129,
-    "totalTokens": 37730869168,
+    "inputTokens": 324493066,
+    "outputTokens": 97445313,
+    "cacheCreationTokens": 684907717,
+    "cacheReadTokens": 36668910168,
+    "cachedTokens": 37353817885,
+    "freshTokens": 421938379,
+    "totalTokens": 37775756264,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -48,13 +48,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12641391,
-      "outputTokens": 65538672,
-      "cacheCreationTokens": 684219284,
-      "cacheReadTokens": 25692544227,
-      "cachedTokens": 26376763511,
-      "freshTokens": 78180063,
-      "totalTokens": 26454943574,
+      "inputTokens": 12641523,
+      "outputTokens": 65585790,
+      "cacheCreationTokens": 684907717,
+      "cacheReadTokens": 25736695640,
+      "cachedTokens": 26421603357,
+      "freshTokens": 78227313,
+      "totalTokens": 26499830670,
       "estimatedCostUsd": null
     }
   },
@@ -3240,13 +3240,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 1711,
-      "outputTokens": 848114,
-      "cacheCreationTokens": 5950668,
-      "cacheReadTokens": 353346738,
-      "cachedTokens": 359297406,
-      "freshTokens": 849825,
-      "totalTokens": 360147231,
+      "inputTokens": 1843,
+      "outputTokens": 895232,
+      "cacheCreationTokens": 6639101,
+      "cacheReadTokens": 397498151,
+      "cachedTokens": 404137252,
+      "freshTokens": 897075,
+      "totalTokens": 405034327,
       "estimatedCostUsd": null
     }
   ],
@@ -3259,7 +3259,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "575a796",
+        "commit": "fd58eeb",
         "changedFiles": 0
       },
       "stack": [],
@@ -3437,7 +3437,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "7cc9d38",
+        "commit": "fd58eeb",
         "changedFiles": 0
       },
       "stack": [
@@ -3471,7 +3471,7 @@
         "css": 2,
         "tsx": 22
       },
-      "lastModified": "2026-07-30T16:33:42.258Z",
+      "lastModified": "2026-07-30T17:04:28.995Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3534,7 +3534,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 37730869168,
+    "exactTotalTokens": 37775756264,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -3741,7 +3741,7 @@
       "cachedSharePct": 98.9,
       "freshSharePct": 1.1,
       "outputSharePct": 23.1,
-      "avgTokensPerActiveDay": 369910482,
+      "avgTokensPerActiveDay": 370350552,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -3866,7 +3866,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "c232fb578b8d32fcf4e72d218aff86b11196e854e18b9ba67f3e354870028eac",
+    "snapshotSha256": "24b70cc8f27840f5fe9ed97e31340e80639ae05d2c34a547382ad68906fb125d",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4132,7 +4132,7 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 151133,
+    "totalEvents": 151201,
     "hierarchy": [
       {
         "provider": "codex",
@@ -4192,9 +4192,9 @@
       },
       {
         "provider": "claude",
-        "events": 68063,
+        "events": 68131,
         "sessions": 45,
-        "totalTokens": 26454943574,
+        "totalTokens": 26499830670,
         "models": [
           {
             "model": "claude-opus-4-8",
@@ -4222,9 +4222,9 @@
           },
           {
             "model": "claude-opus-5",
-            "events": 3642,
+            "events": 3710,
             "sessions": 8,
-            "totalTokens": 1126147132
+            "totalTokens": 1171034228
           },
           {
             "model": "claude-opus-4-6",
@@ -4269,12 +4269,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-30T16:34:12.603Z",
-    "nonce": "316f7fb895698d59332cb180309fcb68",
+    "issuedAt": "2026-07-30T17:04:30.482Z",
+    "nonce": "01d0f52ecb4c31baa171e8e2899cc024",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "cce21da8a390719105c2d30c873a46691130a32460281ab8fbceecdb07acfbe3",
-    "signature": "r9CJE8bZEFmgFC4VQpR881KPCvWqq3LM/Yck2vGOFelMKauwYTMPx2lJovyoJEple4h/gKpT9ui3uM/Au9DpAg==",
+    "payloadSha256": "8c89f9519e1a152c526ea2b47ecea3589892a1848c5dc4bb3572229faf8047cb",
+    "signature": "XHgxIowHowfFNux1c7RkR6wz5kSn95amABYR5nuAFthqWLKthCYyDUp7nsvEHJUhwtDfRKmO/EAJLhSSSfNsCw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
