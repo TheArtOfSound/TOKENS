@@ -1257,3 +1257,25 @@ textarea:focus-visible{
 @media (prefers-reduced-motion: reduce){
   .tl-caret{animation:none;visibility:hidden}
 }
+
+/* ---- Site tour (real screen recording) ---------------------------------
+   Click-to-play by design: the video is ~1MB and nothing fetches it until the
+   visitor asks. Until then the cost is a 70KB poster. */
+.tour{margin:0;display:grid;gap:10px}
+.tour-frame{position:relative;border:1px solid var(--rule);border-radius:12px;overflow:hidden;
+  background:#0c0f16;box-shadow:var(--card-shadow);aspect-ratio:1152/720}
+.tour-video{display:block;width:100%;height:100%;object-fit:contain;background:#0c0f16}
+.tour-poster{display:block;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer;position:relative}
+.tour-poster img{display:block;width:100%;height:100%;object-fit:cover}
+.tour-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,14,.05),rgba(6,8,14,.55));transition:background .15s}
+.tour-poster:hover::after{background:linear-gradient(180deg,rgba(6,8,14,.02),rgba(6,8,14,.42))}
+.tour-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;
+  display:grid;place-items:center;width:62px;height:62px;border-radius:50%;
+  background:#fff;color:#0c0f16;box-shadow:0 6px 22px rgba(6,8,14,.35);padding-left:3px}
+.tour-cta{position:absolute;left:0;right:0;bottom:16px;z-index:1;color:#fff;
+  font-weight:700;font-size:.94rem;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+.tour-poster:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.tour-cap{font-size:.84rem;line-height:1.6;margin:0}
+@media (prefers-reduced-motion: reduce){
+  .tour-poster::after{transition:none}
+}

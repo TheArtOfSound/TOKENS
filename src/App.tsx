@@ -5,6 +5,7 @@ import { ProfileView } from './views/ProfileView';
 import { ActivityDisclaimer } from './views/ActivityDisclaimer';
 import { Directory } from './views/Directory';
 import { TerminalDemo } from './views/TerminalDemo';
+import { SiteTour } from './views/SiteTour';
 import { Join } from './views/Join';
 import { Member } from './views/Member';
 import { Verify } from './views/Verify';
@@ -646,6 +647,8 @@ export default function App() {
           {/* The demo sits right after the three-step strip: the strip claims what
               happens, this shows it happening, using real recorded output. */}
           <TerminalDemo />
+          {/* A real recording of the above, for anyone who would rather watch. */}
+          <SiteTour />
           <div className="trust-strip" aria-label="How Ledger works in three steps">
             <div><strong>1. Measure</strong><span>Local collector reads existing AI usage logs — never auto-publishes</span></div>
             <div><strong>2. Sign</strong><span>Device key seals a public summary — private key never leaves</span></div>
