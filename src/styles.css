@@ -1226,3 +1226,34 @@ textarea:focus-visible{
   .join-progress-item,.source-card,.publish-choice{transition:none}
 }
 
+
+/* ---- Homepage terminal demo -------------------------------------------
+   Deliberately not a video: a few KB of text in a styled frame instead of a
+   few hundred KB of pixels, crisp at any zoom, selectable, and legible to a
+   screen reader without a parallel transcript file. */
+.termdemo{margin:0;display:grid;gap:10px}
+.termdemo-frame{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#0c0f16;box-shadow:var(--card-shadow)}
+.termdemo-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#161a23;border-bottom:1px solid #232936}
+.termdemo-dot{width:10px;height:10px;border-radius:50%;background:#39404f}
+.termdemo-title{margin-left:8px;color:#8892a4;font:600 .74rem/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.termdemo-body{margin:0;padding:16px 18px;min-height:250px;background:#0c0f16;
+  font:.83rem/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  white-space:pre-wrap;overflow-x:auto}
+.tl{color:#c9d2e0}
+.tl-cmd{color:#eaf0f8;font-weight:600}
+.tl-prompt{color:#5f9dff}
+.tl-dim{color:#7c879b}
+.tl-good{color:#57c98b}
+.tl-warn{color:#e5b567;font-weight:600}
+.tl-caret{display:inline-block;width:8px;height:1.05em;vertical-align:text-bottom;background:#5f9dff;animation:tlblink 1.05s steps(2,start) infinite}
+@keyframes tlblink{to{visibility:hidden}}
+.termdemo-controls{display:flex;gap:8px}
+.termdemo-cap{font-size:.84rem;line-height:1.6;margin:0}
+.termdemo-transcript summary{cursor:pointer;font-size:.86rem;color:var(--muted)}
+.termdemo-transcript ol{margin:10px 0 0;padding-left:18px;display:grid;gap:12px}
+.termdemo-transcript pre{margin:4px 0 0;padding:10px 12px;background:var(--page-bg);border:1px solid var(--rule);
+  border-radius:8px;overflow-x:auto;font:.78rem/1.6 ui-monospace,Menlo,monospace;white-space:pre-wrap}
+/* The caret is the only motion here, and it is decoration. */
+@media (prefers-reduced-motion: reduce){
+  .tl-caret{animation:none;visibility:hidden}
+}
