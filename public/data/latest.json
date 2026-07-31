@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T01:38:16.124Z",
+  "generatedAt": "2026-07-31T02:08:40.207Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3259,7 +3259,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1271c65",
+        "commit": "da06185",
         "changedFiles": 0
       },
       "stack": [],
@@ -3304,7 +3304,7 @@
       "git": {
         "branch": "live-site-snapshot-2026-07-30",
         "commit": "1e055b1",
-        "changedFiles": 1
+        "changedFiles": 10
       },
       "stack": [
         "TypeScript"
@@ -3318,6 +3318,7 @@
         "typecheck",
         "demo:vertical",
         "pilot:synthetic",
+        "pilot:multi-company",
         "pilot",
         "stage2:import",
         "install:pilot",
@@ -3329,10 +3330,10 @@
         "js": 4,
         "html": 35,
         "json": 270,
-        "ts": 57,
+        "ts": 58,
         "py": 2
       },
-      "lastModified": "2026-07-30T16:28:47.159Z",
+      "lastModified": "2026-07-31T02:01:02.648Z",
       "scannerWarnings": [
         "match:scored score:1410 folder~qev, package~qev, text~qev, text~qev-desktop, domain=secure.imagineqira.com, domain=qev-desktop, package.json"
       ]
@@ -3437,7 +3438,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1271c65",
+        "commit": "da06185",
         "changedFiles": 0
       },
       "stack": [
@@ -3471,7 +3472,7 @@
         "css": 2,
         "tsx": 22
       },
-      "lastModified": "2026-07-31T01:38:14.057Z",
+      "lastModified": "2026-07-31T02:08:38.007Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3866,7 +3867,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "e1dcb8accf1ae214829276efdd46fa5a28a7d199ea47f2e299b149892b81112a",
+    "snapshotSha256": "4f591f3c372bba863705527bfea6a9f4cb81f27572ad681cdd34a3e3a0269356",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4269,12 +4270,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-07-31T01:38:17.048Z",
-    "nonce": "a1bffcfba5a9346f292861eb89837f50",
+    "issuedAt": "2026-07-31T02:08:42.792Z",
+    "nonce": "92e00926ae832c5a98303d854472eab7",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "6078c806a989d0f56b21bd191e0a3e787493ce03b8a53ae511c08f9e65d064e8",
-    "signature": "300kYJlRPdvq65xu//jp9l4mbiBNUkAXhm1/1Eatfw4y3S8J5E4OhTJfj6vQqc6i80khpTyNauEppi9V0R5OCg==",
+    "payloadSha256": "80d30dc7c09e52e860d874acf0f6b727cc8c44ba10ec3df0be4499eb005e6f02",
+    "signature": "rtCTf2zLFsya4QpGCIZ5K5dIy1Twb0tUJ63eIc/7Ux4OoBTg5/55gupqCt6lP0SnWWbJYLqmISnIZgeEkV3OAw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
