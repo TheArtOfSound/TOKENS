@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-02T06:43:45.856Z
+- **Generated at:** 2026-08-02T07:13:55.051Z
 - **Collector:** 0.4.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `36a2630067c3f410643190c345f0bf1539e593e496fde573f0486c5ce1dc72ff`
+- **Snapshot hash:** `060b2b7acfc81b54fdd7144b348862581adaee71ee1868f7e607091b1a255fd1`
 
 ## Identity (self-submitted)
 
@@ -43,7 +43,7 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 
 - Active AI-work days: **104**
 - Span: 2026-02-26 → 2026-08-01 (157 days)
-- Last 30 / 90 days active: 29 / 73
+- Last 30 / 90 days active: 28 / 72
 - Current / longest streak (days): 12 / 26
 - Tools: Codex, Claude Code
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5, gpt-5.6-luna
