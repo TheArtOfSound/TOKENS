@@ -1,6 +1,6 @@
 {
   "_comment": "Member registry. Each entry points at a snapshot the MEMBER hosts and signs; this file only records where to find it. To join, publish your own signed snapshot and open a pull request adding an entry here. Removing your entry removes you from the directory -- this project stores nothing of yours. The registry does NOT vouch for identity; every profile shows identity verification as pending.",
-  "updatedAt": "2026-08-02T12:45:24.080Z",
+  "updatedAt": "2026-08-02T13:15:32.667Z",
   "members": [
     {
       "handle": "bryan",
