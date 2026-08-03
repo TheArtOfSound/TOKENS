@@ -1,7 +1,9 @@
-name: Deploy GitHub Pages
+name: Validate and Deploy GitHub Pages
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -11,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -34,19 +36,22 @@ jobs:
       - name: Validate published data (schema + hash + secret scan)
         run: npm run validate:data
       - name: Dependency audit (blocking)
-        # Must be able to fail the build. A `|| true` here makes the gate decorative.
         run: npm audit --audit-level=high
       - name: Build
         run: npm run build
         env:
           GITHUB_PAGES: "true"
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
