@@ -73,8 +73,8 @@ export function Join() {
         <h1>Add your profile</h1>
         <p className="lede">
           Install the collector, run one guided command, review the exact signed public payload, and then
-          decide whether to request a directory listing. Installing, scanning, or creating a profile never
-          makes you public automatically.
+          decide whether to request a directory listing. Nothing becomes public because you installed or
+          scanned. Creating a profile also does not make you public automatically.
         </p>
       </header>
 
@@ -137,8 +137,8 @@ export function Join() {
         </p>
         <p className="muted">
           GitHub CLI authentication is currently required for automatic enrollment. The wizard provides a
-          manual fallback when <code>gh</code> is unavailable. A future managed Ledger backend can replace this
-          step without changing local collection or signing.
+          manual fallback when <code>gh</code> is unavailable. After listing, run <code>npm run unlist</code> to
+          withdraw from public search. The historical registry change remains in public git history.
         </p>
       </div>
 
