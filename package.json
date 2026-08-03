@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build && cp dist/index.html dist/404.html && node scripts/prerender-routes.mjs && node scripts/seo.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "join": "tsx collector/join.ts",
     "collect": "tsx collector/collectV2.ts",
     "scan:debug": "tsx collector/scanDebug.ts",
     "validate:data": "tsx collector/validateLatest.ts",
