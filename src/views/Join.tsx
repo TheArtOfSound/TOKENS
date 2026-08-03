@@ -73,8 +73,8 @@ export function Join() {
         <h1>Add your profile</h1>
         <p className="lede">
           Install the collector, run one guided command, review the exact signed public payload, and then
-          decide whether to request a directory listing. Nothing becomes public because you installed or
-          scanned. Creating a profile also does not make you public automatically.
+          decide whether to request a directory listing. Nothing becomes public because you installed or scanned.
+          Creating a profile also does not make you public automatically.
         </p>
       </header>
 
