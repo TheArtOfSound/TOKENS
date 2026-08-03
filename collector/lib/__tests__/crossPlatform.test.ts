@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { buildNpmInvocation, runNpmScript } from '../runNpmScript';
 
 afterEach(() => {
   delete process.env.TOKENS_CLAUDE_DIR;
@@ -60,12 +61,23 @@ describe('log directory overrides', () => {
   });
 });
 
-describe('Windows installer', () => {
+describe('Windows installer and onboarding', () => {
   it('parses node --version in PowerShell instead of passing quoted JavaScript to node -p', () => {
     const installer = readFileSync(path.resolve('public/install.ps1'), 'utf8');
     expect(installer).toContain('node --version');
     expect(installer).toContain("$Matches['major']");
     expect(installer).not.toMatch(/node\s+-p\s+/i);
+  });
+
+  it('builds a ComSpec invocation instead of spawning npm.cmd directly', () => {
+    const invocation = buildNpmInvocation('win32', 'ingest', [], 'C:\\Windows\\System32\\cmd.exe');
+    expect(invocation.file).toBe('C:\\Windows\\System32\\cmd.exe');
+    expect(invocation.args).toEqual(['/d', '/s', '/c', 'npm run ingest']);
+    expect(readFileSync(path.resolve('collector/join.ts'), 'utf8')).not.toMatch(/npm\.cmd/);
+  });
+
+  it.runIf(process.platform === 'win32')('actually launches an npm script without EINVAL', () => {
+    expect(() => runNpmScript('smoke:noop', [], process.cwd())).not.toThrow();
   });
 });
 

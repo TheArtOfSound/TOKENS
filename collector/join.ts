@@ -10,7 +10,6 @@
  * pull request from the user's account and publishes only the signed snapshot.
  */
 
-import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
@@ -21,12 +20,12 @@ import {
   SOURCE_DISCLOSURES,
   type SourceKey,
 } from './lib/consent';
+import { runNpmScript } from './lib/runNpmScript';
 
 const ROOT = process.cwd();
 const PROFILE_DIR = path.join(ROOT, 'profile');
 const PROFILE_FILE = path.join(PROFILE_DIR, 'profile.json');
 const SNAPSHOT_FILE = path.join(ROOT, 'public', 'data', 'latest.json');
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 interface Profile {
   displayName?: string;
@@ -66,14 +65,6 @@ function csv(value: string): string[] {
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function run(script: string, extra: string[] = []): void {
-  execFileSync(npmCommand, ['run', script, ...extra], {
-    cwd: ROOT,
-    stdio: 'inherit',
-    env: process.env,
-  });
 }
 
 async function ask(
@@ -219,9 +210,9 @@ async function main(): Promise<void> {
     }
 
     rl.pause();
-    run('ingest');
-    run('collect');
-    run('consent:preview');
+    runNpmScript('ingest', [], ROOT);
+    runNpmScript('collect', [], ROOT);
+    runNpmScript('consent:preview', [], ROOT);
     rl.resume();
 
     if (!existsSync(SNAPSHOT_FILE)) {
@@ -240,7 +231,7 @@ async function main(): Promise<void> {
     }
 
     rl.pause();
-    run('list-me');
+    runNpmScript('list-me', [], ROOT);
     rl.resume();
   } finally {
     rl.close();
