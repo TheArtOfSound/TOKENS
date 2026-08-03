@@ -25,11 +25,22 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
   Die "Node.js $MinNodeMajor+ is required. Install it from https://nodejs.org and re-run."
 }
 
-$nodeMajor = [int](node -p 'process.versions.node.split(".")[0]')
-if ($nodeMajor -lt $MinNodeMajor) {
-  Die "Node $MinNodeMajor+ is required (found $(node -v))."
+# Do not use `node -p` here. Windows PowerShell can strip the nested quotes from
+# JavaScript expressions passed to native executables, turning split(".") into
+# invalid split(.). Parse the stable `node --version` output in PowerShell instead.
+[string]$nodeVersion = (& node --version 2>&1)
+if ($LASTEXITCODE -ne 0) {
+  Die 'Could not read the installed Node.js version.'
 }
-Info "git: $((git --version).Split(' ')[2])   node: $(node -v)"
+$nodeVersion = $nodeVersion.Trim()
+if ($nodeVersion -notmatch '^v(?<major>\d+)\.') {
+  Die "Could not parse the installed Node.js version: $nodeVersion"
+}
+$nodeMajor = [int]$Matches['major']
+if ($nodeMajor -lt $MinNodeMajor) {
+  Die "Node $MinNodeMajor+ is required (found $nodeVersion)."
+}
+Info "git: $((git --version).Split(' ')[2])   node: $nodeVersion"
 
 if (Test-Path (Join-Path $InstallDir '.git')) {
   Say "Updating existing checkout at $InstallDir"
