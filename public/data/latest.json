@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-03T06:18:44.593Z",
+  "generatedAt": "2026-08-03T07:06:08.525Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.4.0",
@@ -3303,7 +3303,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "751496b",
+        "commit": "72ca369",
         "changedFiles": 0
       },
       "stack": [],
@@ -3482,7 +3482,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "751496b",
+        "commit": "72ca369",
         "changedFiles": 0
       },
       "stack": [
@@ -3501,22 +3501,22 @@
         "validate:data",
         "test",
         "test:watch",
+        "smoke:noop",
         "consent",
         "consent:preview",
-        "consent:export",
-        "consent:delete"
+        "consent:export"
       ],
       "fileCounts": {
         "docs": 31,
         "py": 2,
-        "ts": 100,
+        "ts": 101,
         "json": 29,
         "js": 22,
         "html": 4,
         "css": 2,
         "tsx": 22
       },
-      "lastModified": "2026-08-03T06:18:44.208Z",
+      "lastModified": "2026-08-03T07:06:08.135Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -3656,14 +3656,14 @@
       }
     },
     "activity": {
-      "referenceDate": "2026-08-02",
+      "referenceDate": "2026-08-03",
       "activeDays": 104,
       "firstActiveDate": "2026-02-26",
       "lastActiveDate": "2026-08-01",
       "spanDays": 157,
-      "activeDaysLast30": 28,
+      "activeDaysLast30": 27,
       "activeDaysLast90": 72,
-      "currentStreakDays": 12,
+      "currentStreakDays": 0,
       "longestStreakDays": 26,
       "toolsUsed": [
         "Codex",
@@ -3911,7 +3911,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "76b4cb28b47b2603047c43daa94ebdbe0e581e156caa0f08cc2e34b95b535110",
+    "snapshotSha256": "d3f306c438cc9d9f6cdfeef3229d28651bb1410eea0172c5ae9f7380a4868a5f",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4314,12 +4314,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-03T06:18:44.966Z",
-    "nonce": "2e6a444a10434e8fdfd000a0d2be9d1f",
+    "issuedAt": "2026-08-03T07:06:08.898Z",
+    "nonce": "7f14677d93d70be1be62a6c7e32e56c9",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "ff19362cc89742b816e13d79bbbb29e2e9f413c868400f6858d7305f9b18b8ed",
-    "signature": "8HGXgAZoSlvGAMsH7Lf9nIIKqlu1rNRd1p3oK52elLIRJUS19oONk/16XcISqyjsy11N1xQc6KQTayz2lgXICg==",
+    "payloadSha256": "85d24eef0220ba896e335cffa0875a13ad0403fa77bb435b317b48dd8778acec",
+    "signature": "M+SgX/asp2TW50I5oEfOOfdEXaSC4CJsPKWdJIfO/OcJ2edjTsa6ggaecGNzugeE1pZI1JQOqlziU3ztWuhsBw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
