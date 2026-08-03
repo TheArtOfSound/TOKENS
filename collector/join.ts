@@ -10,7 +10,6 @@
  * pull request from the user's account and publishes only the signed snapshot.
  */
 
-import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
@@ -21,6 +20,7 @@ import {
   SOURCE_DISCLOSURES,
   type SourceKey,
 } from './lib/consent';
+import { runNpmScript } from './lib/runNpmScript';
 
 const ROOT = process.cwd();
 const PROFILE_DIR = path.join(ROOT, 'profile');
@@ -65,27 +65,6 @@ function csv(value: string): string[] {
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function run(script: string, extra: string[] = []): void {
-  const args = ['run', script, ...extra];
-  const options = {
-    cwd: ROOT,
-    stdio: 'inherit' as const,
-    env: process.env,
-  };
-
-  if (process.platform === 'win32') {
-    // npm is a .cmd shim on Windows. Node 24 can reject spawning npm.cmd
-    // directly with EINVAL, so invoke it through the system command processor.
-    const unsafe = args.find((arg) => !/^[a-zA-Z0-9_:@./=+-]+$/.test(arg));
-    if (unsafe) throw new Error(`Unsafe internal npm argument: ${unsafe}`);
-    const command = ['npm', ...args].join(' ');
-    execFileSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', command], options);
-    return;
-  }
-
-  execFileSync('npm', args, options);
 }
 
 async function ask(
@@ -231,9 +210,9 @@ async function main(): Promise<void> {
     }
 
     rl.pause();
-    run('ingest');
-    run('collect');
-    run('consent:preview');
+    runNpmScript('ingest', [], ROOT);
+    runNpmScript('collect', [], ROOT);
+    runNpmScript('consent:preview', [], ROOT);
     rl.resume();
 
     if (!existsSync(SNAPSHOT_FILE)) {
@@ -252,7 +231,7 @@ async function main(): Promise<void> {
     }
 
     rl.pause();
-    run('list-me');
+    runNpmScript('list-me', [], ROOT);
     rl.resume();
   } finally {
     rl.close();
