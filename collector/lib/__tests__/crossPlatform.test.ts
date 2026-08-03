@@ -5,7 +5,7 @@
  * roots are built with os.homedir()/path.join, never a hardcoded POSIX path.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -57,6 +57,15 @@ describe('log directory overrides', () => {
       // locationLabel is either the ~ shorthand or an absolute path under home.
       expect(source.locationLabel.startsWith('~') || source.locationLabel.startsWith(home)).toBe(true);
     }
+  });
+});
+
+describe('Windows installer', () => {
+  it('parses node --version in PowerShell instead of passing quoted JavaScript to node -p', () => {
+    const installer = readFileSync(path.resolve('public/install.ps1'), 'utf8');
+    expect(installer).toContain('node --version');
+    expect(installer).toContain("$Matches['major']");
+    expect(installer).not.toMatch(/node\s+-p\s+/i);
   });
 });
 
