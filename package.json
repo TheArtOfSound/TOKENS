@@ -30,7 +30,8 @@
     "publish:ledger": "tsx collector/publishLedgerUnavailable.ts",
     "publish:ledger:dev": "tsx collector/publishLedger.ts",
     "dev:all": "tsx publish/server.ts & vite",
-    "list-me": "tsx collector/listMe.ts",
+    "list-me": "tsx collector/listMeSetup.ts",
+    "list-me:core": "tsx collector/listMe.ts",
     "unlist": "tsx collector/unlist.ts",
     "build:cli": "node scripts/build-cli.mjs",
     "prepublishOnly": "npm run build:cli"
