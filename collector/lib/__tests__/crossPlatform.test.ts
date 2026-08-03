@@ -60,12 +60,19 @@ describe('log directory overrides', () => {
   });
 });
 
-describe('Windows installer', () => {
+describe('Windows installer and onboarding', () => {
   it('parses node --version in PowerShell instead of passing quoted JavaScript to node -p', () => {
     const installer = readFileSync(path.resolve('public/install.ps1'), 'utf8');
     expect(installer).toContain('node --version');
     expect(installer).toContain("$Matches['major']");
     expect(installer).not.toMatch(/node\s+-p\s+/i);
+  });
+
+  it('runs npm through ComSpec instead of spawning npm.cmd directly', () => {
+    const join = readFileSync(path.resolve('collector/join.ts'), 'utf8');
+    expect(join).toContain("process.env.ComSpec || 'cmd.exe'");
+    expect(join).toContain("['/d', '/s', '/c', command]");
+    expect(join).not.toMatch(/npm\.cmd/);
   });
 });
 
