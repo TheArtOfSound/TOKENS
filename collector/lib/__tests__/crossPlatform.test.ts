@@ -55,13 +55,12 @@ describe('log directory overrides', () => {
     const { detectAll } = await import('../../adapters');
     const home = os.homedir();
     for (const source of detectAll()) {
-      // locationLabel is either the ~ shorthand or an absolute path under home.
       expect(source.locationLabel.startsWith('~') || source.locationLabel.startsWith(home)).toBe(true);
     }
   });
 });
 
-describe('Windows installer and onboarding', () => {
+describe('cross-platform npm launching', () => {
   it('parses node --version in PowerShell instead of passing quoted JavaScript to node -p', () => {
     const installer = readFileSync(path.resolve('public/install.ps1'), 'utf8');
     expect(installer).toContain('node --version');
@@ -76,7 +75,7 @@ describe('Windows installer and onboarding', () => {
     expect(readFileSync(path.resolve('collector/join.ts'), 'utf8')).not.toMatch(/npm\.cmd/);
   });
 
-  it.runIf(process.platform === 'win32')('actually launches an npm script without EINVAL', () => {
+  it('actually launches an npm script on the current operating system', () => {
     expect(() => runNpmScript('smoke:noop', [], process.cwd())).not.toThrow();
   });
 });
@@ -85,27 +84,23 @@ describe('file-based key storage (the Linux / Windows path)', () => {
   it('forces a portable file key with TOKENS_KEY_STORAGE=file and round-trips sign/verify', async () => {
     const cacheDir = mkdtempSync(path.join(tmpdir(), 'tokens-key-'));
     try {
-      process.env.TOKENS_CACHE_DIR = cacheDir; // isolate: never touch the real device key
+      process.env.TOKENS_CACHE_DIR = cacheDir;
       process.env.TOKENS_KEY_STORAGE = 'file';
       vi.resetModules();
       const signing = await import('../signing');
 
-      // First load generates and writes a file key (no Keychain used).
       const created = signing.loadOrCreateDeviceKey();
       expect(created.storage).toBe('file');
       expect(created.created).toBe(true);
 
-      // The key persisted to a file we can see.
       const { existsSync } = await import('node:fs');
       expect(existsSync(path.join(cacheDir, 'device-key.pem'))).toBe(true);
 
-      // Second load reads the same key back (not regenerated).
       const reloaded = signing.loadOrCreateDeviceKey();
       expect(reloaded.storage).toBe('file');
       expect(reloaded.created).toBe(false);
       expect(reloaded.privateKeyPem).toBe(created.privateKeyPem);
 
-      // A snapshot signed with the file key verifies.
       const snapshot: Record<string, unknown> = { generatedAt: '2026-07-24T00:00:00Z', totals: { totalTokens: 10 } };
       snapshot.signature = signing.signSnapshot(snapshot, created.privateKeyPem, 'nonce-1');
       expect(signing.verifySnapshot(snapshot).valid).toBe(true);
