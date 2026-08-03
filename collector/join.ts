@@ -26,7 +26,6 @@ const ROOT = process.cwd();
 const PROFILE_DIR = path.join(ROOT, 'profile');
 const PROFILE_FILE = path.join(PROFILE_DIR, 'profile.json');
 const SNAPSHOT_FILE = path.join(ROOT, 'public', 'data', 'latest.json');
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 interface Profile {
   displayName?: string;
@@ -69,11 +68,24 @@ function csv(value: string): string[] {
 }
 
 function run(script: string, extra: string[] = []): void {
-  execFileSync(npmCommand, ['run', script, ...extra], {
+  const args = ['run', script, ...extra];
+  const options = {
     cwd: ROOT,
-    stdio: 'inherit',
+    stdio: 'inherit' as const,
     env: process.env,
-  });
+  };
+
+  if (process.platform === 'win32') {
+    // npm is a .cmd shim on Windows. Node 24 can reject spawning npm.cmd
+    // directly with EINVAL, so invoke it through the system command processor.
+    const unsafe = args.find((arg) => !/^[a-zA-Z0-9_:@./=+-]+$/.test(arg));
+    if (unsafe) throw new Error(`Unsafe internal npm argument: ${unsafe}`);
+    const command = ['npm', ...args].join(' ');
+    execFileSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', command], options);
+    return;
+  }
+
+  execFileSync('npm', args, options);
 }
 
 async function ask(
