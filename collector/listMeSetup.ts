@@ -9,10 +9,13 @@
 
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import path from 'node:path';
-import { delimiter } from 'node:path';
+import path, { delimiter } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
+import {
+  selectGitHubCliInstallPlan,
+  type GitHubCliInstallPlan,
+} from './lib/githubCliSetup';
 
 function works(file: string, args: string[]): boolean {
   try {
@@ -23,19 +26,27 @@ function works(file: string, args: string[]): boolean {
   }
 }
 
-function windowsCandidates(): string[] {
+function ghCandidates(): string[] {
   const values = [
     process.env.GH_PATH,
-    process.env.ProgramFiles ? path.join(process.env.ProgramFiles, 'GitHub CLI', 'gh.exe') : undefined,
-    process.env.LOCALAPPDATA ? path.join(process.env.LOCALAPPDATA, 'Programs', 'GitHub CLI', 'gh.exe') : undefined,
-    'gh.exe',
+    process.platform === 'win32' && process.env.ProgramFiles
+      ? path.join(process.env.ProgramFiles, 'GitHub CLI', 'gh.exe')
+      : undefined,
+    process.platform === 'win32' && process.env.LOCALAPPDATA
+      ? path.join(process.env.LOCALAPPDATA, 'Programs', 'GitHub CLI', 'gh.exe')
+      : undefined,
+    process.platform === 'darwin' ? '/opt/homebrew/bin/gh' : undefined,
+    process.platform === 'darwin' ? '/usr/local/bin/gh' : undefined,
+    process.platform === 'linux' ? '/usr/bin/gh' : undefined,
+    process.platform === 'linux' ? '/usr/local/bin/gh' : undefined,
+    process.platform === 'linux' ? '/home/linuxbrew/.linuxbrew/bin/gh' : undefined,
+    process.platform === 'win32' ? 'gh.exe' : 'gh',
   ];
   return values.filter((value): value is string => Boolean(value));
 }
 
 function findGh(): string | null {
-  const candidates = process.platform === 'win32' ? windowsCandidates() : [process.env.GH_PATH, 'gh'].filter(Boolean) as string[];
-  for (const candidate of candidates) {
+  for (const candidate of ghCandidates()) {
     if ((path.isAbsolute(candidate) && existsSync(candidate) && works(candidate, ['--version'])) || works(candidate, ['--version'])) {
       return candidate;
     }
@@ -48,9 +59,10 @@ function exposeOnPath(executable: string): void {
   const dir = path.dirname(executable);
   const current = process.env.PATH ?? '';
   const parts = current.split(delimiter);
-  if (!parts.some((part) => part.toLowerCase() === dir.toLowerCase())) {
-    process.env.PATH = `${dir}${delimiter}${current}`;
-  }
+  const includes = parts.some((part) =>
+    process.platform === 'win32' ? part.toLowerCase() === dir.toLowerCase() : part === dir,
+  );
+  if (!includes) process.env.PATH = `${dir}${delimiter}${current}`;
 }
 
 async function confirm(message: string): Promise<boolean> {
@@ -64,41 +76,43 @@ async function confirm(message: string): Promise<boolean> {
   }
 }
 
+function availablePackageManagers(): Set<string> {
+  const candidates = process.platform === 'win32'
+    ? ['winget.exe']
+    : process.platform === 'darwin'
+      ? ['brew']
+      : ['apt-get', 'dnf', 'yum', 'pacman', 'zypper', 'apk', 'brew'];
+
+  return new Set(candidates.filter((command) => works(command, ['--version'])));
+}
+
+function runInstallPlan(plan: GitHubCliInstallPlan): void {
+  if (!plan.requiresElevation || process.platform === 'win32' || process.getuid?.() === 0) {
+    execFileSync(plan.file, plan.args, { stdio: 'inherit' });
+    return;
+  }
+
+  if (!works('sudo', ['--version'])) {
+    throw new Error(`${plan.label} needs administrator privileges, but sudo is unavailable.`);
+  }
+  execFileSync('sudo', [plan.file, ...plan.args], { stdio: 'inherit' });
+}
+
 async function installGh(): Promise<string | null> {
-  if (process.platform === 'win32' && works('winget.exe', ['--version'])) {
-    const approved = await confirm('\nLedger needs GitHub publishing support for the final directory step. Install it automatically?');
-    if (!approved) return null;
+  const plan = selectGitHubCliInstallPlan(process.platform, availablePackageManagers());
+  if (!plan) return null;
 
-    execFileSync(
-      'winget.exe',
-      [
-        'install',
-        '--id',
-        'GitHub.cli',
-        '--exact',
-        '--source',
-        'winget',
-        '--accept-package-agreements',
-        '--accept-source-agreements',
-        '--disable-interactivity',
-      ],
-      { stdio: 'inherit' },
-    );
-    return findGh();
-  }
+  const approved = await confirm(
+    `\nLedger needs GitHub publishing support for the final directory step. Install it with ${plan.label}?`,
+  );
+  if (!approved) return null;
 
-  if (process.platform === 'darwin' && works('brew', ['--version'])) {
-    const approved = await confirm('\nLedger needs GitHub publishing support for the final directory step. Install it with Homebrew?');
-    if (!approved) return null;
-    execFileSync('brew', ['install', 'gh'], { stdio: 'inherit' });
-    return findGh();
-  }
-
-  return null;
+  runInstallPlan(plan);
+  return findGh();
 }
 
 function printSimpleInstall(): void {
-  console.log('\nThe local profile and signed snapshot are complete. Only GitHub sign-in remains.');
+  console.log('\nThe local profile and signed snapshot are complete. Only GitHub publishing setup remains.');
   if (process.platform === 'win32') {
     console.log('Run this once, then run `npm run list-me` again:');
     console.log('  winget install --id GitHub.cli --exact');
@@ -106,7 +120,7 @@ function printSimpleInstall(): void {
     console.log('Run this once, then run `npm run list-me` again:');
     console.log('  brew install gh');
   } else {
-    console.log('Install GitHub CLI from https://cli.github.com, then run `npm run list-me` again.');
+    console.log('Install GitHub CLI using your package manager or https://cli.github.com, then run `npm run list-me` again.');
   }
   console.log('You do not need to edit JSON or create a pull request manually.');
 }
@@ -114,7 +128,9 @@ function printSimpleInstall(): void {
 async function ensureAuthenticated(gh: string): Promise<boolean> {
   if (works(gh, ['auth', 'status', '--hostname', 'github.com'])) return true;
 
-  const approved = await confirm('\nA browser sign-in is required to publish the signed snapshot and request the directory listing. Open GitHub sign-in now?');
+  const approved = await confirm(
+    '\nA browser sign-in is required to publish the signed snapshot and request the directory listing. Open GitHub sign-in now?',
+  );
   if (!approved) return false;
 
   execFileSync(
