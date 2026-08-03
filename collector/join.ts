@@ -165,7 +165,7 @@ async function configureSources(rl: ReturnType<typeof createInterface>): Promise
   const loaded = loadConsent();
   const config = loaded.config;
 
-  console.log('\nChoose what the collector may read. Disabled sources are never opened.');
+  console.log('\nChoose what the collector may read. New installations default every source to off.');
   for (const source of SOURCE_DISCLOSURES) {
     if (source.key === 'imported') continue;
     console.log(`\n${source.name}`);
@@ -175,12 +175,12 @@ async function configureSources(rl: ReturnType<typeof createInterface>): Promise
     console.log(`  network: ${source.networkAccess}`);
 
     const key = source.key as SourceKey;
-    const defaultOn = loaded.created ? key !== 'projectScan' : Boolean(config.sources[key]);
+    const defaultOn = loaded.created ? false : Boolean(config.sources[key]);
     config.sources[key] = await yesNo(rl, `Enable ${source.name}?`, defaultOn);
   }
 
-  if (!config.sources.claude && !config.sources.codex && !config.sources.projectScan) {
-    throw new Error('At least one source must be enabled to create a measured record.');
+  if (!config.sources.claude && !config.sources.codex) {
+    throw new Error('Enable at least one supported AI-tool source: Claude Code or Codex.');
   }
 
   config.createdBy = 'user';
