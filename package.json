@@ -15,6 +15,7 @@
     "validate:data": "tsx collector/validateLatest.ts",
     "test": "vitest run",
     "test:watch": "vitest",
+    "smoke:noop": "node -e \"process.stdout.write('npm spawn ok')\"",
     "consent": "tsx collector/consent.ts show",
     "consent:preview": "tsx collector/consent.ts preview",
     "consent:export": "tsx collector/consent.ts export",
