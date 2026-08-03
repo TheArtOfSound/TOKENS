@@ -64,8 +64,8 @@ jobs:
         run: npm ci
       - name: Typecheck
         run: npm run typecheck
-      - name: Exercise Windows installer and npm child-process path
-        run: npx vitest run collector/lib/__tests__/crossPlatform.test.ts
+      - name: Exercise Windows onboarding and enrollment paths
+        run: npx vitest run collector/lib/__tests__/crossPlatform.test.ts collector/lib/__tests__/githubEnrollmentSetup.test.ts
 
   deploy:
     if: github.event_name != 'pull_request'
