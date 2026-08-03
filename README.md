@@ -2,123 +2,139 @@
 
 **A portable evidence record for AI-assisted work.**
 
-Measure the AI work you already do, sign it with a key that never leaves your
-machine, and — if you choose — publish a record anyone can verify in their own
-browser.
+TOKENS measures supported AI-tool activity locally, signs a sanitized public snapshot on your device, and lets you choose whether to request a public Ledger profile.
 
 [ledger.imagineqira.com](https://ledger.imagineqira.com)
 
-```bash
-npm install -g qira-ledger
-```
+## Fastest working setup
 
-## Quick start
+Requirements: Git and Node.js 22.5 or newer.
 
-```bash
-mkdir my-ledger && cd my-ledger
-ledger init          # scaffold a workspace
-# edit profile/profile.json — displayName and headline
-ledger collect       # measure your local AI usage and sign it
-ledger status        # see what is measured and what is public
-```
-
-Nothing is public at this point. Publishing is a separate, explicit step:
+### macOS or Linux
 
 ```bash
-ledger list-me       # read the disclosure, answer once
-ledger unlist        # withdraw at any time
+curl -fsSL https://ledger.imagineqira.com/install.sh | bash
+cd ~/TOKENS
+npm run join
 ```
 
-After you opt in once, `ledger collect` keeps your published record current
-automatically. You are never asked again.
+### Windows PowerShell
 
-## Commands
+```powershell
+irm https://ledger.imagineqira.com/install.ps1 | iex
+Set-Location "$HOME\TOKENS"
+npm run join
+```
+
+`npm run join` is the production onboarding path. It:
+
+1. Creates or updates your self-submitted profile.
+2. Lets you enable Claude Code, Codex, and project scanning separately.
+3. Measures enabled sources locally.
+4. Generates and signs a sanitized snapshot.
+5. Prints the exact public JSON payload.
+6. Separately asks whether to continue to public directory enrollment.
+
+Installing, scanning, and creating a profile never make you public automatically.
+
+## Current publication model
+
+Ledger is currently a static website. It does not yet run a production account or upload server.
+
+Public enrollment therefore uses the GitHub-backed path:
+
+```bash
+npm run list-me
+```
+
+That command:
+
+- shows the directory disclosure;
+- treats bare Enter as no;
+- records explicit consent locally;
+- publishes only the signed snapshot to a repository controlled by the member;
+- opens a pull request adding the snapshot URL to the Ledger registry.
+
+GitHub CLI authentication is needed for the automatic path. When `gh` is unavailable, the command prints a manual fallback.
+
+The old managed-publication prototype is still available to developers as:
+
+```bash
+npm run publish:serve
+PUBLISH_API_URL=http://127.0.0.1:8787 npm run publish:ledger:dev -- --handle YOU --email you@example.com
+```
+
+It is not the production enrollment route. `npm run publish:ledger` now fails clearly instead of pretending a localhost development server can update the live site.
+
+## Useful commands
 
 | Command | What it does |
 | --- | --- |
-| `ledger init` | Create a workspace in the current directory |
-| `ledger collect` | Measure local AI usage, sign a snapshot |
-| `ledger status` | What is measured, published, and consented to |
-| `ledger list-me` | Join the public directory (asks once) |
-| `ledger unlist` | Withdraw from the public directory |
-| `ledger consent` | Review or change what may be published |
-| `ledger export` | Copy everything held locally about you |
+| `npm run join` | Guided profile, consent, scan, sign, preview, and optional enrollment |
+| `npm run consent` | Show what each source reads and what may be published |
+| `npm run ingest` | Read enabled local provider records into private SQLite |
+| `npm run collect` | Build and sign the sanitized snapshot |
+| `npm run consent:preview` | Print the exact public payload |
+| `npm run list-me` | Request a public directory listing |
+| `npm run unlist` | Withdraw from the public directory |
+| `npm run consent:export` | Export locally held derived data |
+| `npm run consent:delete` | Delete locally held derived data |
+| `npm run verify` | Verify a signed snapshot |
 
-## What it reads, and what it never publishes
+## What it reads and never publishes
 
-It reads the usage logs Claude Code and Codex already write on your machine.
+Supported sources currently include Claude Code and Codex local session records.
 
-**Published:** token counts, dates, model names, and whatever you put in your
-profile files.
+Potentially published, subject to consent:
 
-**Never published:** prompt text, response text, source code, absolute file
-paths, git branch names, usernames, hostnames, secrets, API keys, or raw provider
-account identifiers. Session identifiers are stored as keyed hashes under a salt
-that never leaves your machine.
+- token counts;
+- dates;
+- model names;
+- self-submitted profile fields;
+- allowlisted project summaries when project scanning is enabled.
 
-Publication uses an allowlist, not a blocklist: a field is published because it
-was explicitly permitted, not because nobody remembered to redact it. A
-fail-closed secret scan runs before anything is written.
+Never published:
 
-## What a signature does and does not prove
+- prompts;
+- model responses;
+- source code;
+- raw logs;
+- absolute paths;
+- usernames or hostnames;
+- credentials or API keys;
+- private signing keys;
+- raw provider account identifiers.
 
-A signature proves a snapshot came from a device key and has not been altered
-since. It does **not** prove who holds that key, and it cannot prove your provider
-logs were genuine — anyone controlling a machine could feed the collector
-fabricated logs and it would sign them faithfully.
+Publication constructs an allowlisted payload and runs a fail-closed privacy scan before signing.
 
-**There is no score.** Token volume is evidence of activity, not expertise,
-productivity, efficiency, or professional value. Nothing here ranks people, and
-no profile infers skill from usage. See
-[what each signal can establish](https://ledger.imagineqira.com/claims).
+## What a signature establishes
 
-## A workspace is a directory
+A valid Ed25519 signature establishes that the signed bytes came from a device key and were not changed afterward.
 
-```
-profile/profile.json    who you are, and where your snapshot is served
-profile/consent.json    what you have agreed may be published
-public/data/            your signed snapshot and history
-.tokens-cache/          incremental scan state (safe to delete)
-```
+It does not establish:
 
-Your evidence is a folder you own, not rows in someone's database. `profile/`
-and `.tokens-cache/` are gitignored by default — they hold your identity and a
-per-device salt.
+- legal identity;
+- expertise;
+- authorship;
+- permission;
+- quality;
+- honest source logs;
+- outcomes.
 
-## Requirements
-
-- **Node 22.5+** — the event ledger uses the built-in `node:sqlite`, so there are
-  no native modules and no runtime dependencies.
-- macOS, Linux, or Windows.
-- [`ccusage`](https://www.npmjs.com/package/ccusage) for Claude Code parsing, and
-  [`gh`](https://cli.github.com) if you want `list-me` to open your join pull
-  request for you.
-
-## Privacy
-
-There is no account and no Ledger server that receives your data. Measurement
-happens entirely on your machine and stays there. Publishing is a separate act
-you choose: if you join the directory, your snapshot is hosted in your own
-repository and your entry is added by a pull request you open yourself — so the
-entry is public, permanently, in git history.
-
-[Privacy](https://ledger.imagineqira.com/privacy) ·
-[Terms](https://ledger.imagineqira.com/terms) ·
-[How verification works](https://ledger.imagineqira.com/verify)
+There is no universal skill score. Token volume is evidence of activity, not expertise, productivity, efficiency, compensation, or professional value.
 
 ## Development
 
-This repository contains both the CLI and the static site that renders published
-records.
-
 ```bash
 npm ci
-npm run collect        # same as `ledger collect`, from source
-npm run build:cli      # bundle dist-cli/
-npm run build          # build the website
-npx vitest run         # tests
+npm run typecheck
+npm test
+npm run build
+npm run validate:data
+npm run dev
+open "http://localhost:5199/join"
 ```
 
-Architecture, security, and product notes live under `docs/`.
+The static site is served from this repository and the custom domain is configured by `public/CNAME`.
 
 MIT © Qira LLC
