@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-04T23:09:22.166Z
+- **Generated at:** 2026-08-05T02:12:55.278Z
 - **Collector:** 0.4.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `fceddc584b6e531ff366453d7805fb483d904d093c8441413286b5186c7680c4`
+- **Snapshot hash:** `bd337914442e984c8fdfb1c2949b67ece09bc3a63917aac48a6ab1768f52c394`
 
 ## Identity (self-submitted)
 
@@ -47,7 +47,7 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 - Current / longest streak (days): 0 / 26
 - Tools: Codex, Claude Code
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5, gpt-5.6-luna
-- Projects active (collector-observed locally): 6
+- Projects active (collector-observed locally): 8
 
 Exact total tokens (provider-reported sums): **37880335153**
 
@@ -150,12 +150,12 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 ### My Digital
 
 - Type: deployment
-- Verification: **link_provided**
+- Verification: **collector_observed**
 - Linked local project: My Digital
 - Period: 2026
 - QEV-backed digital goods and licensing surface.
 - URL: — https://mydigital.imagineqira.com
-- Basis: Public link provided; not independently verified.
+- Basis: The local collector independently observed git/file activity for this project.
 
 ### LOLM — Latent Order Language Model
 
@@ -183,13 +183,13 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
   - Latent Order Language Model architecture and validation work.
 - **NFET / QEV** — found=true, status=research
   - Verification, encryption, and proof-layer experiments.
-- **My Digital** — found=false, status=shipping, url=https://mydigital.imagineqira.com
+- **My Digital** — found=true, status=shipping, url=https://mydigital.imagineqira.com
   - QEV-backed digital goods and licensing surface.
 - **Codey** — found=true, status=shipping, url=https://codey.imagineqira.com
   - Qira builder and agent-product workspace.
 - **PTI** — found=true, status=active, url=https://pti.imagineqira.com
   - Phoenix traffic intelligence surface.
-- **Question** — found=false, status=active, url=https://question.imagineqira.com
+- **Question** — found=true, status=active, url=https://question.imagineqira.com
   - Qira question and cognition experiment.
 - **TOKENS** — found=true, status=instrumented
   - Public AI-agent usage observatory.
@@ -278,12 +278,6 @@ Token volume is evidence of activity, not expertise, productivity, efficiency, o
 - Tier: collector_observed · Provenance: local_allowlisted_project_scan · Confidence: medium
 - Explains: Local collector found a linked project. Not identity, quality, or sole authorship.
 - Allowed: activity_occurred
-- Excluded: identity, authorship, expertise, quality, productivity, permission, outcome, compensation_fit, authorship
-
-### Link provided (`link_provided_work`)
-
-- Tier: self_submitted · Provenance: member_supplied_https_url · Confidence: low
-- Explains: Public link provided by the member. Not independently verified.
 - Excluded: identity, authorship, expertise, quality, productivity, permission, outcome, compensation_fit, authorship
 
 ### Self-submitted identity (`self_submitted_identity`)
