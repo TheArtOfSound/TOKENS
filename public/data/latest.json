@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-07T08:06:50.431Z",
+  "generatedAt": "2026-08-07T16:13:44.544Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
@@ -3662,7 +3662,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "c68c15c",
+        "commit": "981a631",
         "changedFiles": 0
       },
       "stack": [],
@@ -3813,34 +3813,18 @@
       "description": "Phoenix traffic intelligence surface.",
       "found": true,
       "git": {
-        "branch": "main",
-        "commit": "5e9ce67",
-        "changedFiles": 1
+        "branch": null,
+        "commit": null,
+        "changedFiles": null
       },
-      "stack": [
-        "React",
-        "Vite",
-        "TypeScript",
-        "Tailwind"
-      ],
-      "scripts": [
-        "dev",
-        "build",
-        "lint",
-        "preview"
-      ],
+      "stack": [],
+      "scripts": [],
       "fileCounts": {
-        "docs": 1,
-        "js": 1,
-        "html": 3,
-        "json": 5,
-        "tsx": 3,
-        "css": 1,
-        "ts": 1
+        "html": 1
       },
-      "lastModified": "2026-06-13T12:12:02.092Z",
+      "lastModified": "2026-08-07T05:06:57.310Z",
       "scannerWarnings": [
-        "match:scored score:585 text~pti, text~phoenix-traffic, domain=pti.imagineqira.com, package.json, vite"
+        "match:scored score:870 folder=pti, text~pti, text~phoenix-traffic, domain=pti.imagineqira.com"
       ],
       "publicUrl": "https://pti.imagineqira.com"
     },
@@ -3874,7 +3858,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "c68c15c",
+        "commit": "981a631",
         "changedFiles": 0
       },
       "stack": [
@@ -3908,7 +3892,7 @@
         "css": 2,
         "tsx": 22
       },
-      "lastModified": "2026-08-07T08:06:48.724Z",
+      "lastModified": "2026-08-07T15:09:18.039Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4311,7 +4295,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "3c3874f64a4de426d7b04c615d22da3164fc5b33be0b19ee609ac17cb3e29aea",
+    "snapshotSha256": "0cd20415a538d9bdb798f4b9487c53260cc9dd5d59831759599b61736b586037",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4740,12 +4724,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-07T08:06:51.189Z",
-    "nonce": "55d0bdeb775e7aa2c70265893aa22bb6",
+    "issuedAt": "2026-08-07T16:13:48.068Z",
+    "nonce": "a221fcddbc18d8630fb9eda8c10dbac0",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "e86b012c800d997d46384ff88550ee5886d5f052759758d8856a6f5ea3cf89d7",
-    "signature": "MtA8vbh1IIT5T9j4RDssNOBfm+eQrfKxskbWsGhlkkmyCqg4PYyMgh4fqMoKgJ/hPP0ZUCYw6r7BCT6/gTbLDg==",
+    "payloadSha256": "1ae8456731634fa80335e50d99ca85db29b34ac7f526e46639239e3b4960caf0",
+    "signature": "jvlgnpVd4W/UMNAxJ7bUBhNq86pl3hWeORudU7N2IpDE5UHUhXSuuX4NKX10qAjG6WFQvJ79vIY+7cT39a/RCg==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
