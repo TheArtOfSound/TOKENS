@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-07T02:28:50.632Z
-- **Collector:** 0.4.0
+- **Generated at:** 2026-08-07T02:59:56.538Z
+- **Collector:** 0.5.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `d14f8b5c30d1807543beb6cab3ae810b9bcc203035742c9c88583483c90899ee`
+- **Snapshot hash:** `22baf3a38b754cf75b88bac5b7c7a1361e2df1fdb3a44527f4229b3d8fd7d398`
 
 ## Identity (self-submitted)
 
@@ -41,15 +41,15 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 
 ## Measured activity
 
-- Active AI-work days: **104**
-- Span: 2026-02-26 → 2026-08-01 (157 days)
-- Last 30 / 90 days active: 24 / 72
-- Current / longest streak (days): 0 / 26
-- Tools: Codex, Claude Code
+- Active AI-work days: **110**
+- Span: 2026-02-26 → 2026-08-06 (162 days)
+- Last 30 / 90 days active: 30 / 78
+- Current / longest streak (days): 44 / 44
+- Tools: Codex, Claude Code, Grok
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5, gpt-5.6-luna
 - Projects active (collector-observed locally): 8
 
-Exact total tokens (provider-reported sums): **37880335153**
+Exact total tokens (provider-reported sums): **38060171404**
 
 _Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value._
 
@@ -57,8 +57,8 @@ _Token volume is evidence of activity, not expertise, productivity, efficiency, 
 
 - Cache reuse share: **98.9%**
 - Fresh token share: **1.1%**
-- Output share of in+out: **23%**
-- Avg tokens / active day: **364233992**
+- Output share of in+out: **22.7%**
+- Avg tokens / active day: **346001558**
 
 Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class.
 
@@ -196,7 +196,7 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ## Agent operation telemetry (sanitized hierarchy)
 
-- Total usage events: **152155**
+- Total usage events: **152339**
 - Distinct sessions (local pseudonyms, count only): **45**
 - Median events / session: 464
 - p95 events / session: 4776
@@ -221,6 +221,10 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
   - claude-opus-5: 3710 events, 8 sessions
   - claude-opus-4-6: 1396 events, 1 sessions
   - claude-haiku-4-5-20251001: 787 events, 7 sessions
+- **grok**: 184 events, 0 sessions, 179836251 tokens
+  - grok-4.5-build: 175 events, 0 sessions
+  - grok-4.5: 5 events, 0 sessions
+  - grok-4.5-build-free: 4 events, 0 sessions
 
 Agent-operation telemetry derived from local provider usage events. Counts and timing only — no prompts, responses, tool arguments, paths, or raw session ids. Session identity is an on-device HMAC pseudonym and is not published.
 
@@ -298,13 +302,13 @@ Token volume is evidence of activity, not expertise, productivity, efficiency, o
 - Schema: 2.0.0
 - Proves: The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact.
 - Raw logs published: false
-- Integrity flags: 0
+- Integrity flags: 1
   - [ok] No future-dated activity — All activity is dated on or before the snapshot date.
   - [ok] Plausible daily volume — No day exceeds the implausible-volume threshold.
   - [ok] Well-formed totals — All totals are finite and non-negative.
   - [ok] No duplicate day-rows — Each (date, provider) appears once.
   - [ok] Recognized model families — All model names match known provider families.
-  - [ok] No large retroactive backfill — No unusual retroactive changes versus the last snapshot.
+  - [flag] No large retroactive backfill — 13 historical day-row(s) appeared that were not in the previous snapshot.
 
 ---
 
