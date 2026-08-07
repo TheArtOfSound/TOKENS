@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-07T07:06:10.964Z
+- **Generated at:** 2026-08-07T07:36:30.641Z
 - **Collector:** 0.5.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `2a1624a728ac0af33b318284ae7510aaa1b3c90a61f42065162c4b69dfceed18`
+- **Snapshot hash:** `47964504c8ab1ce3d061c1a7182baa5f2f211e5de09747f45c68ee735375c53f`
 
 ## Identity (self-submitted)
 
