@@ -24,8 +24,9 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { MEASURED_SOURCE_KEYS, providerDisplayName, type MeasuredSourceKey } from './providers';
 
-export const CONSENT_VERSION = 2;
+export const CONSENT_VERSION = 3;
 
 /**
  * Identifier for the exact disclosure text a member read before agreeing to be
@@ -65,7 +66,8 @@ export interface DirectoryListingConsent {
 }
 const CONSENT_FILE = path.join(process.cwd(), 'profile', 'consent.json');
 
-export type SourceKey = 'claude' | 'codex' | 'projectScan';
+/** Measured agent sources + project scan. Missing keys load as enabled. */
+export type SourceKey = MeasuredSourceKey | 'projectScan';
 
 /** Fields the user can individually exclude from the published payload. */
 export type FieldKey =
@@ -111,6 +113,26 @@ export interface SourceDisclosure {
   discards: string[];
   evidenceClass: string;
   networkAccess: string;
+}
+
+function ccusageAgentDisclosure(key: MeasuredSourceKey): SourceDisclosure {
+  const name = providerDisplayName(key);
+  return {
+    key,
+    name: `${name} usage`,
+    reads: `ccusage ${key} daily --json (application-reported daily aggregates; offline pricing table)`,
+    directories: [`local ${name} / agent logs as discovered by ccusage (never uploaded by this collector)`],
+    extracts: ['date', 'model names', 'input/output/cache token counts', 'estimated cost (price table)'],
+    discards: [
+      'prompt text',
+      'response text',
+      'absolute file paths',
+      'account identifiers',
+      'every field not named above',
+    ],
+    evidenceClass: 'application_reported',
+    networkAccess: 'none (--offline uses a cached pricing table)',
+  };
 }
 
 export const SOURCE_DISCLOSURES: SourceDisclosure[] = [
@@ -164,9 +186,35 @@ export const SOURCE_DISCLOSURES: SourceDisclosure[] = [
     networkAccess: 'none (--offline uses a cached pricing table)',
   },
   {
+    key: 'grok',
+    name: 'Grok (Grok Build / xAI) usage',
+    reads: 'local session usage from ~/.grok/sessions/**/updates.jsonl (session-final totals only)',
+    directories: [
+      '~/.grok/sessions/**/updates.jsonl — opened and parsed directly by this collector',
+      'override with TOKENS_GROK_DIR',
+    ],
+    extracts: [
+      'timestamp',
+      'model name (e.g. grok-4.5-build)',
+      'session-final input/output/cache/reasoning token counts',
+      'a keyed HMAC of the file path (not the path itself)',
+    ],
+    discards: [
+      'prompt text and chat history',
+      'cwd and all absolute file paths',
+      'session ids and request ids (raw)',
+      'every field not named above — extraction is an allowlist',
+    ],
+    evidenceClass: 'provider_reported',
+    networkAccess: 'none',
+  },
+  ...MEASURED_SOURCE_KEYS.filter((k) => k !== 'claude' && k !== 'codex' && k !== 'grok').map(
+    ccusageAgentDisclosure,
+  ),
+  {
     key: 'imported',
     name: 'Imported data (optional, off unless you import)',
-    reads: 'a file YOU point at with `npm run import`, e.g. a ChatGPT/Gemini/Cursor export or a CSV/JSON',
+    reads: 'a file YOU point at with `npm run import`, e.g. a ChatGPT/Gemini/Cursor/Kimi export or a CSV/JSON',
     directories: ['only the exact file path you pass to the import command'],
     extracts: ['date', 'provider', 'model', 'input/output/cache token counts — nothing else'],
     discards: ['prompt text', 'response text', 'titles', 'emails', 'any column not in the token allowlist'],
@@ -197,7 +245,7 @@ export const SOURCE_DISCLOSURES: SourceDisclosure[] = [
 
 export const FIELD_LABELS: Record<FieldKey, string> = {
   totals: 'All-time token totals',
-  providers: 'Per-provider summaries (Claude Code / Codex)',
+  providers: 'Per-provider summaries (Claude, Codex, Grok, Kimi, Gemini, …)',
   daily: 'Daily usage series (drives the activity graph and heatmap)',
   estimatedCost: 'Estimated cost in USD (a price-table estimate, not billing data)',
   models: 'Model names used',
@@ -207,11 +255,17 @@ export const FIELD_LABELS: Record<FieldKey, string> = {
   profileWork: 'Connected work artifacts and outcomes',
 };
 
+function defaultSources(): Record<SourceKey, boolean> {
+  const sources = { projectScan: true } as Record<SourceKey, boolean>;
+  for (const key of MEASURED_SOURCE_KEYS) sources[key] = true;
+  return sources;
+}
+
 function defaults(createdBy: ConsentConfig['createdBy']): ConsentConfig {
   return {
     version: CONSENT_VERSION,
     createdBy,
-    sources: { claude: true, codex: true, projectScan: true },
+    sources: defaultSources(),
     fields: {
       totals: true,
       providers: true,

@@ -39,7 +39,7 @@ const ingestedAt = new Date().toISOString();
 
 console.log('Detected sources:');
 for (const detection of detectAll()) {
-  const enabled = isSourceEnabled(consent, detection.provider as 'claude' | 'codex');
+  const enabled = isSourceEnabled(consent, detection.provider as import('./lib/consent').SourceKey);
   console.log(
     `  ${detection.name.padEnd(20)} ${detection.present ? `${detection.fileCount} files` : 'not present'}` +
       `  ${enabled ? '' : '(DISABLED by consent — will not be read)'}`,
@@ -51,7 +51,7 @@ let totalDuplicates = 0;
 const started = Date.now();
 
 for (const adapter of ADAPTERS) {
-  if (!isSourceEnabled(consent, adapter.provider as 'claude' | 'codex')) continue;
+  if (!isSourceEnabled(consent, adapter.provider as import('./lib/consent').SourceKey)) continue;
   if (!adapter.detect().present) continue;
 
   const t0 = Date.now();

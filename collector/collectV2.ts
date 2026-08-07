@@ -35,6 +35,7 @@ import { Ledger } from './lib/ledger';
 import { deriveTelemetry } from './lib/telemetry';
 import { renderAgentEvidenceMarkdown } from './lib/agentEvidenceMd';
 import { randomBytes } from 'node:crypto';
+import { CCUSAGE_AGENTS, type CcusageAgent } from './lib/providers';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
@@ -199,10 +200,13 @@ function readPracticeConfig(): PracticeConfig {
  */
 const OFFLINE_ARGS = process.env.TOKENS_CCUSAGE_ONLINE === '1' ? [] : ['--offline'];
 
-const PROVIDERS: Array<{ provider: 'claude' | 'codex'; args: string[] }> = [
-  { provider: 'claude', args: ['claude', 'daily', '--json', ...OFFLINE_ARGS] },
-  { provider: 'codex', args: ['codex', 'daily', '--json', ...OFFLINE_ARGS] },
-];
+/** Every agent ccusage can report — not just Claude/Codex. */
+const PROVIDERS: Array<{ provider: CcusageAgent; args: string[] }> = CCUSAGE_AGENTS.map(
+  (provider) => ({
+    provider,
+    args: [provider, 'daily', '--json', ...OFFLINE_ARGS],
+  }),
+);
 
 function runCcusage(args: string[]): { json: unknown } | { warning: string } {
   const bin = process.env.CCUSAGE_BIN || 'ccusage';

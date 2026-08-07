@@ -15,7 +15,7 @@
 export const CANONICAL_SCHEMA_VERSION = '2.0.0';
 
 /** Collector implementation version. Distinct from the schema version. */
-export const COLLECTOR_VERSION = '0.4.0';
+export const COLLECTOR_VERSION = '0.5.0';
 
 /**
  * How a measured value was obtained. Terminology is fixed by the dossier so the
@@ -35,7 +35,11 @@ export type MeasurementClass =
 
 export type Confidence = 'high' | 'medium' | 'low';
 
-export type Provider = 'claude' | 'codex' | 'unknown';
+/**
+ * Provider id (slug). Claude/Codex remain the original first-class sources;
+ * Grok, Kimi, Gemini, and other agents are also valid. See lib/providers.ts.
+ */
+export type Provider = string;
 
 /** The token metric shape used by totals / providers / daily rows (frozen contract). */
 export interface TokenMetrics {

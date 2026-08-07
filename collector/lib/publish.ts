@@ -570,7 +570,8 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
 
   const providers: Record<string, PublishedProvider> = {};
   for (const [key, summary] of Object.entries(draft.providers)) {
-    if (key !== 'claude' && key !== 'codex') continue;
+    // Accept any safe provider slug (claude, codex, kimi, grok, gemini, …).
+    if (!/^[a-z][a-z0-9_-]{0,39}$/.test(key)) continue;
     providers[key] = {
       provider: summary.provider,
       displayName: summary.displayName.slice(0, 40),
@@ -580,7 +581,12 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
   }
 
   const daily: PublishedDaily[] = draft.daily
-    .filter((row) => DATE_RE.test(row.date) && (row.provider === 'claude' || row.provider === 'codex'))
+    .filter(
+      (row) =>
+        DATE_RE.test(row.date) &&
+        typeof row.provider === 'string' &&
+        /^[a-z][a-z0-9_-]{0,39}$/.test(row.provider),
+    )
     .map((row) => ({
       date: row.date,
       provider: row.provider,
@@ -680,7 +686,7 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     sourceOfTruth: draft.sourceOfTruth === 'event_ledger' ? 'event_ledger' : 'ccusage_aggregate',
     providerConfidence: Object.fromEntries(
       Object.entries(draft.providerConfidence ?? {})
-        .filter(([key]) => key === 'claude' || key === 'codex')
+        .filter(([key]) => /^[a-z][a-z0-9_-]{0,39}$/.test(key))
         .map(([key, value]) => [
           key,
           {

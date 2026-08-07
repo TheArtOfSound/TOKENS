@@ -1,9 +1,15 @@
 # Importing usage from other AI sources
 
-Members can bring in usage from tools TOKENS does not read locally — ChatGPT/OpenAI,
-Gemini, Cursor, a spreadsheet, or another machine's `ccusage` — to paint a fuller
-picture. This is opt-in: it only happens when someone runs `npm run import` against
-a file they choose.
+Members can bring in usage from tools Ledger does not read locally — ChatGPT/OpenAI,
+Cursor, a spreadsheet, or another machine's `ccusage` — to paint a fuller picture.
+
+**Built-in local collection (no import needed):** Claude Code, Codex, **Grok**
+(`~/.grok/sessions`), and every agent `ccusage` supports including **Kimi**, Gemini
+CLI, Copilot CLI, OpenCode, Qwen, and others. Run `npm run ingest` then
+`npm run collect`.
+
+Import is still available for sources without a local adapter. This is opt-in: it
+only happens when someone runs `npm run import` against a file they choose.
 
 ## The one rule
 

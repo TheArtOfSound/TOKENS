@@ -51,10 +51,8 @@
     "providers": {
       "type": "object",
       "propertyNames": {
-        "enum": [
-          "claude",
-          "codex"
-        ]
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_-]{0,39}$"
       },
       "additionalProperties": {
         "$ref": "#/$defs/provider"
@@ -940,7 +938,7 @@
     "claimAuthority": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Claim-bounded evidence ladder: signal → provenance → allowed/excluded claims → confidence → limitations. Optional on historical snapshots; always emitted by collector ≥0.4.",
+      "description": "Claim-bounded evidence ladder: signal \u2192 provenance \u2192 allowed/excluded claims \u2192 confidence \u2192 limitations. Optional on historical snapshots; always emitted by collector \u22650.4.",
       "required": [
         "model",
         "combinedAuthorityRule",
@@ -1353,7 +1351,7 @@
     "durability": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Post-merge durability evidence when measured — never a quality score.",
+      "description": "Post-merge durability evidence when measured \u2014 never a quality score.",
       "required": [
         "note",
         "doesNotEstablish",
@@ -1561,11 +1559,8 @@
       ],
       "properties": {
         "provider": {
-          "enum": [
-            "claude",
-            "codex",
-            "unknown"
-          ]
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]{0,39}$"
         },
         "displayName": {
           "type": "string",
@@ -1638,11 +1633,8 @@
           "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
         },
         "provider": {
-          "enum": [
-            "claude",
-            "codex",
-            "unknown"
-          ]
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]{0,39}$"
         },
         "displayName": {
           "type": "string",

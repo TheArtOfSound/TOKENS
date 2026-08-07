@@ -18,7 +18,8 @@ import type { DraftSnapshot } from './publish';
 import type { Provider } from './canonical';
 
 export interface RawSource {
-  provider: Extract<Provider, 'claude' | 'codex'>;
+  /** Any agent slug (claude, codex, kimi, gemini, grok, …). */
+  provider: Provider;
   /** Parsed JSON from `ccusage <provider> daily --json`, or null if it failed. */
   json: unknown;
   /** A warning to record if this source failed to produce data. */

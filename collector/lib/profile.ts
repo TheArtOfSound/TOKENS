@@ -383,8 +383,8 @@ export function deriveActivity(
   const spanDays = firstActiveDate && lastActiveDate ? diffDaysUtc(firstActiveDate, lastActiveDate) + 1 : 0;
 
   const toolsUsed = Object.keys(providers)
-    .filter((key): key is Provider => key === 'claude' || key === 'codex')
-    .map((key) => providerDisplayName(key));
+    .filter((key) => /^[a-z][a-z0-9_-]{0,39}$/.test(key))
+    .map((key) => providerDisplayName(key as Provider));
   const modelsUsed = [...new Set(daily.flatMap((row) => row.models))].sort((a, b) => a.localeCompare(b)).slice(0, 24);
 
   return {

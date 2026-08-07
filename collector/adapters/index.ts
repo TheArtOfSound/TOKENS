@@ -9,6 +9,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { createJsonlAdapter } from './jsonlAdapter';
+import { createGrokAdapter } from './grokAdapter';
 import { createCodexExtractor } from '../lib/events';
 
 const home = os.homedir();
@@ -58,7 +59,9 @@ export const codexAdapter = createJsonlAdapter({
   extractorFactory: createCodexExtractor,
 });
 
-export const ADAPTERS = [claudeCodeAdapter, codexAdapter];
+export const grokAdapter = createGrokAdapter();
+
+export const ADAPTERS = [claudeCodeAdapter, codexAdapter, grokAdapter];
 
 export function detectAll() {
   return ADAPTERS.map((adapter) => ({

@@ -170,8 +170,27 @@ async function configureSources(rl: ReturnType<typeof createInterface>): Promise
     config.sources[key] = await yesNo(rl, `Enable ${source.name}?`, defaultOn);
   }
 
-  if (!config.sources.claude && !config.sources.codex) {
-    throw new Error('Enable at least one supported AI-tool source: Claude Code or Codex.');
+  const anyAgent =
+    config.sources.claude ||
+    config.sources.codex ||
+    config.sources.grok ||
+    config.sources.kimi ||
+    config.sources.gemini ||
+    config.sources.copilot ||
+    config.sources.opencode ||
+    config.sources.qwen ||
+    config.sources.amp ||
+    config.sources.droid ||
+    config.sources.codebuff ||
+    config.sources.hermes ||
+    config.sources.pi ||
+    config.sources.goose ||
+    config.sources.kilo ||
+    config.sources.openclaw;
+  if (!anyAgent) {
+    throw new Error(
+      'Enable at least one AI-tool source (Claude, Codex, Grok, Kimi, Gemini, Copilot, …).',
+    );
   }
 
   config.createdBy = 'user';

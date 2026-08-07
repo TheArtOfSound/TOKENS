@@ -14,6 +14,7 @@
  */
 
 import type { Provider, TokenMetrics } from './canonical';
+import { providerDisplayName, sanitizeProvider } from './providers';
 
 export interface NormalizedDaily extends TokenMetrics {
   date: string;
@@ -43,8 +44,7 @@ const isObj = (v: unknown): v is Record<string, unknown> =>
 
 const hasDate = (v: unknown): v is string => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}/.test(v);
 
-export const providerDisplayName = (p: Provider): string =>
-  p === 'claude' ? 'Claude Code' : p === 'codex' ? 'Codex' : 'Unknown';
+export { providerDisplayName };
 
 /** Add two metric objects. Cost stays null unless at least one side has an estimate. */
 export function addMetrics(a: TokenMetrics, b: TokenMetrics): TokenMetrics {
@@ -118,6 +118,7 @@ export function normalizeMetrics(record: Record<string, unknown>): {
     'cacheReadTokens',
     'cache_read_tokens',
     'cachedInputTokens',
+    'cachedReadTokens',
     'cache_read',
   ]);
   const cachedTokens = cacheCreationTokens + cacheReadTokens;
@@ -161,7 +162,9 @@ export function collectUsageRecords(
     return out;
   }
   if (!isObj(value)) return out;
-  const date = value.date ?? value.day ?? value.timestamp ?? value.createdAt ?? value.lastActivity;
+  // ccusage "all agents" daily uses `period`; per-agent daily uses `date`.
+  const date =
+    value.date ?? value.day ?? value.period ?? value.timestamp ?? value.createdAt ?? value.lastActivity;
   const usageShaped = [
     'inputTokens',
     'outputTokens',
@@ -189,16 +192,20 @@ export function normalizeProviderJson(json: unknown, provider: Provider): Normal
 
   for (const record of collectUsageRecords(json)) {
     const rawDate =
-      record.date ?? record.day ?? record.timestamp ?? record.createdAt ?? record.lastActivity;
+      record.date ??
+      record.day ??
+      record.period ??
+      record.timestamp ??
+      record.createdAt ??
+      record.lastActivity;
     if (!hasDate(rawDate)) continue;
     const date = rawDate.slice(0, 10);
 
-    // Respect an explicit provider on the record if present and known.
-    const recordProvider =
-      typeof record.provider === 'string' && (record.provider === 'claude' || record.provider === 'codex')
-        ? (record.provider as Provider)
-        : provider;
-    if (recordProvider !== 'claude' && recordProvider !== 'codex') continue;
+    // Prefer an explicit provider/agent on the record when it sanitizes cleanly;
+    // otherwise use the caller-assigned provider (e.g. from `ccusage kimi …`).
+    const fromRecord = sanitizeProvider(record.provider ?? record.agent ?? record.source);
+    const recordProvider = (fromRecord && fromRecord !== 'all' ? fromRecord : provider) as Provider;
+    if (!sanitizeProvider(recordProvider)) continue;
 
     const { metrics, reportedTotal } = normalizeMetrics(record);
     if (metrics.totalTokens <= 0) continue;
