@@ -29,7 +29,7 @@ npm run join
 `npm run join` is the production onboarding path. It:
 
 1. Creates or updates your self-submitted profile.
-2. Lets you enable Claude Code, Codex, and project scanning separately.
+2. Lets you enable each supported source separately, including Claude Code, Codex, Grok, Kimi, Gemini CLI, Copilot CLI, OpenCode, and more.
 3. Measures enabled sources locally.
 4. Generates and signs a sanitized snapshot.
 5. Prints the exact public JSON payload.
@@ -83,7 +83,7 @@ It is not the production enrollment route. `npm run publish:ledger` now fails cl
 
 ## What it reads and never publishes
 
-Supported sources currently include Claude Code and Codex local session records.
+Built-in event-level adapters currently support Claude Code, Codex, Grok, and Kimi local session records. Ledger also merges offline daily aggregates for Gemini CLI, Copilot CLI, OpenCode, Amp, Droid, Codebuff, Hermes, pi-agent, Goose, Kilo, Qwen, and OpenClaw when those sources are enabled and available through `ccusage`.
 
 Potentially published, subject to consent:
 

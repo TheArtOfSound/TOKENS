@@ -24,8 +24,6 @@ function initials(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || 'Q';
 }
 
-const TOOLS = ['Claude Code', 'Codex'];
-
 export function Employer() {
   const { profiles, loading, error } = useMemberProfiles();
   const [tool, setTool] = useState('');
@@ -35,6 +33,12 @@ export function Employer() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const tools = useMemo(() => {
+    const set = new Set<string>();
+    profiles.forEach((p) => p.toolsUsed.forEach((candidate) => set.add(candidate)));
+    return [...set].sort();
+  }, [profiles]);
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -98,7 +102,7 @@ export function Employer() {
               <label htmlFor="emp-tool">Tool</label>
               <select id="emp-tool" value={tool} onChange={(e) => setTool(e.target.value)}>
                 <option value="">Any tool</option>
-                {TOOLS.map((t) => <option key={t} value={t}>{t}</option>)}
+                {tools.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div className="fgroup">

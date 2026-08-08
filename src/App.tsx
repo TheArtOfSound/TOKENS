@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { createElement, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { compactNumber, currency, dateTime, fullNumber, percent } from './lib/format';
 import { MEASUREMENT_LABEL, PublicUsageSnapshot, QiraProjectScan, sampleSnapshot } from './lib/usage';
 import { ProfileView } from './views/ProfileView';
@@ -291,7 +292,7 @@ function HowItWorks() {
         <li>
           <span className="how-num">1</span>
           <h3>Measure locally</h3>
-          <p>You install a small open-source program — the <strong>collector</strong> — which reads the usage logs Claude Code and Codex already write on your machine and counts tokens into a private local ledger. Prompts, code, and file paths are never read.</p>
+          <p>You install a small open-source program — the <strong>collector</strong> — which reads the usage records supported AI agents already write on your machine and counts tokens into a private local ledger. Prompts, code, and file paths are never read.</p>
         </li>
         <li>
           <span className="how-num">2</span>
@@ -471,8 +472,12 @@ const NAV_LINKS: Array<{ route: Parameters<typeof href>[0]; label: string }> = [
   { route: { name: 'compare' }, label: 'Compare' },
 ];
 
+const OORT_SIGN_IN = 'https://oortstack.com/auth/signin';
+
 function SiteHeader({ routeName }: { routeName: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggle = useRef<HTMLButtonElement>(null);
+  const menuWasOpen = useRef(false);
 
   // Close the drawer on route change and Escape; lock body scroll while open.
   useEffect(() => {
@@ -480,7 +485,13 @@ function SiteHeader({ routeName }: { routeName: string }) {
   }, [routeName]);
 
   useEffect(() => {
-    if (!menuOpen) return;
+    document.body.classList.toggle('ledger-menu-open', menuOpen);
+    if (!menuOpen) {
+      if (menuWasOpen.current) menuToggle.current?.focus();
+      menuWasOpen.current = false;
+      return () => document.body.classList.remove('ledger-menu-open');
+    }
+    menuWasOpen.current = true;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMenuOpen(false);
     };
@@ -490,6 +501,7 @@ function SiteHeader({ routeName }: { routeName: string }) {
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
+      document.body.classList.remove('ledger-menu-open');
     };
   }, [menuOpen]);
 
@@ -501,7 +513,58 @@ function SiteHeader({ routeName }: { routeName: string }) {
     navigate(`${href({ name: 'directory' })}${query}`);
   };
 
+  const mobileMenu = (
+    <>
+      <button
+        type="button"
+        className="menu-backdrop"
+        tabIndex={menuOpen ? 0 : -1}
+        aria-hidden={!menuOpen}
+        onClick={() => setMenuOpen(false)}
+      >
+        <span className="visually-hidden">Close menu</span>
+      </button>
+      <nav
+        id="mobile-nav"
+        className="mobile-nav"
+        aria-label="Mobile"
+        aria-hidden={!menuOpen}
+      >
+        <div className="mobile-nav-head">
+          <strong>Menu</strong>
+          <button type="button" className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
+            <span aria-hidden="true">&times;</span>
+            <span className="visually-hidden">Close menu</span>
+          </button>
+        </div>
+        <form className="mobile-search" role="search" onSubmit={runSearch}>
+          <label className="visually-hidden" htmlFor="mobile-search">Search people by name, skill, or tool</label>
+          <input id="mobile-search" name="q" type="search" placeholder="Search people, skills, or tools" autoComplete="off" />
+        </form>
+        {NAV_LINKS.map(({ route, label }) => (
+          <a
+            key={route.name}
+            href={href(route)}
+            aria-current={routeName === route.name ? 'page' : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
+            {label}
+          </a>
+        ))}
+        <div className="mobile-nav-actions">
+          <a className="oort-signin" href={OORT_SIGN_IN} onClick={() => setMenuOpen(false)}>
+            Sign in with Oort <span aria-hidden="true">↗</span>
+          </a>
+          <a className="nav-button" href={href({ name: 'join' })} onClick={() => setMenuOpen(false)}>
+            Add your profile
+          </a>
+        </div>
+      </nav>
+    </>
+  );
+
   return (
+    <>
     <header className={`topbar ${menuOpen ? 'is-menu-open' : ''}`}>
       <a className="brand" href={href({ name: 'home' })}><LedgerMark /> <span>LEDGER</span></a>
 
@@ -523,12 +586,19 @@ function SiteHeader({ routeName }: { routeName: string }) {
             {label}
           </a>
         ))}
+        <a className="oort-signin" href={OORT_SIGN_IN}>Oort sign in <span aria-hidden="true">↗</span></a>
         <a className="nav-button" href={href({ name: 'join' })}>Add your profile</a>
       </nav>
+
+      <div className="qira-apps-chrome" aria-label="Qira Apps">
+        <a className="qira-home-link" href="https://imagineqira.com/" title="Qira company site">Qira</a>
+        {createElement('qira-product-launcher', { 'current-product': 'ledger', theme: 'light' })}
+      </div>
 
       <button
         type="button"
         className="menu-toggle"
+        ref={menuToggle}
         aria-expanded={menuOpen}
         aria-controls="mobile-nav"
         onClick={() => setMenuOpen((o) => !o)}
@@ -538,42 +608,9 @@ function SiteHeader({ routeName }: { routeName: string }) {
           <i /><i /><i />
         </span>
       </button>
-
-      {/* Backdrop + drawer: only interactive when open. */}
-      <button
-        type="button"
-        className="menu-backdrop"
-        tabIndex={menuOpen ? 0 : -1}
-        aria-hidden={!menuOpen}
-        onClick={() => setMenuOpen(false)}
-      >
-        <span className="visually-hidden">Close menu</span>
-      </button>
-      <nav
-        id="mobile-nav"
-        className="mobile-nav"
-        aria-label="Mobile"
-        aria-hidden={!menuOpen}
-      >
-        <form className="mobile-search" role="search" onSubmit={runSearch}>
-          <label className="visually-hidden" htmlFor="mobile-search">Search people by name, skill, or tool</label>
-          <input id="mobile-search" name="q" type="search" placeholder="Search people, skills, or tools" autoComplete="off" />
-        </form>
-        {NAV_LINKS.map(({ route, label }) => (
-          <a
-            key={route.name}
-            href={href(route)}
-            aria-current={routeName === route.name ? 'page' : undefined}
-            onClick={() => setMenuOpen(false)}
-          >
-            {label}
-          </a>
-        ))}
-        <a className="nav-button" href={href({ name: 'join' })} onClick={() => setMenuOpen(false)}>
-          Add your profile
-        </a>
-      </nav>
     </header>
+    {typeof document !== 'undefined' ? createPortal(mobileMenu, document.body) : null}
+    </>
   );
 }
 

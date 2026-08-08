@@ -37,7 +37,7 @@ const STEPS: Array<{ label: string; lines: Line[] }> = [
     label: 'Measure, locally',
     lines: [
       { kind: 'cmd', text: 'ledger collect' },
-      { kind: 'dim', text: '  reading local Claude Code and Codex usage logs…' },
+      { kind: 'dim', text: '  reading enabled local AI-agent usage records…' },
       { kind: 'out', text: '  signed snapshot written to public/data/latest.json' },
       { kind: 'dim', text: '  nothing left this machine' },
     ],

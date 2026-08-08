@@ -115,7 +115,7 @@ export function Join() {
         <p className="jcard-sub">The local wizard handles the steps that previously required several commands:</p>
         <ol className="wizard-steps-list">
           <li>Create or update your public profile fields.</li>
-          <li>Choose Claude Code, Codex, and project scanning individually.</li>
+          <li>Choose supported sources individually: Claude Code, Codex, Grok, Kimi, Gemini, Copilot, OpenCode, and more.</li>
           <li>Measure enabled sources into the private local ledger.</li>
           <li>Generate and sign the public snapshot on your device.</li>
           <li>Print the complete JSON payload before any public action.</li>

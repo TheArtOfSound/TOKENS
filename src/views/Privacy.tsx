@@ -60,7 +60,8 @@ export function Privacy() {
 
       <h2>What the collector does on your machine</h2>
       <p>
-        The collector runs locally and reads the usage logs Claude Code and Codex already write. It is
+        The collector runs locally and reads enabled usage records from supported agents, including Claude
+        Code, Codex, Grok, Kimi, Gemini CLI, Copilot CLI, and OpenCode. It is
         allowlist-based: it names the handful of fields it wants and constructs a new object, so a field it
         doesn't know about cannot leak by default.
       </p>
