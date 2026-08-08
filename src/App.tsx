@@ -140,7 +140,7 @@ function ProviderPanel({ snapshot }: { snapshot: PublicUsageSnapshot }) {
   return (
     <section className="panel">
       <div className="section-kicker"><span /> AGENT SOURCES</div>
-      <h2>Claude Code / Codex.</h2>
+      <h2>Agent sources (Claude, Codex, Grok, Kimi, …).</h2>
       <div className="rows">
         {providers.length ? providers.map((provider) => (
           <div className="data-row" key={provider.provider}>

@@ -84,5 +84,8 @@
     "dist-cli/",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
 }

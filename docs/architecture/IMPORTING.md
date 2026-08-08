@@ -4,9 +4,11 @@ Members can bring in usage from tools Ledger does not read locally — ChatGPT/O
 Cursor, a spreadsheet, or another machine's `ccusage` — to paint a fuller picture.
 
 **Built-in local collection (no import needed):** Claude Code, Codex, **Grok**
-(`~/.grok/sessions`), and every agent `ccusage` supports including **Kimi**, Gemini
-CLI, Copilot CLI, OpenCode, Qwen, and others. Run `npm run ingest` then
-`npm run collect`.
+(`~/.grok/sessions/**/updates.jsonl`), **Kimi / Kimi Code**
+(`~/.kimi` + `~/.kimi-code` `**/wire.jsonl`), and every other agent `ccusage`
+supports (Gemini CLI, Copilot CLI, OpenCode, Qwen, …). `npm run collect`
+auto-ingests local adapters, then merges ccusage for providers with no
+event-level ledger rows yet.
 
 Import is still available for sources without a local adapter. This is opt-in: it
 only happens when someone runs `npm run import` against a file they choose.

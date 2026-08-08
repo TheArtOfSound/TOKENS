@@ -8,7 +8,7 @@
  *
  * Two collection paths:
  *   1. ccusage CLI  — application-reported daily aggregates (many agents).
- *   2. Local adapters — event-level JSONL (claude, codex, grok today).
+ *   2. Local adapters — event-level JSONL (claude, codex, grok, kimi today).
  *
  * Provider ids are stable lowercase slugs. Unknown free-form strings are
  * accepted only after sanitization so a hostile export cannot inject paths.
@@ -45,7 +45,7 @@ export const CCUSAGE_AGENTS = [
 export type CcusageAgent = (typeof CCUSAGE_AGENTS)[number];
 
 /** Local adapters (event-level), including sources ccusage does not cover. */
-export const LOCAL_ADAPTER_PROVIDERS = ['claude', 'codex', 'grok'] as const;
+export const LOCAL_ADAPTER_PROVIDERS = ['claude', 'codex', 'grok', 'kimi'] as const;
 
 export type LocalAdapterProvider = (typeof LOCAL_ADAPTER_PROVIDERS)[number];
 
@@ -166,6 +166,12 @@ export function defaultProviderConfidence(provider: Provider): {
     return {
       confidence: 'high',
       note: 'Session-final usage from local Grok Build updates.jsonl (one event per session).',
+    };
+  }
+  if (provider === 'kimi') {
+    return {
+      confidence: 'high',
+      note: 'Turn-scoped usage from local Kimi wire.jsonl (StatusUpdate / usage.record).',
     };
   }
   if (isCcusageAgent(provider)) {

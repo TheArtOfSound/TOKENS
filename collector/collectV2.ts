@@ -35,7 +35,8 @@ import { Ledger } from './lib/ledger';
 import { deriveTelemetry } from './lib/telemetry';
 import { renderAgentEvidenceMarkdown } from './lib/agentEvidenceMd';
 import { randomBytes } from 'node:crypto';
-import { CCUSAGE_AGENTS, type CcusageAgent } from './lib/providers';
+import { CCUSAGE_AGENTS, defaultProviderConfidence, type CcusageAgent } from './lib/providers';
+import { runNpmScript } from './lib/runNpmScript';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'data');
 const LATEST = path.join(OUT_DIR, 'latest.json');
@@ -255,8 +256,23 @@ function main(): void {
     console.log('Run `npm run consent` to see exactly what each source reads, and to turn any of it off.');
   }
 
-  // Source of truth is the event ledger. Prefer it first so we can skip ccusage
-  // when the ledger already has measured rows (ccusage is only a fallback path).
+  // Auto-ingest local adapters (Claude/Codex/Grok/Kimi) so collect always sees
+  // fresh event-level rows without a separate manual step. Skip in CI/tests via
+  // TOKENS_SKIP_AUTO_INGEST=1, or when forced to pure ccusage.
+  if (process.env.TOKENS_SKIP_AUTO_INGEST !== '1' && process.env.TOKENS_SOURCE !== 'ccusage') {
+    console.log('Collect: auto-ingest local adapters…');
+    try {
+      runNpmScript('ingest');
+    } catch (error) {
+      console.warn(
+        `Auto-ingest failed (${error instanceof Error ? error.message : 'unknown'}); continuing with existing ledger + ccusage.`,
+      );
+    }
+  }
+
+  // Source of truth is the event ledger for providers we adapt locally.
+  // ccusage still runs for agents with no ledger rows (Gemini, Copilot, Kimi
+  // when wire.jsonl is empty, …) so multi-provider totals stay complete.
   console.log('Collect: reading event ledger…');
   const ledgerData = process.env.TOKENS_SOURCE === 'ccusage'
     ? { rows: [], warnings: ['Forced ccusage source via TOKENS_SOURCE=ccusage.'], eventCount: 0, providerConfidence: {}, imported: [] }
@@ -264,23 +280,25 @@ function main(): void {
   if (ledgerData.rows.length) {
     console.log(`Sourcing from event ledger: ${ledgerData.eventCount} events, ${ledgerData.rows.length} day-rows.`);
   } else {
-    console.log('Event ledger unavailable or empty; falling back to ccusage.');
+    console.log('Event ledger unavailable or empty; relying on ccusage aggregates where available.');
   }
 
+  const ledgerProviders = new Set(ledgerData.rows.map((row) => row.provider));
+
   // A source the user disabled is never invoked -- not read then filtered.
-  // When the ledger already supplies daily rows, skip the ccusage CLI entirely
-  // (still available as fallback when ledger is empty).
-  const sources: RawSource[] = ledgerData.rows.length
-    ? PROVIDERS.map(({ provider }) => ({ provider, json: null }))
-    : PROVIDERS.map(({ provider, args }) => {
-        if (!isSourceEnabled(consent, provider)) {
-          return { provider, json: null, failureWarning: `${provider} source disabled by consent; not read` };
-        }
-        console.log(`Collect: running ccusage for ${provider}…`);
-        const result = runCcusage(args);
-        if ('warning' in result) return { provider, json: null, failureWarning: result.warning };
-        return { provider, json: result.json };
-      });
+  // Skip ccusage only for providers the ledger already covers (event-level wins).
+  const sources: RawSource[] = PROVIDERS.map(({ provider, args }) => {
+    if (!isSourceEnabled(consent, provider)) {
+      return { provider, json: null, failureWarning: `${provider} source disabled by consent; not read` };
+    }
+    if (ledgerProviders.has(provider)) {
+      return { provider, json: null };
+    }
+    console.log(`Collect: running ccusage for ${provider}…`);
+    const result = runCcusage(args);
+    if ('warning' in result) return { provider, json: null, failureWarning: result.warning };
+    return { provider, json: result.json };
+  });
 
   console.log('Collect: project scan…');
   type QiraScanResult = ReturnType<typeof scanQiraProjects>;
@@ -339,8 +357,23 @@ function main(): void {
   draft.consent = consent;
   draft.imported = ledgerData.imported;
   syncRegistryEntry(readProfileConfig(), draft.generatedAt);
-  draft.sourceOfTruth = ledgerData.rows.length ? 'event_ledger' : 'ccusage_aggregate';
-  draft.providerConfidence = ledgerData.providerConfidence;
+  const ccusageOnly = daily.some((row) => !ledgerProviders.has(row.provider));
+  draft.sourceOfTruth =
+    ledgerData.rows.length && ccusageOnly
+      ? 'event_ledger+ccusage'
+      : ledgerData.rows.length
+        ? 'event_ledger'
+        : 'ccusage_aggregate';
+  // Confidence notes for every provider present in the assembled daily series.
+  const providerConfidence: Record<string, { confidence: 'high' | 'medium'; note: string }> = {
+    ...ledgerData.providerConfidence,
+  };
+  for (const row of daily) {
+    if (!providerConfidence[row.provider]) {
+      providerConfidence[row.provider] = defaultProviderConfidence(row.provider);
+    }
+  }
+  draft.providerConfidence = providerConfidence;
 
   // Sanitized hierarchical telemetry from the event ledger (counts + timing only).
   if (ledgerData.rows.length) {

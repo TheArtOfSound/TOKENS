@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import {
   CCUSAGE_AGENTS,
+  LOCAL_ADAPTER_PROVIDERS,
   isValidProviderSlug,
   providerDisplayName,
   sanitizeProvider,
 } from '../providers';
-import { normalizeProviderJson } from '../normalize';
+import { normalizeProviderJson, emptyMetrics } from '../normalize';
 import { publishSnapshot, type DraftSnapshot } from '../publish';
-import { emptyMetrics } from '../normalize';
+import { assembleDraft } from '../snapshot';
 
 describe('provider slugs', () => {
   it('accepts known multi-provider ids including grok and kimi', () => {
@@ -33,6 +34,112 @@ describe('provider slugs', () => {
     expect(CCUSAGE_AGENTS).toContain('kimi');
     expect(CCUSAGE_AGENTS).toContain('gemini');
     expect(CCUSAGE_AGENTS).toContain('claude');
+  });
+
+  it('registers local adapters for claude, codex, grok, and kimi', () => {
+    expect(LOCAL_ADAPTER_PROVIDERS).toEqual(
+      expect.arrayContaining(['claude', 'codex', 'grok', 'kimi']),
+    );
+  });
+});
+
+describe('assembleDraft multi-provider merge', () => {
+  it('merges ccusage providers that are missing from the event ledger', () => {
+    const { daily, draft } = assembleDraft({
+      sources: [
+        {
+          provider: 'kimi',
+          json: {
+            daily: [
+              {
+                date: '2026-08-01',
+                inputTokens: 20,
+                outputTokens: 10,
+                cacheCreationTokens: 0,
+                cacheReadTokens: 0,
+                totalTokens: 30,
+                modelsUsed: ['kimi-k2'],
+              },
+            ],
+          },
+        },
+        {
+          provider: 'gemini',
+          json: {
+            daily: [
+              {
+                date: '2026-08-01',
+                inputTokens: 5,
+                outputTokens: 5,
+                cacheCreationTokens: 0,
+                cacheReadTokens: 0,
+                totalTokens: 10,
+              },
+            ],
+          },
+        },
+        // Claude also in ccusage — must NOT double-count when ledger has claude
+        {
+          provider: 'claude',
+          json: {
+            daily: [
+              {
+                date: '2026-08-01',
+                inputTokens: 9999,
+                outputTokens: 9999,
+                cacheCreationTokens: 0,
+                cacheReadTokens: 0,
+                totalTokens: 19998,
+              },
+            ],
+          },
+        },
+      ],
+      preNormalizedRows: [
+        {
+          date: '2026-08-01',
+          provider: 'claude',
+          displayName: 'Claude Code',
+          models: ['claude-opus'],
+          ...emptyMetrics(),
+          inputTokens: 100,
+          outputTokens: 50,
+          freshTokens: 150,
+          totalTokens: 150,
+        },
+        {
+          date: '2026-08-01',
+          provider: 'grok',
+          displayName: 'Grok',
+          models: ['grok-4.5'],
+          ...emptyMetrics(),
+          inputTokens: 80,
+          outputTokens: 40,
+          freshTokens: 120,
+          totalTokens: 120,
+        },
+      ],
+      generatedAt: '2026-08-06T00:00:00.000Z',
+      timezone: 'UTC',
+      qiraProjects: [],
+      scanner: {
+        rootsChecked: 0,
+        allowlistedProjects: 0,
+        foundProjects: 0,
+        privacyMode: 'allowlist_no_paths',
+      },
+      gitCommit: null,
+    });
+
+    const providers = new Set(daily.map((d) => d.provider));
+    expect(providers.has('claude')).toBe(true);
+    expect(providers.has('grok')).toBe(true);
+    expect(providers.has('kimi')).toBe(true);
+    expect(providers.has('gemini')).toBe(true);
+    // Ledger claude wins — not the inflated ccusage row
+    const claude = daily.find((d) => d.provider === 'claude')!;
+    expect(claude.totalTokens).toBe(150);
+    expect(draft.totals.totalTokens).toBe(150 + 120 + 30 + 10);
   });
 });
 

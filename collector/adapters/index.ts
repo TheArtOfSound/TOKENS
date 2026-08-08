@@ -10,6 +10,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createJsonlAdapter } from './jsonlAdapter';
 import { createGrokAdapter } from './grokAdapter';
+import { createKimiAdapter } from './kimiAdapter';
 import { createCodexExtractor } from '../lib/events';
 
 const home = os.homedir();
@@ -60,8 +61,9 @@ export const codexAdapter = createJsonlAdapter({
 });
 
 export const grokAdapter = createGrokAdapter();
+export const kimiAdapter = createKimiAdapter();
 
-export const ADAPTERS = [claudeCodeAdapter, codexAdapter, grokAdapter];
+export const ADAPTERS = [claudeCodeAdapter, codexAdapter, grokAdapter, kimiAdapter];
 
 export function detectAll() {
   return ADAPTERS.map((adapter) => ({

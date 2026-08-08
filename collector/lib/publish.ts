@@ -195,7 +195,7 @@ export interface PublishedSnapshot {
   profile?: PublishedProfile;
   imported?: PublishedImported;
   integrity?: { checks: { name: string; status: string; detail: string }[]; flags: number; note: string };
-  sourceOfTruth: 'event_ledger' | 'ccusage_aggregate';
+  sourceOfTruth: 'event_ledger' | 'ccusage_aggregate' | 'event_ledger+ccusage';
   providerConfidence: Record<string, { confidence: string; note: string }>;
   verification: PublishedVerification;
   /** Claim-bounded evidence ladder for every badge on this snapshot. */
@@ -226,7 +226,7 @@ export interface DraftSnapshot {
   profile?: ProfileBlock;
   consent?: ConsentConfig;
   /** Which pipeline produced the daily rows. */
-  sourceOfTruth?: 'event_ledger' | 'ccusage_aggregate';
+  sourceOfTruth?: 'event_ledger' | 'ccusage_aggregate' | 'event_ledger+ccusage';
   /** Per-provider measurement confidence and its justification. */
   providerConfidence?: Record<string, { confidence: 'high' | 'medium'; note: string }>;
   /** Automated integrity checks over the measured series. */
@@ -683,7 +683,12 @@ export function publishSnapshot(draft: DraftSnapshot): PublishResult {
     ...(profile ? { profile } : {}),
     ...(integrityBlock ? { integrity: integrityBlock } : {}),
     ...(importedBlock ? { imported: importedBlock } : {}),
-    sourceOfTruth: draft.sourceOfTruth === 'event_ledger' ? 'event_ledger' : 'ccusage_aggregate',
+    sourceOfTruth:
+      draft.sourceOfTruth === 'event_ledger'
+        ? 'event_ledger'
+        : draft.sourceOfTruth === 'event_ledger+ccusage'
+          ? 'event_ledger+ccusage'
+          : 'ccusage_aggregate',
     providerConfidence: Object.fromEntries(
       Object.entries(draft.providerConfidence ?? {})
         .filter(([key]) => /^[a-z][a-z0-9_-]{0,39}$/.test(key))

@@ -208,9 +208,34 @@ export const SOURCE_DISCLOSURES: SourceDisclosure[] = [
     evidenceClass: 'provider_reported',
     networkAccess: 'none',
   },
-  ...MEASURED_SOURCE_KEYS.filter((k) => k !== 'claude' && k !== 'codex' && k !== 'grok').map(
-    ccusageAgentDisclosure,
-  ),
+  {
+    key: 'kimi',
+    name: 'Kimi / Kimi Code usage',
+    reads: 'local wire.jsonl (npm run ingest), plus ccusage kimi daily --json when no event-level rows exist',
+    directories: [
+      '~/.kimi/sessions/**/wire.jsonl',
+      '~/.kimi-code/sessions/**/agents/**/wire.jsonl',
+      'override with TOKENS_KIMI_DIR or KIMI_DATA_DIR (comma-separated roots ok)',
+    ],
+    extracts: [
+      'timestamp',
+      'model name (e.g. kimi-for-coding)',
+      'turn-scoped input/output/cache token counts (StatusUpdate / usage.record)',
+      'a keyed HMAC of the file path (not the path itself)',
+    ],
+    discards: [
+      'prompt text and chat history',
+      'cwd and all absolute file paths',
+      'session ids and message ids (raw)',
+      'session-scoped cumulative totals (would double-count)',
+      'every field not named above — extraction is an allowlist',
+    ],
+    evidenceClass: 'provider_reported',
+    networkAccess: 'none (--offline ccusage uses a cached pricing table when used as fallback)',
+  },
+  ...MEASURED_SOURCE_KEYS.filter(
+    (k) => k !== 'claude' && k !== 'codex' && k !== 'grok' && k !== 'kimi',
+  ).map(ccusageAgentDisclosure),
   {
     key: 'imported',
     name: 'Imported data (optional, off unless you import)',

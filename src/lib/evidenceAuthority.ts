@@ -99,7 +99,7 @@ export const AUTHORITIES = {
   },
   providerReportedTokens: {
     signalType: 'provider_reported_token_counts',
-    provenance: 'local_claude_or_codex_accounting',
+    provenance: 'local_agent_usage_accounting',
     tier: 'provider_attested',
     allowedClaims: ['activity_occurred'],
     excludedClaims: NEVER_FROM_VOLUME,

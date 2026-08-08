@@ -58,10 +58,17 @@ export function assembleDraft(input: AssembleInput): AssembleResult {
   const rowSets: NormalizedDaily[][] = [];
 
   // Preferred path: rows already normalized from the event ledger. The ledger is
-  // event-level and deduplicated, so no provider JSON parsing is needed.
+  // event-level and deduplicated. Providers that only appear via ccusage (Kimi
+  // when no wire.jsonl yet, Gemini, Copilot, …) still merge in from `sources`.
   if (input.preNormalizedRows?.length) rowSets.push(input.preNormalizedRows);
 
-  for (const source of input.preNormalizedRows?.length ? [] : input.sources) {
+  const ledgerProviders = new Set((input.preNormalizedRows ?? []).map((row) => row.provider));
+
+  for (const source of input.sources) {
+    // Event-level ledger already covers this provider — skip the aggregate path
+    // so we never double-count Claude/Codex/Grok/Kimi when both paths fire.
+    if (ledgerProviders.has(source.provider)) continue;
+
     if (source.json == null) {
       if (source.failureWarning) warnings.push(source.failureWarning);
       continue;

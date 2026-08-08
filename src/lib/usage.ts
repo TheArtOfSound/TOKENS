@@ -1,4 +1,5 @@
-export type ProviderKey = 'claude' | 'codex' | 'all' | 'unknown';
+/** Any agent slug published by the collector (claude, codex, grok, kimi, gemini, …). */
+export type ProviderKey = string;
 
 export interface TokenMetrics {
   inputTokens: number;
