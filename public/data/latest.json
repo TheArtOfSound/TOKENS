@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-08T03:48:33.965Z",
+  "generatedAt": "2026-08-08T04:18:52.213Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 338694649,
-    "outputTokens": 99260277,
+    "inputTokens": 339173897,
+    "outputTokens": 99308199,
     "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 36969736664,
-    "cachedTokens": 37654644381,
-    "freshTokens": 437954926,
-    "totalTokens": 38092599307,
+    "cacheReadTokens": 36983974872,
+    "cachedTokens": 37668882589,
+    "freshTokens": 438482096,
+    "totalTokens": 38107364685,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -27,13 +27,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 315241533,
-      "outputTokens": 32211390,
+      "inputTokens": 315720781,
+      "outputTokens": 32259312,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 11034613760,
-      "cachedTokens": 11034613760,
-      "freshTokens": 347452923,
-      "totalTokens": 11382066683,
+      "cacheReadTokens": 11048851968,
+      "cachedTokens": 11048851968,
+      "freshTokens": 347980093,
+      "totalTokens": 11396832061,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -3665,13 +3665,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 116813,
-      "outputTokens": 11019,
+      "inputTokens": 596061,
+      "outputTokens": 58941,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 1434368,
-      "cachedTokens": 1434368,
-      "freshTokens": 127832,
-      "totalTokens": 1562200,
+      "cacheReadTokens": 15672576,
+      "cachedTokens": 15672576,
+      "freshTokens": 655002,
+      "totalTokens": 16327578,
       "estimatedCostUsd": null
     },
     {
@@ -3702,7 +3702,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "ae65cae",
+        "commit": "3a51380",
         "changedFiles": 0
       },
       "stack": [],
@@ -3853,9 +3853,9 @@
       "description": "Phoenix traffic intelligence surface.",
       "found": true,
       "git": {
-        "branch": null,
-        "commit": null,
-        "changedFiles": null
+        "branch": "main",
+        "commit": "5c140ce",
+        "changedFiles": 0
       },
       "stack": [],
       "scripts": [],
@@ -3898,7 +3898,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "ae65cae",
+        "commit": "3a51380",
         "changedFiles": 0
       },
       "stack": [
@@ -3932,7 +3932,7 @@
         "css": 2,
         "tsx": 22
       },
-      "lastModified": "2026-08-08T03:48:32.879Z",
+      "lastModified": "2026-08-08T04:18:50.771Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4006,7 +4006,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 38092599307,
+    "exactTotalTokens": 38107364685,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4214,10 +4214,10 @@
       "note": "Availability, engagement, and compensation are set by the member. They are self-declared preferences, not verified terms."
     },
     "efficiency": {
-      "cachedSharePct": 98.9,
-      "freshSharePct": 1.1,
-      "outputSharePct": 22.7,
-      "avgTokensPerActiveDay": 343176570,
+      "cachedSharePct": 98.8,
+      "freshSharePct": 1.2,
+      "outputSharePct": 22.6,
+      "avgTokensPerActiveDay": 343309592,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4346,7 +4346,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "228de04eed84c70704111f3231ed2126a30027f060bcaa40b6f810d41e584797",
+    "snapshotSha256": "2adebdfa597a3435503e25e148b5ab80902b8948d614a364deb8a31c9cf7d9cc",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4612,13 +4612,13 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 152375,
+    "totalEvents": 152508,
     "hierarchy": [
       {
         "provider": "codex",
-        "events": 84049,
+        "events": 84182,
         "sessions": 0,
-        "totalTokens": 11382066683,
+        "totalTokens": 11396832061,
         "models": [
           {
             "model": "gpt-5.5",
@@ -4634,9 +4634,9 @@
           },
           {
             "model": "gpt-5.6-sol",
-            "events": 16635,
+            "events": 16734,
             "sessions": 0,
-            "totalTokens": 2236077362
+            "totalTokens": 2245414985
           },
           {
             "model": "gpt-5.4",
@@ -4646,9 +4646,9 @@
           },
           {
             "model": "(unattributed)",
-            "events": 1488,
+            "events": 1489,
             "sessions": 0,
-            "totalTokens": 232679376
+            "totalTokens": 232793985
           },
           {
             "model": "gpt-5.4-mini",
@@ -4658,9 +4658,9 @@
           },
           {
             "model": "gpt-5.6-terra",
-            "events": 39,
+            "events": 72,
             "sessions": 0,
-            "totalTokens": 2490624
+            "totalTokens": 7803770
           },
           {
             "model": "gpt-5.6-luna",
@@ -4749,7 +4749,7 @@
     ],
     "sessions": {
       "distinctSessions": 45,
-      "eventsWithoutSession": 84244,
+      "eventsWithoutSession": 84377,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4775,12 +4775,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-08T03:48:37.168Z",
-    "nonce": "1b36b851802b8328be819080ac2a3d9b",
+    "issuedAt": "2026-08-08T04:18:56.153Z",
+    "nonce": "e8b0caf9ee24260dfb48f8460b452f4d",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "328cd476ac17dc7c4c387371d9c3ca81e7080469d2d49470c94aa08cd6aeae57",
-    "signature": "kpYQu09dLoddovfSocRMov0zKDFmg9bw3M9PdrCR9v0ADZMbOpgFNAQzGc9Dq0t7+cH/egupAOSzfq7gQocFAg==",
+    "payloadSha256": "11d00b241bef464a0441e95dbb9f9207f574cbcf1dedee953ba88100f7378f59",
+    "signature": "6iEbD75wAmi/vI18jl42nZBXQGQfMJmpDfQs5lno+Z7xuP0L5XajQkUvWX0nOg3ZRG9CWtSTr/PNns4fmd75DQ==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
