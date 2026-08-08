@@ -32,7 +32,7 @@ const esc = (s) =>
     .replace(/'/g, '&#39;');
 
 /** Replace the meta values the crawler reads. */
-function withMeta(source, { title, description, url }) {
+function withMeta(source, { title, description, url, noindex = false }) {
   let out = source;
   out = out.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
   // Tags are pretty-printed across multiple lines in index.html, so the pattern
@@ -49,17 +49,19 @@ function withMeta(source, { title, description, url }) {
   set('name', 'twitter:description', description);
   set('name', 'description', description);
   out = out.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${esc(url)}$2`);
+  if (noindex) out = out.replace('</head>', '    <meta name="robots" content="noindex, nofollow" />\n  </head>');
   return out;
 }
 
 const ROUTES = [
   ['people', 'People measuring their AI work — Ledger', 'Browse professionals whose AI work is backed by a signed, browser-verifiable record instead of a self-written résumé.'],
   ['employer', 'Find people by evidence, not by résumé — Ledger', 'Search candidates backed by signed snapshots you verify in your own browser. Evidence and availability first; activity volume is never the ranking.'],
-  ['join', 'Measure your own AI work — Ledger', 'Run an open-source collector on your machine. It measures the AI work you already do and produces a signed summary you publish yourself. No account.'],
+  ['join', 'Measure your own AI work — Ledger', 'Own your Ledger handle through Oort, then run the open-source collector locally and explicitly publish only the signed summary you approve.'],
+  ['account', 'Your Ledger account', 'Own and manage one Ledger handle through your existing Oort account. Local provider logs and signing keys remain on your machine.', true],
   ['verify', 'How verification works — Ledger', 'Paste any snapshot URL and verify its Ed25519 signature yourself, in your own browser. You do not have to trust us.'],
   ['claims', 'What evidence can and cannot establish — Ledger', 'Every badge maps to one signal, one allowed claim, and stated limitations. No universal score: a combined figure never inherits more authority than its weakest evidence.'],
   ['compare', 'Where TOKENS fits — Ledger', 'Not a better usage monitor — the portable evidence layer above them. Honest comparison against metering and audit tools, including where they are stronger.'],
-  ['privacy', 'Privacy — Ledger', 'No analytics, no accounts, no data collected from visitors. Local-first by design: your prompts, code, and file paths never leave your computer.'],
+  ['privacy', 'Privacy — Ledger', 'No analytics or advertising. Optional Oort-backed account ownership stores only allowlisted account fields; prompts, code, logs, and private keys remain local.'],
   ['terms', 'Terms of use — Ledger', 'A free, open-source, local-first tool plus a public directory. No identity guarantee, no skill rating, no warranty.'],
 ];
 
@@ -70,8 +72,8 @@ function emit(routePath, meta) {
 }
 
 let count = 0;
-for (const [route, title, description] of ROUTES) {
-  emit(route, { title, description, url: `${SITE}/${route}` });
+for (const [route, title, description, noindex] of ROUTES) {
+  emit(route, { title, description, url: `${SITE}/${route}`, noindex });
   count += 1;
 }
 

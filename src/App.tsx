@@ -15,6 +15,7 @@ import { Compare } from './views/Compare';
 import { Claims } from './views/Claims';
 import { Privacy } from './views/Privacy';
 import { Terms } from './views/Terms';
+import { Account } from './views/Account';
 import { href, navigate, useRoute } from './lib/router';
 import { safeUrl, linkProps } from './lib/safeUrl';
 import { CAVEATS } from './lib/caveats';
@@ -457,7 +458,7 @@ function SiteFooter() {
       </div>
       <div className="footer-legal">
         <span>© {new Date().getFullYear()} Qira LLC</span>
-        <span>No analytics. No accounts. No data collected from visitors.</span>
+        <span>No analytics. Account data is created only when you connect Oort.</span>
         <span>{CAVEATS.volume}</span>
       </div>
     </footer>
@@ -471,8 +472,6 @@ const NAV_LINKS: Array<{ route: Parameters<typeof href>[0]; label: string }> = [
   { route: { name: 'claims' }, label: 'Evidence' },
   { route: { name: 'compare' }, label: 'Compare' },
 ];
-
-const OORT_SIGN_IN = 'https://oortstack.com/auth/signin';
 
 function SiteHeader({ routeName }: { routeName: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -552,8 +551,8 @@ function SiteHeader({ routeName }: { routeName: string }) {
           </a>
         ))}
         <div className="mobile-nav-actions">
-          <a className="oort-signin" href={OORT_SIGN_IN} onClick={() => setMenuOpen(false)}>
-            Sign in with Oort <span aria-hidden="true">↗</span>
+          <a className="account-link" href={href({ name: 'account' })} onClick={() => setMenuOpen(false)}>
+            Your Ledger account
           </a>
           <a className="nav-button" href={href({ name: 'join' })} onClick={() => setMenuOpen(false)}>
             Add your profile
@@ -586,7 +585,7 @@ function SiteHeader({ routeName }: { routeName: string }) {
             {label}
           </a>
         ))}
-        <a className="oort-signin" href={OORT_SIGN_IN}>Oort sign in <span aria-hidden="true">↗</span></a>
+        <a className="account-link" href={href({ name: 'account' })} aria-current={routeName === 'account' ? 'page' : undefined}>Account</a>
         <a className="nav-button" href={href({ name: 'join' })}>Add your profile</a>
       </nav>
 
@@ -657,6 +656,7 @@ export default function App() {
       {route.name === 'privacy' && <Privacy />}
       {route.name === 'terms' && <Terms />}
       {route.name === 'join' && <Join />}
+      {route.name === 'account' && <Account />}
       {route.name === 'verify' && <Verify />}
       {route.name === 'member' && <Member handle={route.handle} />}
 

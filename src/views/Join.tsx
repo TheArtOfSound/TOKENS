@@ -74,12 +74,22 @@ export function Join() {
         <p className="lede">
           Install the collector, run one guided command, review the exact signed public payload, and then
           decide whether to request a directory listing. Nothing becomes public because you installed or scanned.
-          Creating a profile also does not make you public automatically.
+          Your Oort-owned Ledger account and public profile are separate: creating either one does not publish
+          your local evidence automatically.
         </p>
       </header>
 
       <div className="jcard jcard-pad wizard-step">
-        <h2>1. Install the collector</h2>
+        <h2>1. Own your Ledger account</h2>
+        <p className="jcard-sub">
+          Connect your existing Oort identity to reserve and manage one Ledger handle. Oort account ownership
+          does not read your provider logs or publish a profile.
+        </p>
+        <a className="btn btn-primary" href={href({ name: 'account' })}>Open your Ledger account</a>
+      </div>
+
+      <div className="jcard jcard-pad wizard-step">
+        <h2>2. Install the collector</h2>
         <p className="jcard-sub">
           Requirements: Git and Node.js 22.5 or newer. The installer only downloads the open-source project
           and installs dependencies. It does not read logs or publish data.
@@ -110,7 +120,7 @@ export function Join() {
       </div>
 
       <div className="jcard jcard-pad wizard-step">
-        <h2>2. Run the guided setup</h2>
+        <h2>3. Run the guided setup</h2>
         <Command>{active.next}</Command>
         <p className="jcard-sub">The local wizard handles the steps that previously required several commands:</p>
         <ol className="wizard-steps-list">
@@ -124,11 +134,11 @@ export function Join() {
       </div>
 
       <div className="jcard jcard-pad wizard-step">
-        <h2>3. Public directory enrollment</h2>
+        <h2>4. Public directory enrollment</h2>
         <p>
-          Ledger is currently a static site. There is no deployed account or upload server, so the former
-          <code> publish:ledger </code> workflow could only contact a development server on the same computer.
-          The production-safe enrollment route is now the existing signed-snapshot GitHub flow.
+          Your Ledger account is owned through Oort, while signed snapshots remain local-first and explicitly
+          published. The production-safe enrollment route is currently the signed-snapshot GitHub flow; account
+          creation alone never uploads local evidence.
         </p>
         <p>
           When you approve the final step, <code>npm run list-me</code> publishes only your signed snapshot to

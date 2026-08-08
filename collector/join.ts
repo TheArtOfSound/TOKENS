@@ -240,7 +240,7 @@ async function main(): Promise<void> {
 
     console.log(`\nSigned snapshot ready for @${profile.handle}.`);
     console.log('The preview above is the complete public payload.');
-    console.log('Directory enrollment currently uses GitHub because Ledger has no deployed account server.');
+    console.log('Directory enrollment currently uses GitHub because Ledger account ownership does not upload snapshots.');
     console.log('It publishes only the signed snapshot and opens a registry pull request.');
 
     const enroll = await yesNo(rl, 'Continue to the final public-directory consent?', false);

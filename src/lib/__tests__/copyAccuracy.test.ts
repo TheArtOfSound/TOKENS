@@ -150,10 +150,10 @@ describe('publication promises are accurate', () => {
   });
 
   it('still keeps the promises that remain true', () => {
-    // Chosen deliberately: GitHub-native enrollment means the site really does
-    // stay a static bundle. If this ever fails, a backend was added and the
-    // whole page needs rewriting, not this assertion relaxing.
-    expect(privacy).toMatch(/no backend and no database/i);
+    // Account ownership may persist allowlisted Oort metadata, but the core
+    // local-first boundary must remain explicit.
+    expect(privacy).toMatch(/does not receive your provider logs, prompts, code, private key/i);
+    expect(privacy).toMatch(/ordinary visitors: nothing through the Ledger application/i);
     // Installing and scanning still publish nothing — consent is its own command.
     expect(join).toMatch(/Nothing becomes public because you installed or scanned/i);
   });

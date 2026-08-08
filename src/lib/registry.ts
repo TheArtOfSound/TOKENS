@@ -1,8 +1,8 @@
 /**
  * Member registry — the multi-user layer.
  *
- * TOKENS is local-first, so there is deliberately no account server. Each member
- * runs the collector on their own machine, which produces a SIGNED snapshot, and
+ * TOKENS is local-first, so account ownership and evidence publication remain
+ * separate. Each member runs the collector on their own machine, which produces a SIGNED snapshot, and
  * publishes it at a URL they control. The registry is just an index of those
  * URLs.
  *
@@ -13,8 +13,9 @@
  *  - A member can leave by removing their entry; nothing of theirs is retained.
  *
  * The tradeoff, stated plainly: the registry lists where a snapshot lives, it
- * does not vouch for who published it. Identity verification is a separate,
- * unbuilt layer — every profile shows `Identity verified: pending` until then.
+ * does not vouch for who published it. Oort ownership proves control of an Oort
+ * account, and optional identity proofs establish control of their named
+ * external accounts; neither establishes legal identity.
  */
 
 export interface RegistryMember {

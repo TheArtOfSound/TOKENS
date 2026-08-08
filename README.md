@@ -39,7 +39,9 @@ Installing, scanning, and creating a profile never make you public automatically
 
 ## Current publication model
 
-Ledger is currently a static website. It does not yet run a production account or upload server.
+Ledger serves its public pages statically and uses a small same-origin account service for Oort-backed handle
+ownership. It does not yet run a production snapshot-upload service; signed evidence publication remains an
+explicit member-controlled flow.
 
 Public enrollment therefore uses the GitHub-backed path:
 

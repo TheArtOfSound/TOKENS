@@ -8,9 +8,9 @@ const styles = readFileSync(path.join(root, 'src', 'styles.css'), 'utf8');
 const html = readFileSync(path.join(root, 'index.html'), 'utf8');
 
 describe('shared navigation contract', () => {
-  it('keeps Oort sign-in in the primary and mobile navigation', () => {
-    expect(app).toContain('https://oortstack.com/auth/signin');
-    expect(app.match(/Sign in with Oort|Oort sign in/g)?.length).toBeGreaterThanOrEqual(2);
+  it('routes primary and mobile navigation to the owned Ledger account surface', () => {
+    expect(app.match(/href\(\{ name: 'account' \}\)/g)?.length).toBeGreaterThanOrEqual(2);
+    expect(app).not.toContain('https://oortstack.com/auth/signin');
   });
 
   it('portals the mobile drawer outside the sticky header', () => {

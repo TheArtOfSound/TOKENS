@@ -3,6 +3,7 @@
  *
  * Every claim here was verified against the codebase before being written:
  *  - no analytics/tracking libraries exist in the frontend (grepped)
+ *  - the account Worker stores only the allowlisted Oort/handle fields below
  *  - the only third-party request is api.github.com, and only when a profile
  *    carries an identity proof (src/lib/identity.ts)
  *  - the collector's allowlist/secret-scan behavior is in docs/PRIVACY.md
@@ -19,8 +20,9 @@ export function Privacy() {
     <section className="legal-page" id="privacy">
       <h1>Privacy</h1>
       <p className="lede">
-        Ledger is local-first. There is no account, no analytics on this site, and no Ledger server that
-        receives your data. Measurement happens entirely on your machine and stays there.
+        Ledger is local-first. There is no analytics on this site, and measurement happens entirely on your
+        machine. If you choose to connect Oort, Ledger stores only the account and handle fields described
+        below; it does not receive your provider logs, prompts, code, private key, or private usage ledger.
         <strong> Publishing is a separate act you choose.</strong> If you join the directory, your snapshot is
         hosted in your own repository and your entry is added to this project's public repository by a pull
         request you open yourself — so the entry becomes public, permanently, in git history.
@@ -29,12 +31,20 @@ export function Privacy() {
       <div className="legal-highlight">
         <h2>What this site collects about visitors</h2>
         <p>
-          <strong>Nothing.</strong> No analytics, no tracking pixels, no cookies set by this application, no
-          fingerprinting, no advertising. The site is a static bundle; it has no backend and no database.
+          <strong>For ordinary visitors: nothing through the Ledger application.</strong> No analytics, tracking
+          pixels, fingerprinting, or advertising. Ledger sets no application cookie unless you explicitly
+          connect an Oort account.
+        </p>
+        <p>
+          <strong>If you connect Oort:</strong> a same-origin account service stores your Oort user ID, Oort
+          username, email, display name, avatar metadata, account tier, chosen Ledger handle, and timestamps in
+          a Cloudflare D1 database. It sets one HttpOnly, Secure, SameSite=Lax session cookie named
+          <code> ledger_oort</code>. The cookie contains a signed account reference, not your Oort password.
         </p>
         <p className="muted">
-          It is hosted on GitHub Pages, which — like any web host — processes connection data such as IP
-          addresses in its server logs. That is GitHub's processing, governed by{' '}
+          Static pages are hosted on GitHub Pages behind Cloudflare; the account API runs on Cloudflare Workers.
+          Like any web infrastructure, those providers process connection data such as IP addresses in their
+          server logs under their own policies. GitHub's policy is available in{' '}
           <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">
             GitHub's Privacy Statement
           </a>
@@ -55,6 +65,11 @@ export function Privacy() {
         <li>
           <strong>api.github.com</strong> — only when a profile carries an identity proof. Your browser fetches
           the member's public gist to verify the signature itself. Skipped entirely if no proof is present.
+        </li>
+        <li>
+          <strong>Oort and the same-origin account API</strong> — only when you open or connect a Ledger account.
+          Oort performs sign-in, then sends Ledger a five-minute, Ledger-only signed handoff. Ledger replaces it
+          with its own session cookie.
         </li>
       </ul>
 
@@ -86,9 +101,10 @@ export function Privacy() {
 
       <h2>Deleting your data</h2>
       <p>
-        We hold nothing of yours to delete. Remove your entry from the registry and you are out of the
-        directory; stop hosting your snapshot and it is gone. Copies already cached or indexed elsewhere are
-        outside anyone's control — including ours.
+        You can delete the Oort-to-Ledger account link from the account page; that removes the Ledger account
+        record and its handle ownership. Public snapshots and the public registry are separate. Remove your
+        registry entry and stop hosting your snapshot to withdraw them. Existing git history and copies already
+        cached or indexed elsewhere may remain outside our control.
       </p>
 
       <h2>Children</h2>

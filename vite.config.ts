@@ -3,6 +3,13 @@ import react from '@vitejs/plugin-react';
 
 const localPort = Number(process.env.TOKENS_DEV_PORT ?? 5199);
 const publishPort = Number(process.env.PUBLISH_PORT ?? 8787);
+const accountOrigin = process.env.LEDGER_ACCOUNT_ORIGIN ?? 'https://ledger.imagineqira.com';
+
+const accountProxy = {
+  target: accountOrigin,
+  changeOrigin: true,
+  secure: true,
+};
 
 export default defineConfig({
   plugins: [react()],
@@ -17,6 +24,8 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api\/publish/, '') || '/',
       },
+      '/api/account': accountProxy,
+      '/api/oort': accountProxy,
     },
   },
   preview: {
@@ -28,6 +37,8 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api\/publish/, '') || '/',
       },
+      '/api/account': accountProxy,
+      '/api/oort': accountProxy,
     },
   },
 });

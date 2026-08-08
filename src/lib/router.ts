@@ -23,6 +23,7 @@ export type Route =
   | { name: 'directory' }
   | { name: 'member'; handle: string }
   | { name: 'join' }
+  | { name: 'account' }
   | { name: 'verify' }
   | { name: 'employer' }
   | { name: 'compare' }
@@ -42,6 +43,7 @@ export function parsePath(pathname: string): Route {
   if (path === '/' || path === '/home') return { name: 'home' };
   if (path === '/people' || path === '/directory') return { name: 'directory' };
   if (path === '/join') return { name: 'join' };
+  if (path === '/account') return { name: 'account' };
   if (path === '/verify') return { name: 'verify' };
   if (path === '/employer' || path === '/hire' || path === '/for-employers') return { name: 'employer' };
   if (path === '/compare') return { name: 'compare' };
@@ -62,6 +64,8 @@ export function href(route: Route): string {
       return `${b}/u/${route.handle}`;
     case 'join':
       return `${b}/join`;
+    case 'account':
+      return `${b}/account`;
     case 'verify':
       return `${b}/verify`;
     case 'employer':
