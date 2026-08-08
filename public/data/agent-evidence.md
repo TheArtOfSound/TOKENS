@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-08T07:51:26.531Z
+- **Generated at:** 2026-08-08T08:21:52.993Z
 - **Collector:** 0.5.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `e12128d050c6c15d81017cb80eca5581bc6b438a1d3f752146a194f596f87f97`
+- **Snapshot hash:** `20aa08483af4dc3a300a16a930e9db936b03f3f2bd2fb7bc91bed40b7ed32b48`
 
 ## Identity (self-submitted)
 
@@ -49,7 +49,7 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5, gpt-5.6-luna
 - Projects active (collector-observed locally): 8
 
-Exact total tokens (provider-reported sums): **38171198405**
+Exact total tokens (provider-reported sums): **38242882193**
 
 _Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value._
 
@@ -58,7 +58,7 @@ _Token volume is evidence of activity, not expertise, productivity, efficiency, 
 - Cache reuse share: **98.8%**
 - Fresh token share: **1.2%**
 - Output share of in+out: **22.6%**
-- Avg tokens / active day: **340814271**
+- Avg tokens / active day: **341454305**
 
 Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class.
 
@@ -196,7 +196,7 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ## Agent operation telemetry (sanitized hierarchy)
 
-- Total usage events: **153001**
+- Total usage events: **153520**
 - Distinct sessions (local pseudonyms, count only): **45**
 - Median events / session: 464
 - p95 events / session: 4776
@@ -204,12 +204,12 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ### Hierarchy: provider → model
 
-- **codex**: 84675 events, 0 sessions, 11460665781 tokens
+- **codex**: 85194 events, 0 sessions, 11532349569 tokens
   - gpt-5.5: 32270 events, 0 sessions
+  - gpt-5.6-sol: 17463 events, 0 sessions
   - gpt-5.3-codex: 17421 events, 0 sessions
-  - gpt-5.6-sol: 17052 events, 0 sessions
   - gpt-5.4: 15953 events, 0 sessions
-  - (unattributed): 1664 events, 0 sessions
+  - (unattributed): 1772 events, 0 sessions
   - gpt-5.4-mini: 221 events, 0 sessions
   - gpt-5.6-terra: 72 events, 0 sessions
   - gpt-5.6-luna: 22 events, 0 sessions
