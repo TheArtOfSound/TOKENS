@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-08T21:53:14.755Z",
+  "generatedAt": "2026-08-08T22:23:28.394Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 343340968,
-    "outputTokens": 99863927,
+    "inputTokens": 343557525,
+    "outputTokens": 99878104,
     "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 37208236504,
-    "cachedTokens": 37893144221,
-    "freshTokens": 443204895,
-    "totalTokens": 38336349116,
+    "cacheReadTokens": 37216809176,
+    "cachedTokens": 37901716893,
+    "freshTokens": 443435629,
+    "totalTokens": 38345152522,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -27,13 +27,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 319887852,
-      "outputTokens": 32815040,
+      "inputTokens": 320104409,
+      "outputTokens": 32829217,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 11273113600,
-      "cachedTokens": 11273113600,
-      "freshTokens": 352702892,
-      "totalTokens": 11625816492,
+      "cacheReadTokens": 11281686272,
+      "cachedTokens": 11281686272,
+      "freshTokens": 352933626,
+      "totalTokens": 11634619898,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -3705,13 +3705,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 3799306,
-      "outputTokens": 509672,
+      "inputTokens": 4015863,
+      "outputTokens": 523849,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 209155968,
-      "cachedTokens": 209155968,
-      "freshTokens": 4308978,
-      "totalTokens": 213464946,
+      "cacheReadTokens": 217728640,
+      "cachedTokens": 217728640,
+      "freshTokens": 4539712,
+      "totalTokens": 222268352,
       "estimatedCostUsd": null
     }
   ],
@@ -3724,7 +3724,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "28e86d1",
+        "commit": "e1a62fd",
         "changedFiles": 0
       },
       "stack": [],
@@ -3920,7 +3920,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "28e86d1",
+        "commit": "e1a62fd",
         "changedFiles": 0
       },
       "stack": [
@@ -3955,7 +3955,7 @@
         "css": 3,
         "tsx": 23
       },
-      "lastModified": "2026-08-08T21:53:13.654Z",
+      "lastModified": "2026-08-08T22:23:27.334Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4029,7 +4029,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 38336349116,
+    "exactTotalTokens": 38345152522,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4240,7 +4240,7 @@
       "cachedSharePct": 98.8,
       "freshSharePct": 1.2,
       "outputSharePct": 22.5,
-      "avgTokensPerActiveDay": 342288831,
+      "avgTokensPerActiveDay": 342367433,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4369,7 +4369,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "e62e8dc66c1115aa8cf69ad8416729ad7a14b1285a6f9ead9b561b2c9f4bc675",
+    "snapshotSha256": "e95494caafef6c28bb3a80f4fd6e2c478aeea1d425722833f005f6ac33758f81",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4635,13 +4635,13 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 154190,
+    "totalEvents": 154239,
     "hierarchy": [
       {
         "provider": "codex",
-        "events": 85864,
+        "events": 85913,
         "sessions": 0,
-        "totalTokens": 11625816492,
+        "totalTokens": 11634619898,
         "models": [
           {
             "model": "gpt-5.5",
@@ -4651,9 +4651,9 @@
           },
           {
             "model": "gpt-5.6-sol",
-            "events": 17925,
+            "events": 17974,
             "sessions": 0,
-            "totalTokens": 2394997850
+            "totalTokens": 2403801256
           },
           {
             "model": "gpt-5.3-codex",
@@ -4772,7 +4772,7 @@
     ],
     "sessions": {
       "distinctSessions": 45,
-      "eventsWithoutSession": 86059,
+      "eventsWithoutSession": 86108,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4798,12 +4798,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-08T21:53:16.089Z",
-    "nonce": "6d5c959775b4ad8e295fa23ac523485d",
+    "issuedAt": "2026-08-08T22:23:29.359Z",
+    "nonce": "8c5b7072f24d56c313b2c416a9effab0",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "c4fdae0060da303ee983442210ff32bc1a94b832e283969f2439685ebd23e205",
-    "signature": "YQfO1YjDcDzZ26QEl+YLey5zcWWOcQt4z/xRBiZ97+DQidPlw37IeivB6+AHEJWd/ubI1FU4E149CWMnDciLAA==",
+    "payloadSha256": "b971982658948deef3a511082a91e0c7fc84db7b56bff2646330f3febe847b98",
+    "signature": "Zt1BizHyxmK/xTahfijUitrRX80L9SIjUiazZXva2VARiLhLmYcGbFEZ68kRXUBce/BLjMjLRcInRKcLjRM1Cw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
