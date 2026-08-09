@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-09T04:44:37.677Z",
+  "generatedAt": "2026-08-09T05:14:57.864Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 364151207,
-    "outputTokens": 101992208,
+    "inputTokens": 364275992,
+    "outputTokens": 102046690,
     "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 38202557912,
-    "cachedTokens": 38887465629,
-    "freshTokens": 466143415,
-    "totalTokens": 39353609044,
+    "cacheReadTokens": 38209192536,
+    "cachedTokens": 38894100253,
+    "freshTokens": 466322682,
+    "totalTokens": 39360422935,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -66,13 +66,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 10912226,
-      "outputTokens": 1484215,
+      "inputTokens": 11037011,
+      "outputTokens": 1538697,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 202815232,
-      "cachedTokens": 202815232,
-      "freshTokens": 12396441,
-      "totalTokens": 215211673,
+      "cacheReadTokens": 209449856,
+      "cachedTokens": 209449856,
+      "freshTokens": 12575708,
+      "totalTokens": 222025564,
       "estimatedCostUsd": null
     }
   },
@@ -3800,13 +3800,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 100633,
-      "outputTokens": 21118,
+      "inputTokens": 225418,
+      "outputTokens": 75600,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 4387968,
-      "cachedTokens": 4387968,
-      "freshTokens": 121751,
-      "totalTokens": 4509719,
+      "cacheReadTokens": 11022592,
+      "cachedTokens": 11022592,
+      "freshTokens": 301018,
+      "totalTokens": 11323610,
       "estimatedCostUsd": null
     }
   ],
@@ -3819,7 +3819,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "8717df0",
+        "commit": "207ea99",
         "changedFiles": 0
       },
       "stack": [],
@@ -4015,7 +4015,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "8717df0",
+        "commit": "207ea99",
         "changedFiles": 0
       },
       "stack": [
@@ -4050,7 +4050,7 @@
         "css": 3,
         "tsx": 23
       },
-      "lastModified": "2026-08-09T04:44:36.822Z",
+      "lastModified": "2026-08-09T05:14:55.232Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4124,7 +4124,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 39353609044,
+    "exactTotalTokens": 39360422935,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4336,7 +4336,7 @@
       "cachedSharePct": 98.8,
       "freshSharePct": 1.2,
       "outputSharePct": 21.9,
-      "avgTokensPerActiveDay": 351371509,
+      "avgTokensPerActiveDay": 351432348,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4465,7 +4465,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "cbeb46d0fc7a65cd52c55f54e272b605606f214105b39fc4e1d73a7eed72ba52",
+    "snapshotSha256": "31e899af8e717c8a71f4269e7689422927ead005786b3f97607047b4b85cd9aa",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4731,7 +4731,7 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 161695,
+    "totalEvents": 161699,
     "hierarchy": [
       {
         "provider": "codex",
@@ -4847,15 +4847,15 @@
       },
       {
         "provider": "grok",
-        "events": 199,
+        "events": 203,
         "sessions": 0,
-        "totalTokens": 215211673,
+        "totalTokens": 222025564,
         "models": [
           {
             "model": "grok-4.5-build",
-            "events": 190,
+            "events": 194,
             "sessions": 0,
-            "totalTokens": 211214943
+            "totalTokens": 218028834
           },
           {
             "model": "grok-4.5",
@@ -4874,7 +4874,7 @@
     ],
     "sessions": {
       "distinctSessions": 45,
-      "eventsWithoutSession": 93564,
+      "eventsWithoutSession": 93568,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4900,12 +4900,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-09T04:44:38.602Z",
-    "nonce": "6ef38834c548d7b8b0728978b0687ba0",
+    "issuedAt": "2026-08-09T05:15:00.079Z",
+    "nonce": "d797a93476bb6d87db50d7001c03ff96",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "57ef092ea2899d776439850b48a773203e4561d33ec0bc37e8200d4693f1764e",
-    "signature": "5WpVWBTt0luTeLBiqHfAT62clxEz3wGiBL47I/OY96a49gQhijSFndLxD3j0n2QzuiIvfoOkxgBfl1Jf2r5SAA==",
+    "payloadSha256": "76bf100011c7c0291401a2f9a827ed2f8c0d1d9aeee33f281aecdfcf9118f89d",
+    "signature": "gNGrP0ZpCQk3b3CH0hkKsuxODKKmjPJ/WjQpzZAJeNYUedC3RZAwpEr7qLvrKxPPpwBp06ABckDhoZAQlWVhCA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
