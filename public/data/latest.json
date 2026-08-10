@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-10T04:28:28.790Z",
+  "generatedAt": "2026-08-10T04:58:46.259Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 368513887,
-    "outputTokens": 102534498,
+    "inputTokens": 368536988,
+    "outputTokens": 102544892,
     "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 38281026008,
-    "cachedTokens": 38965933725,
-    "freshTokens": 471048385,
-    "totalTokens": 39436982110,
+    "cacheReadTokens": 38282806232,
+    "cachedTokens": 38967713949,
+    "freshTokens": 471081880,
+    "totalTokens": 39438795829,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -66,13 +66,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 15274906,
-      "outputTokens": 2026505,
+      "inputTokens": 15298007,
+      "outputTokens": 2036899,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 281283328,
-      "cachedTokens": 281283328,
-      "freshTokens": 17301411,
-      "totalTokens": 298584739,
+      "cacheReadTokens": 283063552,
+      "cachedTokens": 283063552,
+      "freshTokens": 17334906,
+      "totalTokens": 300398458,
       "estimatedCostUsd": null
     }
   },
@@ -3818,13 +3818,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 3114858,
-      "outputTokens": 294905,
+      "inputTokens": 3137959,
+      "outputTokens": 305299,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 48497920,
-      "cachedTokens": 48497920,
-      "freshTokens": 3409763,
-      "totalTokens": 51907683,
+      "cacheReadTokens": 50278144,
+      "cachedTokens": 50278144,
+      "freshTokens": 3443258,
+      "totalTokens": 53721402,
       "estimatedCostUsd": null
     }
   ],
@@ -3837,7 +3837,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "b70c481",
+        "commit": "a82b14e",
         "changedFiles": 0
       },
       "stack": [],
@@ -4033,7 +4033,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "b70c481",
+        "commit": "a82b14e",
         "changedFiles": 0
       },
       "stack": [
@@ -4068,7 +4068,7 @@
         "css": 3,
         "tsx": 23
       },
-      "lastModified": "2026-08-10T04:28:27.345Z",
+      "lastModified": "2026-08-10T04:58:44.993Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4142,7 +4142,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 39436982110,
+    "exactTotalTokens": 39438795829,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4354,7 +4354,7 @@
       "cachedSharePct": 98.8,
       "freshSharePct": 1.2,
       "outputSharePct": 21.8,
-      "avgTokensPerActiveDay": 348999842,
+      "avgTokensPerActiveDay": 349015892,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4483,7 +4483,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "5152756881ab94829e8f1d0fc8c6997bf7e3488baac5818ca1dcddb2586091fa",
+    "snapshotSha256": "0e3698a695cb152aaa2e4a99572bd65b0a9b1447610881ce33d9d79bcf58d777",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4749,7 +4749,7 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 161744,
+    "totalEvents": 161745,
     "hierarchy": [
       {
         "provider": "codex",
@@ -4865,15 +4865,15 @@
       },
       {
         "provider": "grok",
-        "events": 248,
+        "events": 249,
         "sessions": 0,
-        "totalTokens": 298584739,
+        "totalTokens": 300398458,
         "models": [
           {
             "model": "grok-4.5-build",
-            "events": 239,
+            "events": 240,
             "sessions": 0,
-            "totalTokens": 294588009
+            "totalTokens": 296401728
           },
           {
             "model": "grok-4.5",
@@ -4892,7 +4892,7 @@
     ],
     "sessions": {
       "distinctSessions": 45,
-      "eventsWithoutSession": 93613,
+      "eventsWithoutSession": 93614,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4918,12 +4918,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-10T04:28:29.485Z",
-    "nonce": "4e93cc777e7d29429c74dc51322f7e8b",
+    "issuedAt": "2026-08-10T04:58:49.382Z",
+    "nonce": "53d6de0e9c6e8993f23256de38e06cb6",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "dc4b361da44b851b1c71e21a9f1e7d305d8ea2c5e5ce30d5b077db33dd4086f7",
-    "signature": "yYVbRCq+Fjm+nXzg7cz1V/V0OZcNlIuuW796DE7v7VDjNateOsV7qezOmiWaKe2/bL9mvxN6/QcqT6+EeyxxAA==",
+    "payloadSha256": "90cfa7d717aecac6a29baa714e6849a064c3ccad1dd83902b16d3e0465309182",
+    "signature": "sAJv/Q0+j3B0YLpk0LC4G/Z3GOr7Aa7rrxStLtANYe7weJqT7ZWc8nIL7tYKD85R9GpDxigKWumNRlcDlLNXCA==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
