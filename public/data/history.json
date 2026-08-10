@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
   "kind": "compact_daily_series",
-  "generatedAt": "2026-08-10T21:14:07.751Z",
+  "generatedAt": "2026-08-10T21:45:34.384Z",
   "updatedThrough": "2026-08-10",
   "pointCount": 172,
   "points": [
@@ -1376,9 +1376,9 @@
     {
       "date": "2026-08-10",
       "provider": "grok",
-      "totalTokens": 14958199,
-      "freshTokens": 840951,
-      "cachedTokens": 14117248,
+      "totalTokens": 16100278,
+      "freshTokens": 915894,
+      "cachedTokens": 15184384,
       "estimatedCostUsd": null
     }
   ],
