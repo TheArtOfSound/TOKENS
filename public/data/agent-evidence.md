@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-11T07:55:21.705Z
+- **Generated at:** 2026-08-11T08:25:47.193Z
 - **Collector:** 0.5.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `599d95c1dfa476a915f2c83422894b237fefaac72392ede25b2b4f14432c402c`
+- **Snapshot hash:** `185292bca7947bea116a0378cdbf7cd70ca7666623aeb516fe1cd937e394c58f`
 
 ## Identity (self-submitted)
 
@@ -49,7 +49,7 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, codex-auto-review, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5
 - Projects active (collector-observed locally): 8
 
-Exact total tokens (provider-reported sums): **41183812085**
+Exact total tokens (provider-reported sums): **41185751533**
 
 _Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value._
 
@@ -58,7 +58,7 @@ _Token volume is evidence of activity, not expertise, productivity, efficiency, 
 - Cache reuse share: **98.7%**
 - Fresh token share: **1.3%**
 - Output share of in+out: **20.6%**
-- Avg tokens / active day: **358120105**
+- Avg tokens / active day: **358136970**
 
 Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class.
 
@@ -196,7 +196,7 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ## Agent operation telemetry (sanitized hierarchy)
 
-- Total usage events: **174068**
+- Total usage events: **174069**
 - Distinct sessions (local pseudonyms, count only): **45**
 - Median events / session: 464
 - p95 events / session: 4776
@@ -222,8 +222,8 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
   - claude-opus-5: 3710 events, 8 sessions
   - claude-opus-4-6: 1396 events, 1 sessions
   - claude-haiku-4-5-20251001: 787 events, 7 sessions
-- **grok**: 312 events, 0 sessions, 401531256 tokens
-  - grok-4.5-build: 303 events, 0 sessions
+- **grok**: 313 events, 0 sessions, 403470704 tokens
+  - grok-4.5-build: 304 events, 0 sessions
   - grok-4.5: 5 events, 0 sessions
   - grok-4.5-build-free: 4 events, 0 sessions
 

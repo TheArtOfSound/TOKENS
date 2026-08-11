@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-11T07:55:21.705Z",
+  "generatedAt": "2026-08-11T08:25:47.193Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 411805462,
-    "outputTokens": 106795842,
+    "inputTokens": 411845322,
+    "outputTokens": 106810374,
     "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 39980303064,
-    "cachedTokens": 40665210781,
-    "freshTokens": 518601304,
-    "totalTokens": 41183812085,
+    "cacheReadTokens": 39982188120,
+    "cachedTokens": 40667095837,
+    "freshTokens": 518655696,
+    "totalTokens": 41185751533,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -66,13 +66,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 19467282,
-      "outputTokens": 2541670,
+      "inputTokens": 19507142,
+      "outputTokens": 2556202,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 379522304,
-      "cachedTokens": 379522304,
-      "freshTokens": 22008952,
-      "totalTokens": 401531256,
+      "cacheReadTokens": 381407360,
+      "cachedTokens": 381407360,
+      "freshTokens": 22063344,
+      "totalTokens": 403470704,
       "estimatedCostUsd": null
     }
   },
@@ -3877,13 +3877,13 @@
         "grok-4.5-build",
         "grok-4.5-build-free"
       ],
-      "inputTokens": 160108,
-      "outputTokens": 34914,
+      "inputTokens": 199968,
+      "outputTokens": 49446,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 12428160,
-      "cachedTokens": 12428160,
-      "freshTokens": 195022,
-      "totalTokens": 12623182,
+      "cacheReadTokens": 14313216,
+      "cachedTokens": 14313216,
+      "freshTokens": 249414,
+      "totalTokens": 14562630,
       "estimatedCostUsd": null
     }
   ],
@@ -3896,7 +3896,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "79e65fb",
+        "commit": "c233b26",
         "changedFiles": 0
       },
       "stack": [],
@@ -4092,7 +4092,7 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "79e65fb",
+        "commit": "c233b26",
         "changedFiles": 0
       },
       "stack": [
@@ -4127,7 +4127,7 @@
         "css": 3,
         "tsx": 23
       },
-      "lastModified": "2026-08-11T07:55:19.725Z",
+      "lastModified": "2026-08-11T08:25:46.026Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4201,7 +4201,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 41183812085,
+    "exactTotalTokens": 41185751533,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4413,7 +4413,7 @@
       "cachedSharePct": 98.7,
       "freshSharePct": 1.3,
       "outputSharePct": 20.6,
-      "avgTokensPerActiveDay": 358120105,
+      "avgTokensPerActiveDay": 358136970,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4542,7 +4542,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "599d95c1dfa476a915f2c83422894b237fefaac72392ede25b2b4f14432c402c",
+    "snapshotSha256": "185292bca7947bea116a0378cdbf7cd70ca7666623aeb516fe1cd937e394c58f",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4808,7 +4808,7 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 174068,
+    "totalEvents": 174069,
     "hierarchy": [
       {
         "provider": "codex",
@@ -4924,15 +4924,15 @@
       },
       {
         "provider": "grok",
-        "events": 312,
+        "events": 313,
         "sessions": 0,
-        "totalTokens": 401531256,
+        "totalTokens": 403470704,
         "models": [
           {
             "model": "grok-4.5-build",
-            "events": 303,
+            "events": 304,
             "sessions": 0,
-            "totalTokens": 397534526
+            "totalTokens": 399473974
           },
           {
             "model": "grok-4.5",
@@ -4951,7 +4951,7 @@
     ],
     "sessions": {
       "distinctSessions": 45,
-      "eventsWithoutSession": 105937,
+      "eventsWithoutSession": 105938,
       "medianEventsPerSession": 464,
       "p95EventsPerSession": 4776,
       "maxEventsPerSession": 14840,
@@ -4977,12 +4977,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-11T07:55:25.091Z",
-    "nonce": "c53e20d3911e9ec9ea5424b05697e2a4",
+    "issuedAt": "2026-08-11T08:25:50.426Z",
+    "nonce": "1da904a39e13f676db4273a9ae9b1927",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "6eb2f6dcb3049bb8a3093db6d0ea2c1b82620d27bc3d4126ae1911d9181ca894",
-    "signature": "Km1F7KUC4MnO++4ENqoUgK7Dldqw8vJynAbw4rrOL6PqLnrf4Bor9+a1GgzpRnZL2BH6Ps87vGS3mmKKUsyqCA==",
+    "payloadSha256": "36bbbd45e7f14cf7ab608c89dcc4c504b048efcb5c1cc76e0dbf397cc4c3fe35",
+    "signature": "VyWbWuYlMVURqWcatob9qO2lJyebfd8oDYrw73Q6IC48BRGWx/iyI7Jj6PWkwf7aWyIbK1Y1WP883Keb7tgDBQ==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
