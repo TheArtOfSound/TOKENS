@@ -3,12 +3,12 @@
 > Machine-readable, claim-bounded export for human or AI evaluation.
 > Raw prompts, code, responses, credentials, and file paths are **not** included.
 
-- **Generated at:** 2026-08-12T02:05:26.400Z
+- **Generated at:** 2026-08-27T22:08:41.818Z
 - **Collector:** 0.5.0
 - **Timezone:** America/Phoenix
 - **Sample data:** no
 - **Live profile:** https://ledger.imagineqira.com/u/bryan
-- **Snapshot hash:** `fe4e936fe9d1a71dba148a0c5906da050ce1bc3f04d818fa14373adadc62ea95`
+- **Snapshot hash:** `c14a66ce944091b0114ebbd1f936b18f9c3e3f3e372a5957d3012575cf993564`
 
 ## Identity (self-submitted)
 
@@ -41,15 +41,15 @@ Building Qira: local-first AI measurement, verified AI-work identity, and applie
 
 ## Measured activity
 
-- Active AI-work days: **115**
-- Span: 2026-02-26 → 2026-08-11 (167 days)
-- Last 30 / 90 days active: 30 / 83
-- Current / longest streak (days): 49 / 49
+- Active AI-work days: **131**
+- Span: 2026-02-26 → 2026-08-27 (183 days)
+- Last 30 / 90 days active: 30 / 85
+- Current / longest streak (days): 65 / 65
 - Tools: Codex, Claude Code, Grok
 - Models (sample): claude-fable-5, claude-haiku-4-5-20251001, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, codex-auto-review, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.5
 - Projects active (collector-observed locally): 8
 
-Exact total tokens (provider-reported sums): **41209705448**
+Exact total tokens (provider-reported sums): **50806787383**
 
 _Token volume is evidence of activity, not expertise, productivity, efficiency, or professional value._
 
@@ -57,8 +57,8 @@ _Token volume is evidence of activity, not expertise, productivity, efficiency, 
 
 - Cache reuse share: **98.7%**
 - Fresh token share: **1.3%**
-- Output share of in+out: **20.6%**
-- Avg tokens / active day: **358345265**
+- Output share of in+out: **20.3%**
+- Avg tokens / active day: **387838072**
 
 Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class.
 
@@ -196,34 +196,35 @@ Shipped open-source collector, live signed ledger, and claim-authority surface e
 
 ## Agent operation telemetry (sanitized hierarchy)
 
-- Total usage events: **174076**
-- Distinct sessions (local pseudonyms, count only): **45**
-- Median events / session: 464
-- p95 events / session: 4776
+- Total usage events: **201619**
+- Distinct sessions (local pseudonyms, count only): **59**
+- Median events / session: 466
+- p95 events / session: 8360
 - Median inter-event gap (s, ≤1h): 10
 
 ### Hierarchy: provider → model
 
-- **codex**: 105625 events, 0 sessions, 14282450159 tokens
-  - gpt-5.6-sol: 33853 events, 0 sessions
+- **codex**: 112929 events, 0 sessions, 15242792926 tokens
+  - gpt-5.6-sol: 39734 events, 0 sessions
   - gpt-5.5: 32270 events, 0 sessions
   - gpt-5.3-codex: 17421 events, 0 sessions
   - gpt-5.4: 15953 events, 0 sessions
-  - (unattributed): 4980 events, 0 sessions
+  - (unattributed): 6255 events, 0 sessions
   - gpt-5.6-terra: 603 events, 0 sessions
-  - codex-auto-review: 302 events, 0 sessions
+  - codex-auto-review: 450 events, 0 sessions
   - gpt-5.4-mini: 221 events, 0 sessions
   - gpt-5.6-luna: 22 events, 0 sessions
-- **claude**: 68131 events, 45 sessions, 26499830670 tokens
-  - claude-opus-4-8: 38108 events, 37 sessions
+- **claude**: 87463 events, 59 sessions, 33468887066 tokens
+  - claude-opus-4-8: 38694 events, 39 sessions
+  - claude-opus-5: 18631 events, 24 sessions
   - claude-opus-4-7: 12742 events, 5 sessions
-  - claude-fable-5: 5900 events, 18 sessions
+  - claude-fable-5: 9725 events, 26 sessions
   - claude-sonnet-4-6: 5488 events, 2 sessions
-  - claude-opus-5: 3710 events, 8 sessions
   - claude-opus-4-6: 1396 events, 1 sessions
   - claude-haiku-4-5-20251001: 787 events, 7 sessions
-- **grok**: 320 events, 0 sessions, 427424619 tokens
-  - grok-4.5-build: 310 events, 0 sessions
+- **grok**: 1227 events, 0 sessions, 2095107391 tokens
+  - grok-4.6-build: 814 events, 0 sessions
+  - grok-4.5-build: 403 events, 0 sessions
   - grok-4.5: 6 events, 0 sessions
   - grok-4.5-build-free: 4 events, 0 sessions
 

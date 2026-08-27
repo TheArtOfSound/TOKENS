@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-12T02:05:26.400Z",
+  "generatedAt": "2026-08-27T22:08:41.818Z",
   "timezone": "America/Phoenix",
   "source": "local_mac_sanitized_ccusage",
   "collectorVersion": "0.5.0",
   "isSampleData": false,
   "totals": {
-    "inputTokens": 412246995,
-    "outputTokens": 106920824,
-    "cacheCreationTokens": 684907717,
-    "cacheReadTokens": 40005629912,
-    "cachedTokens": 40690537629,
-    "freshTokens": 519167819,
-    "totalTokens": 41209705448,
+    "inputTokens": 540930082,
+    "outputTokens": 137518055,
+    "cacheCreationTokens": 787718118,
+    "cacheReadTokens": 49340621128,
+    "cachedTokens": 50128339246,
+    "freshTokens": 678448137,
+    "totalTokens": 50806787383,
     "estimatedCostUsd": null
   },
   "providers": {
@@ -28,13 +28,13 @@
         "gpt-5.6-sol",
         "gpt-5.6-terra"
       ],
-      "inputTokens": 379696657,
-      "outputTokens": 38668382,
+      "inputTokens": 405447963,
+      "outputTokens": 41932099,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 13864085120,
-      "cachedTokens": 13864085120,
-      "freshTokens": 418365039,
-      "totalTokens": 14282450159,
+      "cacheReadTokens": 14795412864,
+      "cachedTokens": 14795412864,
+      "freshTokens": 447380062,
+      "totalTokens": 15242792926,
       "estimatedCostUsd": null
     },
     "claude": {
@@ -49,13 +49,13 @@
         "claude-opus-5",
         "claude-sonnet-4-6"
       ],
-      "inputTokens": 12641523,
-      "outputTokens": 65585790,
-      "cacheCreationTokens": 684907717,
-      "cacheReadTokens": 25736695640,
-      "cachedTokens": 26421603357,
-      "freshTokens": 78227313,
-      "totalTokens": 26499830670,
+      "inputTokens": 12935369,
+      "outputTokens": 78526499,
+      "cacheCreationTokens": 787718118,
+      "cacheReadTokens": 32589707080,
+      "cachedTokens": 33377425198,
+      "freshTokens": 91461868,
+      "totalTokens": 33468887066,
       "estimatedCostUsd": null
     },
     "grok": {
@@ -64,15 +64,16 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
-      "inputTokens": 19908815,
-      "outputTokens": 2666652,
+      "inputTokens": 122546750,
+      "outputTokens": 17059457,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 404849152,
-      "cachedTokens": 404849152,
-      "freshTokens": 22575467,
-      "totalTokens": 427424619,
+      "cacheReadTokens": 1955501184,
+      "cachedTokens": 1955501184,
+      "freshTokens": 139606207,
+      "totalTokens": 2095107391,
       "estimatedCostUsd": null
     }
   },
@@ -2987,7 +2988,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 10531,
       "outputTokens": 343,
@@ -3050,7 +3052,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 319821,
       "outputTokens": 8677,
@@ -3113,7 +3116,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 441535,
       "outputTokens": 124973,
@@ -3131,7 +3135,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 116907,
       "outputTokens": 36933,
@@ -3172,7 +3177,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 21552,
       "outputTokens": 11155,
@@ -3212,7 +3218,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 105056,
       "outputTokens": 52767,
@@ -3274,7 +3281,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 61216,
       "outputTokens": 421,
@@ -3359,7 +3367,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 3207027,
       "outputTokens": 324194,
@@ -3400,7 +3409,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 149813,
       "outputTokens": 20862,
@@ -3441,7 +3451,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 178421,
       "outputTokens": 26649,
@@ -3504,7 +3515,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 1887361,
       "outputTokens": 246171,
@@ -3544,7 +3556,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 1229179,
       "outputTokens": 123218,
@@ -3585,7 +3598,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 30154,
       "outputTokens": 18171,
@@ -3626,7 +3640,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 67086,
       "outputTokens": 11147,
@@ -3644,7 +3659,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 958137,
       "outputTokens": 199381,
@@ -3662,7 +3678,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 710151,
       "outputTokens": 96878,
@@ -3680,7 +3697,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 36551,
       "outputTokens": 14114,
@@ -3698,7 +3716,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 180348,
       "outputTokens": 41154,
@@ -3716,7 +3735,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 723730,
       "outputTokens": 85319,
@@ -3757,7 +3777,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 377017,
       "outputTokens": 20570,
@@ -3798,7 +3819,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 1348455,
       "outputTokens": 268503,
@@ -3816,7 +3838,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 3137959,
       "outputTokens": 305299,
@@ -3857,7 +3880,8 @@
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 4009167,
       "outputTokens": 469857,
@@ -3870,12 +3894,35 @@
     },
     {
       "date": "2026-08-11",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 12715,
+      "outputTokens": 1015269,
+      "cacheCreationTokens": 5948013,
+      "cacheReadTokens": 482554941,
+      "cachedTokens": 488502954,
+      "freshTokens": 1027984,
+      "totalTokens": 489530938,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-11",
       "provider": "grok",
       "displayName": "Grok",
       "models": [
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "inputTokens": 601641,
       "outputTokens": 159896,
@@ -3884,6 +3931,848 @@
       "cachedTokens": 37755008,
       "freshTokens": 761537,
       "totalTokens": 38516545,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-12",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 11040,
+      "outputTokens": 1215806,
+      "cacheCreationTokens": 10365304,
+      "cacheReadTokens": 681495910,
+      "cachedTokens": 691861214,
+      "freshTokens": 1226846,
+      "totalTokens": 693088060,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-12",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 4223897,
+      "outputTokens": 227394,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 91185920,
+      "cachedTokens": 91185920,
+      "freshTokens": 4451291,
+      "totalTokens": 95637211,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-12",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 7231403,
+      "outputTokens": 324981,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 53403264,
+      "cachedTokens": 53403264,
+      "freshTokens": 7556384,
+      "totalTokens": 60959648,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-13",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 36566,
+      "outputTokens": 1026483,
+      "cacheCreationTokens": 10724555,
+      "cacheReadTokens": 400975568,
+      "cachedTokens": 411700123,
+      "freshTokens": 1063049,
+      "totalTokens": 412763172,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-13",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 5409665,
+      "outputTokens": 523665,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 268437504,
+      "cachedTokens": 268437504,
+      "freshTokens": 5933330,
+      "totalTokens": 274370834,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-13",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 9746041,
+      "outputTokens": 1627678,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 161632384,
+      "cachedTokens": 161632384,
+      "freshTokens": 11373719,
+      "totalTokens": 173006103,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-14",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 153375,
+      "outputTokens": 2000370,
+      "cacheCreationTokens": 20149336,
+      "cacheReadTokens": 1159690917,
+      "cachedTokens": 1179840253,
+      "freshTokens": 2153745,
+      "totalTokens": 1181993998,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-14",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 1037981,
+      "outputTokens": 89228,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 23915008,
+      "cachedTokens": 23915008,
+      "freshTokens": 1127209,
+      "totalTokens": 25042217,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-15",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 5734,
+      "outputTokens": 609833,
+      "cacheCreationTokens": 3933427,
+      "cacheReadTokens": 374844530,
+      "cachedTokens": 378777957,
+      "freshTokens": 615567,
+      "totalTokens": 379393524,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-15",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 999472,
+      "outputTokens": 86648,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 11961216,
+      "cachedTokens": 11961216,
+      "freshTokens": 1086120,
+      "totalTokens": 13047336,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-16",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 16685,
+      "outputTokens": 382537,
+      "cacheCreationTokens": 1906491,
+      "cacheReadTokens": 135546165,
+      "cachedTokens": 137452656,
+      "freshTokens": 399222,
+      "totalTokens": 137851878,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-16",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 1555,
+      "outputTokens": 1512,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 200320,
+      "cachedTokens": 200320,
+      "freshTokens": 3067,
+      "totalTokens": 203387,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-16",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 27873011,
+      "outputTokens": 6510331,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 512365440,
+      "cachedTokens": 512365440,
+      "freshTokens": 34383342,
+      "totalTokens": 546748782,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-17",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 16244094,
+      "outputTokens": 1826855,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 211740800,
+      "cachedTokens": 211740800,
+      "freshTokens": 18070949,
+      "totalTokens": 229811749,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-18",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 15958351,
+      "outputTokens": 1082482,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 229957760,
+      "cachedTokens": 229957760,
+      "freshTokens": 17040833,
+      "totalTokens": 246998593,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-19",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 1840,
+      "outputTokens": 1278157,
+      "cacheCreationTokens": 4712894,
+      "cacheReadTokens": 420679765,
+      "cachedTokens": 425392659,
+      "freshTokens": 1279997,
+      "totalTokens": 426672656,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-19",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 3539289,
+      "outputTokens": 559703,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 129232640,
+      "cachedTokens": 129232640,
+      "freshTokens": 4098992,
+      "totalTokens": 133331632,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-19",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 2361854,
+      "outputTokens": 67367,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 17639680,
+      "cachedTokens": 17639680,
+      "freshTokens": 2429221,
+      "totalTokens": 20068901,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-20",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 2952,
+      "outputTokens": 1517773,
+      "cacheCreationTokens": 10565713,
+      "cacheReadTokens": 791596221,
+      "cachedTokens": 802161934,
+      "freshTokens": 1520725,
+      "totalTokens": 803682659,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-20",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 5005273,
+      "outputTokens": 591045,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 132265216,
+      "cachedTokens": 132265216,
+      "freshTokens": 5596318,
+      "totalTokens": 137861534,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-21",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 41153,
+      "outputTokens": 759977,
+      "cacheCreationTokens": 6592548,
+      "cacheReadTokens": 312170936,
+      "cachedTokens": 318763484,
+      "freshTokens": 801130,
+      "totalTokens": 319564614,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-21",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 356538,
+      "outputTokens": 19227,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 5989120,
+      "cachedTokens": 5989120,
+      "freshTokens": 375765,
+      "totalTokens": 6364885,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-22",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 2596,
+      "outputTokens": 704354,
+      "cacheCreationTokens": 3663710,
+      "cacheReadTokens": 518801251,
+      "cachedTokens": 522464961,
+      "freshTokens": 706950,
+      "totalTokens": 523171911,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-22",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 4802610,
+      "outputTokens": 949454,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 182712320,
+      "cachedTokens": 182712320,
+      "freshTokens": 5752064,
+      "totalTokens": 188464384,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-22",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 6112789,
+      "outputTokens": 729577,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 94480000,
+      "cachedTokens": 94480000,
+      "freshTokens": 6842366,
+      "totalTokens": 101322366,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-23",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 2432,
+      "outputTokens": 578018,
+      "cacheCreationTokens": 3691249,
+      "cacheReadTokens": 477314662,
+      "cachedTokens": 481005911,
+      "freshTokens": 580450,
+      "totalTokens": 481586361,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-23",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 2661122,
+      "outputTokens": 286703,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 74902528,
+      "cachedTokens": 74902528,
+      "freshTokens": 2947825,
+      "totalTokens": 77850353,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-23",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 6052098,
+      "outputTokens": 942980,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 49425408,
+      "cachedTokens": 49425408,
+      "freshTokens": 6995078,
+      "totalTokens": 56420486,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-24",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 3662,
+      "outputTokens": 546054,
+      "cacheCreationTokens": 7547177,
+      "cacheReadTokens": 474155290,
+      "cachedTokens": 481702467,
+      "freshTokens": 549716,
+      "totalTokens": 482252183,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-24",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 2036010,
+      "outputTokens": 243391,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 79796864,
+      "cachedTokens": 79796864,
+      "freshTokens": 2279401,
+      "totalTokens": 82076265,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-24",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 558784,
+      "outputTokens": 42882,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 15341440,
+      "cachedTokens": 15341440,
+      "freshTokens": 601666,
+      "totalTokens": 15943106,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-25",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 542,
+      "outputTokens": 192421,
+      "cacheCreationTokens": 770109,
+      "cacheReadTokens": 95552810,
+      "cachedTokens": 96322919,
+      "freshTokens": 192963,
+      "totalTokens": 96515882,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-25",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 661789,
+      "outputTokens": 77105,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 17856640,
+      "cachedTokens": 17856640,
+      "freshTokens": 738894,
+      "totalTokens": 18595534,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-25",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 301306,
+      "outputTokens": 9494,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 8025856,
+      "cachedTokens": 8025856,
+      "freshTokens": 310800,
+      "totalTokens": 8336656,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-26",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 834,
+      "outputTokens": 422590,
+      "cacheCreationTokens": 4015007,
+      "cacheReadTokens": 255581083,
+      "cachedTokens": 259596090,
+      "freshTokens": 423424,
+      "totalTokens": 260019514,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-26",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 348576,
+      "outputTokens": 42527,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 23208320,
+      "cachedTokens": 23208320,
+      "freshTokens": 391103,
+      "totalTokens": 23599423,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-26",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 1515686,
+      "outputTokens": 213042,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 13263104,
+      "cachedTokens": 13263104,
+      "freshTokens": 1728728,
+      "totalTokens": 14991832,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-27",
+      "provider": "claude",
+      "displayName": "Claude Code",
+      "models": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-sonnet-4-6"
+      ],
+      "inputTokens": 1720,
+      "outputTokens": 691067,
+      "cacheCreationTokens": 8224868,
+      "cacheReadTokens": 272051391,
+      "cachedTokens": 280276259,
+      "freshTokens": 692787,
+      "totalTokens": 280969046,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-27",
+      "provider": "codex",
+      "displayName": "Codex",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.3-codex",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra"
+      ],
+      "inputTokens": 2066793,
+      "outputTokens": 352263,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 63794688,
+      "cachedTokens": 63794688,
+      "freshTokens": 2419056,
+      "totalTokens": 66213744,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-27",
+      "provider": "grok",
+      "displayName": "Grok",
+      "models": [
+        "grok-4.5",
+        "grok-4.5-build",
+        "grok-4.5-build-free",
+        "grok-4.6-build"
+      ],
+      "inputTokens": 1283254,
+      "outputTokens": 228988,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 9246336,
+      "cachedTokens": 9246336,
+      "freshTokens": 1512242,
+      "totalTokens": 10758578,
       "estimatedCostUsd": null
     }
   ],
@@ -3896,8 +4785,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "8f231f8",
-        "changedFiles": 0
+        "commit": "9dafbe5",
+        "changedFiles": 9
       },
       "stack": [],
       "scripts": [],
@@ -3966,7 +4855,7 @@
         "ts": 3,
         "rs": 34
       },
-      "lastModified": "2026-07-31T01:54:36.986Z",
+      "lastModified": "2026-08-13T05:35:11.856Z",
       "scannerWarnings": [
         "match:scored score:1645 folder~qev, text~qev, text~nfet, folder=qev-desktop, text~qev-desktop, text~bry-nfet, text~qira-encryption-vault, domain=secure.imagineqira.com"
       ]
@@ -4004,7 +4893,7 @@
         "css": 1,
         "sql": 10
       },
-      "lastModified": "2026-07-27T05:37:38.974Z",
+      "lastModified": "2026-08-13T05:34:41.018Z",
       "scannerWarnings": [
         "match:scored score:1160 folder=my-digital, package~my-digital, text~my-digital, text~mydigital, domain=mydigital.imagineqira.com, package.json"
       ],
@@ -4048,15 +4937,15 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "1ca3eb4",
-        "changedFiles": 0
+        "commit": "25b06b2",
+        "changedFiles": 8
       },
       "stack": [],
       "scripts": [],
       "fileCounts": {
         "html": 1
       },
-      "lastModified": "2026-08-07T05:06:57.310Z",
+      "lastModified": "2026-08-14T01:57:49.192Z",
       "scannerWarnings": [
         "match:scored score:870 folder=pti, text~pti, text~phoenix-traffic, domain=pti.imagineqira.com"
       ],
@@ -4092,8 +4981,8 @@
       "found": true,
       "git": {
         "branch": "main",
-        "commit": "8f231f8",
-        "changedFiles": 0
+        "commit": "9dafbe5",
+        "changedFiles": 9
       },
       "stack": [
         "React",
@@ -4127,7 +5016,7 @@
         "css": 3,
         "tsx": 23
       },
-      "lastModified": "2026-08-12T02:05:22.648Z",
+      "lastModified": "2026-08-27T22:08:01.885Z",
       "scannerWarnings": [
         "match:explicit score:10000 explicit-path, folder=tokens, text~tokens, text~qira-agent-usage-observatory, package~qira-ledger, text~qira-ledger, domain=ledger.imagineqira.com, package.json, vite"
       ]
@@ -4150,7 +5039,7 @@
     "ccusage goose daily returned JSON but no recognized token records",
     "ccusage kilo daily returned JSON but no recognized token records",
     "ccusage copilot daily returned JSON but no recognized token records",
-    "ccusage gemini daily returned JSON but no recognized token records",
+    "ccusage gemini daily --json --offline timed out after 60000ms",
     "ccusage kimi daily returned JSON but no recognized token records"
   ],
   "measurement": {
@@ -4201,7 +5090,7 @@
         "method": "Model identifiers reported by the provider logs."
       }
     },
-    "exactTotalTokens": 41209705448,
+    "exactTotalTokens": 50806787383,
     "estimatedOnly": {
       "costUsd": null,
       "costMicroUsd": null
@@ -4278,15 +5167,15 @@
       }
     },
     "activity": {
-      "referenceDate": "2026-08-11",
-      "activeDays": 115,
+      "referenceDate": "2026-08-27",
+      "activeDays": 131,
       "firstActiveDate": "2026-02-26",
-      "lastActiveDate": "2026-08-11",
-      "spanDays": 167,
+      "lastActiveDate": "2026-08-27",
+      "spanDays": 183,
       "activeDaysLast30": 30,
-      "activeDaysLast90": 83,
-      "currentStreakDays": 49,
-      "longestStreakDays": 49,
+      "activeDaysLast90": 85,
+      "currentStreakDays": 65,
+      "longestStreakDays": 65,
       "toolsUsed": [
         "Codex",
         "Claude Code",
@@ -4310,7 +5199,8 @@
         "gpt-5.6-terra",
         "grok-4.5",
         "grok-4.5-build",
-        "grok-4.5-build-free"
+        "grok-4.5-build-free",
+        "grok-4.6-build"
       ],
       "projectsActive": 8
     },
@@ -4412,8 +5302,8 @@
     "efficiency": {
       "cachedSharePct": 98.7,
       "freshSharePct": 1.3,
-      "outputSharePct": 20.6,
-      "avgTokensPerActiveDay": 358345265,
+      "outputSharePct": 20.3,
+      "avgTokensPerActiveDay": 387838072,
       "note": "Efficiency signals, not a ranking. Producing the same verified result with fewer tokens is better. Cache reuse is the measured proxy for context-injection efficiency (reusing context instead of resending it). Cost per outcome requires connected outcomes, which remain a separate evidence class."
     },
     "practice": {
@@ -4458,7 +5348,7 @@
       {
         "label": "Collector-observed",
         "status": "verified",
-        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (115 active days; 8 project(s) seen locally). This is device-local observation, not independent confirmation."
+        "basis": "AI activity was read from the provider's own usage accounting in local logs on this device (131 active days; 8 project(s) seen locally). This is device-local observation, not independent confirmation."
       },
       {
         "label": "Identity-linked",
@@ -4542,7 +5432,7 @@
   "verification": {
     "schemaVersion": "2.0.0",
     "canonicalSchemaVersion": "2.0.0",
-    "snapshotSha256": "fe4e936fe9d1a71dba148a0c5906da050ce1bc3f04d818fa14373adadc62ea95",
+    "snapshotSha256": "c14a66ce944091b0114ebbd1f936b18f9c3e3f3e372a5957d3012575cf993564",
     "rawLogsPublished": false,
     "gitCommit": null,
     "proves": "The hash proves the published snapshot was not altered after generation. It does not prove the private source logs were immutable, only that this public file is intact."
@@ -4808,19 +5698,19 @@
   "telemetry": {
     "measurementClass": "collector_derived",
     "confidence": "medium",
-    "totalEvents": 174076,
+    "totalEvents": 201619,
     "hierarchy": [
       {
         "provider": "codex",
-        "events": 105625,
+        "events": 112929,
         "sessions": 0,
-        "totalTokens": 14282450159,
+        "totalTokens": 15242792926,
         "models": [
           {
             "model": "gpt-5.6-sol",
-            "events": 33853,
+            "events": 39734,
             "sessions": 0,
-            "totalTokens": 4510023121
+            "totalTokens": 5251661179
           },
           {
             "model": "gpt-5.5",
@@ -4842,9 +5732,9 @@
           },
           {
             "model": "(unattributed)",
-            "events": 4980,
+            "events": 6255,
             "sessions": 0,
-            "totalTokens": 767226110
+            "totalTokens": 966860735
           },
           {
             "model": "gpt-5.6-terra",
@@ -4854,9 +5744,9 @@
           },
           {
             "model": "codex-auto-review",
-            "events": 302,
+            "events": 450,
             "sessions": 0,
-            "totalTokens": 23668242
+            "totalTokens": 42738326
           },
           {
             "model": "gpt-5.4-mini",
@@ -4874,15 +5764,21 @@
       },
       {
         "provider": "claude",
-        "events": 68131,
-        "sessions": 45,
-        "totalTokens": 26499830670,
+        "events": 87463,
+        "sessions": 59,
+        "totalTokens": 33468887066,
         "models": [
           {
             "model": "claude-opus-4-8",
-            "events": 38108,
-            "sessions": 37,
-            "totalTokens": 16194639978
+            "events": 38694,
+            "sessions": 39,
+            "totalTokens": 16552379772
+          },
+          {
+            "model": "claude-opus-5",
+            "events": 18631,
+            "sessions": 24,
+            "totalTokens": 6281502694
           },
           {
             "model": "claude-opus-4-7",
@@ -4892,21 +5788,15 @@
           },
           {
             "model": "claude-fable-5",
-            "events": 5900,
-            "sessions": 18,
-            "totalTokens": 2104166417
+            "events": 9725,
+            "sessions": 26,
+            "totalTokens": 3605014553
           },
           {
             "model": "claude-sonnet-4-6",
             "events": 5488,
             "sessions": 2,
             "totalTokens": 187896657
-          },
-          {
-            "model": "claude-opus-5",
-            "events": 3710,
-            "sessions": 8,
-            "totalTokens": 1171034228
           },
           {
             "model": "claude-opus-4-6",
@@ -4924,15 +5814,21 @@
       },
       {
         "provider": "grok",
-        "events": 320,
+        "events": 1227,
         "sessions": 0,
-        "totalTokens": 427424619,
+        "totalTokens": 2095107391,
         "models": [
           {
-            "model": "grok-4.5-build",
-            "events": 310,
+            "model": "grok-4.6-build",
+            "events": 814,
             "sessions": 0,
-            "totalTokens": 422836501
+            "totalTokens": 1540580567
+          },
+          {
+            "model": "grok-4.5-build",
+            "events": 403,
+            "sessions": 0,
+            "totalTokens": 549938706
           },
           {
             "model": "grok-4.5",
@@ -4950,10 +5846,10 @@
       }
     ],
     "sessions": {
-      "distinctSessions": 45,
-      "eventsWithoutSession": 105945,
-      "medianEventsPerSession": 464,
-      "p95EventsPerSession": 4776,
+      "distinctSessions": 59,
+      "eventsWithoutSession": 114156,
+      "medianEventsPerSession": 466,
+      "p95EventsPerSession": 8360,
       "maxEventsPerSession": 14840,
       "medianInterEventSeconds": 10
     },
@@ -4977,12 +5873,12 @@
     "algorithm": "ed25519",
     "publicKey": "MCowBQYDK2VwAyEACtM+NkNEKJfV8ABWUexYi/JwTYyoPn3gaZ+wAMvd/UA=",
     "keyId": "defe470fe73a66c6",
-    "issuedAt": "2026-08-12T02:05:31.008Z",
-    "nonce": "da7b508f05e5bd707f5f3853e9c3b581",
+    "issuedAt": "2026-08-27T22:09:34.645Z",
+    "nonce": "3465ccdb15512a08a58c203da5c0dc76",
     "scope": "published_snapshot",
     "canonicalizationSpec": "RFC8785-subset; see docs/architecture/CANONICALIZATION.md",
-    "payloadSha256": "f1fd0d199fd6aa12be015b6f3ab3d8254db11d9d25aefa97af0c47c773b484a6",
-    "signature": "l0lEcRTmUbjQkM11GapiBpMWSg/cfBGzutXL0OaDBNwl1Xy4noAwVIZffOfjagXZcixRUqvcjbPMY8vPWU0eDw==",
+    "payloadSha256": "eeb49d43be263177a144c46cf812aba27acf2e5e87f768351eb5c68d95bf5c9a",
+    "signature": "xaNYiC/y4XAHIEkwHFQWA/3RnRRMEtOFOfAwcjv/UrrYx2qjWdqMARovTnjuIYPLihvhXAKMSJLsL7T5J/mhCw==",
     "proves": "This snapshot was produced by a collector holding this device key and has not been altered since signing.",
     "doesNotProve": [
       "It does not prove the provider source logs were genuine or unmodified.",
