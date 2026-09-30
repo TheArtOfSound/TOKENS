@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
   "kind": "compact_daily_series",
-  "generatedAt": "2026-08-27T22:08:41.818Z",
-  "updatedThrough": "2026-08-27",
-  "pointCount": 215,
+  "generatedAt": "2026-09-30T07:00:24.387Z",
+  "updatedThrough": "2026-09-29",
+  "pointCount": 248,
   "points": [
     {
       "date": "2026-02-26",
@@ -976,9 +976,9 @@
     {
       "date": "2026-07-13",
       "provider": "codex",
-      "totalTokens": 339112927,
-      "freshTokens": 14751455,
-      "cachedTokens": 324361472,
+      "totalTokens": 390178767,
+      "freshTokens": 17759695,
+      "cachedTokens": 372419072,
       "estimatedCostUsd": null
     },
     {
@@ -1016,9 +1016,9 @@
     {
       "date": "2026-07-16",
       "provider": "codex",
-      "totalTokens": 182213723,
-      "freshTokens": 5730907,
-      "cachedTokens": 176482816,
+      "totalTokens": 202204779,
+      "freshTokens": 6662763,
+      "cachedTokens": 195542016,
       "estimatedCostUsd": null
     },
     {
@@ -1168,9 +1168,9 @@
     {
       "date": "2026-07-25",
       "provider": "codex",
-      "totalTokens": 401023631,
-      "freshTokens": 12594319,
-      "cachedTokens": 388429312,
+      "totalTokens": 482896929,
+      "freshTokens": 16419873,
+      "cachedTokens": 466477056,
       "estimatedCostUsd": null
     },
     {
@@ -1192,9 +1192,9 @@
     {
       "date": "2026-07-27",
       "provider": "codex",
-      "totalTokens": 438032159,
-      "freshTokens": 13518623,
-      "cachedTokens": 424513536,
+      "totalTokens": 520952900,
+      "freshTokens": 16404804,
+      "cachedTokens": 504548096,
       "estimatedCostUsd": null
     },
     {
@@ -1208,9 +1208,9 @@
     {
       "date": "2026-07-28",
       "provider": "codex",
-      "totalTokens": 507007834,
-      "freshTokens": 15624538,
-      "cachedTokens": 491383296,
+      "totalTokens": 555470681,
+      "freshTokens": 17993305,
+      "cachedTokens": 537477376,
       "estimatedCostUsd": null
     },
     {
@@ -1232,9 +1232,9 @@
     {
       "date": "2026-07-29",
       "provider": "codex",
-      "totalTokens": 13292166,
-      "freshTokens": 936326,
-      "cachedTokens": 12355840,
+      "totalTokens": 24262476,
+      "freshTokens": 1326156,
+      "cachedTokens": 22936320,
       "estimatedCostUsd": null
     },
     {
@@ -1264,9 +1264,9 @@
     {
       "date": "2026-07-31",
       "provider": "codex",
-      "totalTokens": 2138903,
-      "freshTokens": 156439,
-      "cachedTokens": 1982464,
+      "totalTokens": 3562173,
+      "freshTokens": 234685,
+      "cachedTokens": 3327488,
       "estimatedCostUsd": null
     },
     {
@@ -1280,9 +1280,9 @@
     {
       "date": "2026-08-01",
       "provider": "codex",
-      "totalTokens": 102439986,
-      "freshTokens": 3457586,
-      "cachedTokens": 98982400,
+      "totalTokens": 161842704,
+      "freshTokens": 4688144,
+      "cachedTokens": 157154560,
       "estimatedCostUsd": null
     },
     {
@@ -1336,9 +1336,9 @@
     {
       "date": "2026-08-07",
       "provider": "codex",
-      "totalTokens": 31847063,
-      "freshTokens": 1068823,
-      "cachedTokens": 30778240,
+      "totalTokens": 62131926,
+      "freshTokens": 2009814,
+      "cachedTokens": 60122112,
       "estimatedCostUsd": null
     },
     {
@@ -1352,9 +1352,9 @@
     {
       "date": "2026-08-08",
       "provider": "codex",
-      "totalTokens": 1226215155,
-      "freshTokens": 27125747,
-      "cachedTokens": 1199089408,
+      "totalTokens": 1632635701,
+      "freshTokens": 35659701,
+      "cachedTokens": 1596976000,
       "estimatedCostUsd": null
     },
     {
@@ -1376,9 +1376,9 @@
     {
       "date": "2026-08-10",
       "provider": "codex",
-      "totalTokens": 1643883458,
-      "freshTokens": 42845378,
-      "cachedTokens": 1601038080,
+      "totalTokens": 1930751105,
+      "freshTokens": 55432577,
+      "cachedTokens": 1875318528,
       "estimatedCostUsd": null
     },
     {
@@ -1416,9 +1416,9 @@
     {
       "date": "2026-08-12",
       "provider": "codex",
-      "totalTokens": 95637211,
-      "freshTokens": 4451291,
-      "cachedTokens": 91185920,
+      "totalTokens": 107762460,
+      "freshTokens": 6074908,
+      "cachedTokens": 101687552,
       "estimatedCostUsd": null
     },
     {
@@ -1440,9 +1440,9 @@
     {
       "date": "2026-08-13",
       "provider": "codex",
-      "totalTokens": 274370834,
-      "freshTokens": 5933330,
-      "cachedTokens": 268437504,
+      "totalTokens": 336668172,
+      "freshTokens": 8078092,
+      "cachedTokens": 328590080,
       "estimatedCostUsd": null
     },
     {
@@ -1496,9 +1496,9 @@
     {
       "date": "2026-08-16",
       "provider": "codex",
-      "totalTokens": 203387,
-      "freshTokens": 3067,
-      "cachedTokens": 200320,
+      "totalTokens": 406774,
+      "freshTokens": 6134,
+      "cachedTokens": 400640,
       "estimatedCostUsd": null
     },
     {
@@ -1536,9 +1536,9 @@
     {
       "date": "2026-08-19",
       "provider": "codex",
-      "totalTokens": 133331632,
-      "freshTokens": 4098992,
-      "cachedTokens": 129232640,
+      "totalTokens": 198569562,
+      "freshTokens": 6077274,
+      "cachedTokens": 192492288,
       "estimatedCostUsd": null
     },
     {
@@ -1592,9 +1592,9 @@
     {
       "date": "2026-08-22",
       "provider": "codex",
-      "totalTokens": 188464384,
-      "freshTokens": 5752064,
-      "cachedTokens": 182712320,
+      "totalTokens": 264219554,
+      "freshTokens": 8163234,
+      "cachedTokens": 256056320,
       "estimatedCostUsd": null
     },
     {
@@ -1616,9 +1616,9 @@
     {
       "date": "2026-08-23",
       "provider": "codex",
-      "totalTokens": 77850353,
-      "freshTokens": 2947825,
-      "cachedTokens": 74902528,
+      "totalTokens": 143107732,
+      "freshTokens": 5448724,
+      "cachedTokens": 137659008,
       "estimatedCostUsd": null
     },
     {
@@ -1640,9 +1640,9 @@
     {
       "date": "2026-08-24",
       "provider": "codex",
-      "totalTokens": 82076265,
-      "freshTokens": 2279401,
-      "cachedTokens": 79796864,
+      "totalTokens": 120020838,
+      "freshTokens": 3100262,
+      "cachedTokens": 116920576,
       "estimatedCostUsd": null
     },
     {
@@ -1664,9 +1664,9 @@
     {
       "date": "2026-08-25",
       "provider": "codex",
-      "totalTokens": 18595534,
-      "freshTokens": 738894,
-      "cachedTokens": 17856640,
+      "totalTokens": 20462937,
+      "freshTokens": 913369,
+      "cachedTokens": 19549568,
       "estimatedCostUsd": null
     },
     {
@@ -1688,9 +1688,9 @@
     {
       "date": "2026-08-26",
       "provider": "codex",
-      "totalTokens": 23599423,
-      "freshTokens": 391103,
-      "cachedTokens": 23208320,
+      "totalTokens": 47198846,
+      "freshTokens": 782206,
+      "cachedTokens": 46416640,
       "estimatedCostUsd": null
     },
     {
@@ -1704,9 +1704,9 @@
     {
       "date": "2026-08-27",
       "provider": "claude",
-      "totalTokens": 280969046,
-      "freshTokens": 692787,
-      "cachedTokens": 280276259,
+      "totalTokens": 781811847,
+      "freshTokens": 1279697,
+      "cachedTokens": 780532150,
       "estimatedCostUsd": null
     },
     {
@@ -1723,6 +1723,270 @@
       "totalTokens": 10758578,
       "freshTokens": 1512242,
       "cachedTokens": 9246336,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-08-31",
+      "provider": "claude",
+      "totalTokens": 2607464,
+      "freshTokens": 14784,
+      "cachedTokens": 2592680,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-01",
+      "provider": "claude",
+      "totalTokens": 140436430,
+      "freshTokens": 306242,
+      "cachedTokens": 140130188,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-02",
+      "provider": "claude",
+      "totalTokens": 53709822,
+      "freshTokens": 294855,
+      "cachedTokens": 53414967,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-02",
+      "provider": "grok",
+      "totalTokens": 21876915,
+      "freshTokens": 2726451,
+      "cachedTokens": 19150464,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-03",
+      "provider": "claude",
+      "totalTokens": 30501587,
+      "freshTokens": 163115,
+      "cachedTokens": 30338472,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-04",
+      "provider": "claude",
+      "totalTokens": 101331667,
+      "freshTokens": 374785,
+      "cachedTokens": 100956882,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-05",
+      "provider": "claude",
+      "totalTokens": 58936804,
+      "freshTokens": 95297,
+      "cachedTokens": 58841507,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-05",
+      "provider": "grok",
+      "totalTokens": 2884804,
+      "freshTokens": 180804,
+      "cachedTokens": 2704000,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-08",
+      "provider": "claude",
+      "totalTokens": 271067329,
+      "freshTokens": 757314,
+      "cachedTokens": 270310015,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-09",
+      "provider": "claude",
+      "totalTokens": 415783455,
+      "freshTokens": 1007614,
+      "cachedTokens": 414775841,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-09",
+      "provider": "grok",
+      "totalTokens": 22435563,
+      "freshTokens": 1801195,
+      "cachedTokens": 20634368,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-10",
+      "provider": "claude",
+      "totalTokens": 518673502,
+      "freshTokens": 1241878,
+      "cachedTokens": 517431624,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-10",
+      "provider": "grok",
+      "totalTokens": 59503316,
+      "freshTokens": 7782228,
+      "cachedTokens": 51721088,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-11",
+      "provider": "claude",
+      "totalTokens": 867793266,
+      "freshTokens": 1324694,
+      "cachedTokens": 866468572,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-11",
+      "provider": "grok",
+      "totalTokens": 9688552,
+      "freshTokens": 187752,
+      "cachedTokens": 9500800,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-13",
+      "provider": "grok",
+      "totalTokens": 2086883,
+      "freshTokens": 113891,
+      "cachedTokens": 1972992,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-14",
+      "provider": "codex",
+      "totalTokens": 1534057,
+      "freshTokens": 256233,
+      "cachedTokens": 1277824,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-14",
+      "provider": "grok",
+      "totalTokens": 880212,
+      "freshTokens": 365524,
+      "cachedTokens": 514688,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-15",
+      "provider": "codex",
+      "totalTokens": 2221781,
+      "freshTokens": 131669,
+      "cachedTokens": 2090112,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-15",
+      "provider": "grok",
+      "totalTokens": 2524792,
+      "freshTokens": 240888,
+      "cachedTokens": 2283904,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-16",
+      "provider": "codex",
+      "totalTokens": 4955294,
+      "freshTokens": 155166,
+      "cachedTokens": 4800128,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-17",
+      "provider": "codex",
+      "totalTokens": 24208585,
+      "freshTokens": 890825,
+      "cachedTokens": 23317760,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-18",
+      "provider": "codex",
+      "totalTokens": 13482933,
+      "freshTokens": 608949,
+      "cachedTokens": 12873984,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-20",
+      "provider": "codex",
+      "totalTokens": 1372845,
+      "freshTokens": 181037,
+      "cachedTokens": 1191808,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-20",
+      "provider": "grok",
+      "totalTokens": 10537661,
+      "freshTokens": 560061,
+      "cachedTokens": 9977600,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-22",
+      "provider": "codex",
+      "totalTokens": 81491217,
+      "freshTokens": 2987025,
+      "cachedTokens": 78504192,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-23",
+      "provider": "codex",
+      "totalTokens": 53438526,
+      "freshTokens": 1327934,
+      "cachedTokens": 52110592,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "codex",
+      "totalTokens": 57987594,
+      "freshTokens": 1315082,
+      "cachedTokens": 56672512,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-25",
+      "provider": "codex",
+      "totalTokens": 195491,
+      "freshTokens": 1443,
+      "cachedTokens": 194048,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-26",
+      "provider": "codex",
+      "totalTokens": 370135,
+      "freshTokens": 332247,
+      "cachedTokens": 37888,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-27",
+      "provider": "codex",
+      "totalTokens": 14335898,
+      "freshTokens": 338074,
+      "cachedTokens": 13997824,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-28",
+      "provider": "codex",
+      "totalTokens": 16572714,
+      "freshTokens": 297002,
+      "cachedTokens": 16275712,
+      "estimatedCostUsd": null
+    },
+    {
+      "date": "2026-09-29",
+      "provider": "codex",
+      "totalTokens": 63351546,
+      "freshTokens": 1514746,
+      "cachedTokens": 61836800,
       "estimatedCostUsd": null
     }
   ],
